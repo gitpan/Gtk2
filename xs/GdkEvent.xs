@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.33.2.4 2004/03/21 03:20:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.33.2.5 2004/04/09 03:46:36 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -572,7 +572,7 @@ gdk_event_handler_set (class, func, data=NULL)
 				       NULL, NULL);
 	}
 
-#ifdef GDK_TYPE_SCREEN
+#if GTK_CHECK_VERSION (2,2,0)
 
 void
 gdk_event_set_screen (event, screen)

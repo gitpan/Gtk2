@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.26.2.1 2004/03/21 01:26:58 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.26.2.2 2004/04/06 16:37:36 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -483,8 +483,8 @@ gtk_tree_view_get_path_at_pos (tree_view, x, y)
 GdkRectangle_copy *
 gtk_tree_view_get_cell_area (tree_view, path, column)
 	GtkTreeView *tree_view
-	GtkTreePath *path
-	GtkTreeViewColumn *column
+	GtkTreePath_ornull *path
+	GtkTreeViewColumn_ornull *column
     PREINIT:
 	GdkRectangle rect;
     CODE:
@@ -497,8 +497,8 @@ gtk_tree_view_get_cell_area (tree_view, path, column)
 GdkRectangle_copy *
 gtk_tree_view_get_background_area (tree_view, path, column)
 	GtkTreeView *tree_view
-	GtkTreePath *path
-	GtkTreeViewColumn *column
+	GtkTreePath_ornull *path
+	GtkTreeViewColumn_ornull *column
     PREINIT:
 	GdkRectangle rect;
     CODE:

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.39.2.3 2004/03/21 04:26:51 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.39.2.5 2004/04/04 17:16:39 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -124,14 +124,14 @@ BOOT:
 
 	/* make sure that we're running/linked against a version at least as 
 	 * new as we built against, otherwise bad things can happen. */
-	if ((gtk_major_version < GTK_MAJOR_VERSION)
+	if ((((int)gtk_major_version) < GTK_MAJOR_VERSION)
 	    ||
 	    (gtk_major_version == GTK_MAJOR_VERSION && 
-	     gtk_minor_version < GTK_MINOR_VERSION)
+	     ((int)gtk_minor_version) < GTK_MINOR_VERSION)
 	    ||
 	    (gtk_major_version == GTK_MAJOR_VERSION && 
 	     gtk_minor_version == GTK_MINOR_VERSION &&
-	     gtk_micro_version < GTK_MICRO_VERSION))
+	     ((int)gtk_micro_version) < GTK_MICRO_VERSION))
 		warn ("*** This build of Gtk2 was compiled with gtk+ %d.%d.%d,"
 		      " but is currently running with %d.%d.%d, which is too"
 		      " old.  We'll continue, but expect problems!\n",
@@ -173,6 +173,10 @@ semantics in C, and we have preserved those faithfully.
 
 =cut
 
+=for see_also Glib::version
+=cut
+
+  # we have no use for these in perl.
  ##GTKMAIN_C_VAR const guint gtk_binary_age;
  ##GTKMAIN_C_VAR const guint gtk_interface_age;
 

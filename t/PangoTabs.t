@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 6, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoTabs.t,v 1.5 2004/02/27 03:53:52 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoTabs.t,v 1.5.2.1 2004/04/04 17:16:39 kaffeetisch Exp $
 
 SKIP: {
   skip("PangoTabs was broken prior to 1.3.3", 6)
@@ -11,7 +11,7 @@ SKIP: {
   my $array = Gtk2::Pango::TabArray -> new(8, 0);
   isa_ok($array, "Gtk2::Pango::TabArray");
 
-  $array = Gtk2::Pango::TabArray -> new(2, 1, "left", 8, "left", 16);
+  $array = Gtk2::Pango::TabArray -> new_with_positions(2, 1, "left", 8, "left", 16);
   isa_ok($array, "Gtk2::Pango::TabArray");
 
   $array -> resize(3);

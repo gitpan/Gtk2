@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.17 2004/02/26 00:36:01 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.17.2.1 2004/04/09 03:46:36 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -163,7 +163,7 @@ GdkVisual *
 gdk_colormap_get_visual (colormap)
 	GdkColormap *colormap
 
-#ifdef GDK_TYPE_SCREEN
+#if GTK_CHECK_VERSION(2,2,0)
 
  ## GdkScreen* gdk_colormap_get_screen (GdkColormap *cmap)
 GdkScreen *

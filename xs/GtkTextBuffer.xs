@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.21.2.1 2004/03/17 02:47:14 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.21.2.2 2004/04/09 03:46:36 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -437,7 +437,7 @@ gtk_text_buffer_set_modified (buffer, setting)
 	GtkTextBuffer *buffer
 	gboolean setting
 
-#ifdef GTK_TYPE_CLIPBOARD
+#if GTK_CHECK_VERSION(2,2,0)
 
 ## void gtk_text_buffer_add_selection_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard)
 void

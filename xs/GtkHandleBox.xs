@@ -16,12 +16,18 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkHandleBox.xs,v 1.7 2003/12/29 22:03:05 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkHandleBox.xs,v 1.7.4.1 2004/04/05 20:38:48 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::HandleBox	PACKAGE = Gtk2::HandleBox	PREFIX = gtk_handle_box_
+
+=for enum GtkPositionType
+=cut
+
+=for enum GtkShadowType
+=cut
 
 ## GtkWidget* gtk_handle_box_new (void)
 GtkWidget *

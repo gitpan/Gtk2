@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.35.2.1 2004/03/17 02:47:14 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.35.2.2 2004/04/09 03:46:36 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -358,7 +358,7 @@ GdkWindow* gdk_window_lookup (class, GdkNativeWindow anid);
 
 #endif
  
-#ifdef GDK_TYPE_DISPLAY
+#if GTK_CHECK_VERSION(2,2,0)
  
 GdkWindow *gdk_window_foreign_new_for_display (class, GdkDisplay *display, GdkNativeWindow  anid);
     C_ARGS:

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeStore.xs,v 1.22 2004/03/08 23:04:19 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeStore.xs,v 1.22.2.1 2004/04/05 13:42:15 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -55,7 +55,7 @@ gtk_tree_store_new (class, ...)
 =cut
 void
 gtk_tree_store_set_column_types (tree_store, ...)
-GtkTreeStore *tree_store
+	GtkTreeStore *tree_store
     PREINIT:
 	GArray * types;
     CODE:

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStyle.xs,v 1.21.2.1 2004/03/17 02:47:14 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStyle.xs,v 1.21.2.2 2004/04/04 16:35:14 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -530,6 +530,9 @@ gtk_paint_resize_grip (style, window, state_type, area, widget, detail, edge, x,
 MODULE = Gtk2::Style	PACKAGE = Gtk2	PREFIX = gtk_
 
 #if GTK_CHECK_VERSION (2, 4, 0)
+
+=for object Gtk2::Style
+=cut
 
 void
 gtk_draw_insertion_cursor (class, widget, drawable, area, location, is_primary, direction, draw_arrow)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.17 2004/01/25 12:38:13 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.17.2.1 2004/04/09 03:46:36 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -367,7 +367,7 @@ gdk_gc_set_rgb_bg_color (gc, color)
 	GdkGC *gc
 	GdkColor *color
 
-#ifdef GDK_TYPE_SCREEN
+#if GTK_CHECK_VERSION(2,2,0)
 
  ## GdkScreen * gdk_gc_get_screen (GdkGC *gc)
 GdkScreen *

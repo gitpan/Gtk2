@@ -16,13 +16,15 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkScreen.xs,v 1.10 2004/02/29 09:41:35 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkScreen.xs,v 1.10.2.1 2004/04/09 03:46:36 muppetman Exp $
  */
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Gdk::Screen	PACKAGE = Gtk2::Gdk::Screen	PREFIX = gdk_screen_
 
-#ifdef GDK_TYPE_SCREEN
+ ## GdkScreen was introduced in 2.1.x, but wasn't stable until 2.2.0.
+
+#if GTK_CHECK_VERSION(2,2,0)
 
 BOOT:
 	/* the gdk backends override the public GdkScreen with private,
