@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.2 2003/06/07 03:26:49 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.3 2003/07/05 07:12:04 pcg Exp $
  */
 #include "gtk2perl.h"
 
@@ -45,11 +45,9 @@ gdk_atom_intern (class, atom_name, only_if_exists=FALSE)
 	atom_name, only_if_exists
 
 ##  gchar* gdk_atom_name (GdkAtom atom) 
-gchar*
+gchar_own *
 gdk_atom_name (atom)
 	GdkAtom atom
-    CLEANUP:
-	g_free (RETVAL);
 
 MODULE = Gtk2::Gdk::Property	PACKAGE = Gtk2::Gdk::Window	PREFIX = gdk_
 

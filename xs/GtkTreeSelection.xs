@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSelection.xs,v 1.7 2003/06/02 02:53:12 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSelection.xs,v 1.8 2003/07/09 17:42:50 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -91,9 +91,9 @@ gtk_tree_selection_get_selected (selection)
     PPCODE:
 	if (!gtk_tree_selection_get_selected (selection, &model, &iter))
 		XSRETURN_EMPTY;
-	XPUSHs (sv_2mortal (newSVGtkTreeIter_copy (&iter)));
 	if (GIMME_V == G_ARRAY)
 		XPUSHs (sv_2mortal (newSVGtkTreeModel (model)));
+	XPUSHs (sv_2mortal (newSVGtkTreeIter_copy (&iter)));
 
 #if GTK_CHECK_VERSION(2,2,0)
 

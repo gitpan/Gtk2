@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListItem.xs,v 1.3 2003/06/24 19:24:41 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListItem.xs,v 1.4 2003/07/05 07:12:04 pcg Exp $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you
@@ -54,4 +54,5 @@ void
 gtk_list_item_deselect (list_item)
 	GtkListItem * list_item
 
-#endif GTK_TYPE_LIST_ITEM
+#endif
+

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.4 2003/05/22 14:23:22 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.6 2003/07/09 14:53:27 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -93,7 +93,7 @@ gdk_set_program_class (class, program_class)
 	program_class
 
 ##  gchar* gdk_get_display (void) 
-gchar*
+gchar_own *
 gdk_get_display (class)
 	SV * class
     C_ARGS:
@@ -127,13 +127,13 @@ screendims (class)
 ##  GdkGrabStatus gdk_pointer_grab (GdkWindow *window, gboolean owner_events, GdkEventMask event_mask, GdkWindow *confine_to, GdkCursor *cursor, guint32 time_) 
 GdkGrabStatus
 gdk_pointer_grab (class, window, owner_events, event_mask, confine_to, cursor, time_)
-	SV * class
-	GdkWindow *window
-	gboolean owner_events
-	GdkEventMask event_mask
-	GdkWindow *confine_to
-	GdkCursor *cursor
-	guint32 time_
+	SV               * class
+	GdkWindow        * window
+	gboolean           owner_events
+	GdkEventMask       event_mask
+	GdkWindow_ornull * confine_to
+	GdkCursor_ornull * cursor
+	guint32            time_
     C_ARGS:
 	window, owner_events, event_mask, confine_to, cursor, time_
 

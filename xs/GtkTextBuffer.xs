@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.6 2003/05/27 01:20:29 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.9 2003/07/05 08:21:30 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -45,51 +45,14 @@ gtk_text_buffer_get_tag_table (buffer)
 	GtkTextBuffer *buffer
 
 
-## why this no work, because of the gchar instead of char?:
-###void gtk_text_buffer_insert (GtkTextBuffer * buffer, GtkTextIter * iter, const gchar * text, length(text))
-void
-gtk_text_buffer_insert (buffer, iter, text)
-	GtkTextBuffer * buffer
-	GtkTextIter * iter
-	const gchar * text
-    CODE:
-	gtk_text_buffer_insert (buffer, iter, text, strlen(text));
+void gtk_text_buffer_insert (GtkTextBuffer * buffer, GtkTextIter * iter, const gchar_length * text, int length(text))
 
-###void gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer, const gchar *text, length(text))
-void
-gtk_text_buffer_insert_at_cursor (buffer, text)
-	GtkTextBuffer * buffer
-	const gchar * text
-    CODE:
-	gtk_text_buffer_insert_at_cursor (buffer, text, strlen(text));
+void gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer, const gchar_length *text, int length(text))
 
-###gboolean gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer, GtkTextIter *iter, const gchar *text, length(text), gboolean default_editable)
-gboolean
-gtk_text_buffer_insert_interactive (buffer, iter, text, default_editable)
-	GtkTextBuffer * buffer
-	GtkTextIter * iter
-	const gchar * text
-	gboolean default_editable
-    CODE:
-	gtk_text_buffer_insert_interactive (buffer, iter, text, strlen(text), 
-	                                    default_editable);
-    OUTPUT:
-	RETVAL
+gboolean gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer, GtkTextIter *iter, const gchar_length *text, int length(text), gboolean default_editable)
 
 
-###gboolean gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer, const gchar *text, length(text), gboolean default_editable)
-gboolean
-gtk_text_buffer_insert_interactive_at_cursor (buffer, text, default_editable)
-	GtkTextBuffer * buffer
-	const gchar * text
-	gboolean default_editable
-    CODE:
-	gtk_text_buffer_insert_interactive_at_cursor (buffer, text,
-	                                              strlen(text), 
-	                                              default_editable);
-    OUTPUT:
-	RETVAL
-
+gboolean gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer, const gchar_length *text, int length(text), gboolean default_editable)
 
 ## void gtk_text_buffer_insert_range (GtkTextBuffer *buffer, GtkTextIter *iter, const GtkTextIter *start, const GtkTextIter *end)
 void
@@ -162,17 +125,11 @@ gtk_text_buffer_delete_interactive (buffer, start_iter, end_iter, default_editab
 	GtkTextIter *end_iter
 	gboolean default_editable
 
-###void gtk_text_buffer_set_text (GtkTextBuffer *buffer, const gchar *text, length(text))
-void
-gtk_text_buffer_set_text (buffer, text)
-	GtkTextBuffer *buffer
-	const gchar *text
-    CODE:
-	gtk_text_buffer_set_text (buffer, text, strlen (text));
+void gtk_text_buffer_set_text (GtkTextBuffer *buffer, const gchar_length *text, int length(text))
 
-gchar* gtk_text_buffer_get_text (GtkTextBuffer *buffer, GtkTextIter * start, GtkTextIter* end, gboolean include_hidden_chars)
+gchar_own * gtk_text_buffer_get_text (GtkTextBuffer *buffer, GtkTextIter * start, GtkTextIter* end, gboolean include_hidden_chars)
 
-gchar* gtk_text_buffer_get_slice (GtkTextBuffer *buffer, GtkTextIter *start, GtkTextIter *end, gboolean include_hidden_chars);
+gchar_own * gtk_text_buffer_get_slice (GtkTextBuffer *buffer, GtkTextIter *start, GtkTextIter *end, gboolean include_hidden_chars);
 
 ## void gtk_text_buffer_insert_pixbuf (GtkTextBuffer *buffer, GtkTextIter *iter, GdkPixbuf *pixbuf)
 void

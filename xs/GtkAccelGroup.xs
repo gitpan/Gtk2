@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.4 2003/05/22 14:23:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.5 2003/07/05 07:12:04 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -115,15 +115,13 @@ gtk_accelerator_parse (class, accelerator)
 	XPUSHs (sv_2mortal (newSVGdkModifierType (accelerator_mods)));
 
 ## gchar* gtk_accelerator_name (guint accelerator_key, GdkModifierType accelerator_mods)
-gchar *
+gchar_own *
 gtk_accelerator_name (class, accelerator_key, accelerator_mods)
 	SV              * class
 	guint             accelerator_key
 	GdkModifierType   accelerator_mods
     C_ARGS:
 	accelerator_key, accelerator_mods
-    CLEANUP:
-	g_free (RETVAL);
 
 ## void gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
 void

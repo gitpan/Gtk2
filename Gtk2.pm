@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.19 2003/07/05 05:04:46 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.20 2003/07/07 00:15:25 muppetman Exp $
 #
 
 package Gtk2;
@@ -14,7 +14,7 @@ use Glib;
 
 require DynaLoader;
 
-our $VERSION = '0.26';
+our $VERSION = '0.90';
 
 our @ISA = qw(DynaLoader);
 

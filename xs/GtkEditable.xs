@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.3 2003/05/22 14:23:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.4 2003/07/05 07:12:04 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -65,7 +65,7 @@ gtk_editable_delete_text (editable, start_pos, end_pos)
 	gint start_pos
 	gint end_pos
 
-gchar*
+gchar_own *
 gtk_editable_get_chars (editable, start_pos, end_pos)
 	GtkEditable *editable
 	gint start_pos

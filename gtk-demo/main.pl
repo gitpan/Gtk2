@@ -17,7 +17,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
 # Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk-demo/main.pl,v 1.6 2003/05/26 08:08:03 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk-demo/main.pl,v 1.7 2003/07/09 17:42:36 muppetman Exp $
 #
 
 
@@ -547,7 +547,6 @@ sub selection_cb {
   my ($selection, $model) = @_;
 
   my $iter = $selection->get_selected;
-##  my ($iter, undef) = $selection->get_selected;
   return unless defined $iter;
 
   my ($name) = $model->get ($iter, FILENAME_COLUMN);

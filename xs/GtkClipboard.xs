@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.1 2003/06/09 17:51:17 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.3 2003/07/05 08:21:30 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -258,13 +258,7 @@ void
 gtk_clipboard_clear (clipboard)
 	GtkClipboard *clipboard
 
-##  void gtk_clipboard_set_text (GtkClipboard *clipboard, const gchar *text, gint len) 
-void
-gtk_clipboard_set_text (clipboard, text)
-	GtkClipboard *clipboard
-	const gchar *text
-    C_ARGS:
-	clipboard, text, strlen (text)
+void gtk_clipboard_set_text (GtkClipboard *clipboard, const gchar_length *text, int length(text)) 
 
 ##  void gtk_clipboard_request_contents (GtkClipboard *clipboard, GdkAtom target, GtkClipboardReceivedFunc callback, gpointer user_data) 
 void

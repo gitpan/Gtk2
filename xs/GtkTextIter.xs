@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextIter.xs,v 1.6 2003/06/16 20:37:02 joered Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextIter.xs,v 1.7 2003/07/05 07:12:04 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -70,19 +70,22 @@ gtk_text_iter_get_visible_line_index (iter)
 #	GtkTextIter *iter
 
 ## FIXME should this be a static method?
-gchar*
+# pcg: no!
+gchar_own *
 gtk_text_iter_get_slice (start, end)
 	GtkTextIter * start
 	GtkTextIter * end
 
 ## FIXME should this be a static method?
-gchar*
+# pcg: no!
+gchar_own *
 gtk_text_iter_get_text (start, end)
 	GtkTextIter * start
 	GtkTextIter * end
 
-##gchar* gtk_text_iter_get_visible_slice (const GtkTextIter *start, const GtkTextIter *end)
-##gchar* gtk_text_iter_get_visible_text  (const GtkTextIter *start, const GtkTextIter *end)
+gchar_own * gtk_text_iter_get_visible_slice (GtkTextIter *start, GtkTextIter *end)
+
+gchar_own * gtk_text_iter_get_visible_text (GtkTextIter *start, GtkTextIter *end)
 
 ## GdkPixbuf* gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
 GdkPixbuf_ornull*

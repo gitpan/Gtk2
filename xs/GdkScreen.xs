@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkScreen.xs,v 1.2 2003/06/13 00:31:34 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkScreen.xs,v 1.4 2003/07/16 14:46:29 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -123,11 +123,9 @@ gdk_screen_get_toplevel_windows (screen)
 	g_list_free (list);
 
 ##  gchar * gdk_screen_make_display_name (GdkScreen *screen) 
-gchar *
+gchar_own *
 gdk_screen_make_display_name (screen)
 	GdkScreen *screen
-    CLEANUP:
-	g_free (RETVAL);
 
 ##  gint gdk_screen_get_n_monitors (GdkScreen *screen) 
 gint
@@ -135,7 +133,7 @@ gdk_screen_get_n_monitors (screen)
 	GdkScreen *screen
 
 ##  void gdk_screen_get_monitor_geometry (GdkScreen *screen, gint monitor_num, GdkRectangle *dest) 
-GdkRectangle_own *
+GdkRectangle_copy *
 gdk_screen_get_monitor_geometry (screen, monitor_num)
 	GdkScreen *screen
 	gint monitor_num
