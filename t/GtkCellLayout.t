@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   tests => 4,
   noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellLayout.t,v 1.2.2.1 2004/03/17 02:47:13 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellLayout.t,v 1.2.2.2 2004/04/12 03:51:42 muppetman Exp $
 
 my $column = Gtk2::TreeViewColumn -> new();
 isa_ok($column, "Gtk2::CellLayout");
@@ -15,6 +15,12 @@ isa_ok($box, "Gtk2::CellLayout");
 
 my $entry = Gtk2::ComboBoxEntry -> new();
 isa_ok($entry, "Gtk2::CellLayout");
+
+# make sure there is a model; early versions of 2.4.x do not check for NULL
+# before unreffing the model.
+my $model = Gtk2::ListStore->new ('Glib::Int');
+$box->set_model ($model);
+$entry->set_model ($model);
 
 my $completion = Gtk2::EntryCompletion -> new();
 isa_ok($completion, "Gtk2::CellLayout");

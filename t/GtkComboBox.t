@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.6.2.1 2004/03/17 02:47:13 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.6.2.2 2004/04/12 03:51:42 muppetman Exp $
 
 use Gtk2::TestHelper
 	tests => 10,
@@ -39,6 +39,9 @@ is ($model->get_path ($combo_box->get_active_iter)->to_string,
 
 $combo_box = Gtk2::ComboBox->new;
 isa_ok ($combo_box, 'Gtk2::ComboBox');
+# set a model to avoid a nastygram when destroying; some versions of gtk+
+# do not check for NULL before unreffing the model.
+$combo_box->set_model ($model);
 
 $combo_box = Gtk2::ComboBox->new ($model);
 isa_ok ($combo_box, 'Gtk2::ComboBox');

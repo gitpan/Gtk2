@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.21.2.2 2004/04/09 00:19:01 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.21.2.4 2004/04/11 23:19:22 kaffeetisch Exp $
 #
 
 #########################
@@ -516,8 +516,9 @@ structure.
 
 After creating a new Gtk2::SimpleList object with the desired columns you may
 set the list data with a simple Perl array assignment. Rows may be added or
-deleted with the all of the normal array operations. Data may be accessed and
-modified by treating the data member of the list object as an array reference.
+deleted with all of the normal array operations. You can treat the C<data>
+member of the list simplelist object as an array reference, and manipulate the
+list data with perl's normal array operators.
 
 A mechanism has also been put into place allowing columns to be Perl scalars.
 The scalar is converted to text through Perl's normal mechanisms and then
@@ -551,7 +552,8 @@ they are turned on. The parameter ctype is the type of the column, one of:
  pixbuf  a Gtk2::Gdk::Pixbuf
 
 or the name of a custom type you add with C<add_column_type>.
-These should be provided in pairs according to the desired columns for you list.
+These should be provided in pairs according to the desired columns for your
+list.
 
 =item $slist = Gtk2::SimpleList->new_from_treeview (treeview, cname, ctype, ...)
 
@@ -632,10 +634,10 @@ you have to do to render the cell the way you want.  Here are some examples:
   # Perl would convert it to a string
   Gtk2::SimpleList->add_column_type( 'a_scalar', 
           type     => 'Glib::Scalar',
-	  renderer => 'Text',
+	  renderer => 'Gtk2::CellRendererText',
           attr     => sub {
                my ($treecol, $cell, $model, $iter, $col_num) = @_;
-               my $info = $model->get ($iter, $i);
+               my $info = $model->get ($iter, $col_num);
                $cell->set (text => $info);
 	  }
      );
@@ -644,11 +646,11 @@ you have to do to render the cell the way you want.  Here are some examples:
   # that in a text renderer
   Gtk2::SimpleList->add_column_type( 'sum_of_array', 
           type     => 'Glib::Scalar',
-	  renderer => 'Text',
+	  renderer => 'Gtk2::CellRendererText',
           attr     => sub {
                my ($treecol, $cell, $model, $iter, $col_num) = @_;
                my $sum = 0;
-               my $info = $model->get ($iter, $i);
+               my $info = $model->get ($iter, $col_num);
                foreach (@$info)
                {
                    $sum += $_;
@@ -708,7 +710,7 @@ Gtk2::ListStore(3pm).
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2003 by the Gtk2-Perl team.
+Copyright 2003-2004 by the Gtk2-Perl team.
 
 This library is free software; you can redistribute it and/or modify it under
 the terms of the GNU Library General Public License as published by the Free

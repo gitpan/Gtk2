@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.62.2.4 2004/04/09 04:16:10 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.62.2.5 2004/04/12 03:52:35 muppetman Exp $
 #
 
 package Gtk2;
@@ -31,7 +31,7 @@ use Glib;
 
 require DynaLoader;
 
-our $VERSION = '1.041';
+our $VERSION = '1.042';
 
 our @ISA = qw(DynaLoader);
 

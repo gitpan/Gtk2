@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/TestHelper.pm,v 1.6.2.1 2004/03/16 06:59:44 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/TestHelper.pm,v 1.6.2.2 2004/04/11 23:19:22 kaffeetisch Exp $
 #
 
 package Gtk2::TestHelper;
@@ -98,6 +98,14 @@ Do not call Gtk2->init_check, assume that it is not necessary.
 =item nowin32
 
 Set to true if all tests are to be skipped on the win32 platform.
+
+=item at_least_version
+
+A reference to a list that is checked with Gtk2->CHECK_VERSION.
+
+=item skip_all
+
+Simply skip all tests with the reason provided.
 
 =back
 

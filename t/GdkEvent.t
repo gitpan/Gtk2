@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkEvent.t,v 1.11.2.2 2004/03/18 20:59:50 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkEvent.t,v 1.11.2.3 2004/04/12 03:22:37 muppetman Exp $
 #
 
 #########################
@@ -333,6 +333,9 @@ isa_ok ($event->context, 'Gtk2::Gdk::DragContext', '$dnd_event->context');
 
 $event->context (undef);
 is ($event->context, undef, '$dnd_event->context & undef');
+
+# put this back to keep the event destructor from barfing on a NULL pointer
+$event->context (Gtk2::Gdk::DragContext->new);
 
 # Selection ####################################################################
 
