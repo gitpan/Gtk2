@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,17 +16,10 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.21 2004/07/12 18:54:34 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.23 2005/01/07 21:31:59 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
-
-/* FIXME: should we ever bind PangoFontMap, move this to the corresponding .xs
-          file. */
-MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontMap
-
-BOOT:
-	gperl_object_set_no_warn_unreg_subclass (PANGO_TYPE_FONT_MAP, TRUE);
 
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango
 
@@ -223,6 +216,14 @@ pango_font_description_to_filename (desc)
     CLEANUP:
 	g_free (RETVAL);
 
+#if PANGO_CHECK_VERSION (1, 8, 0)
+
+void pango_font_description_set_absolute_size (PangoFontDescription *desc, double size);
+
+gboolean pango_font_description_get_size_is_absolute (const PangoFontDescription *desc);
+
+#endif
+
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontMetrics	PREFIX = pango_font_metrics_
 
 # should happen automagicly
@@ -247,6 +248,30 @@ pango_font_metrics_get_approximate_char_width (metrics)
 int
 pango_font_metrics_get_approximate_digit_width (metrics)
 	PangoFontMetrics *metrics
+
+#if PANGO_CHECK_VERSION (1, 6, 0)
+
+## int pango_font_metrics_get_underline_position (PangoFontMetrics *metrics)
+int
+pango_font_metrics_get_underline_position (metrics)
+	PangoFontMetrics *metrics
+
+## int pango_font_metrics_get_underline_thickness (PangoFontMetrics *metrics)
+int
+pango_font_metrics_get_underline_thickness (metrics)
+	PangoFontMetrics *metrics
+
+## int pango_font_metrics_get_strikethrough_position (PangoFontMetrics *metrics)
+int
+pango_font_metrics_get_strikethrough_position (metrics)
+	PangoFontMetrics *metrics
+
+## int pango_font_metrics_get_strikethrough_thickness (PangoFontMetrics *metrics)
+int
+pango_font_metrics_get_strikethrough_thickness (metrics)
+	PangoFontMetrics *metrics
+
+#endif
 
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontFamily	PREFIX = pango_font_family_
 

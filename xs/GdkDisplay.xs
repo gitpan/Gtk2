@@ -16,13 +16,11 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.10 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.11 2005/01/02 16:25:51 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Gdk::Display	PACKAGE = Gtk2::Gdk::Display	PREFIX = gdk_display_
-
-#if GTK_CHECK_VERSION(2,2,0)
 
 BOOT:
 	/* the various gdk backends will provide private subclasses of
@@ -137,8 +135,6 @@ gdk_display_get_window_at_pointer (GdkDisplay *display)
  # not documented
 ##  GdkDisplay *gdk_display_open_default_libgtk_only (void) 
 
-#endif /* >= 2.2.0 */
-
 #if GTK_CHECK_VERSION(2, 4, 0)
 
 gboolean gdk_display_supports_cursor_alpha (GdkDisplay * display)
@@ -153,5 +149,43 @@ void gdk_display_get_maximal_cursor_size (GdkDisplay *display, OUTLIST guint wid
 void gdk_display_flush (GdkDisplay *display)
 
 GdkWindow *gdk_display_get_default_group (GdkDisplay *display)
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+gboolean gdk_display_supports_selection_notification (GdkDisplay *display);
+
+gboolean gdk_display_request_selection_notification (GdkDisplay *display, GdkAtom selection);
+
+gboolean gdk_display_supports_clipboard_persistence (GdkDisplay *display);
+
+##  void gdk_display_store_clipboard (GdkDisplay *display, GdkWindow *clipboard_window, guint32 time_, GdkAtom *targets, gint n_targets);
+=for apidoc
+=for arg ... of Gtk2::Gdk::Atom's
+=cut
+void
+gdk_display_store_clipboard (display, clipboard_window, time_, ...);
+	GdkDisplay *display
+	GdkWindow *clipboard_window
+	guint32 time_
+    PREINIT:
+	GdkAtom *targets = NULL;
+	gint n_targets = 0;
+    CODE:
+	if (items > 3) {
+		int i;
+
+		n_targets = items - 3;
+		targets = g_new0 (GdkAtom, n_targets);
+
+		for (i = 3; i < items; i++)
+			targets[i - 3] = SvGdkAtom (ST (i));
+	}
+
+	gdk_display_store_clipboard (display, clipboard_window, time_, targets, n_targets);
+
+	if (targets)
+		g_free (targets);
 
 #endif

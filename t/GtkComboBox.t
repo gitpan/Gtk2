@@ -1,10 +1,9 @@
-#!/usr/bin/perl -w
+###!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.8.4.1 2005/01/30 04:21:47 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.15 2005/02/08 06:04:38 muppetman Exp $
 
 use Gtk2::TestHelper
-	tests => 12,
-	noinit => 1,
+	tests => 23,
 	at_least_version => [2, 4, 0, "GtkComboBox is new in 2.4"],
 	;
 
@@ -52,7 +51,7 @@ isa_ok ($combo_box, 'Gtk2::ComboBox');
 
 ## getters and setters
 
-$model = Gtk2::ListStore->new ('Glib::String');
+$model = Gtk2::ListStore->new ('Glib::String', 'Glib::Int');
 $combo_box->set_model ($model);
 is ($combo_box->get_model, $model);
 
@@ -60,11 +59,65 @@ is ($combo_box->get_model, $model);
 is ($combo_box->get_active, -1);
 
 foreach my $t (qw(fee fie foe fum)) {
-	$model->set ($model->append, 0, $t);
+	$model->set ($model->append, 0, $t, 1, 1);
 }
 
 $combo_box->set_active (1);
 is ($combo_box->get_active, 1, 'set and get active');
+
+SKIP: {
+	skip "new api in gtk+ 2.6", 11
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	my $active_path = Gtk2::TreePath->new_from_string
+				("".$combo_box->get_active."");
+	is ($combo_box->get_active_text,
+	    $model->get ($model->get_iter ($active_path), 0),
+	    'get active text');
+
+	$combo_box->set_add_tearoffs (TRUE);
+	ok ($combo_box->get_add_tearoffs, 'tearoff accessors');
+	$combo_box->set_add_tearoffs (FALSE);
+	ok (!$combo_box->get_add_tearoffs, 'tearoff accessors');
+
+	$combo_box->set_focus_on_click (TRUE);
+	ok ($combo_box->get_focus_on_click, 'focus-on-click accessors');
+	$combo_box->set_focus_on_click (FALSE);
+	ok (!$combo_box->get_focus_on_click, 'focus-on-click accessors');
+
+	$combo_box->set_row_separator_func (sub {
+		my ($model, $iter, $data) = @_;
+
+		my $been_here = 0 if 0;
+		return if $been_here++;
+
+		isa_ok ($model, 'Gtk2::ListStore');
+		isa_ok ($iter, 'Gtk2::TreeIter');
+		is_deeply ($data, { something => 'else' });
+	}, { something => 'else'});
+
+	# make sure the widget is parented, realized and sized, or popup
+	# and popdown will assert when they try to use combo_box's GdkWindow.
+	# er, also make sure there's stuff in it.
+	my $cell = Gtk2::CellRendererText->new;
+	$combo_box->pack_start ($cell, TRUE);
+	$combo_box->set_attributes ($cell, text => 0);
+	my $window = Gtk2::Window->new;
+	$window->add ($combo_box);
+	$combo_box->show;
+	$window->show;
+
+	$combo_box->popup;
+	$combo_box->popdown;
+
+	$combo_box->set_wrap_width (1);
+	$combo_box->set_row_span_column (1);
+	$combo_box->set_column_span_column (1);
+
+	is ($combo_box->get_wrap_width, 1);
+	is ($combo_box->get_row_span_column, 1);
+	is ($combo_box->get_column_span_column, 1);
+}
 
 __END__
 

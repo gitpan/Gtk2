@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.21 2004/09/19 21:47:11 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.22 2005/02/19 20:35:40 pcg Exp $
  */
 #include "gtk2perl.h"
 
@@ -96,7 +96,7 @@ MODULE = Gtk2::Gdk::Property	PACKAGE = Gtk2::Gdk::Window	PREFIX = gdk_
 ##  gboolean gdk_property_get (GdkWindow *window, GdkAtom property, GdkAtom type, gulong offset, gulong length, gint pdelete, GdkAtom *actual_property_type, gint *actual_format, gint *actual_length, guchar **data) 
 =for apidoc
 
-=for signature (property_type, format, length) = $window->property_get ($property, $type, $offset, $length, $pdelete)
+=for signature (property_type, format, data) = $window->property_get ($property, $type, $offset, $length, $pdelete)
 
 See I<property_change> for an explanation of the meaning of I<format>.
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextView.xs,v 1.15 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextView.xs,v 1.16 2005/01/09 03:48:41 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -128,6 +128,37 @@ gtk_text_view_get_iter_at_location (text_view, x, y)
 	RETVAL = &iter;
     OUTPUT:
 	RETVAL
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+## void gtk_text_view_get_iter_at_position (GtkTextView *text_view, GtkTextIter *iter, gint *trailing, gint x, gint y)
+=for apidoc
+=for signature ($iter, $trailing) = $text_view->get_iter_at_position ($x, $y)
+=for signature $iter = $text_view->get_iter_at_position ($x, $y)
+Retrieves the iterator pointing to the character at buffer coordinates x and y.
+Buffer coordinates are coordinates for the entire buffer, not just the
+currently-displayed portion.  If you have coordinates from an event, you
+have to convert those to buffer coordinates with
+C<< $text_view->window_to_buffer_coords() >>.
+
+Note that this is different from C<< $text_view->get_iter_at_location() >>,
+which returns cursor locations, i.e. positions between characters.
+=cut
+void
+gtk_text_view_get_iter_at_position (text_view, x, y)
+	GtkTextView *text_view
+	gint x
+	gint y
+    PREINIT:
+	GtkTextIter iter;
+	gint trailing;
+    PPCODE:
+	gtk_text_view_get_iter_at_position (text_view, &iter, &trailing, x, y);
+	PUSHs (sv_2mortal (newSVGtkTextIter_copy (&iter)));
+	if (G_ARRAY == GIMME)
+		XPUSHs (sv_2mortal (newSViv (trailing)));
+
+#endif
 
 ## void gtk_text_view_get_line_yrange (GtkTextView *text_view, const GtkTextIter *iter, gint *y, gint *height)
 void gtk_text_view_get_line_yrange (GtkTextView *text_view, const GtkTextIter *iter, OUTLIST gint y, OUTLIST gint height)

@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntryCompletion.xs,v 1.5 2004/06/04 20:45:00 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntryCompletion.xs,v 1.7 2005/01/30 02:17:30 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -88,4 +88,18 @@ void gtk_entry_completion_delete_action (GtkEntryCompletion *completion, gint in
 ##
 void gtk_entry_completion_set_text_column (GtkEntryCompletion *completion, gint column);
 
+#if GTK_CHECK_VERSION (2, 6, 0)
 
+gint gtk_entry_completion_get_text_column (GtkEntryCompletion *completion);
+
+void gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion);
+
+void gtk_entry_completion_set_inline_completion (GtkEntryCompletion *completion, gboolean inline_completion);
+
+gboolean gtk_entry_completion_get_inline_completion (GtkEntryCompletion *completion);
+
+void gtk_entry_completion_set_popup_completion (GtkEntryCompletion *completion, gboolean popup_completion);
+
+gboolean gtk_entry_completion_get_popup_completion (GtkEntryCompletion *completion);
+
+#endif

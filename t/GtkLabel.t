@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkLabel.t,v 1.2 2004/01/10 04:43:38 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkLabel.t,v 1.6 2005/01/10 06:27:35 muppetman Exp $
 #
 # TODO: 
 #	(set|get)_attributes
@@ -12,7 +12,7 @@
 
 #########################
 
-use Gtk2::TestHelper tests => 22;
+use Gtk2::TestHelper tests => 29;
 
 my $win = Gtk2::Window->new;
 
@@ -65,14 +65,40 @@ ok ($label->get_line_wrap, '$label->(set|get)_line_wrap');
 ok (eq_array ([$label->get_layout_offsets],  [0, 0]), 
 	'$label-get_layout_offsets');
 
+isa_ok ($label->get_layout, 'Gtk2::Pango::Layout');
+
 is ($label->get_mnemonic_widget, undef, '$label->get_mnemonic_widget, undef');
 my $entry = Gtk2::Entry->new;
 $label->set_mnemonic_widget ($entry);
 ok ($label->get_mnemonic_widget, '$label->get_mnemonic_widget, entry');
 
+$label->set_text_with_mnemonic ('_Urgs');
+
+SKIP: {
+	skip 'new 2.6 stuff', 6
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	$label->set_ellipsize ('middle');
+	is ($label->get_ellipsize, 'middle', '[sg]et_ellipsize');
+
+	$label->set_width_chars (23);
+	is ($label->get_width_chars, 23, '[sg]et_width_chars');
+
+	$label->set_max_width_chars (32);
+	is ($label->get_max_width_chars, 32, '[sg]et_max_width_chars');
+
+	$label->set_angle (90);
+	is ($label->get_angle, 90, '[sg]et_angle');
+
+	$label->set_single_line_mode (TRUE);
+	ok ($label->get_single_line_mode, '[sg]et_single_line_mode');
+	$label->set_single_line_mode (FALSE);
+	ok (!$label->get_single_line_mode, '[sg]et_single_line_mode');
+}
+
 1;
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.71.2.1 2005/01/31 19:59:34 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.77 2005/03/07 21:06:51 kaffeetisch Exp $
 #
 
 package Gtk2;
@@ -31,7 +31,7 @@ use Glib;
 
 require DynaLoader;
 
-our $VERSION = '1.062';
+our $VERSION = '1.080';
 
 our @ISA = qw(DynaLoader);
 
@@ -44,7 +44,7 @@ sub import {
 	# order afterwards
 	my $init = 0;
 	my $threads_init = 0;
-	
+
 	foreach (@_) {
 		if (/^-?init$/) {
 			$init = 1;
@@ -62,7 +62,7 @@ sub import {
 # this is critical -- tell dynaloader to load the module so that its 
 # symbols are available to all other modules.  without this, nobody
 # else can use important functions like gtk2perl_new_object!
-# 
+#
 # hrm.  win32 doesn't really use this, because we have to link the whole
 # thing at compile time to ensure all the symbols are defined.
 #

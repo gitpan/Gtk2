@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileFilter.t,v 1.3 2004/03/17 03:52:24 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileFilter.t,v 1.5 2005/01/30 02:17:29 muppetman Exp $
 #
 
 use Gtk2::TestHelper
@@ -40,6 +40,13 @@ $file_filter->add_custom (['filename', 'mime-type'], \&filter_func);
 ok ($file_filter->get_needed >= ['filename', 'mime-type']);
 
 ok (!$file_filter->filter ($filter_info));
+
+SKIP: {
+	skip 'add_pixbuf_formats is new in 2.6', 0
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	$file_filter->add_pixbuf_formats;
+}
 
 __END__
 

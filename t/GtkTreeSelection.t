@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeSelection.t,v 1.6 2004/04/03 19:51:57 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeSelection.t,v 1.7 2005/01/06 04:23:18 muppetman Exp $
 
 ###############################################################################
 
@@ -140,14 +140,9 @@ $selection -> selected_foreach(sub {
 
 ###############################################################################
 
-Glib::Idle -> add(sub {
-	Gtk2 -> main_quit();
-	return 0;
-});
-
-Gtk2 -> main();
+run_main;
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkButton.xs,v 1.16 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkButton.xs,v 1.18 2005/01/30 02:17:30 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -164,5 +164,13 @@ void gtk_button_get_alignment (GtkButton *button, OUTLIST gfloat xalign, OUTLIST
 ##	EXTEND (sp, 2);
 ##	PUSHs (sv_2mortal (newSVnv (xalign)));
 ##	PUSHs (sv_2mortal (newSVnv (yalign)));
+
+#endif
+
+#if GTK_CHECK_VERSION(2,6,0)
+
+void gtk_button_set_image (GtkButton *button, GtkWidget_ornull *image)
+
+GtkWidget_ornull * gtk_button_get_image (GtkButton *button)
 
 #endif

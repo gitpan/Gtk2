@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSimpleList.t,v 1.5 2004/04/09 12:05:49 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSimpleList.t,v 1.6 2005/01/06 04:23:18 muppetman Exp $
 #
 
 #########################
@@ -95,8 +95,7 @@ ok( $list->signal_connect( row_activated => sub
 	} ) );
 
 my $count = 0;
-Glib::Idle->add( sub
-	{
+run_main {
 		my $ldata = $list->{data};
 
 		ok( scalar(@$ldata) == 4 );
@@ -297,14 +296,10 @@ Glib::Idle->add( sub
 			    undef, undef, undef, undef, undef ],
 			  [ 'pushed', 2, 0.1, 0,
 			    undef, undef, undef, undef, undef ] ], 'splice @');
-
-		Gtk2->main_quit;
-		return 0;
-	} );
+};
 
 # end exercise of SimpleList
 
-Gtk2->main;
 ok(1);
 
 # each of these should result in exceptions.
@@ -337,5 +332,5 @@ $tv = undef;
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

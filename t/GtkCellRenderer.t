@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellRenderer.t,v 1.9 2004/03/21 04:38:32 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellRenderer.t,v 1.11 2005/02/08 05:17:41 muppetman Exp $
 
 use Gtk2::TestHelper tests => 9;
 use strict;
@@ -136,22 +136,27 @@ SKIP: {
 	$renderer->editing_canceled;
 }
 
+SKIP: {
+	skip "stop_editing is new in 2.6", 0
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	$renderer->stop_editing (FALSE);
+}
+
 ##########################################################################
 
-Glib::Idle->add (sub {
+run_main {
 	$treeview->set_cursor (Gtk2::TreePath->new_from_string ('0'),
 	                       $column, 1);
 	$treeview->set_cursor (Gtk2::TreePath->new_from_string ('0'),
 	                       $column_compat, 1);
-	Gtk2->main_quit;
-});
+};
 
-Gtk2->main;
 
 is_deeply ([ sort keys %hits ], [ qw/edit init render size/ ], 'callbacks encountered');
 is_deeply ([ sort keys %hits_compat ], [ qw/edit init render size/ ], 'callbacks encountered');
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -1,51 +1,12 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooser.t,v 1.15.4.2 2005/01/31 19:56:49 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooser.t,v 1.20 2005/03/07 21:06:00 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, "GtkFileChooser is new in 2.4"],
-	tests => 42,
-	skip_all => "Currently broken"; # FIXME
+	tests => 43;
 use File::Spec;
 use Cwd;
-
-# useful wrappers
-sub run_main (;&) {
-	my $callback = shift;
-	Glib::Idle->add (sub {
-		if ($callback) {
-			#print "# Entering run_main shutdown callback\n";
-			$callback->();
-			#print "# Leaving run_main shutdown callback\n";
-		}
-		Gtk2->main_quit;
-		FALSE;
-	});
-	#print "# Entering main loop (run_main)\n";
-	Gtk2->main;
-	#print "# Leaving main loop (run_main)\n";
-}
-sub ok_idle ($;$) {
-	my ($testsub, $test_name) = @_;
-	run_main {
-		# 0 Test::More::ok
-		# 1 this block's ok() call
-		# 2 idle callback in run_main
-		# 3 Gtk2::main call in run_main
-		# 4 Gtk2::main call in run_main (again)
-		# 5 ok_idle
-		# 6 the caller we want to print
-		local $Test::Builder::Level = 6;
-		ok ($testsub->(), $test_name);
-	}
-}
-sub is_idle ($$;$) {
-	my ($asub, $b, $test_name) = @_;
-	run_main {
-		local $Test::Builder::Level = 6; # see ok_idle()
-		is ($asub->(), $b, $test_name);
-	}
-}
 
 my $file_chooser = Gtk2::FileChooserWidget->new ('save');
 
@@ -146,8 +107,8 @@ my $preview_widget = Gtk2::Frame->new ('whee');
 $file_chooser->set_preview_widget ($preview_widget);
 is ($file_chooser->get_preview_widget, $preview_widget);
 
-$file_chooser->set_preview_widget_active (FALSE);
-ok (!$file_chooser->get_preview_widget_active);
+$file_chooser->set_preview_widget_active (TRUE);
+ok ($file_chooser->get_preview_widget_active);
 
 $file_chooser->set_preview_widget_active (TRUE);
 ok ($file_chooser->get_preview_widget_active);
@@ -160,8 +121,11 @@ $filename = File::Spec->catfile ($cwd, 'gtk2perl.h');
 ok ($file_chooser->select_filename ($filename));
 
 run_main {
-  is ($file_chooser->get_preview_filename, $filename, 'get_preview_filename');
-  is ($file_chooser->get_preview_uri, "file://".$filename, 'get_preview_uri');
+  TODO: {
+    local $TODO = "gtk+ 2.6 seems to return undef for some reason";
+    is ($file_chooser->get_preview_filename, $filename, 'get_preview_filename');
+    is ($file_chooser->get_preview_uri, "file://".$filename, 'get_preview_uri');
+  }
 };
 
 
@@ -203,12 +167,19 @@ $file_chooser->unselect_filename ($filename);
 @list = $file_chooser->get_uris;
 ok (!scalar (@list), 'no uris selected');
 
-$file_chooser->unselect_filename ($filename);
 @list = $file_chooser->get_filenames;
 is (scalar (@list), 0, 'unselected everything');
 
 $file_chooser->remove_shortcut_folder ($cwd);
 $file_chooser->remove_shortcut_folder_uri ($cwd);
+
+SKIP: {
+	skip("[sg]et_show_hidden are new in 2.6", 1)
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	$file_chooser->set_show_hidden (TRUE);
+	is ($file_chooser->get_show_hidden, TRUE);
+}
 
 __END__
 

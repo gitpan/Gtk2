@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenu.t,v 1.7 2004/03/21 04:38:32 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenu.t,v 1.8 2005/01/02 17:45:21 kaffeetisch Exp $
 #
 
 #########################
@@ -7,7 +7,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 52;
+use Gtk2::TestHelper tests => 55;
 
 ok( my $menubar = Gtk2::MenuBar->new );
 
@@ -41,6 +41,15 @@ foreach $num (qw/1 2 3/)
 	});
 
 	is ($menu->get_attach_widget, $button);
+
+	SKIP: {
+		skip "new 2.6 stuff", 1
+			unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+		my @list = Gtk2::Menu->get_for_attach_widget ($button);
+		is ($list[0], $menu);
+	}
+
 	$menu->detach;
 
 	SKIP: {

@@ -3,7 +3,7 @@ use strict;
 use Test::More;
 use Gtk2;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.12 2004/04/04 17:28:13 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.13 2004/10/30 17:13:22 kaffeetisch Exp $
 
 Gtk2::Gdk::Threads -> init();
 
@@ -71,7 +71,7 @@ my $result = Gtk2::Gdk -> pointer_grab($window -> window(),
                                        Gtk2::Gdk::Cursor -> new("arrow"),
                                        0);
 
-like($result, qr/^(?:success|already-grabbed)$/);
+like($result, qr/^(?:success|already-grabbed|not-viewable)$/);
 like(Gtk2::Gdk -> pointer_is_grabbed(), qr/^(?:1|)$/);
 
 Gtk2::Gdk -> pointer_ungrab(0);
@@ -79,7 +79,7 @@ Gtk2::Gdk -> pointer_ungrab(0);
 # Gtk2::Gdk -> set_double_click_time(20);
 
 $result = Gtk2::Gdk -> keyboard_grab($window -> window(), 1, 0);
-like($result, qr/^(?:success|already-grabbed)$/);
+like($result, qr/^(?:success|already-grabbed|not-viewable)$/);
 Gtk2::Gdk -> keyboard_ungrab(0);
 
 Gtk2::Gdk -> error_trap_push();

@@ -85,8 +85,10 @@ gtk2perl.h
 maps-2.0
 maps-2.2
 maps-2.4
+maps-2.6
 maps_pango-1.0
-maps_pango-1.5
+maps_pango-1.4
+maps_pango-1.6
 pango.typemap
 perl-Gtk2.spec.in
 pm/Helper.pm
@@ -119,6 +121,7 @@ t/GdkSelection.t
 t/GdkVisual.t
 t/GdkWindow.t
 t/GdkX11.t
+t/GtkAboutDialog.t
 t/GtkAccelGroup.t
 t/GtkAccelLabel.t
 t/GtkAccelMap.t
@@ -136,9 +139,12 @@ t/GtkCalendar.t
 t/GtkCellEditable.t
 t/GtkCellLayout.t
 t/GtkCellRenderer.t
+t/GtkCellRendererCombo.t
 t/GtkCellRendererPixbuf.t
+t/GtkCellRendererProgress.t
 t/GtkCellRendererText.t
 t/GtkCellRendererToggle.t
+t/GtkCellView.t
 t/GtkCheckButton.t
 t/GtkCheckMenuItem.t
 t/GtkClipboard.t
@@ -158,6 +164,7 @@ t/GtkEntryCompletion.t
 t/GtkEventBox.t
 t/GtkExpander.t
 t/GtkFileChooser.t
+t/GtkFileChooserButton.t
 t/GtkFileChooserDialog.t
 t/GtkFileChooserWidget.t
 t/GtkFileFilter.t
@@ -178,6 +185,7 @@ t/GtkHSeparator.t
 t/GtkHandleBox.t
 t/GtkIconFactory.t
 t/GtkIconTheme.t
+t/GtkIconView.t
 t/GtkImage.t
 t/GtkImageMenuItem.t
 t/GtkInputDialog.t
@@ -190,6 +198,7 @@ t/GtkMenu.t
 t/GtkMenuBar.t
 t/GtkMenuItem.t
 t/GtkMenuShell.t
+t/GtkMenuToolButton.t
 t/GtkMessageDialog.t
 t/GtkMisc.t
 t/GtkNotebook.t
@@ -252,10 +261,13 @@ t/GtkVScrollbar.t
 t/GtkVSeparator.t
 t/GtkViewport.t
 t/GtkWidget.t
+t/PangoAttributes.t
 t/PangoContext.t
 t/PangoFont.t
+t/PangoFontMap.t
 t/PangoFontset.t
 t/PangoLayout.t
+t/PangoScript.t
 t/PangoTabs.t
 t/PangoTypes.t
 tools/fetch_faq.pl
@@ -287,6 +299,7 @@ xs/GdkVisual.xs
 xs/GdkWindow.xs
 xs/GdkX11.xs
 xs/Gtk2.xs
+xs/GtkAboutDialog.xs
 xs/GtkAccelGroup.xs
 xs/GtkAccelLabel.xs
 xs/GtkAccelMap.xs
@@ -304,9 +317,12 @@ xs/GtkCalendar.xs
 xs/GtkCellEditable.xs
 xs/GtkCellLayout.xs
 xs/GtkCellRenderer.xs
+xs/GtkCellRendererCombo.xs
 xs/GtkCellRendererPixbuf.xs
+xs/GtkCellRendererProgress.xs
 xs/GtkCellRendererText.xs
 xs/GtkCellRendererToggle.xs
+xs/GtkCellView.xs
 xs/GtkCheckButton.xs
 xs/GtkCheckMenuItem.xs
 xs/GtkClipboard.xs
@@ -327,6 +343,7 @@ xs/GtkEntryCompletion.xs
 xs/GtkEventBox.xs
 xs/GtkExpander.xs
 xs/GtkFileChooser.xs
+xs/GtkFileChooserButton.xs
 xs/GtkFileChooserDialog.xs
 xs/GtkFileChooserWidget.xs
 xs/GtkFileFilter.xs
@@ -347,6 +364,7 @@ xs/GtkHSeparator.xs
 xs/GtkHandleBox.xs
 xs/GtkIconFactory.xs
 xs/GtkIconTheme.xs
+xs/GtkIconView.xs
 xs/GtkImage.xs
 xs/GtkImageMenuItem.xs
 xs/GtkInputDialog.xs
@@ -362,6 +380,7 @@ xs/GtkMenu.xs
 xs/GtkMenuBar.xs
 xs/GtkMenuItem.xs
 xs/GtkMenuShell.xs
+xs/GtkMenuToolButton.xs
 xs/GtkMessageDialog.xs
 xs/GtkMisc.xs
 xs/GtkNotebook.xs
@@ -424,12 +443,16 @@ xs/GtkVSeparator.xs
 xs/GtkViewport.xs
 xs/GtkWidget.xs
 xs/GtkWindow.xs
+xs/PangoAttributes.xs
 xs/PangoContext.xs
 xs/PangoFont.xs
+xs/PangoFontMap.xs
 xs/PangoFontset.xs
 xs/PangoLayout.xs
+xs/PangoScript.xs
 xs/PangoTabs.xs
 xs/PangoTypes.xs
 xs_files-2.0
 xs_files-2.2
 xs_files-2.4
+xs_files-2.6

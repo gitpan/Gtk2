@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.19 2004/08/01 16:15:54 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.20 2005/01/06 04:23:15 muppetman Exp $
 #
 
 use strict;
@@ -11,6 +11,8 @@ use warnings;
 #########################
 
 #########################
+
+# NOTE: this is the bootstrap test -- no Gtk2::TestHelper here!
 
 use Test::More tests => 35;
 BEGIN { use_ok('Gtk2') };

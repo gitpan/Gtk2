@@ -1,10 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.8 2004/03/17 03:52:24 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.11 2005/01/30 02:17:29 muppetman Exp $
 #
 
 use Gtk2::TestHelper
-	at_least_version => [2, 4, 0, "GtkIconTheme is new in 2.4"],
-	tests => 15;
+	at_least_version => [2, 4, 0, 'GtkIconTheme is new in 2.4'],
+	tests => 17;
 
 my $icon_theme = Gtk2::IconTheme->new;
 isa_ok ($icon_theme, 'Gtk2::IconTheme');
@@ -19,54 +19,68 @@ $icon_theme->set_screen (Gtk2::Gdk::Screen->get_default);
 
 ok ($icon_theme->list_icons (undef));
 
-my @paths = qw(/tmp /etc /home);
-$icon_theme->set_search_path (@paths);
-	
-is_deeply ([$icon_theme->get_search_path], \@paths);
-	
-$icon_theme->append_search_path ('/usr/local/tmp');
-push @paths, '/usr/local/tmp';
-is_deeply ([$icon_theme->get_search_path], \@paths);
-	
-$icon_theme->prepend_search_path ('/usr/tmp');
-unshift @paths, '/usr/tmp';
-is_deeply ([$icon_theme->get_search_path], \@paths);
-
 ok (!$icon_theme->has_icon ('gtk-open'));
 ok (!$icon_theme->has_icon ('something crazy'));
 
-my $icon_info = $icon_theme->lookup_icon ("stock_edit", 24, "use-builtin");
+my $icon_info = $icon_theme->lookup_icon ('stock_edit', 24, 'use-builtin');
 
 SKIP: {
-	skip "lookup_icon returned undef, skipping the rest", 6
+	skip 'lookup_icon returned undef, skipping the rest', 5
 		unless defined $icon_info;
 
-	isa_ok ($icon_info, "Gtk2::IconInfo");
+	isa_ok ($icon_info, 'Gtk2::IconInfo');
 
-	my $pixbuf = $icon_theme->load_icon ("stock_edit", 24, "use-builtin");
-	isa_ok ($pixbuf, "Gtk2::Gdk::Pixbuf");
+	my $pixbuf = $icon_theme->load_icon ('stock_edit', 24, 'use-builtin');
+	isa_ok ($pixbuf, 'Gtk2::Gdk::Pixbuf');
+
+	isa_ok ($icon_info->load_icon, 'Gtk2::Gdk::Pixbuf');
 
 	is ($icon_info->get_base_size, 24);
 	like ($icon_info->get_filename, qr/stock_edit/);
 
-	$icon_info->set_raw_coordinates (1);
-
 	# FIXME:
-	# isa_ok ($icon_info->get_builtin_pixbuf, "Gtk2::Gdk::Pixbuf");
-	# isa_ok($icon_info->get_embedded_rect, "Gtk2::Gdk::Rectangle");
+	# isa_ok ($icon_info->get_builtin_pixbuf, 'Gtk2::Gdk::Pixbuf');
+	# isa_ok($icon_info->get_embedded_rect, 'Gtk2::Gdk::Rectangle');
 	# warn $icon_info->get_attach_points;
 	# warn $icon_info->get_display_name;
 
-	$icon_theme->add_builtin_icon ("stock_edit", 24, $pixbuf);
+	$icon_info->set_raw_coordinates (1);
 
-	# cannot call set_custom_theme on a default theme
-	$icon_theme = Gtk2::IconTheme->new;
-	$icon_theme->set_custom_theme ('crazy custom theme');
-
-	is ($icon_theme->get_example_icon_name, undef);
-
-	ok (!$icon_theme->rescan_if_needed);
+	$icon_theme->add_builtin_icon ('stock_edit', 24, $pixbuf);
 }
+
+SKIP: {
+	skip 'new 2.6 stuff', 1
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	my @sizes = $icon_theme->get_icon_sizes ('stock_edit');
+
+	skip 'get_icon_sizes returned empty, can not test them', 1
+		unless (@sizes);
+	
+	like ($sizes[0], qr/^\d+$/);
+}
+
+my @paths = qw(/tmp /etc /home);
+$icon_theme->set_search_path (@paths);
+
+is_deeply ([$icon_theme->get_search_path], \@paths);
+
+$icon_theme->append_search_path ('/usr/local/tmp');
+push @paths, '/usr/local/tmp';
+is_deeply ([$icon_theme->get_search_path], \@paths);
+
+$icon_theme->prepend_search_path ('/usr/tmp');
+unshift @paths, '/usr/tmp';
+is_deeply ([$icon_theme->get_search_path], \@paths);
+
+# cannot call set_custom_theme on a default theme
+$icon_theme = Gtk2::IconTheme->new;
+$icon_theme->set_custom_theme ('crazy custom theme');
+
+is ($icon_theme->get_example_icon_name, undef);
+
+ok (!$icon_theme->rescan_if_needed);
 
 __END__
 

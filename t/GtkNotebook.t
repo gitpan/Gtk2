@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkNotebook.t,v 1.2.6.1 2005/01/31 19:56:49 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkNotebook.t,v 1.5 2005/02/26 21:30:39 muppetman Exp $
 #
 
 #########################
@@ -7,7 +7,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 58;
+use Gtk2::TestHelper tests => 60;
 
 my $win = Gtk2::Window->new;
 
@@ -16,30 +16,29 @@ $win->add($nb);
 ok(1);
 
 
-$nb->prepend_page( Gtk2::Label->new('p1c'), Gtk2::Label->new('p1') );
-ok(1);
+# just to make the lines shorter
+sub label { Gtk2::Label->new (shift) }
 
-$nb->append_page( Gtk2::Label->new('p2c'), Gtk2::Label->new('p2') );
-ok(1);
+is ($nb->prepend_page (label ('p1c'), label ('p1')), 0);
 
-my $child = Gtk2::Label->new('p1.5c');
-$nb->insert_page( $child, Gtk2::Label->new('p1.5'), 1 );
-ok(1);
+is ($nb->append_page (label ('p2c'), label ('p2')), 1);
 
-$nb->prepend_page_menu( Gtk2::Label->new('Page 1c'), undef, Gtk2::Label->new('Page 1 pop') );
-ok(1);
+my $child = label ('p1.5c');
+is ($nb->insert_page ($child, label ('p1.5'), 1), 1);
 
-$nb->append_page_menu( Gtk2::Label->new('Page 6c'), Gtk2::Label->new('Page 6l'),
-		Gtk2::Label->new('Page 6 pop') );
-ok(1);
+is ($nb->prepend_page_menu (label ('Page 1c'), undef, label ('Page 1 pop')), 0);
 
-my $child2 = Gtk2::Label->new('Page 2c');
-$nb->insert_page_menu($child2, Gtk2::Label->new('Page 2 pop'), undef, 1 );
-ok(1);
+is ($nb->append_page_menu (label ('Page 6c'), label ('Page 6l'),
+			   label ('Page 6 pop')),
+    4);;
 
-$nb->insert_page( Gtk2::Label->new('remove'), Gtk2::Label->new('remove'), 7 );
-$nb->insert_page( Gtk2::Label->new('remove'), Gtk2::Label->new('remove'), 7 );
-$nb->insert_page( Gtk2::Label->new('remove'), Gtk2::Label->new('remove'), 0 );
+my $child2 = label ('Page 2c');
+is ($nb->insert_page_menu ($child2, label ('Page 2 pop'), undef, 1), 1);
+
+is ($nb->insert_page (label ('remove'), label ('remove'), 7), 6);
+is ($nb->insert_page (label ('remove'), label ('remove'), 7), 7);
+is ($nb->insert_page (label ('remove'), label ('remove'), 0), 0);
+
 $nb->remove_page(7);
 ok(1);
 $nb->remove_page(0);
@@ -115,8 +114,9 @@ ok(1);
 is_deeply( [ $nb->query_tab_label_packing($child) ],
 	   [ TRUE, FALSE, 'end' ] );
 
-Glib::Idle->add( sub
-	{
+$win->show_all;
+ok(1);
+run_main {
 		$nb->next_page;
 		ok(1);
 		$nb->prev_page;
@@ -135,17 +135,8 @@ Glib::Idle->add( sub
 		$nb->set_current_page(4);
        		ok(1);
 		ok( $nb->get_current_page == 4 );
+};
 
-		Gtk2->main_quit;
-		ok(1);
-
-		0
-	} );
-
-$win->show_all;
-ok(1);
-
-Gtk2->main;
 ok(1);
 
 __END__

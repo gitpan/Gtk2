@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 48;
+use Gtk2::TestHelper tests => 53;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoFont.t,v 1.4 2004/04/19 19:20:52 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoFont.t,v 1.6 2005/01/07 21:31:59 kaffeetisch Exp $
 
 my $description = Gtk2::Pango::FontDescription -> new();
 isa_ok($description, "Gtk2::Pango::FontDescription");
@@ -44,6 +44,14 @@ isa_ok($description, "Gtk2::Pango::FontDescription");
 is($description -> to_string(), "Sans 12");
 ok(defined($description -> to_filename()));
 
+SKIP: {
+  skip("new 1.8 stuff", 1)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 8, 0));
+
+  $description -> set_absolute_size(23.42);
+  is($description -> get_size_is_absolute(), TRUE);
+}
+
 ###############################################################################
 
 my $label = Gtk2::Label -> new("Bla");
@@ -68,6 +76,16 @@ like($metrics -> get_ascent(), $number);
 like($metrics -> get_descent(), $number);
 like($metrics -> get_approximate_char_width(), $number);
 like($metrics -> get_approximate_digit_width(), $number);
+
+SKIP: {
+  skip("new 1.6 stuff", 4)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 6, 0));
+
+  like($metrics -> get_underline_position(), $number);
+  like($metrics -> get_underline_thickness(), $number);
+  like($metrics -> get_strikethrough_position(), $number);
+  like($metrics -> get_strikethrough_thickness(), $number);
+}
 
 ###############################################################################
 
@@ -117,5 +135,5 @@ SKIP: {
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

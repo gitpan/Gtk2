@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkX11.t,v 1.3 2004/02/27 05:31:48 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkX11.t,v 1.4 2005/01/02 16:25:51 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();
@@ -23,6 +23,13 @@ SKIP: {
 
     $display -> grab();
     $display -> ungrab();
+  }
+
+  SKIP: {
+    skip("2.6 stuff", 0)
+      unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+    $window -> window() -> set_user_time(time());
   }
 }
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.35 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.36 2005/01/02 16:25:51 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -626,6 +626,25 @@ gtk_window_propagate_key_event (window, event)
 	GdkEvent *event
     C_ARGS:
 	window, (GdkEventKey *) event
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+void gtk_window_set_focus_on_map (GtkWindow *window, gboolean setting);
+
+gboolean gtk_window_get_focus_on_map (GtkWindow *window);
+
+void gtk_window_set_icon_name (GtkWindow *window, const gchar *name);
+
+const gchar_ornull * gtk_window_get_icon_name (GtkWindow  *window);
+
+##  void gtk_window_set_default_icon_name (const gchar *name);
+void
+gtk_window_set_default_icon_name (class, name)
+	const gchar *name
+    C_ARGS:
+	name
 
 #endif
 

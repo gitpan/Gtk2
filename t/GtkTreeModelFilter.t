@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   noinit => 1,
   at_least_version => [2, 4, 0, "GtkTreeModelFilter is new in 2.4"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelFilter.t,v 1.3.4.1 2005/01/17 04:34:49 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelFilter.t,v 1.5 2005/01/17 04:32:44 muppetman Exp $
 
 my $list = Gtk2::ListStore -> new("Glib::Int", "Glib::String");
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkX11.xs,v 1.4 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkX11.xs,v 1.5 2005/01/02 16:25:51 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 #ifdef GDK_WINDOWING_X11
@@ -158,5 +158,13 @@ MODULE = Gtk2::Gdk::X11	PACKAGE = Gtk2::Gdk::Display	PREFIX = gdk_x11_display_
 void gdk_x11_display_grab (GdkDisplay *display);
 
 void gdk_x11_display_ungrab (GdkDisplay *display);
+
+#endif
+
+MODULE = Gtk2::Gdk::X11	PACKAGE = Gtk2::Gdk::Window	PREFIX = gdk_x11_window_
+
+#if defined(GDK_WINDOWING_X11) && GTK_CHECK_VERSION (2, 6, 0)
+
+void gdk_x11_window_set_user_time (GdkWindow *window, guint32 timestamp);
 
 #endif

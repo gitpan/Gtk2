@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 75, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkBox.t,v 1.5.6.1 2005/01/31 19:56:49 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkBox.t,v 1.6 2005/02/10 21:32:39 kaffeetisch Exp $
 
 my $box = Gtk2::VBox -> new();
 isa_ok($box, "Gtk2::Box");

@@ -24,7 +24,7 @@ TextView subclass which implements the CellEditable GInterface.
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/customrenderer.pl,v 1.2 2004/03/14 08:55:31 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/customrenderer.pl,v 1.3 2005/01/07 21:31:59 kaffeetisch Exp $
 #
 
 use strict;
@@ -62,7 +62,7 @@ sub REMOVE_WIDGET { warn "remove widget\n"; }
 ###############################################################################
 # and now, a CellRenderer that uses Mup::MultilineEntry for editing.
 
-package Gtk2::CellRendererMultiline;
+package Mup::CellRendererMultiline;
 
 use Glib qw(TRUE FALSE);
 
@@ -126,7 +126,7 @@ sub cell_edited {
 	$model->set ($model->get_iter ($iter), 0 => $new_value);
 }
 
-my $renderer = Gtk2::CellRendererMultiline->new;
+my $renderer = Mup::CellRendererMultiline->new;
 $renderer->set (editable => TRUE);
 $renderer->signal_connect (edited => \&cell_edited);
 my $column = Gtk2::TreeViewColumn->new_with_attributes ("custom renderer",

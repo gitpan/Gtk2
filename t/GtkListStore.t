@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
-use Gtk2::TestHelper tests => 43, noinit => 1;
+use Gtk2::TestHelper tests => 46, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.12 2004/03/24 00:31:32 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.16 2005/01/09 03:48:40 muppetman Exp $
 
 ###############################################################################
 
@@ -188,7 +188,7 @@ SKIP: {
 	$i++;
     }
 
-    Glib::Idle->add( sub {
+    run_main {
 		SKIP: {
 			skip 'function only in version > 2.2', 5
 				unless Gtk2->CHECK_VERSION (2, 2, 0);
@@ -223,14 +223,26 @@ SKIP: {
 		$store->clear;
 		ok ($store->iter_n_children == 0, 
 			'$store->clear/iter_n_children');
-		Gtk2->main_quit;
-		0;
-	} );
+	};
+}
 
-    Gtk2->main;
+SKIP: {
+	skip "new stuff in gtk+ 2.6", 3
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	my $nrows_before = $store->iter_n_children;
+
+	my $iter = $store->insert_with_values (-1);
+	isa_ok ($iter, 'Gtk2::TreeIter', 'insert_with_values with no values');
+
+	$iter = $store->insert_with_values (-1, 0, 'foo', 3, TRUE, 2, 42);
+	isa_ok ($iter, 'Gtk2::TreeIter', 'insert_with_values with values');
+
+	is ($store->iter_n_children, $nrows_before + 2,
+	    'added expected number of rows');
 }
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

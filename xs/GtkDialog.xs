@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.21 2004/03/21 04:38:45 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.24 2005/01/10 06:27:12 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -428,3 +428,43 @@ gtk_dialog_set_has_separator (dialog, setting)
 gboolean
 gtk_dialog_get_has_separator (dialog)
 	GtkDialog * dialog
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+##  void gtk_dialog_set_alternative_button_order (GtkDialog *dialog, gint first_response_id, ...)
+void
+gtk_dialog_set_alternative_button_order (dialog, ...)
+	GtkDialog *dialog
+    PREINIT:
+	gint n_params, i;
+	gint *new_order;
+    CODE:
+	if ((n_params = (items - 1)) > 0) {
+		new_order = g_new0 (gint, n_params);
+		for (i = 1; i < items; i++)
+			new_order[i - 1] = SvIV (ST (i));
+
+		gtk_dialog_set_alternative_button_order_from_array (
+			dialog, n_params, new_order);
+
+		g_free (new_order);
+	}
+
+#endif
+
+MODULE = Gtk2::Dialog	PACKAGE = Gtk2	PREFIX = gtk_
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+# don't override the pod from Gtk2.pm...
+=for object Gtk2::main
+=cut
+
+##  gboolean gtk_alternative_dialog_button_order (GdkScreen *screen);
+gboolean
+gtk_alternative_dialog_button_order (class, screen=NULL)
+	GdkScreen_ornull *screen
+    C_ARGS:
+	screen
+
+#endif

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 8, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelSort.t,v 1.3.6.1 2005/01/30 04:21:47 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelSort.t,v 1.4 2005/01/19 13:02:46 rwmcfa1 Exp $
 
 my $list = Gtk2::ListStore -> new("Glib::Int");
 

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 13;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSpinButton.t,v 1.4.6.1 2005/01/30 04:21:47 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSpinButton.t,v 1.5 2005/01/19 13:02:46 rwmcfa1 Exp $
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 

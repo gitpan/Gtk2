@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
 use Gtk2::TestHelper
-  tests => 20,
+  tests => 21,
   at_least_version => [2, 2, 0, "GdkDisplay is new in 2.2"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.7 2004/04/25 11:12:45 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.8 2005/01/02 16:25:51 kaffeetisch Exp $
 
 my $display = Gtk2::Gdk::Display -> open($ENV{DISPLAY});
 isa_ok($display, "Gtk2::Gdk::Display");
@@ -58,6 +58,27 @@ SKIP: {
   like($height, qr/^\d+$/);
 
   isa_ok($display -> get_default_group(), "Gtk2::Gdk::Window");
+}
+
+SKIP: {
+  skip("new 2.6 stuff", 1)
+    unless Gtk2 -> CHECK_VERSION(2, 6, 0);
+
+  if ($display -> supports_selection_notification()) {
+    is($display -> request_selection_notification(Gtk2::Gdk::Atom -> intern("text/plain")), TRUE);
+  } else {
+    ok(1);
+  }
+
+  if ($display -> supports_clipboard_persistence()) {
+    my $window = Gtk2::Window -> new();
+    $window -> realize();
+
+    $display -> store_clipboard($window -> window, 0,
+                                Gtk2::Gdk::Atom -> intern("text/plain"),
+                                Gtk2::Gdk::Atom -> intern("image/png"));
+    $display -> store_clipboard($window -> window, 0);
+  }
 }
 
 # FIXME: currently segfaults for me.  see #85715.

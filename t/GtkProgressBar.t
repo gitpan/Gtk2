@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkProgressBar.t,v 1.5 2004/03/12 17:47:14 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkProgressBar.t,v 1.6 2005/01/02 16:25:51 kaffeetisch Exp $
 #
 
 #########################
@@ -7,7 +7,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 30, noinit => 1;
+use Gtk2::TestHelper tests => 31, noinit => 1;
 
 ok( my $vbox = Gtk2::VBox->new( 0, 5 ) );
 
@@ -44,6 +44,14 @@ foreach (@prog)
 }
 
 ok(1);
+
+SKIP: {
+	skip "[sg]et_ellipsize are new in 2.6", 1
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	$prog[0]->set_ellipsize ("middle");
+	is ($prog[0]->get_ellipsize, "middle");
+}
 
 __END__
 

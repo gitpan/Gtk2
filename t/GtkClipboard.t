@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-use Gtk2::TestHelper tests => 64,
+use Gtk2::TestHelper tests => 85,
 	at_least_version => [2, 2, 0, "GtkClipboard didn't exist in 2.0.x"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkClipboard.t,v 1.7.4.1 2005/01/30 04:21:54 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkClipboard.t,v 1.8 2005/01/02 17:45:21 kaffeetisch Exp $
 
 my $clipboard;
 
@@ -58,9 +58,32 @@ SKIP: {
 		isa_ok ($_[1][0], "Gtk2::Gdk::Atom");
 		is ($_[2], "bla");
 	}, "bla");
+}
 
-	# FIXME: always empty?
-	# warn $clipboard->wait_for_targets;
+SKIP: {
+	skip 'new/now-working targets stuff', 2
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	is ($clipboard->wait_is_target_available (Gtk2::Gdk::Atom->intern ('TEXT')), TRUE);
+	isa_ok (($clipboard->wait_for_targets)[0], 'Gtk2::Gdk::Atom');
+}
+
+SKIP: {
+	skip "new image stuff", 5
+		# Some of this was broken in 2.6.0
+		unless Gtk2->CHECK_VERSION (2, 6, 1);
+
+	my $pixbuf = Gtk2::Gdk::Pixbuf->new ("rgb", FALSE, 8, 23, 42);
+	$clipboard->set_image ($pixbuf);
+
+	is ($clipboard->wait_is_image_available, TRUE);
+
+	isa_ok ($clipboard->wait_for_image, "Gtk2::Gdk::Pixbuf");
+	$clipboard->request_image (sub {
+		is ($_[0], $clipboard);
+		isa_ok ($_[1], "Gtk2::Gdk::Pixbuf");
+		is ($_[2], "bla");
+	}, "bla");
 }
 
 Glib::Timeout->add (200, sub {Gtk2->main_quit;1});
@@ -103,6 +126,25 @@ sub get_func {
 
 	is( $_[1]->data, $expect);
 	is( $_[1]->length, length ($expect));
+
+	SKIP: {
+		skip '2.6 stuff', 7
+			unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+		# This won't work with a STRING selection, but I don't know
+		# what else to use, so we just check that both operations fail.
+		my $pixbuf = Gtk2::Gdk::Pixbuf->new ('rgb', FALSE, 8, 23, 42);
+		is ($_[1]->set_pixbuf ($pixbuf), FALSE);
+		is ($_[1]->get_pixbuf, undef);
+
+		# Same here.
+		is ($_[1]->set_uris, FALSE);
+		is_deeply ([$_[1]->get_uris], []);
+		is ($_[1]->set_uris (qw(a b c)), FALSE);
+		is_deeply ([$_[1]->get_uris], []);
+
+		is ($_[1]->targets_include_image (TRUE), FALSE);
+	}
 }
 
 sub clear_func {
@@ -158,9 +200,19 @@ $clipboard->request_contents (Gtk2::Gdk->SELECTION_TYPE_STRING,
 Glib::Timeout->add (200, sub {Gtk2->main_quit;1});
 Gtk2->main;
 
+SKIP: {
+	skip "new 2.6 stuff", 0
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	$clipboard->set_can_store ({target=>'STRING'}, {target=>'TEXT'});
+        $clipboard->set_can_store;
+
+        $clipboard->store;
+}
+
 $clipboard->clear;
 
 __END__
 
-Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2004 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

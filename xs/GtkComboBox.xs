@@ -1,12 +1,26 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBox.xs,v 1.5.6.1 2005/01/30 04:21:47 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBox.xs,v 1.9 2005/01/30 02:17:30 muppetman Exp $
  */
 
 #include "gtk2perl.h"
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+/* Defined in GtkTreeView.xs. */
+
+extern GPerlCallback *
+gtk2perl_tree_view_row_separator_func_create (SV * func, SV * data);
+
+extern gboolean
+gtk2perl_tree_view_row_separator_func (GtkTreeModel      *model,
+				       GtkTreeIter       *iter,
+				       gpointer           data);
+
+#endif
 
 MODULE = Gtk2::ComboBox	PACKAGE = Gtk2::ComboBox	PREFIX = gtk_combo_box_
 
@@ -72,3 +86,51 @@ void gtk_combo_box_insert_text (GtkComboBox *combo_box, gint position, const gch
 void gtk_combo_box_prepend_text (GtkComboBox *combo_box, const gchar *text);
 
 void gtk_combo_box_remove_text (GtkComboBox *combo_box, gint position);
+
+##/* programmatic control */
+void gtk_combo_box_popup (GtkComboBox *combo_box);
+
+void gtk_combo_box_popdown (GtkComboBox *combo_box);
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+gint gtk_combo_box_get_wrap_width (GtkComboBox *combo_box);
+
+gint gtk_combo_box_get_row_span_column (GtkComboBox *combo_box);
+
+gint gtk_combo_box_get_column_span_column (GtkComboBox *combo_box);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+gchar_own * gtk_combo_box_get_active_text (GtkComboBox *combo_box);
+
+gboolean gtk_combo_box_get_add_tearoffs (GtkComboBox *combo_box);
+
+void gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box, gboolean add_tearoffs);
+
+#GtkTreeViewRowSeparatorFunc gtk_combo_box_get_row_separator_func (GtkComboBox *combo_box);
+
+ ## void gtk_combo_box_set_row_separator_func (GtkComboBox *combo_box, GtkTreeViewRowSeparatorFunc func, gpointer data, GtkDestroyNotify destroy)
+void
+gtk_combo_box_set_row_separator_func (GtkComboBox *combo_box, SV *func, SV *data = NULL)
+    PREINIT:
+	GPerlCallback *callback;
+    CODE:
+	callback = gtk2perl_tree_view_row_separator_func_create (func, data);
+	gtk_combo_box_set_row_separator_func (
+		combo_box,
+		(GtkTreeViewRowSeparatorFunc)
+		  gtk2perl_tree_view_row_separator_func,
+		callback,
+		(GtkDestroyNotify)
+		  gperl_callback_destroy);
+
+void gtk_combo_box_set_focus_on_click (GtkComboBox *combo_box, gboolean focus_on_click);
+
+gboolean gtk_combo_box_get_focus_on_click (GtkComboBox *combo_box);
+
+#AtkObject * gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box);
+
+#endif

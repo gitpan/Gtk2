@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellRenderer.xs,v 1.28 2004/09/04 23:50:35 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellRenderer.xs,v 1.29 2005/02/08 05:17:41 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -555,6 +555,12 @@ gtk_cell_renderer_start_editing (cell, event, widget, path, background_area, cel
 void
 gtk_cell_renderer_editing_canceled (cell)
 	GtkCellRenderer *cell
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+void gtk_cell_renderer_stop_editing (GtkCellRenderer *cell, gboolean canceled)
 
 #endif
 

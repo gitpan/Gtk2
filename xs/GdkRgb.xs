@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.12 2004/09/19 21:47:11 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.13 2005/01/02 17:45:21 kaffeetisch Exp $
  */
  #include "gtk2perl.h"
 
@@ -220,3 +220,13 @@ gdk_rgb_ditherable (class)
     C_ARGS:
 	/*void*/
 
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+##  gboolean gdk_rgb_colormap_ditherable (GdkColormap *cmap);
+gboolean
+gdk_rgb_colormap_ditherable (class, cmap)
+	GdkColormap *cmap
+    C_ARGS:
+	cmap
+
+#endif

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileFilter.xs,v 1.5 2004/06/14 17:33:36 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileFilter.xs,v 1.7 2005/01/30 02:17:30 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -126,3 +126,9 @@ GtkFileFilterFlags gtk_file_filter_get_needed (GtkFileFilter *filter);
 gboolean gtk_file_filter_filter (GtkFileFilter *filter, SV *filter_info);
     C_ARGS:
 	filter, SvGtkFileFilterInfo (filter_info)
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+void gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
+
+#endif

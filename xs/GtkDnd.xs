@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDnd.xs,v 1.12 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDnd.xs,v 1.13 2005/01/02 16:25:51 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -241,6 +241,22 @@ gtk_drag_check_threshold (widget, start_x, start_y, current_x, current_y)
 	gint start_y
 	gint current_x
 	gint current_y
+
+#if GTK_CHECK_VERSION(2,6,0)
+
+void gtk_drag_dest_add_text_targets (GtkWidget *widget);
+
+void gtk_drag_dest_add_image_targets (GtkWidget *widget);
+
+void gtk_drag_dest_add_uri_targets (GtkWidget *widget);
+
+void gtk_drag_source_add_text_targets (GtkWidget *widget);
+
+void gtk_drag_source_add_image_targets (GtkWidget *widget);
+
+void gtk_drag_source_add_uri_targets (GtkWidget *widget);
+
+#endif
 
  ## private
 ##  void _gtk_drag_source_handle_event (GtkWidget *widget, GdkEvent *event) 

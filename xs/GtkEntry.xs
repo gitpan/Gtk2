@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.12 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.14 2005/01/30 02:17:30 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -159,3 +159,10 @@ gtk_entry_set_editable (entry, editable)
 	GtkEntry * entry
 	gboolean   editable
 
+#if GTK_CHECK_VERSION(2, 6, 0)
+
+gint gtk_entry_layout_index_to_text_index (GtkEntry *entry, gint layout_index)
+
+gint gtk_entry_text_index_to_layout_index (GtkEntry *entry, gint text_index)
+
+#endif

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkImage.xs,v 1.16 2004/01/15 19:39:42 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkImage.xs,v 1.18 2005/01/30 02:17:30 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -155,3 +155,22 @@ GdkPixbufAnimation* gtk_image_get_animation (GtkImage *image)
  ## void gtk_image_get (GtkImage *image, GdkImage **val, GdkBitmap **mask)
  ##void gtk_image_set (GtkImage *image, GdkImage *val, GdkBitmap *mask)
 
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+##  GtkWidget * gtk_image_new_from_icon_name (const gchar *icon_name, GtkIconSize size)
+GtkWidget *
+gtk_image_new_from_icon_name (class, icon_name, size)
+	const gchar *icon_name
+	GtkIconSize size
+    C_ARGS:
+	icon_name, size
+
+void gtk_image_set_from_icon_name (GtkImage *image, const gchar *icon_name, GtkIconSize size)
+
+void gtk_image_get_icon_name (GtkImage *image, OUTLIST const gchar *icon_name, OUTLIST GtkIconSize size)
+
+void gtk_image_set_pixel_size (GtkImage *image, gint pixel_size)
+
+gint gtk_image_get_pixel_size (GtkImage *image)
+
+#endif

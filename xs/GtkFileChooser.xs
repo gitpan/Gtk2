@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileChooser.xs,v 1.12 2004/03/08 02:58:07 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileChooser.xs,v 1.14 2005/01/30 02:17:30 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -201,3 +201,10 @@ void gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser);
 	}
 	g_slist_free (slist);
 
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+void gtk_file_chooser_set_show_hidden (GtkFileChooser *chooser, gboolean show_hidden)
+
+gboolean gtk_file_chooser_get_show_hidden (GtkFileChooser *chooser)
+
+#endif

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.21 2004/03/21 01:39:04 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.23 2005/01/30 02:17:30 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -232,6 +232,18 @@ gtk_accelerator_valid (class, keyval, modifiers)
 #	EXTEND(SP,n_entries);
 #	for( i = 0; i < n_entries; i++ )
 #		PUSHs(sv_2mortal(newSVGtkAccelGroupEntry(entries[i])));
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+##  gchar * gtk_accelerator_get_label (guint accelerator_key, GdkModifierType accelerator_mods)
+gchar_own *
+gtk_accelerator_get_label (class, accelerator_key, accelerator_mods)
+	guint accelerator_key
+	GdkModifierType accelerator_mods
+    C_ARGS:
+	accelerator_key, accelerator_mods
+
+#endif
 
 MODULE = Gtk2::AccelGroup	PACKAGE = Gtk2::AccelGroups	PREFIX = gtk_accel_groups_
 

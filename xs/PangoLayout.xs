@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.22 2004/09/13 21:07:35 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.23 2005/01/07 21:31:59 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -181,6 +181,11 @@ pango_layout_set_font_description (layout, desc)
 	PangoLayout *layout
 	PangoFontDescription_ornull *desc
 
+#if PANGO_CHECK_VERSION (1, 8, 0)
+
+const PangoFontDescription_ornull * pango_layout_get_font_description (PangoLayout *layout);
+
+#endif
 
 ##  int pango_layout_get_width (PangoLayout *layout) 
 ##  int pango_layout_get_indent (PangoLayout *layout) 

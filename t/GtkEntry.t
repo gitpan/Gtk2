@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 13;
+use Gtk2::TestHelper tests => 15;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntry.t,v 1.8 2004/03/21 04:38:32 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntry.t,v 1.10 2005/01/30 02:17:29 muppetman Exp $
 
 my $entry = Gtk2::Entry -> new();
 isa_ok($entry, "Gtk2::Entry");
@@ -50,6 +50,14 @@ SKIP: {
 
   $entry -> set_alignment(0.23);
   is(int($entry -> get_alignment() * 100) / 100, 0.23);
+}
+
+SKIP: {
+  skip("layout_index_to_text_index and text_index_to_layout_index are new in 2.6", 2)
+    unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+  is($entry -> layout_index_to_text_index(1), 1);
+  is($entry -> text_index_to_layout_index(1), 1);
 }
 
 __END__

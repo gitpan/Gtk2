@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 126;
+use Gtk2::TestHelper tests => 156;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.13.4.1 2005/01/30 04:21:25 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.17 2005/01/30 02:17:29 muppetman Exp $
 
 ###############################################################################
 
@@ -294,6 +294,43 @@ $view -> set_column_drag_function(sub { return 1; });
 
 ###############################################################################
 
+SKIP: {
+	# NOTE: the skip count here includes 2 for each tested accessor and
+	#       three for each row that results in a call to the row
+	#       separator callback.  i'm assuming that the number will be
+	#       constant; if not, i suppose we'll just have to disable the
+	#       row separator func test.
+	skip "new toys in 2.6", 30
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	# here are a few new properties which default to off; let's check
+	# the accessors & mutators by turning them on and then back off,
+	# to avoid disrupting the tests that follow.
+	foreach my $thing (qw(fixed_height_mode
+			      hover_selection
+			      hover_expand)) {
+		my $setter = "set_$thing";
+		my $getter = "get_$thing";
+		$view->$setter (1);
+		ok ($view->$getter, $thing);
+
+		$view->$setter (0);
+		ok (!$view->$getter, $thing);
+	}
+
+# FIXME is this a reasonable way to test this?
+	$view->set_row_separator_func (sub {
+		my ($model, $iter, $data) = @_;
+		isa_ok ($model, 'Gtk2::TreeModel');
+		isa_ok ($iter, 'Gtk2::TreeIter');
+		isa_ok ($data, 'HASH');
+		my $path = $model->get_path ($iter);
+		return 1 == ($path->get_indices)[0];
+	}, {thing=>'foo'});
+}
+
+###############################################################################
+
 my $i_know_this_place = 0;
 $cell_renderer = Gtk2::CellRendererToggle -> new();
 
@@ -378,13 +415,7 @@ $view->signal_connect (button_press_event => sub {
 	});
 my $event = Gtk2::Gdk::Event->new ('button-press');
 
-Glib::Idle -> add(sub {
-	$view->signal_emit ('button_press_event', $event);
-	Gtk2 -> main_quit();
-	return 0;
-});
-
-Gtk2 -> main();
+run_main { $view->signal_emit ('button_press_event', $event) };
 
 __END__
 

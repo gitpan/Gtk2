@@ -1,8 +1,15 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 47, noinit => 1;
+use Gtk2::TestHelper tests => 48, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoTypes.t,v 1.2 2004/09/13 21:07:34 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoTypes.t,v 1.4 2004/10/30 17:13:23 kaffeetisch Exp $
+
+SKIP: {
+  skip("find_base_dir is new in 1.4", 1)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 4, 0));
+
+is(Gtk2::Pango -> find_base_dir("urgs"), "ltr");
+}
 
 my $language = Gtk2::Pango::Language -> from_string("de_DE");
 isa_ok($language, "Gtk2::Pango::Language");

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.25 2004/04/19 18:18:42 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.26 2005/02/17 04:33:12 muppetman Exp $
 #
 
 #########################
@@ -353,6 +353,7 @@ sub POP { # this
 	my $model = $_[0]->{model};
 	my $index = $model->iter_n_children-1;
 	my $iter = $model->iter_nth_child(undef, $index);
+	return undef unless $iter;
 	my $ret = [ $model->get ($iter) ];
 	$model->remove($iter) if( $index >= 0 );
 	return $ret;
@@ -361,6 +362,7 @@ sub POP { # this
 sub SHIFT { # this
 	my $model = $_[0]->{model};
 	my $iter = $model->iter_nth_child(undef, 0);
+	return undef unless $iter;
 	my $ret = [ $model->get ($iter) ];
 	$model->remove($iter) if( $model->iter_n_children );
 	return $ret;
@@ -390,6 +392,7 @@ sub DELETE { # this, key
 	my $ret;
 	if ($_[1] < $model->iter_n_children (undef)) {
 		my $iter = $model->iter_nth_child (undef, $_[1]);
+		return undef unless $iter;
 		$ret = [ $model->get ($iter) ];
 		$model->remove ($iter);
 	}

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 50;
+use Gtk2::TestHelper tests => 53;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.10.2.1 2005/01/30 04:21:35 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.12 2005/02/26 16:28:24 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Bla");
 my $context = $label -> create_pango_context();
@@ -19,6 +19,10 @@ is($layout -> get_text(), "Bla bla.");
 $layout -> set_markup("Bla bla.");
 is($layout -> set_markup_with_accel("Bla _bla.", "_"), "b");
 
+my $font = Gtk2::Pango::FontDescription -> new();
+
+$layout -> set_font_description($font);
+
 SKIP: {
   skip("set_font_description was slightly borken", 0)
     unless (Gtk2::Pango -> CHECK_VERSION(1, 4, 0));
@@ -26,7 +30,15 @@ SKIP: {
   $layout -> set_font_description(undef);
 }
 
-$layout -> set_font_description(Gtk2::Pango::FontDescription -> new());
+SKIP: {
+  skip("new 1.8 stuff", 2)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 8, 0));
+
+  is($layout -> get_font_description(), undef);
+
+  $layout -> set_font_description($font);
+  isa_ok($layout -> get_font_description(), "Gtk2::Pango::FontDescription");
+}
 
 $layout -> set_width(23);
 is($layout -> get_width(), 23);
@@ -42,6 +54,10 @@ is($layout -> get_spacing(), 5);
 
 $layout -> set_justify(1);
 is($layout -> get_justify(), 1);
+
+my $attributes = $layout -> get_attributes();
+isa_ok($attributes, "Gtk2::Pango::AttrList");
+$layout -> set_attributes($attributes);
 
 SKIP: {
   skip("[sg]et_auto_dir are new in 1.3.5", 1)

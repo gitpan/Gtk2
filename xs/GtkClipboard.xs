@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.19.2.1 2005/01/30 04:21:54 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.21 2005/01/02 17:45:21 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -79,6 +79,20 @@ gtk2perl_clipboard_targets_received_func (GtkClipboard *clipboard,
 		av_push (av, newSVGdkAtom (targets[i]));
 	targetlist = sv_2mortal (newRV_noinc ((SV*) av));
 	gperl_callback_invoke (callback, NULL, clipboard, targetlist);
+	gperl_callback_destroy (callback);
+}
+
+#endif
+
+#if GTK_CHECK_VERSION(2, 6, 0)
+
+static void
+gtk2perl_clipboard_image_received_func (GtkClipboard *clipboard,
+                                        GdkPixbuf *pixbuf,
+                                        gpointer data)
+{
+	GPerlCallback * callback = (GPerlCallback*) data;
+	gperl_callback_invoke (callback, NULL, clipboard, pixbuf);
 	gperl_callback_destroy (callback);
 }
 
@@ -381,6 +395,51 @@ gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard)
 		g_free (targets);
 	}
 
-#endif
+#endif /* 2.4.0 */
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+void gtk_clipboard_set_image (GtkClipboard *clipboard, GdkPixbuf *pixbuf);
+
+GdkPixbuf_noinc_ornull * gtk_clipboard_wait_for_image (GtkClipboard *clipboard);
+
+gboolean gtk_clipboard_wait_is_image_available (GtkClipboard *clipboard);
+
+##  void gtk_clipboard_request_image (GtkClipboard *clipboard, GtkClipboardImageReceivedFunc callback, gpointer user_data);
+void
+gtk_clipboard_request_image (GtkClipboard *clipboard, SV *callback, SV *user_data=NULL)
+    PREINIT:
+	GType param_types[2];
+	GPerlCallback *real_callback;
+    CODE:
+	param_types[0] = GTK_TYPE_CLIPBOARD;
+	param_types[1] = GDK_TYPE_PIXBUF;
+
+	real_callback = gperl_callback_new (callback, user_data,
+	                                    2, param_types, G_TYPE_NONE);
+	gtk_clipboard_request_image
+			(clipboard,
+			 gtk2perl_clipboard_image_received_func,
+			 real_callback);
+
+##  void gtk_clipboard_set_can_store (GtkClipboard *clipboard, const GtkTargetEntry *targets, gint n_targets);
+=for apidoc
+=for arg ... of Gtk2::TargetEntry's
+=cut
+void
+gtk_clipboard_set_can_store (clipboard, ...);
+	GtkClipboard *clipboard
+    PREINIT:
+	GtkTargetEntry *targets = NULL;
+	gint n_targets;
+    CODE:
+	GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (1, targets, n_targets);
+	gtk_clipboard_set_can_store (clipboard, targets, n_targets);
+
+void gtk_clipboard_store (GtkClipboard *clipboard);
+
+gboolean gtk_clipboard_wait_is_target_available (GtkClipboard *clipboard, GdkAtom target);
+
+#endif /* 2.6.0 */
 
 #endif /* defined GTK_TYPE_CLIPBOARD */

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 2, noinit => 1, skip_all => "Currently broken"; # FIXME
+use Gtk2::TestHelper tests => 2, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStock.t,v 1.5.6.1 2005/01/31 19:56:49 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStock.t,v 1.6 2005/02/26 16:28:24 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 
@@ -21,7 +21,11 @@ my @items = (
 
 Gtk2::Stock -> add(@items);
 is_deeply([(Gtk2::Stock -> list_ids())[0, 1]], ["gtk2perl-test-script", "gtk2perl-bla"]);
-is_deeply(Gtk2::Stock -> lookup("gtk2perl-test-script"), $items[0]);
+
+TODO: {
+  local $TODO = "Currently fails due to a Test::More bug";
+  is_deeply(Gtk2::Stock -> lookup("gtk2perl-test-script"), $items[0]);
+}
 
 __END__
 

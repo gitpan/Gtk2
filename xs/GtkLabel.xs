@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.14 2004/01/17 07:25:05 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.17 2005/01/09 03:48:41 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -184,3 +184,27 @@ gtk_label_get_layout (label)
 
 
 void gtk_label_get_layout_offsets (GtkLabel * label, OUTLIST gint x, OUTLIST gint y)
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+void gtk_label_set_ellipsize (GtkLabel *label, PangoEllipsizeMode mode);
+
+PangoEllipsizeMode gtk_label_get_ellipsize (GtkLabel *label);
+
+void gtk_label_set_width_chars (GtkLabel *label, gint n_chars);
+
+gint gtk_label_get_width_chars (GtkLabel *label);
+
+void gtk_label_set_max_width_chars (GtkLabel *label, gint n_chars);
+
+gint gtk_label_get_max_width_chars (GtkLabel *label);
+
+void gtk_label_set_angle (GtkLabel *label, gdouble angle);
+
+gdouble gtk_label_get_angle (GtkLabel *label);
+
+void gtk_label_set_single_line_mode (GtkLabel *label, gboolean single_line_mode);
+
+gboolean gtk_label_get_single_line_mode (GtkLabel *label);
+
+#endif

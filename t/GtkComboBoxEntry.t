@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBoxEntry.t,v 1.5.4.1 2005/01/30 04:21:47 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBoxEntry.t,v 1.6 2005/01/19 13:02:46 rwmcfa1 Exp $
 #
 
 use Gtk2::TestHelper

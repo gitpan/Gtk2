@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDnd.xs,v 1.14 2004/03/01 07:06:44 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDnd.xs,v 1.15 2005/01/02 16:25:51 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -232,3 +232,9 @@ gdk_drop_finish (context, success, time_=GDK_CURRENT_TIME)
 	GdkDragContext *context
 	gboolean success
 	guint32 time_
+
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+gboolean gdk_drag_drop_succeeded (GdkDragContext *context);
+
+#endif

@@ -1,4 +1,4 @@
-$Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/TODO,v 1.15 2004/06/09 01:40:23 muppetman Exp $
+$Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/TODO,v 1.17 2004/10/17 10:34:28 kaffeetisch Exp $
 
 
 give a better name to the entry point for gtk-demo
@@ -13,12 +13,6 @@ no typemap (and therefore no bindings) for
 	PangoEngineShape
 	PangoCoverage
 	PangoLayoutLine
-
-gdk_threads_init is supposed to be called before gtk_init.
-probably should have another import option, -thread-init,
-to avoid *always* enabling thread safety, since it will
-be rare to have a multi-threaded perl gtk program until
-perl threading is more mainstream.
 
 what about decorated window stuff?
 

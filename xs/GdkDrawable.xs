@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDrawable.xs,v 1.16 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDrawable.xs,v 1.17 2005/01/02 16:25:51 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -320,6 +320,10 @@ gdk_draw_layout_with_colors (drawable, gc, x, y, layout, foreground, background)
 	GdkColor *foreground
 	GdkColor *background
 
+##  The docs say that "[t]his is low level functionality used internally to
+##  implement rotated underlines and backgrouds when rendering a PangoLayout
+##  and is likely not useful for applications."
+##  void gdk_draw_trapezoids (GdkDrawable *drawable, GdkGC *gc, GdkTrapezoid *trapezoids, gint n_trapezoids);
 
 MODULE = Gtk2::Gdk::Drawable	PACKAGE = Gtk2::Gdk::Drawable	PREFIX = gdk_drawable_
 

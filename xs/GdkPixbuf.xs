@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.32 2004/09/19 21:47:11 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.33 2005/02/08 05:17:17 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -239,6 +239,12 @@ gdk_pixbuf_get_height (pixbuf)
 int
 gdk_pixbuf_get_rowstride (pixbuf)
 	GdkPixbuf *pixbuf
+
+## G_CONST_RETURN gchar * gdk_pixbuf_get_option (GdkPixbuf *pixbuf, const gchar *key)
+const gchar_ornull *
+gdk_pixbuf_get_option (pixbuf, key)
+	GdkPixbuf * pixbuf
+	const gchar * key
 
 ##  GdkPixbuf *gdk_pixbuf_new (GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample, int width, int height) 
 GdkPixbuf_noinc *

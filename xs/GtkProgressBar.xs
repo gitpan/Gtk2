@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkProgressBar.xs,v 1.9 2004/03/12 02:05:43 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkProgressBar.xs,v 1.10 2005/01/02 16:25:51 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -85,3 +85,10 @@ const gchar_ornull *
 gtk_progress_bar_get_text (pbar)
 	GtkProgressBar * pbar
 
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+void gtk_progress_bar_set_ellipsize (GtkProgressBar *pbar, PangoEllipsizeMode mode);
+
+PangoEllipsizeMode gtk_progress_bar_get_ellipsize (GtkProgressBar *pbar);
+
+#endif

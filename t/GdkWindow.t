@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 39;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.13 2004/02/28 16:45:43 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.14 2005/01/02 16:25:51 kaffeetisch Exp $
 
 my $attributes = {
   title => "Bla",
@@ -265,6 +265,15 @@ isa_ok(Gtk2::Gdk -> get_default_root_window(), "Gtk2::Gdk::Window");
 
 $window -> set_user_data(123);
 is($window -> get_user_data(), 123);
+
+SKIP: {
+  skip("new 2.6 stuff", 0)
+    unless Gtk2 -> CHECK_VERSION(2, 6, 0);
+
+  $window -> enable_synchronized_configure();
+  $window -> configure_finished();
+  $window -> set_focus_on_map(TRUE);
+}
 
 $window -> hide();
 

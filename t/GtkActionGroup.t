@@ -1,11 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkActionGroup.t,v 1.4 2004/03/17 03:52:24 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkActionGroup.t,v 1.7 2005/01/10 06:32:28 muppetman Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, "Action-based menus are new in 2.4"],
-#	tests => 9, noinit => 1;
-	tests => 11;
+	tests => 28;
 
 my $action_group = Gtk2::ActionGroup->new ("Fred");
 
@@ -91,7 +90,33 @@ $action_group->add_radio_actions (\@color_entries, COLOR_GREEN, \&on_change);
 @list = $action_group->list_actions;
 is (@list, 10);
 
+$action_group->set_translation_domain("de_DE");
+
+SKIP: {
+	skip "translation API is (semi) new in 2.6", 3+14
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	$action_group->set_translate_func(sub {
+		my ($string, $data) = @_;
+
+		is($string, "Urgs");
+		is($data, "bla");
+
+		return "Sgru";
+	}, "bla");
+
+	is($action_group->translate_string("Urgs"), "Sgru");
+
+	# as of 2.6.0 we have the ability to call the translation function
+	# from add_*_actions like we're supposed to, so let's test that.
+	# the following should result in 14 oks.
+	$action_group->set_translate_func (sub { ok(1, 'xlate'); reverse $_[0]; });
+	$action_group->add_actions (\@action_entries);
+	$action_group->add_toggle_actions (\@toggle_entries, 42);
+	$action_group->add_radio_actions (\@color_entries, COLOR_GREEN, \&on_change);
+}
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

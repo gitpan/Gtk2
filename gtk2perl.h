@@ -18,7 +18,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
  * 
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.33 2004/08/29 13:02:38 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.36 2005/02/17 04:33:47 muppetman Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -41,9 +41,18 @@
   GType gtk2perl_pango_layout_iter_get_type (void) G_GNUC_CONST;
 #endif
 
+/* custom GType for PangoScriptIter */
+#if PANGO_CHECK_VERSION (1, 4, 0)
+# ifndef PANGO_TYPE_SCRIPT_ITER
+#  define PANGO_TYPE_SCRIPT_ITER (gtk2perl_pango_script_iter_get_type ())
+   GType gtk2perl_pango_script_iter_get_type (void) G_GNUC_CONST;
+# endif
+#endif
+
 #include "gtk2perl-autogen.h"
 
-#ifdef GDK_WINDOWING_WIN32 /* no plug/socket on win32 despite patches exist for years. */
+/* no plug/socket on non-X11 despite patches exist for years. */
+#ifndef GDK_WINDOWING_X11
 # undef GTK_TYPE_PLUG
 # undef GTK_TYPE_SOCKET
 #endif

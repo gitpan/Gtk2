@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 32;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextBuffer.t,v 1.6 2004/03/21 04:38:32 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextBuffer.t,v 1.7 2005/01/02 16:25:51 kaffeetisch Exp $
 
 my $table = Gtk2::TextTagTable -> new();
 
@@ -123,6 +123,13 @@ SKIP: {
 
 $buffer -> begin_user_action();
 $buffer -> end_user_action();
+
+SKIP: {
+  skip "backspace is new in 2.6", 0
+    unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+  $buffer -> backspace($buffer -> get_end_iter(), TRUE, TRUE);
+}
 
 __END__
 

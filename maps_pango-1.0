@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/maps_pango-1.0,v 1.1 2004/07/07 19:17:36 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/maps_pango-1.0,v 1.3 2004/10/30 17:13:17 kaffeetisch Exp $
 #
 
 #
@@ -40,6 +40,7 @@ PANGO_TYPE_FONTSET	PangoFontset	GObject	Gtk2::Pango::Fontset
 PANGO_TYPE_GLYPH_STRING	PangoGlyphString	GBoxed	Gtk2::Pango::GlyphString
 PANGO_TYPE_LANGUAGE	PangoLanguage	GBoxed	Gtk2::Pango::Language
 PANGO_TYPE_LAYOUT	PangoLayout	GObject	Gtk2::Pango::Layout
+PANGO_TYPE_SCRIPT	PangoScript	GEnum	Gtk2::Pango::Script
 PANGO_TYPE_STRETCH	PangoStretch	GEnum	Gtk2::Pango::Stretch
 PANGO_TYPE_STYLE	PangoStyle	GEnum	Gtk2::Pango::Style
 PANGO_TYPE_TAB_ALIGN	PangoTabAlign	GEnum	Gtk2::Pango::TabAlign

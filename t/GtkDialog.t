@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDialog.t,v 1.2 2004/01/10 04:43:38 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDialog.t,v 1.4 2005/01/02 17:45:21 kaffeetisch Exp $
 #
 
 #########################
@@ -7,7 +7,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 18;
+use Gtk2::TestHelper tests => 21;
 
 ok( my $win = Gtk2::Window->new('toplevel') );
 
@@ -65,7 +65,20 @@ ok(1);
 $btn3->clicked;
 ok(1);
 
+SKIP: {
+	skip 'set_alternative_button_order is new in 2.6', 3
+		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	$d3->set_alternative_button_order (2, 3);
+	$d3->set_alternative_button_order;
+
+	my $screen = Gtk2::Gdk::Screen->get_default;
+	like (Gtk2->alternative_dialog_button_order ($screen), qr/^(?:1|)$/);
+	like (Gtk2->alternative_dialog_button_order (undef), qr/^(?:1|)$/);
+	like (Gtk2->alternative_dialog_button_order, qr/^(?:1|)$/);
+}
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

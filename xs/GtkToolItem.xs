@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolItem.xs,v 1.3 2004/02/22 19:57:34 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolItem.xs,v 1.4 2005/01/09 03:48:41 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -62,3 +62,8 @@ GtkWidget * gtk_tool_item_get_proxy_menu_item (GtkToolItem *tool_item, const gch
 
 void gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item, const gchar *menu_item_id, GtkWidget *menu_item);
 
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+void gtk_tool_item_rebuild_menu (GtkToolItem *tool_item);
+
+#endif

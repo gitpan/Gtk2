@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.39 2004/06/04 20:44:59 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.40 2005/01/02 16:25:51 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -809,6 +809,15 @@ gdk_window_process_updates (GdkWindow * window, gboolean update_children)
  ## void gdk_window_get_internal_paint_info (GdkWindow *window, GdkDrawable **real_drawable, gint *x_offset, gint *y_offset)
 void gdk_window_get_internal_paint_info (GdkWindow *window, OUTLIST GdkDrawable *real_drawable, OUTLIST gint x_offset, OUTLIST gint y_offset)
 
+#if GTK_CHECK_VERSION (2, 6, 0)
+
+void gdk_window_enable_synchronized_configure (GdkWindow *window);
+
+void gdk_window_configure_finished (GdkWindow *window);
+
+void gdk_window_set_focus_on_map (GdkWindow *window, gboolean focus_on_map);
+
+#endif
 
 MODULE = Gtk2::Gdk::Window	PACKAGE = Gtk2::Gdk	PREFIX = gdk_
 
