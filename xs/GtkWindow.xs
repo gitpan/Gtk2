@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.14 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.17 2003/11/12 19:47:55 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,12 +26,9 @@ MODULE = Gtk2::Window	PACKAGE = Gtk2::Window	PREFIX = gtk_window_
 ## GtkWidget* gtk_window_new (GtkWindowType type)
 GtkWidget *
 gtk_window_new (class, type=GTK_WINDOW_TOPLEVEL)
-	SV            * class
 	GtkWindowType   type
     C_ARGS:
 	type
-    CLEANUP:
-	UNUSED(class);
 
 ## void gtk_window_set_title (GtkWindow *window, const gchar *title)
 void
@@ -176,14 +173,13 @@ GdkGravity
 gtk_window_get_gravity (window)
 	GtkWindow * window
 
-# TODO: GDkGeometry not in typemap
 ## void gtk_window_set_geometry_hints (GtkWindow *window, GtkWidget *geometry_widget, GdkGeometry *geometry, GdkWindowHints geom_mask)
-#void
-#gtk_window_set_geometry_hints (window, geometry_widget, geometry, geom_mask)
-#	GtkWindow      * window
-#	GtkWidget      * geometry_widget
-#	GdkGeometry    * geometry
-#	GdkWindowHints   geom_mask
+void
+gtk_window_set_geometry_hints (window, geometry_widget, geometry, geom_mask)
+	GtkWindow      * window
+	GtkWidget      * geometry_widget
+	GdkGeometry    * geometry
+	GdkWindowHints   geom_mask
 
 ## gboolean gtk_window_get_has_frame (GtkWindow *window)
 gboolean
@@ -255,24 +251,25 @@ gtk_window_set_icon (window, icon)
 void
 gtk_window_set_icon_from_file (window, filename)
 	GtkWindow     * window
-	const gchar   * filename
+	GPerlFilename filename
     PREINIT:
-	GError * err = NULL;
+        GError *error = NULL;
     CODE:
-	if (!gtk_window_set_icon_from_file(window, filename, &err))
-		gperl_croak_gerror (filename, err);
+	gtk_window_set_icon_from_file(window, filename, &error);
+        if (error)
+		gperl_croak_gerror (filename, error);
 
 #gboolean gtk_window_set_default_icon_from_file (GtkWindow *window, const gchar *filename, GError **err)
 void
-gtk_window_set_default_icon_from_file (class, filename)
-	SV            * class
-	const gchar   * filename
+gtk_window_set_default_icon_from_file (class_or_instance, filename)
+        SV *class_or_instance
+	GPerlFilename filename
     PREINIT:
-	GError * err = NULL;
+        GError *error = NULL;
     CODE:
-	UNUSED(class);
-	if (!gtk_window_set_default_icon_from_file(filename, &err))
-		gperl_croak_gerror (filename, err);
+	gtk_window_set_default_icon_from_file(filename, &error);
+        if (error)
+		gperl_croak_gerror (filename, error);
 
 #endif
 
@@ -286,14 +283,10 @@ gtk_window_get_icon (window)
 ## void gtk_window_set_default_icon_list (GList *list)
 void
 gtk_window_set_default_icon_list (class, pixbuf, ...)
-	SV * class
-	SV * pixbuf
     PREINIT:
 	int i;
 	GList * list = NULL;
     CODE:
-	UNUSED(class);
-	UNUSED(pixbuf);
 	for (i = 1; i < items ; i++)
 		list = g_list_append (list, SvGdkPixbuf (ST (i)));
 	gtk_window_set_default_icon_list (list);
@@ -302,11 +295,9 @@ gtk_window_set_default_icon_list (class, pixbuf, ...)
 ## GList* gtk_window_get_default_icon_list (void)
 void
 gtk_window_get_default_icon_list (class)
-	SV * class
     PREINIT:
 	GList * list, * tmp;
     PPCODE:
-	UNUSED(class);
 	list = gtk_window_get_default_icon_list ();
 	for (tmp = list ; tmp != NULL ; tmp = tmp->next)
 		XPUSHs (sv_2mortal (newSVGdkPixbuf (tmp->data)));
@@ -320,11 +311,9 @@ gtk_window_get_modal (window)
 ## GList* gtk_window_list_toplevels (void)
 void
 gtk_window_list_toplevels (class)
-	SV * class
     PREINIT:
 	GList * toplvls, * i;
     PPCODE:
-	UNUSED(class);
 	toplvls = gtk_window_list_toplevels ();
 	for (i = toplvls; i != NULL; i = i->next)
 		XPUSHs (sv_2mortal (newSVGtkWindow (i->data)));
@@ -459,11 +448,8 @@ gtk_window_parse_geometry (window, geometry)
 ## GtkWindowGroup * gtk_window_group_new (void)
 GtkWindowGroup *
 gtk_window_group_new (class)
-	SV * class
     C_ARGS:
 	/*void*/
-    CLEANUP:
-	UNUSED(class);
 
 ## void gtk_window_group_add_window (GtkWindowGroup *window_group, GtkWindow *window)
 void

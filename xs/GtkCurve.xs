@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.11 2003/09/26 12:28:31 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.12 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,11 +26,8 @@ MODULE = Gtk2::Curve	PACKAGE = Gtk2::Curve	PREFIX = gtk_curve_
 ## GtkWidget* gtk_curve_new (void)
 GtkWidget *
 gtk_curve_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 ## void gtk_curve_reset (GtkCurve *curve)
 void

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkList.xs,v 1.5 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkList.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you
@@ -33,11 +33,8 @@ MODULE = Gtk2::List	PACKAGE = Gtk2::List	PREFIX = gtk_list_
 ##  GtkWidget* gtk_list_new (void) 
 GtkWidget *
 gtk_list_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 ## parameter order flipped on this function so the item
 ## list soaks up the rest of the arg stack
@@ -46,11 +43,9 @@ void
 gtk_list_insert_items (list, position, list_item, ...)
 	GtkList       * list
 	gint            position
-	GtkListItem   * list_item
     PREINIT:
 	GList * list_items = NULL;
     CODE:
-	UNUSED(list_item);
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));
@@ -64,11 +59,9 @@ gtk_list_insert_items (list, position, list_item, ...)
 void
 gtk_list_append_items (list, list_item, ...)
 	GtkList       * list
-	GtkListItem   * list_item
     PREINIT:
 	GList * list_items = NULL;
     CODE:
-	UNUSED(list_item);
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));
@@ -82,11 +75,9 @@ gtk_list_append_items (list, list_item, ...)
 void
 gtk_list_prepend_items (list, list_item, ...)
 	GtkList       * list
-	GtkListItem   * list_item
     PREINIT:
 	GList * list_items = NULL;
     CODE:
-	UNUSED(list_item);
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));
@@ -100,11 +91,9 @@ gtk_list_prepend_items (list, list_item, ...)
 void
 gtk_list_remove_items (list, list_item, ...)
 	GtkList       * list
-	GtkListItem   * list_item
     PREINIT:
 	GList * list_items = NULL;
     CODE:
-	UNUSED(list_item);
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolbar.xs,v 1.10 2003/10/01 15:25:01 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolbar.xs,v 1.11 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -177,11 +177,8 @@ MODULE = Gtk2::Toolbar	PACKAGE = Gtk2::Toolbar	PREFIX = gtk_toolbar_
 ## GtkWidget* gtk_toolbar_new (void)
 GtkWidget *
 gtk_toolbar_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 ##GtkWidget* gtk_toolbar_append_item (GtkToolbar *toolbar, const char *text, const char *tooltip_text, const char *tooltip_private_text, GtkWidget *icon, GtkSignalFunc callback, gpointer user_data)
 GtkWidget *

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextTag.xs,v 1.6 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextTag.xs,v 1.8 2003/10/18 07:04:43 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -24,15 +24,11 @@
 MODULE = Gtk2::TextTag	PACKAGE = Gtk2::TextTag	PREFIX = gtk_text_tag_
 
 
-#### FIXME name may be NULL... need a gchar_ornull typemap
 GtkTextTag_noinc *
-gtk_text_tag_new (class, name)
-	SV * class
-	const gchar * name
+gtk_text_tag_new (class, name=NULL)
+	const gchar_ornull * name
     C_ARGS:
 	name
-    CLEANUP:
-	UNUSED(class);
 
 gint
 gtk_text_tag_get_priority (tag)
@@ -56,11 +52,8 @@ MODULE = Gtk2::TextTag	PACKAGE = Gtk2::TextAttributes	PREFIX = gtk_text_attribut
 ## GtkTextAttributes* gtk_text_attributes_new (void)
 GtkTextAttributes_own *
 gtk_text_attributes_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 GtkTextAttributes_own*
 gtk_text_attributes_copy (src)

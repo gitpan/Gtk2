@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListItem.xs,v 1.6 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListItem.xs,v 1.7 2003/10/12 17:57:30 rwmcfa1 Exp $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you
@@ -34,10 +34,8 @@ MODULE = Gtk2::ListItem	PACKAGE = Gtk2::ListItem	PREFIX = gtk_list_item_
 ##  GtkWidget* gtk_list_item_new_with_label (const gchar *label) 
 GtkWidget *
 gtk_list_item_new (class, label=NULL)
-	SV    * class
 	gchar * label
     CODE:
-	UNUSED(class);
 	if( label )
 		RETVAL = gtk_list_item_new_with_label(label);
 	else

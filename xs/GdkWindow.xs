@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.17 2003/09/28 19:24:10 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.21 2003/11/14 02:27:44 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -44,12 +44,10 @@ gdk_window_get_window_type (window)
  ## GdkWindow* gdk_window_at_pointer (gint *win_x, gint *win_y)
 void
 gdk_window_at_pointer (class)
-	SV * class
     PREINIT:
 	GdkWindow * window;
 	gint win_x, win_y;
     PPCODE:
-	UNUSED(class);
 	window = gdk_window_at_pointer (&win_x, &win_y);
 	EXTEND (SP, 3);
 	PUSHs (sv_2mortal (newSVGdkWindow (window)));
@@ -178,6 +176,8 @@ gdk_window_scroll (window, dx, dy)
 	gint dx
 	gint dy
 
+void gdk_window_shape_combine_mask (GdkWindow * window, GdkBitmap * mask, gint x, gint y);
+
   ## FIXME needs typemap for GdkRegion
  ## void gdk_window_shape_combine_region (GdkWindow *window, GdkRegion *shape_region, gint offset_x, gint offset_y)
  ##void
@@ -199,17 +199,13 @@ gdk_window_get_state (window)
 
 #ifndef GDK_MULTIHEAD_SAFE
 
-GdkWindow* gdk_window_foreign_new (SV * class, GdkNativeWindow anid);
+GdkWindow* gdk_window_foreign_new (class, GdkNativeWindow anid);
     C_ARGS:
 	anid
-    CLEANUP:
-	UNUSED(class);
 
-GdkWindow* gdk_window_lookup (SV * class, GdkNativeWindow anid);
+GdkWindow* gdk_window_lookup (class, GdkNativeWindow anid);
     C_ARGS:
 	anid
-    CLEANUP:
-	UNUSED(class);
 
 #endif
  
@@ -253,14 +249,12 @@ gdk_window_set_skip_pager_hint (window, skips_pager)
 
 #endif
 
-# FIXME need typemap for GdkGeometry
- ## void gdk_window_set_geometry_hints (GdkWindow *window, GdkGeometry *geometry, GdkWindowHints geom_mask)
- ##void
- ##gdk_window_set_geometry_hints (window, geometry, geom_mask)
- ##	GdkWindow *window
- ##	GdkGeometry *geometry
- ##	GdkWindowHints geom_mask
- ##
+## void gdk_window_set_geometry_hints (GdkWindow *window, GdkGeometry *geometry, GdkWindowHints geom_mask)
+void
+gdk_window_set_geometry_hints (window, geometry, geom_mask)
+	GdkWindow *window
+	GdkGeometry *geometry
+	GdkWindowHints geom_mask
 
 ## void gdk_set_sm_client_id (const gchar *sm_client_id)
 void
@@ -565,35 +559,16 @@ void
 gdk_window_thaw_updates (window)
 	GdkWindow * window
 
- ## void gdk_window_process_all_updates (void)
-void
-gdk_window_process_all_updates (SV * class)
-    C_ARGS:
-	/*void*/
-    CLEANUP:
-	UNUSED(class);
+void gdk_window_process_all_updates (GdkWindow *class_or_instance)
+    C_ARGS: /*void*/
+
+void gdk_window_set_debug_updates (GdkWindow *class_or_instance, gboolean enable)
+    C_ARGS: enable
 
  ## void gdk_window_process_updates (GdkWindow *window, gboolean update_children)
 void
 gdk_window_process_updates (GdkWindow * window, gboolean update_children)
 
-# FIXME needs typemap for GdkGeometry
- ## ## void gdk_window_constrain_size (GdkGeometry *geometry, guint flags, gint width, gint height, gint *new_width, gint *new_height)
- ##void
- ##gdk_window_constrain_size (geometry, flags, width, height)
- ##	GdkGeometry *geometry
- ##	guint flags
- ##	gint width
- ##	gint height
- ##    PREINIT:
- ##	gint new_width;
- ##	gint new_height;
- ##    PPCODE:
- ##	gdk_window_constrain_size (geometry, flags, width, height, &new_width, &new_height);
- ##	EXTEND (SP, 2);
- ##	PUSHs (sv_2mortal (mewSViv (new_width)));
- ##	PUSHs (sv_2mortal (mewSViv (new_height)));
- ##
  ## void gdk_window_get_internal_paint_info (GdkWindow *window, GdkDrawable **real_drawable, gint *x_offset, gint *y_offset)
  ##void
  ##gdk_window_get_internal_paint_info (window, real_drawable, x_offset, y_offset)
@@ -605,9 +580,7 @@ gdk_window_process_updates (GdkWindow * window, gboolean update_children)
 
 MODULE = Gtk2::Gdk::Window	PACKAGE = Gtk2::Gdk	PREFIX = gdk_
 
-GdkWindow *gdk_get_default_root_window (SV * class)
+GdkWindow *gdk_get_default_root_window (class)
     C_ARGS:
 	/*void*/
-    CLEANUP:
-	UNUSED(class);
 

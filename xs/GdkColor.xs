@@ -16,20 +16,32 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.8 2003/09/22 00:04:24 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.10 2003/11/10 06:49:51 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
 /*
-GdkColormap is a direct GObject subclass; be sure to use GdkColormap_noinc in the
-proper places.
+GdkColormap is a direct GObject subclass; be sure to use GdkColormap_noinc
+in the proper places.
 
 GdkColor is a plain structure treated as a boxed type.  use GdkColor_own and
 GdkColor_copy in all the right places.
 */
 
 MODULE = Gtk2::Gdk::Color	PACKAGE = Gtk2::Gdk::Colormap	PREFIX = gdk_colormap_
+
+=head1 DESCRIPTION
+
+Colormaps are used to store the mappings between the RGB values you ask for
+and the actual, hardware-dependent values used to display those colors.
+The C<< $colormap->alloc_color >> and C<< $colormap->alloc_colors >> methods
+do the necessary work to allocate a color within the visual; this actually
+has nothing to do with memory management, so it is important that you call
+C<< $colormap->free_colors >> to release those spots in the colormap
+allocated by C<alloc_color> and C<alloc_colors>.
+
+=cut
 
  ## GdkColormap* gdk_colormap_new (GdkVisual *visual, gboolean allocate)
 GdkColormap_noinc*
@@ -45,11 +57,8 @@ gdk_colormap_new (visual, allocate)
  ## GdkColormap* gdk_colormap_get_system (void)
 GdkColormap*
 gdk_colormap_get_system (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 
  ## deprecated
@@ -59,6 +68,11 @@ gdk_colormap_get_system (class)
 ## success becomes an array of TRUE or FALSE corresponding to each input
 ## color, telling whether each one was successfully allocated.  the return
 ## value is the number that were NOT allocated.
+=for apidoc
+=for arg ... list of Gtk2::Gdk::Colors to allocate
+Returns a list of boolean values, telling whether the color at the
+corresponding spot in I<...> could be allocated.
+=cut
 void
 gdk_colormap_alloc_colors (colormap, writeable, best_match, ...)
 	GdkColormap *colormap
@@ -138,16 +152,23 @@ gdk_colormap_query_color (colormap, pixel)
 
 MODULE = Gtk2::Gdk::Color	PACKAGE = Gtk2::Gdk::Color	PREFIX = gdk_color_
 
+=head1 DESCRIPTION
+
+Gdk's colors are 16-bit RGB values -- that is, the red, green, and blue
+components are integer values from 0 to 65535, with 65535 meaning full
+saturation.  If you are used to dealing with colors on the range of 0 to
+255, just scale those numbers by a factor of 8.
+
+=cut
+
 GdkColor_own *
 gdk_color_new (class, red, green, blue)
-	SV * class
 	int red
 	int green
 	int blue
     PREINIT:
 	GdkColor c;
     CODE:
-	UNUSED(class);
 	c.red = red;
 	c.green = green;
 	c.blue = blue;
@@ -162,12 +183,10 @@ gdk_color_new (class, red, green, blue)
  ## gint gdk_color_parse (const gchar *spec, GdkColor *color)
 GdkColor_own *
 gdk_color_parse (class, spec)
-	SV * class
 	const gchar *spec
     PREINIT:
 	GdkColor c;
     CODE:
-	UNUSED(class);
 	RETVAL = gdk_color_copy (&c);
 	if (!gdk_color_parse (spec, RETVAL)) {
 		gdk_color_free (RETVAL);

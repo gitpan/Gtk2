@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.6 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.7 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "../gtk2perl.h"
@@ -26,7 +26,6 @@ MODULE = Gtk2::MessageDialog	PACKAGE = Gtk2::MessageDialog	PREFIX = gtk_message_
 
 GtkWidget *
 gtk_message_dialog_new (class, parent, flags, type, buttons, message)
-	SV * class
 	GtkWindow_ornull * parent
 	GtkDialogFlags flags
 	GtkMessageType type
@@ -34,6 +33,4 @@ gtk_message_dialog_new (class, parent, flags, type, buttons, message)
 	char * message
     C_ARGS:
 	parent, flags, type, buttons, message
-    CLEANUP:
-	UNUSED(class);
 

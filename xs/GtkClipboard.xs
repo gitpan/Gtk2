@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.7 2003/09/30 20:39:10 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.9 2003/11/07 10:57:00 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -52,6 +52,8 @@ gtk2perl_clipboard_received_func (GtkClipboard *clipboard,
 			g_object_get_qdata (G_OBJECT (clipboard),
 			                    clipboard_received_quark());
 	gperl_callback_invoke (callback, NULL, clipboard, selection_data);
+
+	PERL_UNUSED_VAR (data);
 }
 
 static void
@@ -63,6 +65,8 @@ gtk2perl_clipboard_text_received_func (GtkClipboard *clipboard,
 			g_object_get_qdata (G_OBJECT (clipboard),
 			                    clipboard_text_received_quark());
 	gperl_callback_invoke (callback, NULL, clipboard, text);
+
+	PERL_UNUSED_VAR (data);
 }
 
 static void
@@ -98,25 +102,19 @@ MODULE = Gtk2::Clipboard	PACKAGE = Gtk2::Clipboard	PREFIX = gtk_clipboard_
 ##  GtkClipboard *gtk_clipboard_get (GdkAtom selection) 
 GtkClipboard_noinc *
 gtk_clipboard_get (class, selection)
-	SV * class
 	GdkAtom selection
     C_ARGS:
 	selection
-    CLEANUP:
-	UNUSED (class);
 
 #if GTK_CHECK_VERSION(2,2,0)
 
 ##  GtkClipboard *gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection) 
 GtkClipboard_noinc *
 gtk_clipboard_get_for_display (class, display, selection)
-	SV * class
 	GdkDisplay *display
 	GdkAtom selection
     C_ARGS:
 	display, selection
-    CLEANUP:
-	UNUSED (class);
 
 ##  GdkDisplay *gtk_clipboard_get_display (GtkClipboard *clipboard) 
 GdkDisplay *
@@ -132,7 +130,6 @@ gtk_clipboard_set_with_data (clipboard, get_func, clear_func, user_data, target1
 	SV * get_func
 	SV * clear_func
 	SV * user_data
-	GtkTargetEntry *target1
     PREINIT:
 	GtkTargetEntry *targets = NULL;
 	guint n_targets;
@@ -199,7 +196,6 @@ gtk_clipboard_set_with_owner (clipboard, get_func, clear_func, owner, target1, .
 	SV * get_func
 	SV * clear_func
 	GObject *owner
-	GtkTargetEntry *target1
     PREINIT:
 	GtkTargetEntry *targets = NULL;
 	guint n_targets = 0;

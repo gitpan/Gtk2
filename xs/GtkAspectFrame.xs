@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAspectFrame.xs,v 1.6 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAspectFrame.xs,v 1.7 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,7 +26,6 @@ MODULE = Gtk2::AspectFrame	PACKAGE = Gtk2::AspectFrame	PREFIX = gtk_aspect_frame
 ## GtkWidget* gtk_aspect_frame_new (const gchar *label, gfloat xalign, gfloat yalign, gfloat ratio, gboolean obey_child)
 GtkWidget *
 gtk_aspect_frame_new (class, label, xalign, yalign, ratio, obey_child)
-	SV          * class
 	const gchar * label
 	gfloat        xalign
 	gfloat        yalign
@@ -34,8 +33,6 @@ gtk_aspect_frame_new (class, label, xalign, yalign, ratio, obey_child)
 	gboolean      obey_child
     C_ARGS:
 	label, xalign, yalign, ratio, obey_child
-    CLEANUP:
-	UNUSED(class);
 
 ## void gtk_aspect_frame_set (GtkAspectFrame *aspect_frame, gfloat xalign, gfloat yalign, gfloat ratio, gboolean obey_child)
  ### NOTE: renamed to avoid clashing with Glib::Object->set

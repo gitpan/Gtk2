@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.5 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -45,12 +45,9 @@ MODULE = Gtk2::Pango::Layout	PACKAGE = Gtk2::Pango::Layout	PREFIX = pango_layout
 ##  PangoLayout *pango_layout_new (PangoContext *context) 
 PangoLayout_noinc *
 pango_layout_new (class, context)
-	SV * class
 	PangoContext * context
     C_ARGS:
 	context
-    CLEANUP:
-	UNUSED(class);
 
 ##  PangoLayout *pango_layout_copy (PangoLayout *src) 
 PangoLayout_noinc *

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileSelection.xs,v 1.10 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileSelection.xs,v 1.12 2003/11/12 03:14:57 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -54,24 +54,15 @@ member_widget (fs)
 ## GtkWidget* gtk_file_selection_new (const gchar *title)
 GtkWidget *
 gtk_file_selection_new (class, title)
-	SV          * class
 	const gchar * title
     C_ARGS:
 	title
-    CLEANUP:
-	UNUSED(class);
 
 ## void gtk_file_selection_set_filename (GtkFileSelection *filesel, const gchar *filename)
 void
 gtk_file_selection_set_filename (filesel, filename)
 	GtkFileSelection * filesel
-	const gchar      * filename
-    PREINIT:
-	gchar * opsysname;
-    CODE:
-	opsysname = g_filename_from_utf8 (filename, -1, NULL, NULL, NULL);
-	gtk_file_selection_set_filename (filesel, opsysname);
-	g_free (opsysname);
+	GPerlFilename filename
 
 ## void gtk_file_selection_complete (GtkFileSelection *filesel, const gchar *pattern)
 void
@@ -100,14 +91,9 @@ gboolean
 gtk_file_selection_get_select_multiple (filesel)
 	GtkFileSelection * filesel
 
-gchar_own *
+GPerlFilename_own
 gtk_file_selection_get_filename (filesel)
 	GtkFileSelection * filesel
-    CODE:
-	RETVAL = g_filename_to_utf8 (gtk_file_selection_get_filename (filesel),
-	                             -1, NULL, NULL, NULL);
-    OUTPUT:
-	RETVAL
 
 void
 gtk_file_selection_get_selections (filesel)
@@ -118,7 +104,6 @@ gtk_file_selection_get_selections (filesel)
     PPCODE:
 	rets = gtk_file_selection_get_selections(filesel);
 	for (i = 0; rets[i] != NULL; i++)
-		XPUSHs (sv_2mortal (newSVGChar (
-			g_filename_to_utf8 (rets[i], -1, NULL, NULL, NULL))));
+		XPUSHs (sv_2mortal (gperl_sv_from_filename (rets[i])));
 	g_strfreev(rets);
 

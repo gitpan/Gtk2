@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.13 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.15 2003/10/18 07:04:42 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -27,12 +27,9 @@ MODULE = Gtk2::TextBuffer	PACKAGE = Gtk2::TextBuffer	PREFIX = gtk_text_buffer_
 
 GtkTextBuffer_noinc*
 gtk_text_buffer_new (class, tagtable=NULL)
-	SV * class
 	GtkTextTagTable_ornull * tagtable
     C_ARGS:
 	tagtable
-    CLEANUP:
-	UNUSED(class);
 
 gint
 gtk_text_buffer_get_line_count (buffer)
@@ -251,17 +248,18 @@ gtk_text_buffer_remove_all_tags (buffer, start, end)
 ##                                             const gchar *tag_name,
 ##                                             const gchar *first_property_name,
 ##                                             ...);
-## FIXME tag_name may be NULL, how do we tell perl that?:
+## tag_name may be NULL.
 ## The returned tag is owned by the buffer's tag table!  do not use _noinc!
 GtkTextTag *
 gtk_text_buffer_create_tag (buffer, tag_name, ...)
 	GtkTextBuffer * buffer
-	const gchar * tag_name
+	const gchar_ornull * tag_name
     PREINIT:
 	GtkTextTagTable * tag_table;
 	int i;
     CODE:
-	/* FIXME test the number of stack items! */
+	if ((items - 2) % 2)
+		croak ("expecting tag name followed by name=>value pairs");
 	/*
 	 * since we can't really pass on the varargs call from perl to C,
 	 * we'll have to reimplement this convenience function ourselves.

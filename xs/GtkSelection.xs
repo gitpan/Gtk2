@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.7 2003/09/26 07:56:10 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.8 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -110,12 +110,11 @@ DESTROY (SV * list)
 
 ##  GtkTargetList *gtk_target_list_new (const GtkTargetEntry *targets, guint ntargets) 
 GtkTargetList *
-gtk_target_list_new (SV * class, ...)
+gtk_target_list_new (class, ...)
     PREINIT:
 	GtkTargetEntry *targets;
 	guint ntargets;
     CODE:
-	UNUSED(class);
 	GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (1, targets, ntargets);
 	RETVAL = gtk_target_list_new (targets, ntargets);
     OUTPUT:
@@ -138,12 +137,11 @@ gtk_target_list_add (list, target, flags, info)
 
 ##  void gtk_target_list_add_table (GtkTargetList *list, const GtkTargetEntry *targets, guint ntargets) 
 void
-gtk_target_list_add_table (GtkTargetList * list, GtkTargetEntry * target, ...)
+gtk_target_list_add_table (GtkTargetList * list, target, ...)
     PREINIT:
 	GtkTargetEntry *targets;
 	guint ntargets;
     CODE:
-	UNUSED(target);
 	GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (1, targets, ntargets);
 	gtk_target_list_add_table (list, targets, ntargets);
     CLEANUP:
@@ -172,29 +170,23 @@ MODULE = Gtk2::Selection	PACKAGE = Gtk2::Selection	PREFIX = gtk_selection_
 ##  gboolean gtk_selection_owner_set (GtkWidget *widget, GdkAtom selection, guint32 time_) 
 gboolean
 gtk_selection_owner_set (class, widget, selection, time_)
-	SV * class
 	GtkWidget_ornull *widget
 	GdkAtom selection
 	guint32 time_
     C_ARGS:
 	widget, selection, time_
-    CLEANUP:
-	UNUSED(class);
 
 #if GTK_CHECK_VERSION(2,2,0)
 
 ##  gboolean gtk_selection_owner_set_for_display (GdkDisplay *display, GtkWidget *widget, GdkAtom selection, guint32 time_) 
 gboolean
 gtk_selection_owner_set_for_display (class, display, widget, selection, time_)
-	SV * class
 	GdkDisplay *display
 	GtkWidget_ornull *widget
 	GdkAtom selection
 	guint32 time_
     C_ARGS:
     	display, widget, selection, time_
-    CLEANUP:
-	UNUSED(class);
 
 #endif /* >= 2.2.0 */
 
@@ -213,12 +205,10 @@ void
 gtk_selection_add_targets (widget, selection, target, ...)
 	GtkWidget *widget
 	GdkAtom selection
-	GtkTargetEntry *target
     PREINIT:
 	GtkTargetEntry *targets;
 	guint ntargets;
     CODE:
-	UNUSED(target);
 	GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (2, targets, ntargets);
 	gtk_selection_add_targets (widget, selection, targets, ntargets);
 	g_free (targets);

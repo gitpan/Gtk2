@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.11 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.13 2003/11/06 12:57:36 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -31,7 +31,9 @@ gtk2perl_item_factory_item_activate (gpointer    nothing,
 	SV    * callback_sv;
 	SV    * callback_data;
 
-	dSP; 
+	dSP;
+
+	PERL_UNUSED_VAR (nothing);
 
 	/* the the callback and it's data out of the widget */
 	callback_sv = (SV*)g_object_get_data (
@@ -66,14 +68,12 @@ MODULE = Gtk2::ItemFactory	PACKAGE = Gtk2::ItemFactory	PREFIX = gtk_item_factory
 ##  GtkItemFactory* gtk_item_factory_new (GType container_type, const gchar *path, GtkAccelGroup *accel_group) 
 GtkItemFactory*
 gtk_item_factory_new (class, container_type_package, path, accel_group)
-	SV * class
 	char * container_type_package
 	const gchar *path
 	GtkAccelGroup_ornull *accel_group
     PREINIT:
 	GType container_type;
     CODE:
-	UNUSED(class);
 	container_type = gperl_type_from_package (container_type_package);
 	RETVAL = gtk_item_factory_new (container_type, path, accel_group);
     OUTPUT:
@@ -84,21 +84,15 @@ gtk_item_factory_new (class, container_type_package, path, accel_group)
 
 GtkItemFactory_ornull*
 gtk_item_factory_from_widget (class, widget)
-	SV * class
 	GtkWidget *widget
     C_ARGS:
 	widget
-    CLEANUP:
-	UNUSED(class);
 
 const gchar*
 gtk_item_factory_path_from_widget (class, widget)
-	SV * class
 	GtkWidget *widget
     C_ARGS:
 	widget
-    CLEANUP:
-	UNUSED(class);
 
 GtkWidget_ornull*
 gtk_item_factory_get_item (ifactory, path)

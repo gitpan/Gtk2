@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextTagTable.xs,v 1.3 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextTagTable.xs,v 1.4 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -32,11 +32,8 @@ MODULE = Gtk2::TextTagTable	PACKAGE = Gtk2::TextTagTable	PREFIX = gtk_text_tag_t
 
 GtkTextTagTable_noinc *
 gtk_text_tag_table_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 void
 gtk_text_tag_table_add (table, tag)

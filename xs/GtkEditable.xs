@@ -16,12 +16,119 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.5 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.8 2003/11/11 05:58:45 muppetman Exp $
  */
 
 #include "gtk2perl.h"
+#include <gperl_marshal.h>
+
+/*
+GtkEditable's insert-text signal uses an integer pointer as a write-through
+parameter; unlike GtkWidget's size-request signal, we can't just pass an
+editable object, because an integer is an integral type.
+
+   void user_function  (GtkEditable *editable,
+                        gchar *new_text,
+                        gint new_text_length,
+                        gint *position,  <<=== that's the problem
+                        gpointer user_data);
+*/
+static void
+gtk2perl_editable_insert_text_marshal (GClosure * closure,
+                                       GValue * return_value,
+                                       guint n_param_values,
+                                       const GValue * param_values,
+                                       gpointer invocation_hint,
+                                       gpointer marshal_data)
+{
+	dGPERL_CLOSURE_MARSHAL_ARGS;
+	int len;
+	gint * position_p;
+	SV * string, * position;
+
+	GPERL_CLOSURE_MARSHAL_INIT (closure, marshal_data);
+
+	PERL_UNUSED_VAR (return_value);
+	PERL_UNUSED_VAR (n_param_values);
+	PERL_UNUSED_VAR (invocation_hint);
+
+	ENTER;
+	SAVETMPS;
+
+	PUSHMARK (SP);
+
+	GPERL_CLOSURE_MARSHAL_PUSH_INSTANCE (param_values);
+
+	/* new_text */
+	string = newSVpv (g_value_get_string (param_values+1), 0);
+	XPUSHs (string);
+
+	/* text length is redundant, but documented.  it doesn't hurt
+	 * anything to include it, but would be a doc hassle to omit it. */
+	XPUSHs (sv_2mortal (newSViv (g_value_get_int (param_values+2))));
+
+	/* insert position */
+	position_p = g_value_get_pointer (param_values+3);
+	position = newSViv (*position_p);
+	XPUSHs (position);
+
+	GPERL_CLOSURE_MARSHAL_PUSH_DATA;
+
+	PUTBACK;
+
+	GPERL_CLOSURE_MARSHAL_CALL (G_ARRAY);
+
+	/* refresh the param_values with whatever changes the callback may
+	 * have made.  values returned on the stack take precedence over
+	 * modifications to @_. */
+	if (count == 2) {
+		SV * sv;
+		/* get the values off the end of the stack.  why do my
+		 * attempts to use ST() result in segfaults? */
+		*position_p = POPi;
+		sv = POPs;
+		sv_utf8_upgrade (sv);
+		g_value_set_string ((GValue*)param_values+1, SvPV (sv, len));
+		g_value_set_int ((GValue*)param_values+2, len);
+		PUTBACK;
+		
+	} else if (count == 0) {
+		/* returned no values, then refresh string and position
+		 * params from the callback's args, which may have been
+		 * modified. */
+		sv_utf8_upgrade (string);
+		g_value_set_string ((GValue*)param_values+1,
+		                    SvPV (string, len));
+		g_value_set_int ((GValue*)param_values+2, len);
+		*position_p = SvIV (position);
+		if (*position_p < 0)
+			*position_p = 0;
+
+	} else {
+		/* NOTE: croaking here can cause bad things to happen to the
+		 * app, because croaking in signal handlers is bad juju. */
+		croak ("an insert-text signal handler must either return"
+		       " two items (text and position)\nor return no items"
+		       " and possibly modify its @_ parameters.\n"
+		       "  callback returned %d items", count);
+	}
+
+	/*
+	 * clean up 
+	 */
+	SvREFCNT_dec (string);
+	SvREFCNT_dec (position);
+
+	FREETMPS;
+	LEAVE;
+}
+
 
 MODULE = Gtk2::Editable	PACKAGE = Gtk2::Editable	PREFIX = gtk_editable_
+
+BOOT:
+	gperl_signal_set_marshaller_for (GTK_TYPE_EDITABLE, "insert_text",
+	                                 gtk2perl_editable_insert_text_marshal);
 
 void
 gtk_editable_select_region (editable, start, end)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.30 2003/10/01 15:25:01 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.37 2003/11/14 02:27:44 muppetman Exp $
  */
 #include "gtk2perl.h"
 #include "ppport.h"
@@ -79,13 +79,11 @@ width (requisition, newval=NULL)
 
 GtkRequisition_copy *
 new (class, width=0, height=0)
-	SV * class
 	gint width
 	gint height
     PREINIT:
 	GtkRequisition req;
     CODE:
-	UNUSED(class);
 	req.width = width;
 	req.height = height;
 	RETVAL = &req;
@@ -107,6 +105,12 @@ window (widget)
     OUTPUT:
 	RETVAL
 
+=for apidoc
+=for signature allocation = $widget->allocation
+Returns I<$widget>'s current allocated size as a read-only rectangle
+(re-blessed as a Gtk2::Allocation); the allocated size is not necessarily
+the same as the requested size.
+=cut
 SV *
 allocation (widget)
 	GtkWidget * widget
@@ -123,7 +127,7 @@ style (widget)
 	Gtk2::Widget::style = 1
 	Gtk2::Widget::get_style = 2
     CODE:
-	UNUSED(ix);
+	PERL_UNUSED_VAR (ix);
 	RETVAL = gtk_widget_get_style(widget);
     OUTPUT:
 	RETVAL
@@ -198,7 +202,7 @@ get_flags (widget, ...)
 		case 17: RETVAL = GTK_WIDGET_DOUBLE_BUFFERED  (widget); break;
 		case 18: RETVAL = GTK_WIDGET_CAN_DEFAULT      (widget); break;
 		case 19: RETVAL = GTK_WIDGET_HAS_DEFAULT      (widget); break;
-		default: croak ("inhandled case in flag_get - shouldn't happen");
+		default: croak ("unhandled case (%s) in get_flags - shouldn't happen", ix);
 	    }
 	} else {
 	    value = (gboolean) SvIV(ST(1));
@@ -208,10 +212,10 @@ get_flags (widget, ...)
 		case  3: flag = GTK_REALIZED	     ; break;
 		case  4: flag = GTK_MAPPED	     ; break;
 		case  5: flag = GTK_VISIBLE	     ; break;
-/* read only -	case  6: flag = GTK_DRAWABLE	     ; break; */
+		case  6: croak ("widget flag drawable is read only"); break;
 		case  7: flag = GTK_SENSITIVE	     ; break;
 		case  8: flag = GTK_PARENT_SENSITIVE ; break;
-/* read only -	case  9: flag = GTK_IS_SENSITIVE     ; break; */
+		case  9: croak ("widget flag is_sensitive is read only"); break;
 		case 10: flag = GTK_CAN_FOCUS	     ; break;
 		case 11: flag = GTK_HAS_FOCUS	     ; break;
 		case 12: flag = GTK_HAS_GRAB	     ; break;
@@ -222,7 +226,7 @@ get_flags (widget, ...)
 		case 17: flag = GTK_DOUBLE_BUFFERED  ; break;
 		case 18: flag = GTK_CAN_DEFAULT      ; break;
 		case 19: flag = GTK_HAS_DEFAULT      ; break;
-		default: croak ("inhandled case in flag_set - shouldn't happen");
+		default: croak ("unhandled case (%s) in set_flags - shouldn't happen", ix);
 	    }
 	    if ( value ) {
 	    	GTK_WIDGET_SET_FLAGS(widget, flag);
@@ -357,6 +361,15 @@ gtk_widget_size_request (widget)
 
 ## function is only useful for widget implementations
 ##void gtk_widget_get_child_requisition (GtkWidget *widget, GtkRequisition *requisition);
+GtkRequisition_copy*
+gtk_widget_get_child_requisition (GtkWidget * widget)
+    PREINIT:
+	GtkRequisition req;
+    CODE:
+	gtk_widget_get_child_requisition (widget, &req);
+	RETVAL = &req;
+    OUTPUT:
+	RETVAL
 
 void
 gtk_widget_add_accelerator (widget, accel_signal, accel_group, accel_key, accel_mods, flags)
@@ -388,8 +401,16 @@ gtk_widget_mnemonic_activate   (widget, group_cycling)
 	gboolean    group_cycling
 
  # gtk docs say rarely used, suggest other ways
- #gboolean   gtk_widget_event		  (GtkWidget	       *widget,
- #					   GdkEvent	       *event);
+=for apidoc
+This rarely-used function emits an event signal on I<$widget>.  Don't use
+this to synthesize events; use C<< Gtk2->main_do_event >> instead.  Don't
+synthesize expose events; use C<< $gdkwindow->invalidate_rect >> instead.
+Basically, the main use for this in gtk2-perl will be to pass motion
+notify events to rulers from other widgets.
+=cut
+gboolean gtk_widget_event (GtkWidget * widget, GdkEvent	*event);
+
+ # gtk docs say rarely used, suggest other ways
  #gint       gtk_widget_send_expose         (GtkWidget           *widget,
  #					   GdkEvent            *event);
 
@@ -408,12 +429,14 @@ gtk_widget_reparent (widget, new_parent)
 	GtkWidget * widget
 	GtkWidget * new_parent
 
+=for apidoc
+Returns undef if I<$widget> and I<$area> do not intersect.
+=cut
 GdkRectangle_copy *
 gtk_widget_intersect (widget, area)
 	GtkWidget    * widget
 	GdkRectangle * area
     PREINIT:
-	gboolean     ret;
 	GdkRectangle intersection;
     CODE:
 	if (!gtk_widget_intersect (widget, area, &intersection))
@@ -471,7 +494,7 @@ gtk_widget_get_parent (widget)
 	Gtk2::Widget::get_parent = 0
 	Gtk2::Widget::parent = 1
     CLEANUP:
-	UNUSED(ix);
+	PERL_UNUSED_VAR (ix);
 
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
 
@@ -569,6 +592,11 @@ gtk_widget_get_pointer (GtkWidget *widget, OUTLIST gint x, OUTLIST gint y);
 gboolean gtk_widget_is_ancestor (GtkWidget *widget, GtkWidget *ancestor);
 
  #gboolean gtk_widget_translate_coordinates (GtkWidget *src_widget, GtkWidget *dest_widget, gint src_x, gint src_y, gint *dest_x, gint *dest_y);
+=for apidoc
+=for signature (dst_x, dst_y) = $src_widget->translate_coordinates ($dest_widget, $src_x, $src_y)
+Returns an empty list if either widget is not realized or if they do not share
+a common ancestor.
+=cut
 void
 gtk_widget_translate_coordinates (GtkWidget *src_widget, GtkWidget *dest_widget, gint src_x, gint src_y)
     PREINIT:
@@ -623,8 +651,8 @@ gtk_widget_create_pango_layout (widget, text)
 	GtkWidget   * widget
         const gchar *text
 
- ### FIXME may return NULL if stockid isn't known.... but then, it will
- ###       croak on converting unknown stock ids, too.
+ ### may return NULL if stockid isn't known.... but then, it will
+ ### croak on converting unknown stock ids, too.
 GdkPixbuf_noinc *
 gtk_widget_render_icon (widget, stock_id, size, detail=NULL)
 	GtkWidget   * widget
@@ -632,25 +660,30 @@ gtk_widget_render_icon (widget, stock_id, size, detail=NULL)
 	GtkIconSize   size
 	const gchar * detail
 
-# bunch of FIXMEs FIXME FIXME FIXME
  #/* handle composite names for GTK_COMPOSITE_CHILD widgets,
  # * the returned name is newly allocated.
  # */
- #void   gtk_widget_set_composite_name	(GtkWidget	*widget,
- #					 const gchar   	*name);
- #gchar* gtk_widget_get_composite_name	(GtkWidget	*widget);
- #
- #/* Descend recursively and set rc-style on all widgets without user styles */
- #void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
- #
- #/* Push/pop pairs, to change default values upon a widget's creation.
- # * This will override the values that got set by the
- # * gtk_widget_set_default_* () functions.
- # */
- #void	     gtk_widget_push_colormap	     (GdkColormap *cmap);
- #void	     gtk_widget_push_composite_child (void);
- #void	     gtk_widget_pop_composite_child  (void);
- #void	     gtk_widget_pop_colormap	     (void);
+
+void gtk_widget_set_composite_name (GtkWidget *widget, const gchar *name)
+
+gchar* gtk_widget_get_composite_name (GtkWidget *widget)
+ 
+#/* Descend recursively and set rc-style on all widgets without user styles */
+void gtk_widget_reset_rc_styles (GtkWidget *widget)
+ 
+void gtk_widget_push_colormap (SV *class_or_widget, GdkColormap *cmap)
+    C_ARGS: cmap
+
+void gtk_widget_pop_colormap (SV *class_or_widget)
+    C_ARGS: /* void */
+
+void gtk_widget_push_composite_child (SV *class_or_widget)
+    C_ARGS: /* void */
+
+void gtk_widget_pop_composite_child (SV *class_or_widget)
+    C_ARGS: /* void */
+
+# bunch of FIXMEs FIXME FIXME FIXME
  #
  #/* widget style properties
  # */
@@ -672,18 +705,20 @@ gtk_widget_render_icon (widget, stock_id, size, detail=NULL)
  #
  #/* Set certain default values to be used at widget creation time.
  # */
- #void	     gtk_widget_set_default_colormap (GdkColormap *colormap);
+
+void gtk_widget_set_default_colormap (SV *class_or_widget, GdkColormap *colormap);
+    C_ARGS: colormap
 
 GtkStyle*
-gtk_widget_get_default_style (class)
-	SV* class
-    C_ARGS:
-	/*void*/
-    CLEANUP:
-	UNUSED(class);
+gtk_widget_get_default_style (SV *class_or_widget)
+    C_ARGS: /* void */
 
- #GdkColormap* gtk_widget_get_default_colormap (void);
- #GdkVisual*   gtk_widget_get_default_visual   (void);
+GdkColormap* gtk_widget_get_default_colormap (SV *class_or_widget)
+    C_ARGS: /* void */
+
+GdkVisual* gtk_widget_get_default_visual (SV *class_or_widget)
+    C_ARGS: /* void */
+
  #
  #/* Functions for setting directionality for widgets
  # */
@@ -696,27 +731,18 @@ gtk_widget_get_direction (GtkWidget *widget);
 
 void
 gtk_widget_set_default_direction (class, dir);
-	SV               * class
 	GtkTextDirection   dir
     C_ARGS:
     	dir
-    CLEANUP:
-	UNUSED(class);
 
 GtkTextDirection
 gtk_widget_get_default_direction (class);
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
  #/* Counterpart to gdk_window_shape_combine_mask.
  # */
- #void	     gtk_widget_shape_combine_mask (GtkWidget *widget,
- #					    GdkBitmap *shape_mask,
- #					    gint       offset_x,
- #					    gint       offset_y);
+void gtk_widget_shape_combine_mask (GtkWidget *widget, GdkBitmap *shape_mask, gint offset_x, gint offset_y);
 
 
 
@@ -725,6 +751,14 @@ gtk_widget_get_default_direction (class);
  # void gtk_widget_class_path (GtkWidget *widget, guint *path_length, gchar **path, gchar **path_reversed);
  ## both changed to ($path, $path_reversed) = $widget->(path|class_path);
  ## returns the path_reversed straight from C, no matter how nonsensical...
+=for apidoc Gtk2::Widget::path
+=for signature (path, path_reversed) = $widget->path
+=cut
+
+=for apidoc class_path
+=for signature (path, path_reversed) = $widget->class_path
+=cut
+
 void
 gtk_widget_path (GtkWidget *widget)
     ALIAS:

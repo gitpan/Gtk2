@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioMenuItem.xs,v 1.8 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioMenuItem.xs,v 1.9 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,7 +25,6 @@ MODULE = Gtk2::RadioMenuItem	PACKAGE = Gtk2::RadioMenuItem	PREFIX = gtk_radio_me
 
 GtkWidget *
 gtk_radio_menu_item_news (class, member_or_listref=NULL, label=NULL)
-	SV          * class
 	SV          * member_or_listref
 	const gchar * label
     ALIAS:
@@ -36,7 +35,6 @@ gtk_radio_menu_item_news (class, member_or_listref=NULL, label=NULL)
 	GSList           * group = NULL;
 	GtkRadioMenuItem * member = NULL;
     CODE:
-	UNUSED(class);
 	if( member_or_listref && member_or_listref != &PL_sv_undef
 	    && SvROK (member_or_listref) 
 	    && SvRV (member_or_listref) != &PL_sv_undef )

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.17 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.20 2003/11/10 06:50:07 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -45,13 +45,11 @@ MODULE = Gtk2::TreeModel	PACKAGE = Gtk2::TreePath	PREFIX = gtk_tree_path_
 
 GtkTreePath_own_ornull *
 gtk_tree_path_new (class, path=NULL)
-	SV * class
 	const gchar * path
     ALIAS:
 	new_from_string = 1
     CODE:
-	UNUSED(class);
-	UNUSED(ix);
+	PERL_UNUSED_VAR (ix);
 	if (path)
 		RETVAL = gtk_tree_path_new_from_string (path);
 	else
@@ -61,24 +59,22 @@ gtk_tree_path_new (class, path=NULL)
 
 
 ## GtkTreePath * gtk_tree_path_new_from_indices (gint first_index, ...)
-## C version is a vararg convenience function which uses a list of ints
-## terminated by -1, since -1 is an invalid index; we can just use the
-## number of stack items, instead, but the API docs tell users to put
-## -1 at the end.  we'll consider that to be a programmer error and
-## croak on it.  you get it once while you're developing, and from then
-## on you know not to do that.
-## also, it's implemented in C only in 2.2.x, but we're reimplementing
-## it here, so we can use it in all versions.
+=for apidoc
+=for arg first_index (integer) a non-negative index value
+=for arg ... zero or more index values
+
+The C API reference docs for this function say to mark the end of the list
+with a -1, but Perl doesn't need list terminators, so don't do that.
+
+This is specially implemented to be available for all gtk+ versions.
+
+=cut
 GtkTreePath_own_ornull *
 gtk_tree_path_new_from_indices (class, first_index, ...)
-	SV * class
-	gint first_index
     PREINIT:
 	gint i;
 	GtkTreePath *path;
     CODE:
-	UNUSED(class);
-	UNUSED(first_index);
 	path = gtk_tree_path_new ();
 
 	for (i = 1 ; i < items ; i++) {
@@ -102,12 +98,8 @@ gtk_tree_path_to_string (path)
 
 GtkTreePath *
 gtk_tree_path_new_first (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
-
 
 ## gtk_tree_path_new_root is deprecated in 2.2.0
 
@@ -191,11 +183,9 @@ MODULE = Gtk2::TreeModel	PACKAGE = Gtk2::TreeRowReference	PREFIX = gtk_tree_row_
 ##GtkTreeRowReference* gtk_tree_row_reference_new (GtkTreeModel *model, GtkTreePath *path);
 #  $row_ref_or_undef = Gtk2::TreeRowReference->new ($model, $path)
 GtkTreeRowReference_own_ornull*
-gtk_tree_row_reference_new (SV * class, GtkTreeModel *model, GtkTreePath *path)
+gtk_tree_row_reference_new (class, GtkTreeModel *model, GtkTreePath *path)
     C_ARGS:
 	model, path
-    CLEANUP:
-	UNUSED(class);
 
   ## mmmm, the docs say "you do not need to use this function"
 ##GtkTreeRowReference* gtk_tree_row_reference_new_proxy (GObject *proxy, GtkTreeModel *model, GtkTreePath *path);
@@ -254,6 +244,9 @@ GtkTreeRowReference* gtk_tree_row_reference_copy (GtkTreeRowReference *reference
 
 MODULE = Gtk2::TreeModel	PACKAGE = Gtk2::TreeModel	PREFIX = gtk_tree_model_
 
+=for flags GtkTreeModelFlags
+=cut
+
 ## GtkTreeModelFlags gtk_tree_model_get_flags (GtkTreeModel *tree_model)
 GtkTreeModelFlags
 gtk_tree_model_get_flags (tree_model)
@@ -267,6 +260,9 @@ gtk_tree_model_get_n_columns (tree_model)
 ## GType gtk_tree_model_get_column_type (GtkTreeModel *tree_model, gint index_)
 ### we hide GType from the perl level.  return the corresponding
 ### package instead.
+=for apidoc
+Returns the type of column I<$index_> as a package name.
+=cut
 const gchar *
 gtk_tree_model_get_column_type (tree_model, index_)
 	GtkTreeModel *tree_model
@@ -345,22 +341,61 @@ gtk_tree_model_get_path (tree_model, iter)
 	GtkTreeModel *tree_model
 	GtkTreeIter *iter
 
-## return the proper thing from the GValue as an SV
-##  remember that we hide GValue from perl
+
+## void gtk_tree_model_get (GtkTreeModel *tree_model, GtkTreeIter *iter, ...)
 ## void gtk_tree_model_get_value (GtkTreeModel *tree_model, GtkTreeIter *iter, gint column, GValue *value)
-SV *
-gtk_tree_model_get_value (tree_model, iter, column)
+
+=for apidoc Gtk2::TreeModel::get
+=for arg ... column indices
+
+Fetch and return the model's values in the row pointed to by I<$iter>.
+If you specify no column indices, it returns the values for all of the
+columns, otherwise, returns just those columns' values (in order).
+
+This overrides overrides Glib::Object's C<get>, so you'll want to use
+C<< $object->get_property >> to set object properties.
+
+=cut
+
+=for apidoc Gtk2::TreeModel::get_value
+Alias for C<Gtk2::TreeModel::get>.
+=cut
+
+void
+gtk_tree_model_get (tree_model, iter, ...)
 	GtkTreeModel *tree_model
 	GtkTreeIter *iter
-	gint column
+    ALIAS:
+	get_value = 1
     PREINIT:
-	GValue value = {0, };
-    CODE:
-	gtk_tree_model_get_value (tree_model, iter, column, &value);
-	RETVAL = gperl_sv_from_value (&value);
-	g_value_unset (&value);
-    OUTPUT:
-	RETVAL
+	int i;
+    PPCODE:
+	/* if column id's were passed, just return those columns */
+	if( items > 2 )
+	{
+		for (i = 2 ; i < items ; i++) {
+			GValue gvalue = {0, };
+			gtk_tree_model_get_value (tree_model, iter, 
+			                          SvIV (ST (i)), &gvalue);
+			XPUSHs (sv_2mortal (gperl_sv_from_value (&gvalue)));
+			g_value_unset (&gvalue);
+		}
+	}
+	else
+	{
+		/* otherwise return all of the columns */
+		for( i = 0; i < gtk_tree_model_get_n_columns(tree_model); i++ )
+		{
+			GValue gvalue = {0, };
+			gtk_tree_model_get_value (tree_model, iter, 
+			                          i, &gvalue);
+			XPUSHs (sv_2mortal (gperl_sv_from_value (&gvalue)));
+			g_value_unset (&gvalue);
+		}
+	}
+
+ ## va_list means nothing to a perl developer, it's a c-specific thing.
+#### void gtk_tree_model_get_valist (GtkTreeModel *tree_model, GtkTreeIter *iter, va_list var_args)
 
 
 ##
@@ -434,42 +469,13 @@ gtk_tree_model_iter_parent (tree_model, child)
 #### void gtk_tree_model_ref_node (GtkTreeModel *tree_model, GtkTreeIter *iter)
 #### void gtk_tree_model_unref_node (GtkTreeModel *tree_model, GtkTreeIter *iter)
 
-## void gtk_tree_model_get (GtkTreeModel *tree_model, GtkTreeIter *iter, ...)
-void
-gtk_tree_model_get (tree_model, iter, ...)
-	GtkTreeModel *tree_model
-	GtkTreeIter *iter
-    PREINIT:
-	int i;
-    PPCODE:
-	/* if column id's were passed, just return those columns */
-	if( items > 2 )
-	{
-		for (i = 2 ; i < items ; i++) {
-			GValue gvalue = {0, };
-			gtk_tree_model_get_value (tree_model, iter, 
-			                          SvIV (ST (i)), &gvalue);
-			XPUSHs (sv_2mortal (gperl_sv_from_value (&gvalue)));
-			g_value_unset (&gvalue);
-		}
-	}
-	else
-	{
-		/* otherwise return all of the columns */
-		for( i = 0; i < gtk_tree_model_get_n_columns(tree_model); i++ )
-		{
-			GValue gvalue = {0, };
-			gtk_tree_model_get_value (tree_model, iter, 
-			                          i, &gvalue);
-			XPUSHs (sv_2mortal (gperl_sv_from_value (&gvalue)));
-			g_value_unset (&gvalue);
-		}
-	}
-
- ## va_list means nothing to a perl developer, it's a c-specific thing.
-#### void gtk_tree_model_get_valist (GtkTreeModel *tree_model, GtkTreeIter *iter, va_list var_args)
-
 ## void gtk_tree_model_foreach (GtkTreeModel *model, GtkTreeModelForeachFunc func, gpointer user_data)
+=for apidoc
+=for arg func (subroutine)
+Call I<$func> on each row in I<$model>.  I<$func> gets the tree path and iter
+of the current row; if I<$func> returns true, the tree ceases to be walked,
+and C<< $treemodel->foreach >> returns.
+=cut
 void
 gtk_tree_model_foreach (model, func, user_data=NULL)
 	GtkTreeModel *model

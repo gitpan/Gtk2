@@ -16,10 +16,11 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.11 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.14 2003/11/10 18:37:32 muppetman Exp $
  */
 
 #include "gtk2perl.h"
+#include <gperl_marshal.h>
 
 /*
  * GtkDialog interprets the response id as completely user-defined for
@@ -62,54 +63,32 @@ gtk2perl_dialog_response_marshal (GClosure * closure,
                                   gpointer invocation_hint,
                                   gpointer marshal_data)
 {
-	GPerlClosure *pc = (GPerlClosure *)closure;
-	SV * data;
-	SV * instance;
-#ifndef PERL_IMPLICIT_CONTEXT
-	dSP;
-#else
-	SV **SP;
+	dGPERL_CLOSURE_MARSHAL_ARGS;
 
-	/* make sure we're executed by the same interpreter that created
-	 * the closure object. */
-	PERL_SET_CONTEXT (marshal_data);
+	GPERL_CLOSURE_MARSHAL_INIT (closure, marshal_data);
 
-	SPAGAIN;
-#endif
+	PERL_UNUSED_VAR (return_value);
+	PERL_UNUSED_VAR (n_param_values);
+	PERL_UNUSED_VAR (invocation_hint);
 
 	ENTER;
 	SAVETMPS;
 
 	PUSHMARK (SP);
 
-	if (GPERL_CLOSURE_SWAP_DATA (pc)) {
-		/* swap instance and data */
-		data     = gperl_sv_from_value (param_values);
-		instance = pc->data;
-	} else {
-		/* normal */
-		instance = gperl_sv_from_value (param_values);
-		data     = pc->data;
-	}
-
-	EXTEND (SP, 2);
-	/* the instance is always the first item in @_ */
-	PUSHs (instance);
+	GPERL_CLOSURE_MARSHAL_PUSH_INSTANCE (param_values);
 
 	/* the second parameter for this signal is defined as an int
 	 * but is actually a response code, and can have GtkResponseType
 	 * values. */
-	PUSHs (sv_2mortal (response_id_to_sv
+	XPUSHs (sv_2mortal (response_id_to_sv
 				(g_value_get_int (param_values + 1))));
 
-	if (data)
-		XPUSHs (data);
+	GPERL_CLOSURE_MARSHAL_PUSH_DATA;
+
 	PUTBACK;
 
-	call_sv (pc->callback, G_DISCARD | G_EVAL);
-
-	if (SvTRUE (ERRSV))
-		gperl_run_exception_handlers ();
+	GPERL_CLOSURE_MARSHAL_CALL (G_DISCARD);
 
 	/*
 	 * clean up 
@@ -143,7 +122,6 @@ gtk_dialog_widgets (dialog)
 
 ##GtkWidget *
 ##gtk_dialog_new (class)
-##	SV * class
 ##
 ##GtkWidget* gtk_dialog_new_with_buttons (const gchar     *title,
 ##                                        GtkWindow       *parent,
@@ -152,7 +130,6 @@ gtk_dialog_widgets (dialog)
 ##                                        ...);
 GtkWidget *
 gtk_dialog_new (class, ...)
-	SV * class
     ALIAS:
 	Gtk2::Dialog::new = 0
 	Gtk2::Dialog::new_with_buttons = 1
@@ -163,8 +140,7 @@ gtk_dialog_new (class, ...)
 	GtkWindow * parent;
 	int flags;
     CODE:
-	UNUSED(class);
-	UNUSED(ix);
+	PERL_UNUSED_VAR (ix);
 	if (items == 1) {
 		/* the easy way out... */
 		dialog = gtk_dialog_new ();

@@ -16,26 +16,21 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoContext.xs,v 1.4 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoContext.xs,v 1.7 2003/11/11 05:58:49 muppetman Exp $
  */
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Pango::Context	PACKAGE = Gtk2::Pango::Context	PREFIX = pango_context_
 
-# FIXME
-###  PangoContext *pango_context_new (void) 
-#PangoContext_noinc *
-#pango_context_new (class)
-#	SV * class
-#    C_ARGS:
-#	
+ ## applications have no cause to use pango_context_new() -- it is intended
+ ## to be used by backends.  i seriously doubt anyone would want to write a
+ ## pango backend in Perl, unless they want something that's really slow.
+ ## higher-level APIs are used to create contexts appropriate for the desired
+ ## backend, e.g. $gtkwidget->create_pango_context.
+##  PangoContext *pango_context_new (void) 
 
-# FIXME
-###  void pango_context_set_font_map (PangoContext *context, PangoFontMap *font_map) 
-#void
-#pango_context_set_font_map (context, font_map)
-#	PangoContext *context
-#	PangoFontMap *font_map
+ ## same thing goes for pango_context_set_font_map.
+##  void pango_context_set_font_map (PangoContext *context, PangoFontMap *font_map) 
 
 ## FIXME
 ###  void pango_context_list_families (PangoContext *context, PangoFontFamily ***families, int *n_families) 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.11 2003/10/03 19:23:37 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.17 2003/11/12 03:14:57 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,10 +25,15 @@ static void
 gtk2perl_pixbuf_destroy_notify (guchar * pixels,
                                 gpointer data)
 {
+	PERL_UNUSED_VAR (pixels);
+
 	gperl_sv_free ((SV*)data);
 }
 
 MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::Pixbuf	PREFIX = gdk_pixbuf_
+
+=for enum GdkPixbufAlphaMode
+=cut
 
  ## void gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable, GdkGC *gc, int src_x, int src_y, int dest_x, int dest_y, int width, int height, GdkRgbDither dither, int x_dither, int y_dither)
 void
@@ -63,26 +68,45 @@ gdk_pixbuf_render_to_drawable_alpha (pixbuf, drawable, src_x, src_y, dest_x, des
 	int x_dither
 	int y_dither
 
-### FIXME return pixmap and bitmap on output stack
-## ## void gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf *pixbuf, GdkColormap *colormap, GdkPixmap **pixmap_return, GdkBitmap **mask_return, int alpha_threshold)
-##void
-##gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf, colormap, pixmap_return, mask_return, alpha_threshold)
-##	GdkPixbuf *pixbuf
-##	GdkColormap *colormap
-##	GdkPixmap **pixmap_return
-##	GdkBitmap **mask_return
-##	int alpha_threshold
-##
-### FIXME return pixmap and bitmap on output stack
-## ## void gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf *pixbuf, GdkPixmap **pixmap_return, GdkBitmap **mask_return, int alpha_threshold)
-##void
-##gdk_pixbuf_render_pixmap_and_mask (pixbuf, pixmap_return, mask_return, alpha_threshold)
-##	GdkPixbuf *pixbuf
-##	GdkPixmap **pixmap_return
-##	GdkBitmap **mask_return
-##	int alpha_threshold
-##
+=for apidoc
+=for signature pixmap = $pixbuf->render_pixmap_and_mask_for_colormap ($colormap, $alpha_threshold)
+=for signature (pixmap, mask) = $pixbuf->render_pixmap_and_mask_for_colormap ($colormap, $alpha_threshold)
+=cut
+void
+gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf, colormap, alpha_threshold)
+	GdkPixbuf *pixbuf
+	GdkColormap *colormap
+	int alpha_threshold
+        PPCODE:
+{
+        GdkPixmap *pm;
+        GdkBitmap *bm;
 
+        gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf, colormap, &pm, GIMME_V == G_ARRAY ? &bm : 0, alpha_threshold);
+        XPUSHs (newSVGdkPixmap (pm));
+        if (GIMME_V == G_ARRAY)
+          XPUSHs (newSVGdkBitmap (bm));
+}
+
+
+=for apidoc
+=for signature pixmap = $pixbuf->render_pixmap_and_mask ($alpha_threshold)
+=for signature (pixmap, mask) = $pixbuf->render_pixmap_and_mask ($alpha_threshold)
+=cut
+void
+gdk_pixbuf_render_pixmap_and_mask (pixbuf, alpha_threshold)
+	GdkPixbuf *pixbuf
+	int alpha_threshold
+        PPCODE:
+{
+        GdkPixmap *pm;
+        GdkBitmap *bm;
+
+        gdk_pixbuf_render_pixmap_and_mask (pixbuf, &pm, GIMME_V == G_ARRAY ? &bm : 0, alpha_threshold);
+        XPUSHs (newSVGdkPixmap (pm));
+        if (GIMME_V == G_ARRAY)
+          XPUSHs (newSVGdkBitmap (bm));
+}
 
 
 ##  GQuark gdk_pixbuf_error_quark (void) G_GNUC_CONST 
@@ -134,7 +158,6 @@ gdk_pixbuf_get_rowstride (pixbuf)
 ##  GdkPixbuf *gdk_pixbuf_new (GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample, int width, int height) 
 GdkPixbuf_noinc *
 gdk_pixbuf_new (class, colorspace, has_alpha, bits_per_sample, width, height)
-	SV * class
 	GdkColorspace colorspace
 	gboolean has_alpha
 	int bits_per_sample
@@ -142,8 +165,6 @@ gdk_pixbuf_new (class, colorspace, has_alpha, bits_per_sample, width, height)
 	int height
     C_ARGS:
 	colorspace, has_alpha, bits_per_sample, width, height
-    CLEANUP:
-	UNUSED(class);
 
 ##  GdkPixbuf *gdk_pixbuf_copy (const GdkPixbuf *pixbuf) 
 GdkPixbuf_noinc *
@@ -162,12 +183,10 @@ gdk_pixbuf_new_subpixbuf (src_pixbuf, src_x, src_y, width, height)
 ##  GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename, GError **error) 
 GdkPixbuf_noinc *
 gdk_pixbuf_new_from_file (class, filename)
-	SV * class
-	const char *filename
+	GPerlFilename filename
     PREINIT:
-	GError * error = NULL;
+        GError *error = NULL;
     CODE:
-	UNUSED(class);
 	RETVAL = gdk_pixbuf_new_from_file (filename, &error);
 	if (!RETVAL)
 		gperl_croak_gerror (filename, error);
@@ -175,6 +194,21 @@ gdk_pixbuf_new_from_file (class, filename)
 	RETVAL
 
 ###  GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample, int width, int height, int rowstride, GdkPixbufDestroyNotify destroy_fn, gpointer destroy_fn_data) 
+=for apidoc
+
+In C this function allows you to wrap a GdkPixbuf structure around existing
+pixel data.  In Perl, we have to use C<pack> to generate a scalar containing
+the pixel data, and pass that scalar to C<new_from_data>, which copies the
+scalar to keep it around.  It also manages the memory automagically, so there's
+no need for a destruction notifier function.  This all means that if you change
+your copy of the data scalar later, the pixbuf will I<not> reflect that, but
+because of the way perl manages string data and scalars, it would be pretty
+fragile to do that in the first place.  If you need to modify a pixbuf's data
+after it has been created, you can create new pixbufs for the changed regions
+and use C<< $pixbuf->composite >>, or try a different approach (possibly use a
+server-side pixmap and gdk drawing primitives, or something like libart).
+
+=cut
 GdkPixbuf_noinc *
 gdk_pixbuf_new_from_data (class, data, colorspace, has_alpha, bits_per_sample, width, height, rowstride)
 	SV * data
@@ -202,14 +236,10 @@ gdk_pixbuf_new_from_data (class, data, colorspace, has_alpha, bits_per_sample, w
 ##  GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data) 
 GdkPixbuf_noinc *
 gdk_pixbuf_new_from_xpm_data (class, data, ...)
-	SV * class
-	SV * data
     PREINIT:
 	char ** lines;
 	int i;
     CODE:
-	UNUSED(class);
-	UNUSED(data);
 	lines = g_new (char *, items - 1);
 	for (i = 1; i < items; i++)
 		lines[i-1] = SvPV_nolen (ST (i));
@@ -222,14 +252,12 @@ gdk_pixbuf_new_from_xpm_data (class, data, ...)
 ##  GdkPixbuf* gdk_pixbuf_new_from_inline (gint data_length, const guint8 *data, gboolean copy_pixels, GError **error) 
 GdkPixbuf_noinc *
 gdk_pixbuf_new_from_inline (class, data_length, data, copy_pixels)
-	SV * class
 	gint data_length
 	const guchar *data
 	gboolean copy_pixels
     PREINIT:
 	GError * error = NULL;
     CODE:
-	UNUSED(class);
 	RETVAL = gdk_pixbuf_new_from_inline (data_length, data, 
 	                                     copy_pixels, &error);
 	if (!RETVAL)
@@ -249,10 +277,10 @@ gdk_pixbuf_fill (pixbuf, pixel)
 void
 gdk_pixbuf_save (pixbuf, filename, type, ...)
 	GdkPixbuf *pixbuf
-	const char *filename
-	const char *type
+	GPerlFilename filename
+	gchar *type
     PREINIT:
-	GError * error= NULL;
+	GError * error = NULL;
 	char ** option_keys = NULL;
 	char ** option_vals = NULL;
 	int i, nkeys;
@@ -390,13 +418,11 @@ MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::PixbufAnimation	PREFIX = gdk_pix
 
 ##  GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file (const char *filename, GError **error) 
 GdkPixbufAnimation_noinc *
-gdk_pixbuf_animation_new_from_file (class, filename, error)
-	SV * class
-	char *filename
+gdk_pixbuf_animation_new_from_file (class, filename)
+	GPerlFilename filename
     PREINIT:
 	GError * error = NULL;
     CODE:
-	UNUSED(class);
 	RETVAL = gdk_pixbuf_animation_new_from_file (filename, &error);
 	if (!RETVAL)
 		gperl_croak_gerror (filename, error);
@@ -427,56 +453,118 @@ GdkPixbuf *
 gdk_pixbuf_animation_get_static_image (animation)
 	GdkPixbufAnimation *animation
 
-## FIXME no typemap for GTimeVal
+## there's no typemap for GTimeVal.
 ## GTimeVal is in GLib, same as unix' struct timeval.
+## timeval is seconds and microseconds, which we can get from Time::HiRes.
+## so, we'll take seconds and microseconds.  if neither is available,
+## pass NULL to the wrapped function to get the current time.
 ###  GdkPixbufAnimationIter *gdk_pixbuf_animation_get_iter (GdkPixbufAnimation *animation, const GTimeVal *start_time) 
-#GdkPixbufAnimationIter_noinc *
-#gdk_pixbuf_animation_get_iter (animation, start_time)
-#	GdkPixbufAnimation *animation
-#	GTimeVal *start_time
-#
-###  int gdk_pixbuf_animation_iter_get_delay_time (GdkPixbufAnimationIter *iter) 
-#int
-#gdk_pixbuf_animation_iter_get_delay_time (iter)
-#	GdkPixbufAnimationIter *iter
-#
-###  GdkPixbuf *gdk_pixbuf_animation_iter_get_pixbuf (GdkPixbufAnimationIter *iter) 
-#GdkPixbuf *
-#gdk_pixbuf_animation_iter_get_pixbuf (iter)
-#	GdkPixbufAnimationIter *iter
-#
-###  gboolean gdk_pixbuf_animation_iter_on_currently_loading_frame (GdkPixbufAnimationIter *iter) 
-#gboolean
-#gdk_pixbuf_animation_iter_on_currently_loading_frame (iter)
-#	GdkPixbufAnimationIter *iter
-#
+=for apidoc
+
+The seconds and microseconds values are available from Time::HiRes, which is
+standard since perl 5.8.0.  If both are undef or omitted, the function uses the
+current time.
+
+=cut
+GdkPixbufAnimationIter_noinc *
+gdk_pixbuf_animation_get_iter (animation, start_time_seconds=0, start_time_microseconds=0)
+	GdkPixbufAnimation *animation
+	guint start_time_seconds
+	guint start_time_microseconds
+    CODE:
+	if (start_time_microseconds) {
+		GTimeVal start_time;
+		start_time.tv_sec = start_time_seconds;
+		start_time.tv_usec = start_time_microseconds;
+		RETVAL = gdk_pixbuf_animation_get_iter (animation,
+		                                        &start_time);
+	} else
+		RETVAL = gdk_pixbuf_animation_get_iter (animation, NULL);
+    OUTPUT:
+	RETVAL
+
+MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::PixbufAnimationIter	PREFIX = gdk_pixbuf_animation_iter_
+
+int gdk_pixbuf_animation_iter_get_delay_time (GdkPixbufAnimationIter *iter) 
+
+GdkPixbuf *gdk_pixbuf_animation_iter_get_pixbuf (GdkPixbufAnimationIter *iter) 
+
+gboolean gdk_pixbuf_animation_iter_on_currently_loading_frame (GdkPixbufAnimationIter *iter) 
+
 ###  gboolean gdk_pixbuf_animation_iter_advance (GdkPixbufAnimationIter *iter, const GTimeVal *current_time) 
-#gboolean
-#gdk_pixbuf_animation_iter_advance (iter, current_time)
-#	GdkPixbufAnimationIter *iter
-#	GTimeVal *current_time
+gboolean
+gdk_pixbuf_animation_iter_advance (iter, current_time_seconds=0, current_time_microseconds=0)
+	GdkPixbufAnimationIter *iter
+	guint current_time_seconds
+	guint current_time_microseconds
+    CODE:
+	if (current_time_microseconds) {
+		GTimeVal current_time;
+		current_time.tv_sec = current_time_seconds;
+		current_time.tv_usec = current_time_microseconds;
+		RETVAL = gdk_pixbuf_animation_iter_advance (iter,
+		                                            &current_time);
+	} else
+		RETVAL = gdk_pixbuf_animation_iter_advance (iter, NULL);
+     OUTPUT:
+	RETVAL
+
+
+MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::Pixbuf	PREFIX = gdk_pixbuf_
 
 #if GTK_CHECK_VERSION(2,2,0)
 
-## FIXME no typemap entry for GdkPixbufFormat
-###  GSList *gdk_pixbuf_get_formats (void) 
-#GSList *
-#gdk_pixbuf_get_formats (void)
-#	void
-#
+## there's no typemap entry for GdkPixbufFormat, because there's no
+## boxed type support.  it's an information structure, so we'll just
+## hashify it so you can use Data::Dumper on it.
+##
+# returned strings should be freed
 ###  gchar *gdk_pixbuf_format_get_name (GdkPixbufFormat *format) 
-#gchar *
-#gdk_pixbuf_format_get_name (format)
-#	GdkPixbufFormat *format
-#
 ###  gchar *gdk_pixbuf_format_get_description (GdkPixbufFormat *format) 
-#gchar *
-#gdk_pixbuf_format_get_description (format)
-#	GdkPixbufFormat *format
-#
+###  gchar ** gdk_pixbuf_format_get_mime_types (GdkPixbufFormat *format)
+###  gchar ** gdk_pixbuf_format_get_extensions (GdkPixbufFormat *format)
 ###  gboolean gdk_pixbuf_format_is_writable (GdkPixbufFormat *format) 
-#gboolean
-#gdk_pixbuf_format_is_writable (format)
-#	GdkPixbufFormat *format
+
+###  GSList *gdk_pixbuf_get_formats (void) 
+## list should be freed, but not formats
+void
+gdk_pixbuf_get_formats (class=NULL)
+    PREINIT:
+	GSList * formats, * i;
+    PPCODE:
+	formats = gdk_pixbuf_get_formats ();
+	for (i = formats ; i != NULL ; i = i->next) {
+		gchar * s;
+		gchar ** strv;
+		int j;
+		AV * av;
+		GdkPixbufFormat * format = (GdkPixbufFormat*) i->data;
+		HV * hv = newHV ();
+
+		s = gdk_pixbuf_format_get_name (format);
+		hv_store (hv, "name", 4, newSVGChar (s), 0);
+		g_free (s);
+
+		s = gdk_pixbuf_format_get_description (format);
+		hv_store (hv, "description", 11, newSVGChar (s), 0);
+		g_free (s);
+
+		strv = gdk_pixbuf_format_get_mime_types (format);
+		av = newAV ();
+		for (j = 0 ; strv && strv[j] ; j++)
+			av_store (av, j, newSVGChar (strv[j]));
+		hv_store (hv, "mime_types", 10, newRV_noinc ((SV*) av), 0);
+		g_strfreev (strv);
+
+		strv = gdk_pixbuf_format_get_extensions (format);
+		av = newAV ();
+		for (j = 0 ; strv && strv[j] ; j++)
+			av_store (av, j, newSVGChar (strv[j]));
+		hv_store (hv, "extensions", 10, newRV_noinc ((SV*) av), 0);
+		g_strfreev (strv);
+
+		XPUSHs (sv_2mortal (newRV_noinc ((SV*) hv)));
+	}
+	g_slist_free (formats);
 
 #endif /* >= 2.2.0 */

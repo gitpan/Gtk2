@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.7 2003/09/22 00:04:24 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.8 2003/11/03 17:22:43 muppetman Exp $
 #
 
 use strict;
@@ -17,9 +17,10 @@ BEGIN { use_ok('Gtk2') };
 
 #########################
 
-ok( Gtk2->get_version_info );
-ok( Gtk2->check_version(0,0,0) eq 'Gtk+ version too new (major mismatch)' );
-ok( Gtk2->check_version(50,0,0) eq 'Gtk+ version too old (major mismatch)' );
+my @version = Gtk2->get_version_info;
+is( @version, 3, 'version info is three items long' );
+is( Gtk2->check_version(0,0,0), 'Gtk+ version too new (major mismatch)' );
+is( Gtk2->check_version(50,0,0), 'Gtk+ version too old (major mismatch)' );
 
 SKIP:
 {

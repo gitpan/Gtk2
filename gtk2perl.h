@@ -18,7 +18,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
  * 
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.17 2003/09/26 07:56:01 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.18 2003/11/08 00:02:15 pcg Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -63,14 +63,6 @@ typedef GdkBitmap GdkBitmap_noinc;
 SV * newSVGdkBitmap (GdkBitmap * bitmap);
 SV * newSVGdkBitmap_noinc (GdkBitmap * bitmap);
 
-
-/*
- * override the autogen stuff for GdkModifierType, so we can make sure
- * that GDK_MODIFIER_MASK doesn't get in there and mess things up.
- * (it has multiple bits set and therefore matches everything!)
- */
-#undef newSVGdkModifierType
-SV * newSVGdkModifierType (GdkModifierType mods);
 
 /*
  * GdkAtom, an opaque pointer

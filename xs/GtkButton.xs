@@ -16,23 +16,53 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkButton.xs,v 1.7 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkButton.xs,v 1.10 2003/11/02 07:14:30 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Button	PACKAGE = Gtk2::Button	PREFIX = gtk_button_
 
+=head1 MNEMONICS
+
+Mnemonics are "memory aids"; in GTK+, a mnemonic is an underlined character
+which corresponds to a keyboard accelerator.  For a button, that means pressing
+Alt and that key activates the button.
+
+For convenience, Gtk2-Perl uses mnemonics by default on widgets that support
+them.  If characters in label string are preceded by an underscore, they are
+underlined.  If you need a literal underscore character in a label, use '__'
+(two underscores).  If you don't want to use mnemonics at all, use the
+non-mnemonic version explicitly (e.g. C<Gtk2::Button::new_with_label>).
+
+=cut
+
+=for apidoc Gtk2::Button::new 
+=signature widget = Gtk2::Button->new
+=signature widget = Gtk2::Button->new ($mnemonic)
+=arg label (__hide__)
+=arg mnemonic (string) used to label the widget, see L</MNEMONICS>
+=cut
+
+=for apidoc Gtk2::Button::new_with_mnemonic
+=signature widget = Gtk2::Button->new_with_mnemonic ($mnemonic)
+=arg label (__hide__)
+=arg mnemonic (string) used to label the widget, see L</MNEMONICS>
+=cut
+
+=for apidoc Gtk2::Button::new_with_label
+=signature widget = Gtk2::Button->new_with_label ($label)
+=arg label (string) used to label the widget
+=cut
+
 GtkWidget *
 gtk_button_news (class, label=NULL)
-	SV * class
 	const gchar * label
     ALIAS:
 	Gtk2::Button::new = 0
 	Gtk2::Button::new_with_mnemonic = 1
 	Gtk2::Button::new_with_label = 2
     CODE:
-	UNUSED(class);
 	if (label) {
 		if (ix == 2)
 			RETVAL = gtk_button_new_with_label (label);
@@ -43,14 +73,17 @@ gtk_button_news (class, label=NULL)
     OUTPUT:
 	RETVAL
 
+# TODO: find and/or create Gtk2::StockItems info/page
+=for apidoc
+
+=arg stock_id (string) creates a new button using the icon and text from the specified stock item, see L<Gtk2::StockItems>
+
+=cut
 GtkWidget *
 gtk_button_new_from_stock (class, stock_id)
-	SV * class
 	const gchar * stock_id
     C_ARGS:
 	stock_id
-    CLEANUP:
-	UNUSED(class);
 
 void
 gtk_button_pressed (button)

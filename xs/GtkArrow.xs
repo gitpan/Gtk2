@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkArrow.xs,v 1.5 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkArrow.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,13 +26,10 @@ MODULE = Gtk2::Arrow	PACKAGE = Gtk2::Arrow	PREFIX = gtk_arrow_
 ## GtkWidget* gtk_arrow_new (GtkArrowType arrow_type, GtkShadowType shadow_type)
 GtkWidget *
 gtk_arrow_new (class, arrow_type, shadow_type)
-	SV            * class
 	GtkArrowType    arrow_type
 	GtkShadowType   shadow_type
     C_ARGS:
 	arrow_type, shadow_type
-    CLEANUP:
-	UNUSED(class);
 
 ## void gtk_arrow_set (GtkArrow *arrow, GtkArrowType arrow_type, GtkShadowType shadow_type)
 void

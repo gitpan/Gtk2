@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.5 2003/09/22 00:04:24 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -35,7 +35,6 @@ eq (left, right, swap=FALSE)
 ##  GdkAtom gdk_atom_intern (const gchar *atom_name, gboolean only_if_exists) 
 GdkAtom
 gdk_atom_intern (class, atom_name, only_if_exists=FALSE)
-	SV * class
 	const gchar *atom_name
 	gboolean only_if_exists
     ALIAS:
@@ -44,8 +43,7 @@ gdk_atom_intern (class, atom_name, only_if_exists=FALSE)
     C_ARGS:
 	atom_name, only_if_exists
     CLEANUP:
-	UNUSED(class);
-	UNUSED(ix);
+	PERL_UNUSED_VAR (ix);
 
 ##  gchar* gdk_atom_name (GdkAtom atom) 
 gchar_own *

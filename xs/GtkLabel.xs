@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.8 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.9 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -27,21 +27,15 @@ MODULE = Gtk2::Label	PACKAGE = Gtk2::Label	PREFIX = gtk_label_
 
 GtkWidget *
 gtk_label_new (class, str=NULL)
-	SV * class
 	const gchar * str
     C_ARGS:
 	str
-    CLEANUP:
-	UNUSED(class);
 
 GtkWidget *
 gtk_label_new_with_mnemonic (class, str)
-	SV * class
 	const gchar * str
     C_ARGS:
 	str
-    CLEANUP:
-	UNUSED(class);
 
 ### gtk_label_[gs]et_text ---- string does *not* include any embedded stuff
 void

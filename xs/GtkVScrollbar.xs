@@ -16,20 +16,28 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVScrollBar.xs,v 1.6 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVScrollbar.xs,v 1.1 2003/11/03 05:51:25 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
-MODULE = Gtk2::VScrollBar	PACKAGE = Gtk2::VScrollBar	PREFIX = gtk_vscrollbar_
+MODULE = Gtk2::VScrollbar	PACKAGE = Gtk2::VScrollbar	PREFIX = gtk_vscrollbar_
 
 ## GtkWidget* gtk_vscrollbar_new (GtkAdjustment *adjustment)
 GtkWidget *
 gtk_vscrollbar_new (class, adjustment=NULL)
-	SV            * class
 	GtkAdjustment_ornull * adjustment
+    ALIAS:
+	Gtk2::VScrollBar::new = 1
     C_ARGS:
 	adjustment
-    CLEANUP:
-	UNUSED(class);
 
+=for apidoc Gtk2::VScrollBar::new
+
+A typo in days long past resulted in the package names for Gtk2::VScrollbar
+and Gtk2::HScrollbar being misspelled with a capital C<B>, despite the fact
+that only the proper name (with the small C<b>) was actually registered
+with the Glib type system.  For backward compatibility with Gtk2-1.00,
+Gtk2::VScrollBar->new calls Gtk2::VScrollbar->new without complaint.
+
+=cut

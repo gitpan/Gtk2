@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkHScale.xs,v 1.7 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkHScale.xs,v 1.8 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,22 +26,16 @@ MODULE = Gtk2::HScale	PACKAGE = Gtk2::HScale	PREFIX = gtk_hscale_
 ## GtkWidget* gtk_hscale_new (GtkAdjustment *adjustment)
 GtkWidget *
 gtk_hscale_new (class, adjustment=NULL)
-	SV            * class
 	GtkAdjustment_ornull * adjustment
     C_ARGS:
 	adjustment
-    CLEANUP:
-	UNUSED(class);
 
 ## GtkWidget* gtk_hscale_new_with_range (gdouble min, gdouble max, gdouble step)
 GtkWidget *
 gtk_hscale_new_with_range (class, min, max, step)
-	SV * class
 	gdouble min
 	gdouble max
 	gdouble step
     C_ARGS:
 	min, max, step
-    CLEANUP:
-	UNUSED(class);
 

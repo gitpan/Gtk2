@@ -1,3 +1,363 @@
+2003/11/13 23:41 (-0500) muppetman
+
+	* Gtk2.pm, Makefile.PL, README: bump version to 1.011
+
+2003/11/14 04:06 pcg
+
+	* xs/GdkTypes.xs: fix constrain_size name.
+
+2003/11/13 21:26 (-0500) muppetman
+
+	* xs/GdkWindow.xs, xs/GtkWidget.xs: genfirstpass appears to have
+	skipped shape_combine_mask all those months ago.  implemented it in
+	both GdkWindow and GtkWidget because i like cool shaped windows.
+
+2003/11/13 13:25 (-0500) muppetman
+
+	* gdk.typemap: hush compiler warning 'incompatible type for arg 1 of
+	Perl_croak_nocontext' -- croak() is by default croak_nocontext, which
+	does not get aTHX_ passed to it.
+
+	* xs/GdkTypes.xs: typo in constrain_size -- no such function as
+	mewSViv, although the name is nice.  :)
+	add pod for the rectangle mutators, so their signatures make sense
+	in the docs.
+
+2003/11/12 18:28 pcg
+
+	* gdk.typemap, xs/GdkTypes.xs: implement Gtk2::Gdk::Geometry.
+        * xs/GdkWindow.xs, xs/GtkWindow.xs: use it and move
+        gdk_window_constraing_size to GdkTypes.xs.
+
+2003/11/12 16:05 pcg
+
+	* xs/GdkTypes.xs: change acessor methods to mutators for
+        Gtk2::Gdk:Rectangle.
+
+2003/11/11 23:00 (-0500) muppetman
+
+	* xs/PangoFont.xs: put the docs for the constants into the
+	Gtk2::Pango::FontDescription package, so that the doc generation
+	stuff doesn't overwrite the docs from Pango.pm.
+
+2003/11/12 01:57 pcg
+
+        * xs/GdkPixbuf.xs, xs/GtkWindow.xs, xs/GtkImage.xs, xs/GtkRc.xs,
+        xs/GtkIconFactory.xs, xs/GdkPixmap.xs: use GPerlFilename and
+        gperl_filename_from_sv on behalf of the user, so filenames work
+        the same as in other parts of gtk/glib (and sometimes unlike perl,
+        but it's the only way to load locale-encoded files).
+        * xs/GtkFileSelection.xs: convert to use new typemap entries.
+
+2003/11/11 00:36 (-0500) muppetman
+
+	* MANIFEST, debian/*: remove the debian packaging files, since having
+	them in the upstream dist makes it difficult for the maintainers
+
+	* xs/GtkEditable.xs: use casts to hush the compiler's indignant warnings
+	about our flagrant disregard for the const-ness of param_values
+
+	* xs/PangoContext.xs: remove a couple of functions that are only enabled
+	when building pango backends
+
+2003/11/10 15:00 (-0500) muppetman
+
+	* xs/GtkWidget.xs: bind gtk_widget_event().
+
+	* examples/rulers.pl, MANIFEST: add a ported version of the rulers
+	example from the gtk-perl tutorial, using gtk_widget_event() to 
+	propagate the motion notify events to the rulers.  this was previously
+	not possible.
+
+2003/11/10 13:35 (-0500) muppetman
+
+	* xs/GtkDialog.xs, xs/GtkEditable.xs: use the new macros in the new
+	gperl_marshal.h to implement custom signal marshallers.
+
+	* examples/insert-text-test.pl: additional marshaller smoke test
+
+2003/11/10 09:12 (-0500) rwmcfa1
+	
+	* xs/GtkTreeSelection.xs: missing ; on the end of function call caused
+	syntax error, with somewhat odd message, resolved.
+
+2003/11/10 01:44 (-0500) muppetman
+
+	* api.pod, xs/GdkColor.xs, xs/GdkPixbuf.xs, xs/GtkStyle.xs,
+	xs/GtkWidget.xs, xs/GtkTreeSelection.xs: move descriptions of
+	changed call signatures or semantics from api.pod to apidoc pod
+	in the actual xs files.  this isn't all of it, but almost.
+
+	* xs/GtkTreeSelection.xs: shuffle the code for get_selected_rows
+	and count_selected_rows to avoid them showing up twice in the pod.
+ 
+	* xs/GtkTreeModel.xs, xs/GtkTreeView.xs: use the C name in the
+	=for enums line --- let GenPod figure out the perl name.
+
+2003/11/09 23:48 (-0500) muppetman
+
+	* xs/GtkTreeModel.xs: get_value and get were implemented separately,
+	for no good reason; get_value is now an alias for get.  added apidoc
+	pods to document the stuff that isn't obvious or is different from
+	the C api.
+
+	* xs/GtkTreeView.xs: switch widget_to_tree_coords and
+	tree_to_widget_coords to use OUTLIST to save code and avoid the need
+	to add a =for signature line.  add apidoc pod for other stuff.
+
+	* api.pod: removed stuff from the specifics section that is now
+	documented directly in the apidoc pods.
+
+2003/11/10 01:51 pcg
+
+	* api.pod: Document new operation on GFlags.
+
+2003/11/08 01:20 (-0500) muppetman
+
+	* examples/cellrenderer_date.pl, examples/cellrenderer_popup.pl,
+	examples/cellrenderer_spinbutton.pl, examples/histogramplot.pl:
+	update to use new fangled flags operators
+
+	* xs/GtkDialog.xs: fix the same sorts of bugs in the dialog::response
+	marshaller as we found earlier this week in Glib/GClosure.xs.
+
+	A examples/insert-text-test.pl
+	* xs/GtkEditable.xs: fix the Gtk2::Editable::insert-text signal.
+	allows you to modify the arguments or return values on the stack,
+	by the TIMTOWTDI principle.  new example code modifies @_.
+
+2003/11/07 21:09 pcg
+
+	* gtk2perl.h: removed newSVGdkModifierType hack.
+
+2003/11/07 16:49 pcg
+
+	* xs/GdkWindow.xs: implement gdk_window_set_debug_updates.
+        * MANIFEST: Add xs_files*.
+
+2003/11/07 11:53 (+0100) kaffeetisch
+
+	* xs/GtkClipboard.xs: Two other places where PERL_UNUSED_VAR was called
+	before variables are declared.  Fix necessary to make it compile on
+	FreeBSD.
+
+2003/11/06 16:53 (-0500) muppetman
+
+	* Gtk2.pm: link to the generated pods.
+
+2003/11/06 10:30 (-0500) muppetman
+
+	* xs/Gtk2.xs: handle logs for GdkPixbuf, too.
+
+2003/11/06 13:48 kaffeetisch
+
+	* xs/GtkItemFactory.xs: Call dSP before PERL_UNUSED_VAR to make it
+	compile on FreeBSD.
+
+2003/11/03 14:05 muppetman
+
+	* xs/GdkEvent.xs: GenPod uses instance arg names now, so we can
+	remove all the ugly signature overrides.
+
+2003/11/03 18:37 pcg
+
+	* Makefile.PL: avoid "package MY" for easier access to variables.
+	* MANIFEST: ScrollBar => Scrollbar.
+        * api.pod: Document Scorll[bB] change.
+
+2003/11/03 12:18 muppetman
+
+	* Makefile.PL: @lists needs to be our, not my.  updated some comments.
+
+	* t/00.Gtk2.t: scalar versus list context bug in version info test
+
+	* AUTHORS: added bjarne to the contributors list
+
+2003/11/03 16:24 pcg
+
+	* xs/GtkWidget.xs: Implement a bunch of minor methods, some of them
+        even tested.
+
+2003/11/03 12:45 muppetman
+
+	A xs_files-2.0: new file listing source files for gtk+-2.0.x
+	A xs_files-2.2: new file listing source files for gtk+-2.2.x
+	* CodeGen.pm, Makefile.PL: modify build to use explicit lists of
+	source code files based on the discovered gtk+ version, rather
+	than just globbing all the files the xs dir.
+
+	D xs/GtkHScrollBar.xs
+	A xs/GtkHScrollbar.xs
+	D xs/GtkVScrollBar.xs
+	A xs/GtkVScrollbar.xs
+	long ago, in the early days of gtk2-perl-xs, these files were
+	created with the wrong capitalization of the file and package
+	names; register.xsh registers Gtk2::[VH]Scrollbar, but the
+	files implement Gtk2::[VH]ScrollBar.  since this is wrong, i have
+	corrected it by changing the package names and renaming the files,
+	but in order to retain compatibility with Gtk2-1.00, the old
+	Gtk2::[VH]ScrollBar::new()s are aliased to the new ones. 
+
+2003/11/02 23:26 pcg
+
+        * xs/GdkPixbuf.xs, api.pod: Implement and document
+        gdk_pixbuf_render_pixmap_and_mask* functions.
+
+2003/11/02 13:24 pcg
+
+	* api.pod: Document Scrollbar vs. ScrollBar inconsistency.
+
+2003/11/02 16:17 muppetman
+
+	* Gtk2.pm: undo my silly "atleast" version checks, and so something
+	more like what Exporter would do.  we don't use Exporter directly
+	because we're not an exporter, and we still need to watch for -init.
+
+	* Makefile.PL: Glib doesn't use the "atleast" check anymore, either.
+
+2003/11/02 02:12 muppetman
+
+	* xs/GtkButton.xs: after fixing the GenPod bug, it became apparent
+	that button's doc needed to hide label on new_with_mnemonic, too.
+	while i was at it, fleshed out the description of mnemonics to make
+	more sense to people who've never heard of them.
+
+2003/11/01 14:52 rwmcfa1
+
+	* xs/Button.xs: autopod doc added
+
+2003/10/30 22:10 rwmcfa1
+
+	* t/30.GtkCellRenderer.t: this test seems kinda flaky, it was counting 
+	that 24 callbacks happened, but often that number seems inconsistent. 
+	slight modifications made so that we now check that at least one, edit, 
+	render, size, and init happen. activate doesn't seem to ever occur.
+
+2003/10/29 12:40 muppetman
+
+	fixing a few things while tracking down bugs reported by
+	Bjarne Steinsbø:
+
+	* xs/GtkCellRenderer.xs, xs/GtkStyle.xs: all of the gtk_paint_foo()
+	functions ask for GdkWindows, but actually work on GdkDrawables.
+	according to http://bugzilla.gnome.org/show_bug.cgi?id=102678 ,
+	the same is true for gtk_cell_renderer_render(), and has been fixed
+	in gtk+ 2.3.0.  so, we use GdkDrawable instead of GdkWindow in all
+	of those places.
+
+	* examples/cellrenderer_popup.pl: if the treeview is reorderable,
+	the popup and editing interaction is broken, resulting in the treeview
+	thinking we're still dragging the row.  fix that by using a dummy
+	GtkCellEditable.
+
+	* xs/GtkEntry.xs: GtkEntry also implements GtkCellEditable.
+	use gperl_prepend_isa() instead of custom AV-handling code.
+
+2003/10/29 09:36 rwmcfa1
+
+	* xs/GtkWidget.xs: improved error messages in get/set_flags. croak when
+	trying to set a read only flag.
+
+2003/10/29 02:00 muppetman
+
+	* Gtk2.pm: add a version check to Gtk2's import
+
+	* Makefile.PL: use Glib's new 'atleast' version check
+
+2003/10/28 23:21 muppetman
+
+	* Makefile.PL: use the new semantics for Glib::MakeHelper methods.
+	never just 'use' a non-standard dependency module, place those
+	use lines in the eval'd string.  otherwise, the Makefile.PL won't
+	pass the compile phase, and CPAN won't pick up dependencies 
+	properly.
+
+2003/10/28 16:47 rwmcfa1
+
+	* Gtk2/MANIFEST: missing files added
+
+	* Gtk2/Makefile.PL: updates to new system, MakeHelper. use strict and 
+	use warnings safe now
+
+	* Gtk2/xs/Gtk2.xs: put things in an appropriate doc object
+
+2003/10/27 19:38 muppetman
+
+	* Makefile.PL: documentation generation experimentation
+
+	* xs/GdkEvent.xs: apidoc pod bundles all of the event subtypes into
+	GdkEvent's docs; which creates another problem, namely, they all have
+	the same instance name in their call signatures.  so, add =signature
+	pods to give them better names.  implemented a few of the more
+	esoteric members, too.
+	
+	* xs/GtkCellRenderer.xs: document CellRendererState and
+	CellRendererMode with CellRenderer.
+
+2003/10/27 14:34 muppetman
+
+	* xs/GtkCellRenderer.xs: merged the cellrenderer subclassing stuff,
+	with lots of new-style experimental documentation.
+
+	* t/30.GtkCellRenderer.t: new test
+
+	* examples/cellrenderer_date.pl, examples/cellrenderer_popup.pl,
+	examples/cellrenderer_spinbutton.pl: new examples
+
+2003/10/22 13:31 muppetman
+
+	stuff found while writing a documentation generator...
+
+	* xs/GtkListStore.xs: stray semicolon
+	* xs/GdkScreen.xs: arg list had an output parameter in it
+
+2003/10/19 18:55 rwmcfa1
+
+	* xs/GdkPixbuf.xs: two missing semicolons added, in 2.2 section so 
+	wasn't caught compling on < 2.2.
+
+2003/10/19 00:41 muppetman
+
+	* examples/simplelist.pl, examples/scribble.pl,
+	examples/histogramplot.pl: commentary cleanup and such
+
+2003/10/18 02:41 muppetman
+
+	* Gtk2.pm: bump version for devel series.
+	* Makefile.PL: require Glib 1.01 (to pick up a new typemap)
+
+	Made a pass through the source killing FIXMEs.
+	* TODO: updated.
+	* gtk.typemap, xs/GtkColorSelection.xs, xs/GtkTreeView.xs, 
+	xs/GtkTreeViewColumn.xs: cleaned up
+	* xs/Gdk.xs, xs/GtkTextBuffer.xs, xs/GtkTextTag.xs: use the new
+	gchar_ornull typemap to clean things up
+	* xs/GdkGC.xs: implemented GdkGCValues stuff, mostly by porting
+	Gtk-Perl code.
+	* xs/GdkPixbuf.xs, api.pod: implemented the animation iter and
+	pixbuf formats stuff, finally.
+	* xs/GtkStyle.xs: painstakingly traced through the source of
+	gtkstyle.c to see where NULL is and isn't allowed, and updated all
+	the paint_foo functions accordingly.
+	* xs/GtkTextIter.xs: implemented get_marks, get_toggled_tags,
+	get_attributes, and get_language
+	* xs/GtkWidget.xs: implement get_child_requisition.  apparently this
+	isn't equivalent to get_size_request after all; some widget
+	implementations need this (e.g., placing popups by hand).
+	* xs/PangoContext.xs: don't know why these weren't implemented.
+
+2003/10/12 13:42 rwmcfa1
+
+	* xs/(most).xs: UNUSED is no more, PERL_UNUSED_VAR used where 
+	needed, relies on new ParseXS to prevent the other warnings that were
+	its fault, we now only quite the ones that are ours
+
+	* Gtk2/xs/GtkObject.xs: fixed problem where g_object_unref was being
+	called on the wrong thing. there was both a SV * class and GtkObject 
+	class, no longer the case
+
+======== 1.0
+
 2003/10/10 00:13 muppetman
 
 	* Gtk2.pm, README, META.yml, debian/changelog: 1.00

@@ -18,7 +18,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/simplelist.pl,v 1.7 2003/09/30 20:37:52 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/simplelist.pl,v 1.8 2003/10/19 02:59:43 muppetman Exp $
 #
 
 use strict;
@@ -147,9 +147,7 @@ $chk->signal_connect (toggled => sub {
 $vbox->pack_start ($chk, 0, 0, 0);
 $tooltips->set_tip ($chk, 'set whether the list is reorderable');
 
-#$slist->set_column_editable (1, 1);
-#$slist->set_column_editable (2, 1);
-
+# finally, a button to end it all
 $btn = Gtk2::Button->new_from_stock ('gtk-quit');
 $btn->signal_connect (clicked => sub  { Gtk2->main_quit; });
 $vbox->pack_end($btn, 0, 1, 0);

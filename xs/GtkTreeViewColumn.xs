@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.11 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.13 2003/10/18 07:05:04 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -79,23 +79,16 @@ gtk2perl_tree_cell_data_func (GtkTreeViewColumn * tree_column,
 MODULE = Gtk2::TreeViewColumn	PACKAGE = Gtk2::TreeViewColumn	PREFIX = gtk_tree_view_column_
 
 
-## FIXME consolidate these constructors!
-
 GtkTreeViewColumn *
 gtk_tree_view_column_new (class)
-	SV * class
     C_ARGS:
 	/*void*/
-    CLEANUP:
-	UNUSED(class);
 
 GtkTreeViewColumn *
 gtk_tree_view_column_new_with_attributes (class, title, cell, ...)
-	SV * class
 	const gchar * title
 	GtkCellRenderer * cell
     CODE:
-	UNUSED(class);
 	if (!check_stack_for_attributes (3))
 		croak ("Usage: Gtk2::TreeViewColumn->new_with_attributes (TITLE, CELLRENDERER, ATTR1, COL1, ATTR2, COL2, ...)");
 	RETVAL = gtk_tree_view_column_new ();
@@ -131,7 +124,7 @@ gtk_tree_view_column_get_cell_renderers (tree_column)
 	GList * renderers, * i;
     PPCODE:
 	renderers = gtk_tree_view_column_get_cell_renderers (tree_column);
-	EXTEND (SP, g_list_length (renderers));
+	EXTEND (SP, (int)g_list_length (renderers));
 	for (i = renderers ; i ; i = i->next)
 		PUSHs (sv_2mortal (newSVGtkCellRenderer (GTK_CELL_RENDERER (i->data))));
 	g_list_free (renderers);

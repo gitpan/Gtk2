@@ -16,11 +16,139 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.10 2003/09/22 00:04:24 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.12 2003/10/18 07:05:15 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
+/*
+ * GdkGCValues code ported from Gtk-Perl 0.7009.  There's no boxed type
+ * support for this structure, but since it's only used in a couple of
+ * functions in this file, we can scrape by without typemaps.
+ */
+SV *
+newSVGdkGCValues (GdkGCValues * v)
+{
+	HV * h;
+	SV * r;
+	
+	if (!v)
+		return newSVsv (&PL_sv_undef);
+		
+	h = newHV ();
+	r = newRV_noinc ((SV*)h);
+
+	hv_store (h, "foreground", 10, newSVGdkColor_copy (&v->foreground), 0);
+	hv_store (h, "background", 10, newSVGdkColor_copy (&v->background), 0);
+	if (v->font) hv_store (h, "font", 4, newSVGdkFont (v->font), 0);
+	hv_store (h, "function", 8, newSVGdkFunction (v->function), 0);
+	hv_store (h, "fill", 4, newSVGdkFill (v->fill), 0);
+	if (v->tile) hv_store (h, "tile", 4, newSVGdkPixmap (v->tile), 0);
+	if (v->stipple) hv_store (h, "stipple", 7, newSVGdkPixmap (v->stipple), 0);
+	if (v->clip_mask) hv_store (h, "clip_mask", 9, newSVGdkPixmap (v->clip_mask), 0);
+	hv_store (h, "subwindow_mode", 14, newSVGdkSubwindowMode (v->subwindow_mode), 0);
+	hv_store (h, "ts_x_origin", 11, newSViv (v->ts_x_origin), 0);
+	hv_store (h, "ts_y_origin", 11, newSViv (v->ts_y_origin), 0);
+	hv_store (h, "clip_x_origin", 13, newSViv (v->clip_x_origin), 0);
+	hv_store (h, "clip_x_origin", 13, newSViv (v->clip_y_origin), 0);
+	hv_store (h, "graphics_exposures", 18, newSViv (v->graphics_exposures), 0);
+	hv_store (h, "line_width", 10, newSViv (v->line_width), 0);
+	hv_store (h, "line_style", 10, newSVGdkLineStyle (v->line_style), 0);
+	hv_store (h, "cap_style", 9, newSVGdkCapStyle (v->cap_style), 0);
+	hv_store (h, "join_style", 10, newSVGdkJoinStyle (v->join_style), 0);
+	
+	return r;
+}
+
+static GdkGCValues *
+read_gcvalues_from_sv (SV * data, GdkGCValues * v, GdkGCValuesMask * m)
+{
+	HV * h;
+	SV ** s;
+
+	if ((!data) || (!SvOK (data)) || (!SvRV (data)) ||
+	     (SvTYPE (SvRV (data)) != SVt_PVHV))
+		return NULL;
+		
+	h = (HV*) SvRV (data);
+
+	if (!v)
+		v = gperl_alloc_temp (sizeof(GdkGCValues));
+
+	if ((s=hv_fetch (h, "foreground", 10, 0)) && SvOK (*s)) {
+		v->foreground = *((GdkColor*) SvGdkColor (*s));
+		*m |= GDK_GC_FOREGROUND;
+	}
+	if ((s=hv_fetch (h, "background", 10, 0)) && SvOK (*s)) {
+		v->background = *((GdkColor*) SvGdkColor (*s));
+		*m |= GDK_GC_BACKGROUND;
+	}
+	if ((s=hv_fetch (h, "font", 4, 0)) && SvOK (*s)) {
+		v->font = SvGdkFont (*s);
+		*m |= GDK_GC_FONT;
+	}
+	if ((s=hv_fetch (h, "function", 8, 0)) && SvOK (*s)) {
+		v->function = SvGdkFunction (*s);
+		*m |= GDK_GC_FUNCTION;
+	}
+	if ((s=hv_fetch (h, "fill", 4, 0)) && SvOK (*s)) {
+		v->function = SvGdkFill (*s);
+		*m |= GDK_GC_FILL;
+	}
+	if ((s=hv_fetch (h, "tile", 4, 0)) && SvOK (*s)) {
+		v->tile = SvGdkPixmap (*s);
+		*m |= GDK_GC_TILE;
+	}
+	if ((s=hv_fetch (h, "stipple", 7, 0)) && SvOK (*s)) {
+		v->stipple = SvGdkPixmap (*s);
+		*m |= GDK_GC_STIPPLE;
+	}
+	if ((s=hv_fetch (h, "clip_mask", 9, 0)) && SvOK (*s)) {
+		v->clip_mask = SvGdkPixmap (*s);
+		*m |= GDK_GC_CLIP_MASK;
+	}
+	if ((s=hv_fetch (h, "subwindow_mode", 14, 0)) && SvOK (*s)) {
+		v->subwindow_mode = SvGdkSubwindowMode (*s);
+		*m |= GDK_GC_SUBWINDOW;
+	}
+	if ((s=hv_fetch (h, "ts_x_origin", 11, 0)) && SvOK (*s)) {
+		v->ts_x_origin = SvIV (*s);
+		*m |= GDK_GC_TS_X_ORIGIN;
+	}
+	if ((s=hv_fetch (h, "ts_y_origin", 11, 0)) && SvOK (*s)) {
+		v->ts_y_origin = SvIV (*s);
+		*m |= GDK_GC_TS_Y_ORIGIN;
+	}
+	if ((s=hv_fetch (h, "clip_x_origin", 13, 0)) && SvOK (*s)) {
+		v->clip_x_origin = SvIV (*s);
+		*m |= GDK_GC_CLIP_X_ORIGIN;
+	}
+	if ((s=hv_fetch (h, "clip_y_origin", 13, 0)) && SvOK (*s)) {
+		v->clip_y_origin = SvIV (*s);
+		*m |= GDK_GC_CLIP_Y_ORIGIN;
+	}
+	if ((s=hv_fetch (h, "graphics_exposures", 18, 0)) && SvOK (*s)) {
+		v->graphics_exposures = SvIV (*s);
+		*m |= GDK_GC_EXPOSURES;
+	}
+	if ((s=hv_fetch (h, "line_width", 10, 0)) && SvOK (*s)) {
+		v->line_width= SvIV (*s);
+		*m |= GDK_GC_LINE_WIDTH;
+	}
+	if ((s=hv_fetch (h, "line_style", 10, 0)) && SvOK (*s)) {
+		v->line_style= SvGdkLineStyle (*s);
+		*m |= GDK_GC_LINE_STYLE;
+	}
+	if ((s=hv_fetch (h, "cap_style", 9, 0)) && SvOK (*s)) {
+		v->cap_style = SvGdkCapStyle (*s);
+		*m |= GDK_GC_CAP_STYLE;
+	}
+	if ((s=hv_fetch (h, "join_style", 10, 0)) && SvOK (*s)) {
+		v->join_style = SvGdkJoinStyle (*s);
+		*m |= GDK_GC_JOIN_STYLE;
+	}
+	return v;
+}
 
 MODULE = Gtk2::Gdk::GC	PACKAGE = Gtk2::Gdk::GC	PREFIX = gdk_gc_
 
@@ -36,27 +164,38 @@ BOOT:
  ## void gdk_gc_unref (GdkGC *gc)
 
  ##GdkGC * gdk_gc_new (GdkDrawable * drawable);
-GdkGC_noinc*
-gdk_gc_new (class, drawable)
-	SV * class
-	GdkDrawable * drawable
-    C_ARGS:
-	drawable
-    CLEANUP:
-	UNUSED(class);
-
-# FIXME need GdkGCValues
  ##GdkGC * gdk_gc_new_with_values (GdkDrawable * drawable, GdkGCValues * values);
-##  implement this with an optional values arg to ->new
- ##GdkScreen * gdk_gc_get_screen (GdkGC * gc);
+GdkGC_noinc*
+gdk_gc_new (class, GdkDrawable * drawable, SV * values=NULL)
+    ALIAS:
+	new_with_values = 1
+    CODE:
+	if (values && SvTRUE (values)) {
+		GdkGCValuesMask m;
+		GdkGCValues v;
+		read_gcvalues_from_sv (values, &v, &m);
+		RETVAL = gdk_gc_new_with_values (drawable, &v, m);
+	} else {
+		if (ix == 1)
+			warn ("passed empty values to new_with_values");
+		RETVAL = gdk_gc_new (drawable);
+	}
+    OUTPUT:
+	RETVAL
 
-# FIXME need GdkGCValues
+
 # ## void gdk_gc_get_values (GdkGC *gc, GdkGCValues *values)
-#void
-#gdk_gc_get_values (gc, values)
-#	GdkGC *gc
-#	GdkGCValues *values
-#
+SV *
+gdk_gc_get_values (gc)
+	GdkGC *gc
+    PREINIT:
+	GdkGCValues values;
+    CODE:
+	gdk_gc_get_values (gc, &values);
+	RETVAL = newSVGdkGCValues (&values);
+    OUTPUT:
+	RETVAL
+
 # FIXME need GdkGCValues
 # ## void gdk_gc_set_values (GdkGC *gc, GdkGCValues *values, GdkGCValuesMask values_mask)
 #void

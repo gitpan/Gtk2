@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.10 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.11 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,11 +26,8 @@ MODULE = Gtk2::Tooltips	PACKAGE = Gtk2::Tooltips	PREFIX = gtk_tooltips_
 ## GtkTooltips* gtk_tooltips_new (void)
 GtkTooltips *
 gtk_tooltips_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 ## void gtk_tooltips_enable (GtkTooltips *tooltips)
 void
@@ -67,13 +64,11 @@ gtk_tooltips_set_tip (tooltips, widget, tip_text, tip_private=NULL)
 ## GtkTooltipsData* gtk_tooltips_data_get (GtkWidget *widget)
 void
 gtk_tooltips_data_get (class, widget)
-	SV        * class
 	GtkWidget * widget
     PREINIT:
 	GtkTooltipsData * ret = NULL;
 	HV              * hv;
     PPCODE:
-	UNUSED(class);
 	ret = gtk_tooltips_data_get(widget);
 	if( !ret )
 		XSRETURN_UNDEF;

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDnd.xs,v 1.5 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDnd.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -43,7 +43,6 @@ MODULE = Gtk2::Dnd	PACKAGE = Gtk2::Drag	PREFIX = gtk_drag_
 ##  GdkDragContext *gtk_drag_begin (GtkWidget *widget, GtkTargetList *targets, GdkDragAction actions, gint button, GdkEvent *event) 
 GdkDragContext *
 gtk_drag_begin (class, widget, targets, actions, button, event)
-	SV * class
 	GtkWidget *widget
 	GtkTargetList *targets
 	GdkDragAction actions
@@ -51,8 +50,6 @@ gtk_drag_begin (class, widget, targets, actions, button, event)
 	GdkEvent *event
     C_ARGS:
 	widget, targets, actions, button, event
-    CLEANUP:
-	UNUSED(class);
 
 MODULE = Gtk2::Dnd	PACKAGE = Gtk2::Gdk::DragContext	PREFIX = gtk_drag_
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.12 2003/10/03 17:29:12 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.15 2003/11/03 19:08:29 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -44,6 +44,8 @@ static const char *
 gdk_event_get_package (GType gtype,
                        GdkEvent * event)
 {
+	PERL_UNUSED_VAR (gtype);
+
 	switch (event->type) {
 	    default:
 		warn ("unknown event type %d", event->type);
@@ -164,26 +166,21 @@ BOOT:
  ## gboolean gdk_events_pending (void)
 gboolean
 gdk_events_pending (class)
-	SV * class
     C_ARGS:
 	/*void*/
-    CLEANUP:
-	UNUSED(class);
 
  ## GdkEvent* gdk_event_get (void)
  ## GdkEvent* gdk_event_peek (void)
 ## caller must free
 GdkEvent_own_ornull*
 gdk_event_get (class)
-	SV * class
     ALIAS:
 	get = 0
 	peek = 1
     C_ARGS:
 	/*void*/
     CLEANUP:
-	UNUSED(class);
-	UNUSED(ix);
+	PERL_UNUSED_VAR (ix);
 
  ## GdkEvent* gdk_event_get_graphics_expose (GdkWindow *window)
 GdkEvent_own_ornull*
@@ -194,12 +191,9 @@ gdk_event_get_graphics_expose (window)
 ## call as Gtk2::Gdk::Event->put ($event)
 void
 gdk_event_put (class, event)
-	SV * class
 	GdkEvent *event
     C_ARGS:
 	event
-    CLEANUP:
-	UNUSED(class);
 
 #if GTK_CHECK_VERSION(2,2,0)
 
@@ -207,12 +201,9 @@ gdk_event_put (class, event)
 ## caller must free
 GdkEvent_own*
 gdk_event_new (class, type)
-	SV * class
 	GdkEventType type
     C_ARGS:
 	type
-    CLEANUP:
-	UNUSED(class);
 
 #endif
 
@@ -232,7 +223,7 @@ gdk_event_get_time (event)
 	Gtk2::Gdk::Event::get_time = 0
 	Gtk2::Gdk::Event::time = 1
     CLEANUP:
-	UNUSED(ix);
+	PERL_UNUSED_VAR (ix);
 
  ## gboolean gdk_event_get_state (GdkEvent *event, GdkModifierType *state)
 GdkModifierType
@@ -242,11 +233,27 @@ state (event)
 	Gtk2::Gdk::Event::get_state = 0
 	Gtk2::Gdk::Event::state = 1
     CODE:
-	UNUSED(ix);
+	PERL_UNUSED_VAR (ix);
 	if (!gdk_event_get_state (event, &RETVAL))
 		XSRETURN_UNDEF;
     OUTPUT:
 	RETVAL
+
+=for apidoc Gtk2::Gdk::Event::get_coords
+=signature ($x, $y) = $event->get_coords
+=cut
+
+=for apidoc Gtk2::Gdk::Event::coords
+=signature ($x, $y) = $event->coords
+=cut
+
+=for apidoc Gtk2::Gdk::Event::x
+=signature integer = $event->x
+=cut
+
+=for apidoc Gtk2::Gdk::Event::y
+=signature integer = $event->y
+=cut
 
  ## gboolean gdk_event_get_coords (GdkEvent *event, gdouble *x_win, gdouble *y_win)
 void
@@ -275,6 +282,22 @@ gdk_event_get_coords (event)
 			PUSHs (sv_2mortal (newSVnv (x)));
 			PUSHs (sv_2mortal (newSVnv (y)));
 	}
+
+=for apidoc Gtk2::Gdk::Event::get_root_coords
+=signature ($x_root, $y_root) = $event->get_root_coords
+=cut
+
+=for apidoc Gtk2::Gdk::Event::root_coords
+=signature ($x_root, $y_root) = $event->root_coords
+=cut
+
+=for apidoc Gtk2::Gdk::Event::x_root
+=signature integer = $event->x_root
+=cut
+
+=for apidoc Gtk2::Gdk::Event::y_root
+=signature integer = $event->y_root
+=cut
 
  ## gboolean gdk_event_get_root_coords (GdkEvent *event, gdouble *x_root, gdouble *y_root)
 void
@@ -364,7 +387,7 @@ DESTROY (sv)
 	Gtk2::Gdk::Event::WindowState::DESTROY = 16
 	Gtk2::Gdk::Event::DND::DESTROY         = 17
     CODE:
-	UNUSED(ix);
+	PERL_UNUSED_VAR (ix);
 	default_wrapper_class->destroy (sv);
 
 
@@ -428,6 +451,8 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Expose
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Expose", "Gtk2::Gdk::Event");
 
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventExpose
  #{
@@ -440,27 +465,24 @@ BOOT:
  #};
 
 GdkRectangle*
-area (event)
-	GdkEvent * event
+area (GdkEvent * eventexpose)
     CODE:
-	RETVAL = &(event->expose.area);
+	RETVAL = &(eventexpose->expose.area);
     OUTPUT:
 	RETVAL
 
  # FIXME need GdkRegion
 #GdkRegion_copy*
-#region (event)
-#	GdkEvent * event
+#region (GdkEvent * eventexpose)
 #    CODE:
-#	RETVAL = event->expose.region;
+#	RETVAL = eventexpose->expose.region;
 #    OUTPUT:
 #	RETVAL
 
 gint
-count (event)
-	GdkEvent * event
+count (GdkEvent * eventexpose)
     CODE:
-	RETVAL = event->expose.count;
+	RETVAL = eventexpose->expose.count;
     OUTPUT:
 	RETVAL
 
@@ -468,6 +490,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::NoExpose
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::NoExpose", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventNoExpose
  #{
@@ -481,6 +506,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Visibility
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Visibility", "Gtk2::Gdk::Event");
 
+=for object Gtk2::Gdk::Event
+=cut
+
  #struct _GdkEventVisibility
  #{
  #//  GdkEventType type;  <- GdkEventAny
@@ -491,10 +519,9 @@ BOOT:
 
 # different return type, override Gtk2::Gdk::Event::state
 GdkVisibilityState
-state (event)
-	GdkEvent * event
+state (GdkEvent * eventvisibility)
     CODE:
-	RETVAL = event->visibility.state;
+	RETVAL = eventvisibility->visibility.state;
     OUTPUT:
 	RETVAL
 
@@ -502,6 +529,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Motion
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Motion", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventMotion
  #{
@@ -519,10 +549,16 @@ BOOT:
  #};
 
 guint
-is_hint (event)
-	GdkEvent * event
+is_hint (GdkEvent * eventmotion)
     CODE:
-	RETVAL = event->motion.is_hint;
+	RETVAL = eventmotion->motion.is_hint;
+    OUTPUT:
+	RETVAL
+
+GdkDevice_ornull *
+device (GdkEvent * eventmotion)
+    CODE:
+	RETVAL = eventmotion->motion.device;
     OUTPUT:
 	RETVAL
 
@@ -530,6 +566,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Button
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Button", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventButton
  #{
@@ -547,10 +586,16 @@ BOOT:
  #};
 
 guint
-button (event)
-	GdkEvent * event
+button (GdkEvent * eventbutton)
     CODE:
-	RETVAL = event->button.button;
+	RETVAL = eventbutton->button.button;
+    OUTPUT:
+	RETVAL
+
+GdkDevice_ornull *
+device (GdkEvent * eventbutton)
+    CODE:
+	RETVAL = eventbutton->button.device;
     OUTPUT:
 	RETVAL
 
@@ -558,6 +603,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Scroll
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Scroll", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventScroll
  #{
@@ -574,10 +622,16 @@ BOOT:
  #};
 
 GdkScrollDirection
-direction (event)
-	GdkEvent * event
+direction (GdkEvent * eventscroll)
     CODE:
-	RETVAL = event->scroll.direction;
+	RETVAL = eventscroll->scroll.direction;
+    OUTPUT:
+	RETVAL
+
+GdkDevice_ornull *
+device (GdkEvent * eventscroll)
+    CODE:
+	RETVAL = eventscroll->scroll.device;
     OUTPUT:
 	RETVAL
 
@@ -586,6 +640,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Key
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Key", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventKey
  #{
@@ -602,26 +659,23 @@ BOOT:
  #};
 
 guint
-keyval (event)
-	GdkEvent * event
+keyval (GdkEvent * eventkey)
     CODE:
-	RETVAL = event->key.keyval;
+	RETVAL = eventkey->key.keyval;
     OUTPUT:
 	RETVAL
 
 gint
-length (event)
-	GdkEvent * event
+length (GdkEvent * eventkey)
     CODE:
-	RETVAL = event->key.length;
+	RETVAL = eventkey->key.length;
     OUTPUT:
 	RETVAL
 
 gchar *
-string (event)
-	GdkEvent * event
+string (GdkEvent * eventkey)
     CODE:
-	RETVAL = event->key.string;
+	RETVAL = eventkey->key.string;
     OUTPUT:
 	RETVAL
 
@@ -629,6 +683,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Crossing
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Crossing", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventCrossing
  #{
@@ -648,10 +705,23 @@ BOOT:
  #};
 
 GdkCrossingMode
-mode (event)
-	GdkEvent * event
+mode (GdkEvent * eventcrossing)
     CODE:
-	RETVAL = event->crossing.mode;
+	RETVAL = eventcrossing->crossing.mode;
+    OUTPUT:
+	RETVAL
+
+GdkNotifyType
+detail (GdkEvent * eventcrossing)
+    CODE:
+	RETVAL = eventcrossing->crossing.detail;
+    OUTPUT:
+	RETVAL
+
+gboolean
+focus (GdkEvent * eventcrossing)
+    CODE:
+	RETVAL = eventcrossing->crossing.focus;
     OUTPUT:
 	RETVAL
 
@@ -659,6 +729,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Focus
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Focus", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventFocus
  #{
@@ -669,10 +742,9 @@ BOOT:
  #};
 
 gint16
-in (event)
-	GdkEvent * event
+in (GdkEvent * eventfocus)
     CODE:
-	RETVAL = event->focus_change.in;
+	RETVAL = eventfocus->focus_change.in;
     OUTPUT:
 	RETVAL
 
@@ -680,6 +752,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Configure
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Configure", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventConfigure
  #{
@@ -692,13 +767,14 @@ BOOT:
  #};
 
 gint
-dim (event)
-	GdkEvent * event
+dim (GdkEvent * eventconfigure)
     ALIAS:
 	Gtk2::Gdk::Event::Configure::width  = 0
 	Gtk2::Gdk::Event::Configure::height = 1
     CODE:
-	RETVAL = ix ? event->configure.height : event->configure.width;
+	RETVAL = ix
+	       ? eventconfigure->configure.height
+	       : eventconfigure->configure.width;
     OUTPUT:
 	RETVAL
 
@@ -706,6 +782,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Property
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Property", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventProperty
  #{
@@ -721,6 +800,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Selection
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Selection", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventSelection
  #{
@@ -739,6 +821,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Proximity
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Proximity", "Gtk2::Gdk::Event");
 
+=for object Gtk2::Gdk::Event
+=cut
+
  #/* This event type will be used pretty rarely. It only is important
  #   for XInput aware programs that are drawing their own cursor */
 
@@ -751,10 +836,20 @@ BOOT:
  #  GdkDevice *device;
  #};
 
+GdkDevice_ornull *
+device (GdkEvent * eventproximity)
+    CODE:
+	RETVAL = eventproximity->motion.device;
+    OUTPUT:
+	RETVAL
+
 MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Client
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Client", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventClient
  #{
@@ -775,6 +870,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Setting
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::Setting", "Gtk2::Gdk::Event");
 
+=for object Gtk2::Gdk::Event
+=cut
+
  #struct _GdkEventSetting
  #{
  #//  GdkEventType type;  <- GdkEventAny
@@ -784,10 +882,27 @@ BOOT:
  #  char *name;
  #};
 
+GdkSettingAction
+action (GdkEvent * eventsetting)
+    CODE:
+	RETVAL = eventsetting->setting.action;
+    OUTPUT:
+	RETVAL
+
+char *
+name (GdkEvent * eventsetting)
+    CODE:
+	RETVAL = eventsetting->setting.name;
+    OUTPUT:
+	RETVAL
+
 MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::WindowState
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::WindowState", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #struct _GdkEventWindowState
  #{
@@ -799,18 +914,16 @@ BOOT:
  #};
 
 GdkWindowState
-changed_mask (event)
-	GdkEvent * event
+changed_mask (GdkEvent * eventwindowstate)
     CODE:
-	RETVAL = event->window_state.changed_mask;
+	RETVAL = eventwindowstate->window_state.changed_mask;
     OUTPUT:
 	RETVAL
 
 GdkWindowState
-new_window_state (event)
-	GdkEvent * event
+new_window_state (GdkEvent * eventwindowstate)
     CODE:
-	RETVAL = event->window_state.new_window_state;
+	RETVAL = eventwindowstate->window_state.new_window_state;
     OUTPUT:
 	RETVAL
 
@@ -818,6 +931,9 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::DND
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Event::DND", "Gtk2::Gdk::Event");
+
+=for object Gtk2::Gdk::Event
+=cut
 
  #/* Event types for DND */
 
@@ -832,10 +948,9 @@ BOOT:
  #};
 
 GdkDragContext *
-context (event)
-	GdkEvent * event
+context (GdkEvent * eventdnd)
     CODE:
-	RETVAL = event->dnd.context;
+	RETVAL = eventdnd->dnd.context;
     OUTPUT:
 	RETVAL
 
@@ -870,20 +985,14 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk	PREFIX = gdk_
 
 void
 gdk_set_show_events (class, show_events)
-	SV * class
 	gboolean show_events
     C_ARGS:
 	show_events
-    CLEANUP:
-	UNUSED(class);
 
 gboolean
 gdk_get_show_events (class)
-	SV * class
     C_ARGS:
 	/*void*/
-    CLEANUP:
-	UNUSED(class);
 
  # FIXME needs a callback
  ## void gdk_add_client_message_filter (GdkAtom message_type, GdkFilterFunc func, gpointer data)
@@ -896,12 +1005,10 @@ gdk_get_show_events (class)
  ## gboolean gdk_setting_get (const gchar *name, GValue *value)
 SV *
 gdk_setting_get (class, name)
-	SV * class
 	const gchar *name
     PREINIT:
 	GValue value = {0,};
     CODE:
-	UNUSED(class);
 	g_value_init (&value, G_TYPE_INT);
 	if (!gdk_setting_get (name, &value))
 		XSRETURN_UNDEF;

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.6 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.8 2003/10/29 17:48:27 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -24,28 +24,20 @@
 MODULE = Gtk2::Entry	PACKAGE = Gtk2::Entry	PREFIX = gtk_entry_
 
 BOOT:
-	{
-	AV * isa = get_av ("Gtk2::Entry::ISA", TRUE);
-	av_push (isa, newSVpv ("Gtk2::Editable", 0));
-	}
+	gperl_prepend_isa ("Gtk2::Entry", "Gtk2::CellEditable");
+	gperl_prepend_isa ("Gtk2::Entry", "Gtk2::Editable");
 
 GtkWidget*
 gtk_entry_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 ##GtkWidget* gtk_entry_new_with_max_length (gint max)
 GtkWidget *
 gtk_entry_new_with_max_length (class, max)
-	SV   * class
 	gint   max
     C_ARGS:
 	max
-    CLEANUP:
-	UNUSED(class);
 
 void
 gtk_entry_set_visibility (entry, visible)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkContainer.xs,v 1.7 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkContainer.xs,v 1.8 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -108,12 +108,10 @@ gtk_container_get_children (container)
 void
 gtk_container_set_focus_chain (container, widget1, ...)
 	GtkContainer *container
-	SV * widget1
     PREINIT:
 	GList *focusable_widgets = NULL;
 	int i;
     PPCODE:
-	UNUSED(widget1);
 	for (i = items - 1 ; i > 0 ; i--)
 		focusable_widgets = g_list_prepend (focusable_widgets,
 		                                    SvGtkWidget (ST (i)));

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDrawingArea.xs,v 1.5 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDrawingArea.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,11 +26,8 @@ MODULE = Gtk2::DrawingArea	PACKAGE = Gtk2::DrawingArea	PREFIX = gtk_drawing_area
 ## GtkWidget* gtk_drawing_area_new (void)
 GtkWidget *
 gtk_drawing_area_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 ## void gtk_drawing_area_size (GtkDrawingArea *darea, gint width, gint height)
 void

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkObject.xs,v 1.8 2003/10/01 15:25:01 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkObject.xs,v 1.9 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "../gtk2perl.h"
@@ -105,7 +105,6 @@ gtk_object_destroy (object)
 
 GtkObject *
 new (class, object_class, ...)
-	SV * class
 	const char * object_class
     PREINIT:
 	int n_params = 0;
@@ -143,8 +142,9 @@ new (class, object_class, ...)
 				croak ("could not convert value for property %s",
 				       key);
 			params[i].name = key; /* will be valid until this
-			                       * xsub is finished */
+			                     issue2.html  * xsub is finished */
 		}
+		g_type_class_unref (class);
 	}
 
 	RETVAL = g_object_newv (object_type, n_params, params);	
@@ -155,7 +155,6 @@ new (class, object_class, ...)
 			g_value_unset (&params[i].value);
 		g_free (params);
 	}
-	g_type_class_unref (class);
 
     OUTPUT:
 	RETVAL

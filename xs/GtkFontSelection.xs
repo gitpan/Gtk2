@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFontSelection.xs,v 1.7 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFontSelection.xs,v 1.8 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,11 +26,8 @@ MODULE = Gtk2::FontSelection	PACKAGE = Gtk2::FontSelection	PREFIX = gtk_font_sel
 ## GtkWidget* gtk_font_selection_new (void)
 GtkWidget *
 gtk_font_selection_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 ## gchar* gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
 gchar_own *
@@ -64,12 +61,9 @@ MODULE = Gtk2::FontSelection	PACKAGE = Gtk2::FontSelectionDialog	PREFIX = gtk_fo
 ## GtkWidget* gtk_font_selection_dialog_new (const gchar *title)
 GtkWidget *
 gtk_font_selection_dialog_new (class, title)
-	SV          * class
 	const gchar * title
     C_ARGS:
 	title
-    CLEANUP:
-	UNUSED(class);
 
 GtkWidget *
 members_get (fsd)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.9 2003/09/22 00:04:24 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.11 2003/11/12 03:14:57 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -57,35 +57,28 @@ BOOT:
 ### intentionally switched to char instead of gchar
 GdkBitmap_noinc *
 gdk_bitmap_create_from_data (class, drawable, data, width, height)
-	SV * class
 	GdkDrawable_ornull *drawable
 	const char *data
 	gint width
 	gint height
     C_ARGS:
 	drawable, data, width, height
-    CLEANUP:
-	UNUSED(class);
 
 MODULE = Gtk2::Gdk::Pixmap	PACKAGE = Gtk2::Gdk::Pixmap	PREFIX = gdk_pixmap_
 
 GdkPixmap_noinc *
 gdk_pixmap_new (class, drawable, width, height, depth)
-	SV * class
 	GdkDrawable_ornull * drawable
 	gint width
 	gint height
 	gint depth
     C_ARGS:
 	drawable, width, height, depth
-    CLEANUP:
-	UNUSED(class);
 
  ## GdkPixmap* gdk_pixmap_create_from_data (GdkDrawable *drawable, const gchar *data, gint width, gint height, gint depth, GdkColor *fg, GdkColor *bg)
 ### intentionally switched to char instead of gchar
 GdkPixmap_noinc *
 gdk_pixmap_create_from_data (class, drawable, data, width, height, depth, fg, bg)
-	SV * class
 	GdkDrawable *drawable
 	const char *data
 	gint width
@@ -95,21 +88,17 @@ gdk_pixmap_create_from_data (class, drawable, data, width, height, depth, fg, bg
 	GdkColor *bg
     C_ARGS:
 	drawable, data, width, height, depth, fg, bg
-    CLEANUP:
-	UNUSED(class);
 
  ## GdkPixmap* gdk_pixmap_create_from_xpm (GdkDrawable *drawable, GdkBitmap **mask, GdkColor *transparent_color, const gchar *filename)
 void
 gdk_pixmap_create_from_xpm (class, drawable, transparent_color, filename)
-	SV * class
 	GdkDrawable *drawable
 	GdkColor_ornull *transparent_color
-	const gchar *filename
+	GPerlFilename filename
     PREINIT:
 	GdkPixmap * pixmap;
 	GdkBitmap * mask;
     PPCODE:
-	UNUSED(class);
 	pixmap = gdk_pixmap_create_from_xpm (drawable, &mask,
 					     transparent_color, filename);
 	EXTEND (SP, 2);
@@ -119,16 +108,14 @@ gdk_pixmap_create_from_xpm (class, drawable, transparent_color, filename)
  ## GdkPixmap* gdk_pixmap_colormap_create_from_xpm (GdkDrawable *drawable, GdkColormap *colormap, GdkBitmap **mask, GdkColor *transparent_color, const gchar *filename)
 void
 gdk_pixmap_colormap_create_from_xpm (class, drawable, colormap, transparent_color, filename)
-	SV * class
 	GdkDrawable *drawable
 	GdkColormap *colormap
 	GdkColor_ornull *transparent_color
-	const gchar *filename
+	GPerlFilename filename
     PREINIT:
 	GdkPixmap * pixmap;
 	GdkBitmap * mask;
     PPCODE:
-	UNUSED(class);
 	pixmap = gdk_pixmap_colormap_create_from_xpm (drawable, colormap,
 					&mask, transparent_color, filename);
 	EXTEND (SP, 2);
@@ -138,18 +125,14 @@ gdk_pixmap_colormap_create_from_xpm (class, drawable, colormap, transparent_colo
 ## ## GdkPixmap* gdk_pixmap_create_from_xpm_d (GdkDrawable *drawable, GdkBitmap **mask, GdkColor *transparent_color, gchar **data)
 void
 gdk_pixmap_create_from_xpm_d (class, drawable, transparent_color, data, ...)
-	SV * class
 	GdkDrawable *drawable
 	GdkColor_ornull *transparent_color
-	SV * data
     PREINIT:
 	GdkBitmap * mask = NULL;
 	GdkPixmap * pixmap = NULL;
 	char ** lines;
 	int i;
     PPCODE:
-	UNUSED(class);
-	UNUSED(data);
 	lines = g_new (char*, items - 3);
 	for (i = 3 ; i < items ; i++)
 		lines[i-3] = SvPV_nolen (ST (i));
@@ -164,19 +147,15 @@ gdk_pixmap_create_from_xpm_d (class, drawable, transparent_color, data, ...)
 ## ## GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable *drawable, GdkColormap *colormap, GdkBitmap **mask, GdkColor *transparent_color, gchar **data)
 void
 gdk_pixmap_colormap_create_from_xpm_d (class, drawable, colormap, transparent_color, data, ...)
-	SV * class
 	GdkDrawable_ornull *drawable
 	GdkColormap_ornull *colormap
 	GdkColor_ornull *transparent_color
-	SV * data
     PREINIT:
 	GdkBitmap * mask = NULL;
 	GdkPixmap * pixmap = NULL;
 	char ** lines;
 	int i;
     PPCODE:
-	UNUSED(class);
-	UNUSED(data);
 	lines = g_new (char*, items - 4);
 	for (i = 4 ; i < items ; i++)
 		lines[i-4] = SvPV_nolen (ST (i));

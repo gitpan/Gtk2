@@ -16,27 +16,10 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkTypes.xs,v 1.11 2003/09/22 00:04:24 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkTypes.xs,v 1.17 2003/11/14 04:07:38 pcg Exp $
  */
 
 #include "gtk2perl.h"
-
-/***  GAH!!  copied code!!!  crap...  ***/
-
-SV *
-newSVGdkModifierType (GdkModifierType val)
-{
-	GFlagsValue * vals = gtk_type_flags_get_values (GDK_TYPE_MODIFIER_TYPE);
-	AV * flags = newAV ();
-	while (vals && vals->value_nick && vals->value_name) {
-		if ((vals->value != GDK_MODIFIER_MASK) &&
-		    (vals->value & val))
-			av_push (flags, newSVpv (vals->value_nick, 0));
-		vals++;
-	}
-	return newRV_noinc ((SV*) flags);
-}
-
 
 SV *
 newSVGdkAtom (GdkAtom atom)
@@ -58,12 +41,10 @@ SvGdkAtom (SV * sv)
 	return (GdkAtom)NULL; /* not reached */
 }
 
-
 MODULE = Gtk2::Gdk::Types	PACKAGE = Gtk2::Gdk::Rectangle
 
 GdkRectangle_copy *
 new (class, x, y, width, height)
-	SV * class
 	gint x
 	gint y
 	gint width
@@ -71,7 +52,6 @@ new (class, x, y, width, height)
     PREINIT:
 	GdkRectangle rect;
     CODE:
-	UNUSED(class);
 	rect.x = x;
 	rect.y = y;
 	rect.width = width;
@@ -80,14 +60,36 @@ new (class, x, y, width, height)
     OUTPUT:
 	RETVAL
 
+=for apidoc Gtk2::Gdk::Rectangle::x
+=for signature integer = $rectangle->x
+=for signature oldvalue = $rectangle->x ($newvalue)
+=for arg newvalue (integer)
+=cut
+
+=for apidoc y
+=for signature integer = $rectangle->y
+=for signature oldvalue = $rectangle->y ($newvalue)
+=for arg newvalue (integer)
+=cut
+
+=for apidoc width
+=for signature integer = $rectangle->width
+=for signature oldvalue = $rectangle->width ($newvalue)
+=for arg newvalue (integer)
+=cut
+
+=for apidoc height
+=for signature integer = $rectangle->height
+=for signature oldvalue = $rectangle->height ($newvalue)
+=for arg newvalue (integer)
+=cut
+
 gint
-members (rectangle)
-	GdkRectangle * rectangle
+x (GdkRectangle *rectangle, SV *newvalue = 0)
     ALIAS:
-	Gtk2::Gdk::Rectangle::x = 0
-	Gtk2::Gdk::Rectangle::y = 1
-	Gtk2::Gdk::Rectangle::width = 2
-	Gtk2::Gdk::Rectangle::height = 3
+	y = 1
+	width = 2
+	height = 3
     CODE:
 	RETVAL = 0;
 	switch (ix) {
@@ -96,9 +98,20 @@ members (rectangle)
 		case 2: RETVAL = rectangle->width; break;
 		case 3: RETVAL = rectangle->height; break;
 	}
+        if (newvalue) {
+                switch (ix) {
+                        case 0: rectangle->x      = SvIV (newvalue); break;
+                        case 1: rectangle->y      = SvIV (newvalue); break;
+                        case 2: rectangle->width  = SvIV (newvalue); break;
+                        case 3: rectangle->height = SvIV (newvalue); break;
+                }
+        }
     OUTPUT:
 	RETVAL
 
+=for apidoc
+=for signature (x, y, width, height) = $rectangle->values
+=cut
 void
 values (rectangle)
 	GdkRectangle * rectangle
@@ -108,3 +121,98 @@ values (rectangle)
 	PUSHs (sv_2mortal (newSViv (rectangle->y)));
 	PUSHs (sv_2mortal (newSViv (rectangle->width)));
 	PUSHs (sv_2mortal (newSViv (rectangle->height)));
+
+MODULE = Gtk2::Gdk::Types	PACKAGE = Gtk2::Gdk::Geometry
+
+GdkGeometry *
+new (class)
+	SV *class
+    PREINIT:
+	GdkGeometry geometry;
+    CODE:
+        memset (&geometry, 0, sizeof (geometry));
+	RETVAL = &geometry;
+    OUTPUT:
+	RETVAL
+
+gint
+min_width (GdkGeometry *geometry, gint newvalue = 0)
+    ALIAS:
+        min_height = 1
+        max_width = 2
+        max_height = 3
+        base_width = 4
+        base_height = 5
+        width_inc = 6
+        height_inc = 7
+    CODE:
+	switch (ix) {
+                case 0: RETVAL = geometry->min_width;   break;
+                case 1: RETVAL = geometry->min_height;  break;
+                case 2: RETVAL = geometry->max_width;   break;
+                case 3: RETVAL = geometry->max_height;  break;
+                case 4: RETVAL = geometry->base_width;  break;
+                case 5: RETVAL = geometry->base_height; break;
+                case 6: RETVAL = geometry->width_inc;   break;
+                case 7: RETVAL = geometry->height_inc;  break;
+        }
+	if (items > 1) {
+                switch (ix) {
+                        case 0: geometry->min_width   = newvalue; break;
+                        case 1: geometry->min_height  = newvalue; break;
+                        case 2: geometry->max_width   = newvalue; break;
+                        case 3: geometry->max_height  = newvalue; break;
+                        case 4: geometry->base_width  = newvalue; break;
+                        case 5: geometry->base_height = newvalue; break;
+                        case 6: geometry->width_inc   = newvalue; break;
+                        case 7: geometry->height_inc  = newvalue; break;
+                }
+        }
+    OUTPUT:
+	RETVAL
+
+gdouble
+min_aspect (GdkGeometry *geometry, gdouble newvalue = 0)
+    ALIAS:
+        max_aspect = 1
+    CODE:
+	switch (ix) {
+                case 0: RETVAL = geometry->min_aspect; break;
+                case 1: RETVAL = geometry->max_aspect; break;
+        }
+	if (items > 1) {
+                switch (ix) {
+                        case 0: geometry->min_aspect = newvalue; break;
+                        case 1: geometry->max_aspect = newvalue; break;
+                }
+        }
+    OUTPUT:
+	RETVAL
+
+GdkGravity
+gravity (GdkGeometry *geometry, GdkGravity newvalue = 0)
+    CODE:
+        RETVAL = geometry->win_gravity;
+        if (items > 1)
+  		geometry->win_gravity = newvalue;
+    OUTPUT:
+        RETVAL
+
+## moved here because it makes plain sense
+## need to document it...
+## ## void gdk_window_constrain_size (GdkGeometry *geometry, guint flags, gint width, gint height, gint *new_width, gint *new_height)
+void
+constrain_size (geometry, flags, width, height)
+	GdkGeometry *geometry
+	GdkWindowHints flags
+	gint width
+	gint height
+    PREINIT:
+	gint new_width;
+	gint new_height;
+    PPCODE:
+	gdk_window_constrain_size (geometry, flags, width, height, &new_width, &new_height);
+	EXTEND (SP, 2);
+	PUSHs (sv_2mortal (newSViv (new_width)));
+	PUSHs (sv_2mortal (newSViv (new_height)));
+

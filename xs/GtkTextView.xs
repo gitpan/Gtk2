@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextView.xs,v 1.9 2003/09/26 12:28:31 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextView.xs,v 1.10 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,16 +26,12 @@ MODULE = Gtk2::TextView	PACKAGE = Gtk2::TextView	PREFIX = gtk_text_view_
 ## GtkWidget * gtk_text_view_new (void)
 GtkWidget *
 gtk_text_view_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 ## GtkWidget * gtk_text_view_new_with_buffer (GtkTextBuffer *buffer)
 GtkWidget *
 gtk_text_view_new_with_buffer (class, buffer)
-	SV            * class
 	GtkTextBuffer * buffer
     C_ARGS:
 	buffer

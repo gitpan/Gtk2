@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVBox.xs,v 1.6 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVBox.xs,v 1.7 2003/10/12 17:57:30 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,11 +25,8 @@ MODULE = Gtk2::VBox	PACKAGE = Gtk2::VBox	PREFIX = gtk_vbox_
 
 GtkWidget*
 gtk_vbox_new (class, homogeneous=0, spacing=5)
-	SV * class
 	gboolean homogeneous
 	gint spacing
     C_ARGS:
 	homogeneous, spacing
-    CLEANUP:
-	UNUSED(class);
 

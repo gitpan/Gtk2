@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkColorSelection.xs,v 1.6 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkColorSelection.xs,v 1.8 2003/10/18 07:05:04 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,11 +25,8 @@ MODULE = Gtk2::ColorSelection	PACKAGE = Gtk2::ColorSelection	PREFIX = gtk_color_
 
 GtkWidget *
 gtk_color_selection_new (class)
-	SV * class
     C_ARGS:
 	/* void */
-    CLEANUP:
-	UNUSED(class);
 
 ## gboolean gtk_color_selection_get_has_opacity_control (GtkColorSelection *colorsel)
 gboolean
@@ -116,18 +113,15 @@ gboolean
 gtk_color_selection_is_adjusting (colorsel)
 	GtkColorSelection * colorsel
 
-## FIXME need testing, stat!
 ## gboolean gtk_color_selection_palette_from_string (const gchar *str, GdkColor **colors, gint *n_colors)
 void
 gtk_color_selection_palette_from_string (class, string)
-	SV * class
 	gchar * string
     PREINIT:
 	GdkColor * colors;
 	gint n_colors;
 	int i;
     PPCODE:
-	UNUSED(class);
 	if (!gtk_color_selection_palette_from_string (string,
 						&colors, &n_colors))
 		XSRETURN_EMPTY;
@@ -136,19 +130,16 @@ gtk_color_selection_palette_from_string (class, string)
 		PUSHs (sv_2mortal (newSVGdkColor_copy (&(colors[i]))));
 	g_free (colors);
 
-## FIXME need testing, stat!
 ## gchar* gtk_color_selection_palette_to_string (const GdkColor *colors, gint n_colors)
 
 SV *
 gtk_color_selection_palette_to_string (class, ...)
-	SV * class
     PREINIT:
 	GdkColor * colors;
 	gint n_colors;
 	gchar * string;
 	int i;
     CODE:
-	UNUSED(class);
 	n_colors = items - 1;
 	for (i = 0 ; i < n_colors ; i++) {
 		/* this will croak if any of the items are not valid */
