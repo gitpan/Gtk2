@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileSelection.xs,v 1.12 2003/11/12 03:14:57 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileSelection.xs,v 1.14 2003/11/18 22:25:44 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -91,10 +91,14 @@ gboolean
 gtk_file_selection_get_select_multiple (filesel)
 	GtkFileSelection * filesel
 
-GPerlFilename_own
+## gtk_file_selection_get_filename returns a statically allocated string
+GPerlFilename_const
 gtk_file_selection_get_filename (filesel)
 	GtkFileSelection * filesel
 
+=for apidoc
+Returns the list of file name(s) selected.
+=cut
 void
 gtk_file_selection_get_selections (filesel)
 	GtkFileSelection * filesel

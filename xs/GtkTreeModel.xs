@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.20 2003/11/10 06:50:07 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.24 2003/11/21 07:38:06 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -117,6 +117,9 @@ gint
 gtk_tree_path_get_depth (path)
 	GtkTreePath *path
 
+=for apidoc
+Returns a list of integers.
+=cut
 void
 gtk_tree_path_get_indices (path)
 	GtkTreePath * path
@@ -131,13 +134,9 @@ gtk_tree_path_get_indices (path)
 	for (i = 0 ; i < depth ; i++)
 		PUSHs (sv_2mortal (newSViv (indices[i])));
 
-## perl developer need never know this exists
+## boxed wrapper stuff handled by Glib::Boxed
+## GtkTreePath * gtk_tree_path_copy (GtkTreePath *path)
 ## void gtk_tree_path_free (GtkTreePath *path)
-
-## C function returns a new copy of arg, so perl wrapper owns the object
-GtkTreePath_own *
-gtk_tree_path_copy (path)
-	GtkTreePath * path
 
 gint
 gtk_tree_path_compare (a, b)
@@ -197,14 +196,9 @@ gboolean
 gtk_tree_row_reference_valid (reference)
 	GtkTreeRowReference *reference
 
-#### a perl developer need never know this exists
+#### boxed wrapper stuff handled by Glib::Boxed
+#### GtkTreeRowReference* gtk_tree_row_reference_copy (GtkTreeRowReference *reference);
 #### void gtk_tree_row_reference_free (GtkTreeRowReference *reference)
-
-#if GTK_CHECK_VERSION(2,2,0)
-
-GtkTreeRowReference* gtk_tree_row_reference_copy (GtkTreeRowReference *reference);
-
-#endif /* 2.2.0 */
 
  ## i gather that you only need these if you created the row reference with
  ## gtk_tree_row_reference_new_proxy...  but they recommend you don't use
@@ -234,11 +228,10 @@ GtkTreeRowReference* gtk_tree_row_reference_copy (GtkTreeRowReference *reference
 
 ####MODULE = Gtk2::TreeModel	PACKAGE = Gtk2::TreeIter	PREFIX = gtk_tree_iter_
 
-## not intended for use in applications.  the bindings take care of
-## this for us.
-## GtkTreeIter * gtk_tree_iter_copy (GtkTreeIter *iter)
+## we get this from Glib::Boxed::copy
+## GtkTreeIter * gtk_tree_iter_copy (GtkTreeIter * iter)
 
-#### should be done by DESTROY, not needed
+## we get this from Glib::Boxed::DESTROY
 ## void gtk_tree_iter_free (GtkTreeIter *iter)
 
 
@@ -400,14 +393,20 @@ gtk_tree_model_get (tree_model, iter, ...)
 
 ##
 ## gboolean gtk_tree_model_iter_next (GtkTreeModel *tree_model, GtkTreeIter *iter)
-GtkTreeIter_copy *
+GtkTreeIter_own *
 gtk_tree_model_iter_next (tree_model, iter)
 	GtkTreeModel *tree_model
 	GtkTreeIter *iter
     CODE:
-	if (!gtk_tree_model_iter_next (tree_model, iter))
+	/* the C version modifies the iter we pass; to make this fit more
+	 * with the rest of our Perl interface, we want *not* to modify
+	 * the one passed and instead return the modified iter... which
+	 * means we have to copy *first*. */
+	RETVAL = gtk_tree_iter_copy (iter);
+	if (!gtk_tree_model_iter_next (tree_model, RETVAL)) {
+		gtk_tree_iter_free (RETVAL);
 		XSRETURN_UNDEF;
-	RETVAL = iter;
+	}
     OUTPUT:
 	RETVAL
 

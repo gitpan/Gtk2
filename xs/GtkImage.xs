@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkImage.xs,v 1.12 2003/11/12 03:14:57 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkImage.xs,v 1.13 2003/11/17 02:43:10 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -130,6 +130,9 @@ GdkPixbuf*
 gtk_image_get_pixbuf (image)
 	GtkImage *image
 
+=for apidoc
+=signature (stock_id, icon_size) = $image->get_stock
+=cut
 void
 gtk_image_get_stock (image)
 	GtkImage *image

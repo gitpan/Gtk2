@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.17 2003/11/12 03:14:57 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.21 2003/11/21 06:31:49 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -34,6 +34,19 @@ MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::Pixbuf	PREFIX = gdk_pixbuf_
 
 =for enum GdkPixbufAlphaMode
 =cut
+
+ ## void gdk_pixbuf_render_threshold_alpha (GdkPixbuf * pixbuf, GdkBitmap * bitmap, int src_x, int src_y, int dest_x, int dest_y, int width, int height, int alpha_threshold);
+void
+gdk_pixbuf_render_threshold_alpha (pixbuf, bitmap, src_x, src_y, dest_x, dest_y, width, height, alpha_threshold)
+	GdkPixbuf * pixbuf
+	GdkBitmap * bitmap
+	int src_x
+	int src_y
+	int dest_x
+	int dest_y
+	int width
+	int height
+	int alpha_threshold
 
  ## void gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf, GdkDrawable *drawable, GdkGC *gc, int src_x, int src_y, int dest_x, int dest_y, int width, int height, GdkRgbDither dither, int x_dither, int y_dither)
 void
@@ -107,6 +120,63 @@ gdk_pixbuf_render_pixmap_and_mask (pixbuf, alpha_threshold)
         if (GIMME_V == G_ARRAY)
           XPUSHs (newSVGdkBitmap (bm));
 }
+
+=for apidoc get_from_image
+=for signature pixbuf = Gtk2::Gdk::Pixbuf->get_from_image ($src, $cmap, $src_x, $src_y, $dest_x, $dest_y, $width, $height)
+=for signature pixbuf = $pixbuf->get_from_image ($src, $cmap, $src_x, $src_y, $dest_x, $dest_y, $width, $height)
+=for arg src (GdkImage)
+Fetch pixels from a Gtk2::Gdk::Image as a Gtk2::Gdk::Pixbuf.
+Returns a new Gtk2::Gdk::Pixbuf if you use the class form, or I<$pixbuf> if
+you call it on an existing pixbuf.
+=cut
+
+=for apidoc
+=for signature pixbuf = Gtk2::Gdk::Pixbuf->get_from_drawable ($src, $cmap, $src_x, $src_y, $dest_x, $dest_y, $width, $height)
+=for signature pixbuf = $pixbuf->get_from_drawable ($src, $cmap, $src_x, $src_y, $dest_x, $dest_y, $width, $height)
+=for arg src (GdkDrawable)
+Fetch pixels from a Gtk2::Gdk::Drawable as a Gtk2::Gdk::Pixbuf.
+Returns a new Gtk2::Gdk::Pixbuf if you use the class form, or I<$pixbuf> if
+you call it on an existing pixbuf.
+=cut
+ ## GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest, GdkDrawable *src, GdkColormap *cmap, int src_x, int src_y, int dest_x, int dest_y, int width, int height);
+SV *
+gdk_pixbuf_get_from_drawable (dest_or_class, src, cmap, src_x, src_y, dest_x, dest_y, width, height)
+	SV * dest_or_class
+	SV * src
+	GdkColormap_ornull *cmap
+	int src_x
+	int src_y
+	int dest_x
+	int dest_y
+	int width
+	int height
+    ALIAS:
+	get_from_image = 1
+    PREINIT:
+	GdkPixbuf * pixbuf, * dest;
+    CODE:
+	dest = SvROK (dest_or_class)
+	     ? SvGdkPixbuf (dest_or_class)
+	     : NULL;
+	if (ix == 1)
+		pixbuf = gdk_pixbuf_get_from_image (dest,
+		                                    SvGdkImage (src),
+		                                    cmap, src_x, src_y,
+		                                    dest_x, dest_y,
+		                                    width, height);
+	else
+		pixbuf = gdk_pixbuf_get_from_drawable (dest,
+		                                       SvGdkDrawable (src),
+		                                       cmap, src_x, src_y,
+		                                       dest_x, dest_y,
+		                                       width, height);
+	if (!pixbuf)
+		XSRETURN_UNDEF;
+	/* we own the output pixbuf if there was no destination supplied. */
+	RETVAL = gperl_new_object (G_OBJECT (pixbuf), dest != pixbuf);
+    OUTPUT:
+	RETVAL
+
 
 
 ##  GQuark gdk_pixbuf_error_quark (void) G_GNUC_CONST 
@@ -221,7 +291,7 @@ gdk_pixbuf_new_from_data (class, data, colorspace, has_alpha, bits_per_sample, w
     PREINIT:
 	SV * real_data;
     CODE:
-	if (!SvTRUE (data) || !SvPOK (data))
+	if (!data || !SvPOK (data))
 		croak ("expecting a packed string for pixel data");
 	real_data = gperl_sv_copy (data);
 	RETVAL = gdk_pixbuf_new_from_data (SvPV_nolen (real_data),
@@ -527,6 +597,10 @@ MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::Pixbuf	PREFIX = gdk_pixbuf_
 
 ###  GSList *gdk_pixbuf_get_formats (void) 
 ## list should be freed, but not formats
+=for apidoc
+Returns a list of hashes with information about the formats supported by
+Gtk2::Gdk::Pixbuf.
+=cut
 void
 gdk_pixbuf_get_formats (class=NULL)
     PREINIT:

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.11 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.13 2003/11/21 06:31:49 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -49,7 +49,7 @@ gtk_tooltips_set_tip (tooltips, widget, tip_text, tip_private=NULL)
     PREINIT:
 	const gchar * real_tip_private = NULL;
     CODE:
-	if (tip_private && SvTRUE (tip_private))
+	if (tip_private && SvOK (tip_private))
 		real_tip_private = SvGChar (tip_private);
 	gtk_tooltips_set_tip (tooltips, widget, tip_text, real_tip_private);
 	/* work around a (bug|questionable behavior) in Gtk+, wherein the
@@ -62,6 +62,18 @@ gtk_tooltips_set_tip (tooltips, widget, tip_text, tip_private=NULL)
 	                        tooltips, (GDestroyNotify)g_object_unref);
 
 ## GtkTooltipsData* gtk_tooltips_data_get (GtkWidget *widget)
+=for apidoc
+=signature hash = $tooltips->data_get ($widget)
+Returns a hash with the keys: tooptips, widget, tip_text, and tip_private.
+
+tooltips is the GtkTooltips group that this tooltip belongs to. widget is the
+GtkWidget that this tooltip data is associated with. tip_text is a string
+containing the tooltip message itself.
+
+tip_private is a string that is not shown as the default tooltip. Instead, this
+message may be more informative and go towards forming a context-sensitive help
+system for your application.
+=cut
 void
 gtk_tooltips_data_get (class, widget)
 	GtkWidget * widget

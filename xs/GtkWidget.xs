@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.37 2003/11/14 02:27:44 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.38 2003/11/17 02:43:10 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 #include "ppport.h"
@@ -508,6 +508,22 @@ gtk_widget_set_size_request (widget, width=-1, height=-1)
 	gint width
 	gint height
 
+=for apidoc
+This function is typically used when implementing a GtkContainer subclass.
+Obtains the preferred size of a widget. The container uses this information to
+arrange its child widgets and decide what size allocations to give them with
+L<"$widget-E<gt>size_allocate">.
+
+You can also call this function from an application, with some caveats. Most
+notably, getting a size request requires the widget to be associated with a
+screen, because font information may be needed. Multihead-aware applications
+should keep this in mind.
+
+Also remember that the size request is not necessarily the size a widget will
+actually be allocated.
+
+See also L<"$widget-E<gt>get_child_requisition">
+=cut
 void
 gtk_widget_get_size_request (widget)
 	GtkWidget * widget

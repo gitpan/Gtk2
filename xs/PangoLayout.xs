@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.8 2003/11/18 06:28:17 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -72,11 +72,7 @@ pango_layout_get_attributes (layout)
 
 ##  void pango_layout_set_text (PangoLayout *layout, const char *text, int length) 
 void
-pango_layout_set_text (layout, text)
-	PangoLayout *layout
-	const gchar *text
-    C_ARGS:
-	layout, text, -1
+pango_layout_set_text (PangoLayout *layout, const gchar_length *text, int length(text))
 
 ##  const char * pango_layout_get_text (PangoLayout *layout);
 const gchar *
@@ -85,23 +81,11 @@ pango_layout_get_text (layout)
 
 ##  void pango_layout_set_markup (PangoLayout *layout, const char *markup, int length) 
 void
-pango_layout_set_markup (layout, markup)
-	PangoLayout *layout
-	const gchar *markup
-    C_ARGS:
-	layout, markup, -1
+pango_layout_set_markup (PangoLayout * layout, const gchar_length * markup, int length(markup))
 
-# FIXME
-###  void pango_layout_set_markup_with_accel (PangoLayout *layout, const char *markup, int length, gunichar accel_marker, gunichar *accel_char) 
-#void
-#pango_layout_set_markup_with_accel (layout, markup, length, accel_marker, accel_char)
-#	PangoLayout *layout
-#	const gchar *markup
-#	int length
-#	gunichar accel_marker
-#	gunichar *accel_char
-#    C_ARGS:
-#	layout, markup, -1, accel_marker, accel_char
+##  void pango_layout_set_markup_with_accel (PangoLayout *layout, const char *markup, int length, gunichar accel_marker, gunichar *accel_char) 
+void
+pango_layout_set_markup_with_accel (PangoLayout * layout, const char * markup, int length(markup), gunichar accel_marker, OUTLIST gunichar accel_char)
 
 ##  void pango_layout_set_font_description (PangoLayout *layout, const PangoFontDescription *desc) 
 void
@@ -202,6 +186,9 @@ pango_layout_context_changed (layout)
 	PangoLayout *layout
 
 ##  void pango_layout_get_log_attrs (PangoLayout *layout, PangoLogAttr **attrs, gint *n_attrs) 
+=for apidoc
+Returns a list of Gtk2::Pango::LogAttr's
+=cut
 void
 pango_layout_get_log_attrs (layout)
 	PangoLayout * layout

@@ -1,3 +1,157 @@
+2003/11/21 02:16 (-0500) muppetman
+
+	* Gtk2.pm, README, Makefile.PL: update requirements to Glib 1.012,
+	and bump version for 1.012 beta release.
+
+	* xs/GtkIconFactory.xs, xs/GtkIconFactory.xs, xs/GtkSelection.xs,
+	xs/GtkTextIter.xs, xs/GtkTextTag.xs, xs/GtkTreeModel.xs,
+	xs/PangoTabs.xs: remove copy methods in favor of Glib::Boxed::copy.
+
+2003/11/21 01:09 (-0500) muppetman
+
+	* CodeGen.pm, gtk2perl.h, xs/GdkGC.xs, xs/GdkPixbuf.xs,
+	xs/GtkCellRenderer.xs, xs/GtkItemFactory.xs, xs/GtkNotebook.xs,
+	xs/GtkSelection.xs, xs/GtkTooltips.xs, xs/GtkTreeSortable.xs:
+	use SvOK() as a lighter test for definedness than SvTRUE().
+	generally just try to make these tests cheaper.
+
+	* xs/GtkTreeModel.xs: rearrange iter_next() to avoid leaking the
+	iter copy when there is no next node.
+
+2003/11/20 19:43 (-0500) rwmcfa1
+
+	* Makefile.PL: some of it, V should be in there even on win32.
+
+	* xs/GtkItemFactory.xs: ..._factory_new, allow accel_group to default,
+	Torsten Schoenfeld
+
+	* Gtk2.pm: patch applied to improve the cleanpath stuff.
+
+2003/11/19 14:14 (-0500) muppetman
+
+	* Makefile.PL: don't do the install stuff on win32, it b0rks things.
+
+	* Gtk2.exports: newSVGdkModifierType isn't a function anymore.
+
+	* xs/GtkEditable.xs, xs/GtkMenu.xs: apparently cl.exe (MSVC's compiler)
+	doesn't like the version of dSP used in PERL_IMPLICIT_CONTEXT to occur
+	after code has started; move dGPERL_CLOSURE_MARSHAL_ARGS to the end of
+	the variable declarations block to make it happy.  (the last statement
+	in that macro is dSP.)  continue to loathe msvc.
+
+2003/11/19 11:14 (-0500) muppetman
+
+	* xs/GtkRc.xs: finally committing stuff i did for GtkRcStyle a looong
+	time ago.  accessors and mutators for various members of GtkRcStyle,
+	and some methods that were commented out in GtkRc.xs.  not commonly
+	needed, but handy in rare situations.
+
+2003/11/19 09:10 (-0500) rwmcfa1
+	
+	* t/22.GtkListStore.t: there was a skip unless 2.2.x in which the iter 
+	was converted to a string, that iter is no longer the inc'd one and thus
+	was 0 instead of 1. follow up to last commit.
+
+2003/11/18 17:21 (-0500) muppetman
+
+	* t/file-selection.t: new test
+
+	* t/22.GtkListStore.t: fix GtkListStore test to expect new iter->next
+	semantics.
+
+	* xs/GtkFileSelection.xs: gtk_file_selection_get_filename returns a
+	statically allocated string -- use GPerlFilename_const instead of
+	GPerlFilename_own to avoid core dumps.
+
+	* xs/GtkIconFactory.xs: use GPerlFilename_const to hush compiler
+	warnings.  
+
+2003/11/18 09:42 (-0500) rwmcfa1
+
+	* xs/GtkTreeModel.xs: $model->iter_next fixed, we needed to make a copy
+	of the iter, otherwise we were modifying the passed one (which isn't 
+	very perly) and then returning it.
+
+2003/11/18 01:16 (-0500) muppetman
+
+	* xs/GtkEntry.xs, xs/GtkTextIter.xs, xs/PangoLayout.xs: now that we
+	have typemaps for gunichar, implement things that were waiting on it.
+
+	* xs/PangoLayout.xs: convert a few things to use gchar_length and 
+	length(); don't make pango call strlen() when perl already knows the
+	text's length!
+
+	* t/text-iter-searches.t: new test for the GtkTextIter search tools.
+	this one isn't numbered because it just needs to run after all of
+	the numbered tests.
+
+2003/11/17 23:21 (-0500) rwmcfa1
+
+	* xs/GdkDisplayManager.xs, xs/GdkDnd.xs, xs/GdkPixmap.xs, 
+	xs/GdkProperty.xs, xs/GdkScreen.xs, xs/GdkTypes.xs, xs/GdkWindow.xs, 
+	xs/Gtk2.xs, xs/GtkAccelGroup.xs, xs/GtkCellRenderer.xs, 
+	xs/GtkColorSelection.xs, xs/GtkCurve.xs, xs/GtkEditable.xs, 
+	xs/GtkFileSelection.xs, xs/GtkIconFactory.xs, xs/GtkLabel.xs, 
+	xs/GtkRadioMenuItem.xs, xs/GtkSelection.xs, xs/GtkStock.xs, 
+	xs/GtkTextBuffer.xs, xs/GtkTreeModel.xs, xs/GtkTreeSortable.xs, 
+	xs/GtkTreeViewColumn.xs, xs/PangoLayout.xs, xs/PangoTabs.xs: apidoc 
+	added, almost all PPCODE xsubs now have it
+
+	* xs/GtkTreeDnd.xs: gtk_tree_get_row_drag_data had the outlist params 
+	in the prototype. apidoc added, almost all PPCODE xsubs now have it
+
+	* xs/GtkContainer.xs: PPCODE -> CODE, return was always void. apidoc 
+	added, almost all PPCODE xsubs now have it
+
+	* xs/GdkSelection.xs: added a class parameter to 
+	gdk_selection_property_get. apidoc added, almost all PPCODE xsubs now 
+	have it
+
+2003/11/17 16:27 (-0500) muppetman
+
+	* xs/GdkPixbuf.xs: i borked the get_from_(drawable|image) xsubs...
+	this fixes them, and adds docs.
+
+2003/11/17 22:04 (+0100) kaffeetisch
+
+	* CodeGen.pm: Create INPUT typemaps for the 'const' equivalents of
+	GBoxed's, too.
+
+2003/11/17 12:51 (-0500) muppetman
+
+	* TODO: updated
+
+	* xs/Gtk2.xs: added key snoopers and docs for Gtk2->init.
+
+	* xs/GdkPixbuf.xs: more missing methods, get_from_drawable and
+	get_from_image.  looks like these were missing because of bugs
+	in genfirstpass a long time ago.
+
+	* xs/GdkDrawable.xs: wrong PREFIX resulted in wrong method name for
+	gdk_drawable_get_image().  bug report from dosmodi gergely.
+
+2003/11/17 07:10 (-0500) rwmcfa1
+
+	* Makefile.PL: xs_files-2.3 shouldn't be involved outside of the 2.3 
+	branch. problem found by Bjarne Steinsbø
+
+2003/11/16 21:36 (-0500) rwmcfa1
+
+	* ChangeLog, xs/GdkDisplay.xs, xs/GdkPixbuf.xs, xs/GtkImage.xs,
+	xs/GtkRadioButton.xs, xs/GtkTextIter.xs, xs/GtkTooltips.xs,
+	xs/GtkTreeView.xs, xs/GtkWidget.xs, xs/GtkWindow.xs, xs/PangoFont.xs:
+	apidoc updates
+
+2003/11/16 20:32 (-0500) muppetman
+
+	* xs/GtkMenu.xs: use the new GPerlCallback helper macros in
+	gperl_marshal.h
+
+2003/11/16 02:44 (-0500) muppetman
+
+	* xs/GtkCellRenderer.xs, xs/GtkEditable.xs, xs/GtkMenu.xs:
+	clean up the stack properly after call_sv to stop internal bleeding.
+
 2003/11/13 23:41 (-0500) muppetman
 
 	* Gtk2.pm, Makefile.PL, README: bump version to 1.011

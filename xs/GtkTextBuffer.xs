@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.15 2003/10/18 07:04:42 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.16 2003/11/18 04:36:34 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -366,6 +366,11 @@ gtk_text_buffer_get_start_iter (buffer)
 
 
 #### void gtk_text_buffer_get_bounds (GtkTextBuffer *buffer, GtkTextIter *start, GtkTextIter *end)
+=for apidoc
+=signature (start, end) = $buffer->get_bounds
+Retrieves the first and last iterators in the buffer, i.e. the entire buffer
+lies within the range (start,end).
+=cut
 void
 gtk_text_buffer_get_bounds (buffer)
 	GtkTextBuffer *buffer
@@ -454,6 +459,13 @@ gtk_text_buffer_paste_clipboard (buffer, clipboard, override_location, default_e
 
 ## gboolean gtk_text_buffer_get_selection_bounds (GtkTextBuffer *buffer, GtkTextIter *start, GtkTextIter *end)
 ## returns empty list if there is no selection
+=for apidoc
+=signature (start, end) = $buffer->get_selection_bounds
+Returns start and end if some text is selected, empty otherwise; places the
+bounds of the selection in start and end (if the selection has length 0, then
+start and end are filled in with the same value). start and end will be in
+ascending order.  
+=cut
 void
 gtk_text_buffer_get_selection_bounds (buffer)
 	GtkTextBuffer *buffer

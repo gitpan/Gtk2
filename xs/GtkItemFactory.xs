@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.13 2003/11/06 12:57:36 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.15 2003/11/21 06:31:49 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -67,7 +67,7 @@ MODULE = Gtk2::ItemFactory	PACKAGE = Gtk2::ItemFactory	PREFIX = gtk_item_factory
 
 ##  GtkItemFactory* gtk_item_factory_new (GType container_type, const gchar *path, GtkAccelGroup *accel_group) 
 GtkItemFactory*
-gtk_item_factory_new (class, container_type_package, path, accel_group)
+gtk_item_factory_new (class, container_type_package, path, accel_group=NULL)
 	char * container_type_package
 	const gchar *path
 	GtkAccelGroup_ornull *accel_group
@@ -142,7 +142,7 @@ _create_item (ifactory, path, accelerator, callback_action, item_type, extra_dat
 
 	/* if the user supplied a callback then we'll need to call our
 	 * marshaler in order to call it */
-	if( SvTRUE(callback_sv) )
+	if (SvOK (callback_sv))
 		entry.callback = gtk2perl_item_factory_item_activate;
 
 	/* create the item in the normal manner now */

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.9 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.10 2003/11/18 04:36:34 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -153,6 +153,10 @@ gtk_label_select_region (label, start_offset=-1, end_offset=-1)
  #                                                   gint             * end)
 ## done by hand because we don't want to return the boolean...  either there's
 ## a list or not.
+=for apidoc
+=signature (start, end) = $label->get_selection_bounds
+Returns integers, start and end.
+=cut
 void
 gtk_label_get_selection_bounds (label)
 	GtkLabel * label

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.7 2003/11/18 04:36:34 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -55,6 +55,9 @@ MODULE = Gtk2::Gdk::Property	PACKAGE = Gtk2::Gdk::Window	PREFIX = gdk_
  ### the docs warn us not to use this one, but don't say it's deprecated.
 
 ##  gboolean gdk_property_get (GdkWindow *window, GdkAtom property, GdkAtom type, gulong offset, gulong length, gint pdelete, GdkAtom *actual_property_type, gint *actual_format, gint *actual_length, guchar **data) 
+=for apidoc
+=signature (property_type, format, length) = $window->property_get ($property, $type, $offset, $length, $pdelete)
+=cut
 void
 gdk_property_get (window, property, type, offset, length, pdelete)
 	GdkWindow *window

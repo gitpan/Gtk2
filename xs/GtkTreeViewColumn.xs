@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.13 2003/10/18 07:05:04 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.14 2003/11/18 04:36:34 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -117,6 +117,9 @@ gtk_tree_view_column_clear (tree_column)
 
 
 ## GList* gtk_tree_view_column_get_cell_renderers (GtkTreeViewColumn *tree_column);
+=for apidoc
+Returns a list of Gtk2::CellRenderer's.
+=cut
 void
 gtk_tree_view_column_get_cell_renderers (tree_column)
 	GtkTreeViewColumn * tree_column

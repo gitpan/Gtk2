@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkSelection.xs,v 1.5 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkSelection.xs,v 1.6 2003/11/18 04:36:34 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -121,8 +121,12 @@ gdk_selection_convert (class, requestor, selection, target, time_)
 
   ## docs do not say deprecated, but recommend the use of GtkClipboard instead
 ##  gboolean gdk_selection_property_get (GdkWindow *requestor, guchar **data, GdkAtom *prop_type, gint *prop_format) 
+=for apidoc
+=signature (data, prop_type, prop_format) = Gtk2::Gdk::Selection->property_get ($requestor)
+Use Gtk2::Clipboard instead.
+=cut
 void
-gdk_selection_property_get (requestor)
+gdk_selection_property_get (class, requestor)
 	GdkWindow *requestor
     PREINIT:
 	guchar * data;

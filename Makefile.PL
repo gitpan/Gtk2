@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.52 2003/11/14 04:43:18 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.56 2003/11/21 07:38:06 muppetman Exp $
 #
 
 use 5.008;
@@ -32,7 +32,7 @@ use Cwd;
 our %build_reqs = (
 	'perl-ExtUtils-Depends'   => '0.1',
 	'perl-ExtUtils-PkgConfig' => '1.00',
-	'perl-Glib'               => '1.011',
+	'perl-Glib'               => '1.012',
 	'Gtk+'                    => '2.0.0',
 );
 
@@ -78,7 +78,6 @@ my @gtk_version = split /\./, $pkgcfg{modversion};
 our @xs_files = ();
 our @lists = ('xs_files-2.0');
 push @lists, 'xs_files-2.2' if $gtk_version[1] >= 2;
-push @lists, 'xs_files-2.3' if $gtk_version[1] >= 3;
 foreach my $filename (@lists) {
 	my @names = read_source_list_file ($filename);
 	print "$filename lists ".scalar(@names)." xs files\n";
@@ -189,9 +188,9 @@ WriteMakefile(
 
 sub MY::postamble
 {
-	return Glib::MakeHelper->postamble_clean ()
-	     . Glib::MakeHelper->postamble_docs (@xs_files)
-	     . Glib::MakeHelper->postamble_rpms (
+	my $text = Glib::MakeHelper->postamble_clean ()
+	         . Glib::MakeHelper->postamble_docs (@xs_files)
+	         . Glib::MakeHelper->postamble_rpms (
 			'GTK_RUN' => $runtime_reqs{'Gtk+'},
 			'GTK' => $build_reqs{'Gtk+'},
 			'PERL_EXTUTILS_DEPENDS' => 
@@ -199,8 +198,17 @@ sub MY::postamble
 			'PERL_EXTUTILS_PKGCONFIG' => 
 				$build_reqs{'perl-ExtUtils-PkgConfig'},
 			'PERL_GLIB' => $build_reqs{'perl-Glib'},
-		)
-	      ."
+	           );
+	
+	$text .= " 
+# rebuild the makefile if the file lists change
+Makefile : ".join(" ", @lists)."
+";
+
+	# this installation stuff doesn't make sense on windows, where
+	# we don't really have a /usr.  also, nmake barfs on $+.
+	unless ($^O eq 'MSWin32') {
+		$text .= "
 # the tmp-xxx stuff is just so that only the pl files get installed
 install-\%: %
 	\@\$(MKPATH) tmp-\$+/
@@ -208,10 +216,10 @@ install-\%: %
 	\@\$(MOD_INSTALL) ./tmp-\$+/ \\
 		\$(PREFIX)/share/doc/perl-\$(DISTNAME)/\$+
 	\@\$(RM_RF) tmp-\$+/
-
-# rebuild the makefile if the file lists change
-Makefile : ".join(" ", @lists)."
 ";
+	}
+
+	return $text;
 }
 
 # this probably needs to go into ExtUtils::Depends.

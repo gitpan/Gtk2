@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioButton.xs,v 1.11 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioButton.xs,v 1.12 2003/11/17 02:43:10 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -108,6 +108,9 @@ gtk_radio_button_set_group (radio_button, member_or_listref)
 	gtk_radio_button_set_group(radio_button, group);
 
 # GSList * gtk_radio_button_get_group (GtkRadioButton *radio_button)
+=for apidoc
+=signature @group
+=cut
 void
 gtk_radio_button_get_group (radio_button)
 	GtkRadioButton * radio_button

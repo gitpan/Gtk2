@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkNotebook.xs,v 1.11 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkNotebook.xs,v 1.12 2003/11/21 06:31:49 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,7 +25,7 @@
 static GtkWidget *
 ensure_label_widget (SV * sv)
 {
-	if (!sv || !SvTRUE (sv))
+	if (!sv || !SvOK (sv))
 		return NULL;
 	if (sv_derived_from (sv, "Gtk2::Widget"))
 		return SvGtkWidget (sv);

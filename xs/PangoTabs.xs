@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTabs.xs,v 1.4 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTabs.xs,v 1.6 2003/11/21 07:38:06 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -46,11 +46,8 @@ pango_tab_array_new (class, initial_size, positions_in_pixels, ...)
 	RETVAL
 
 
+ ## see Glib::Boxed
 ##  PangoTabArray *pango_tab_array_copy (PangoTabArray *src) 
-PangoTabArray_own *
-pango_tab_array_copy (src)
-	PangoTabArray *src
-
 ##  void pango_tab_array_free (PangoTabArray *tab_array) 
 
 ##  gint pango_tab_array_get_size (PangoTabArray *tab_array) 
@@ -76,6 +73,12 @@ pango_tab_array_set_tab (tab_array, tab_index, alignment, location)
 void pango_tab_array_get_tab (PangoTabArray *tab_array, gint tab_index, OUTLIST PangoTabAlign alignment, OUTLIST gint location) 
 
 ##  void pango_tab_array_get_tabs (PangoTabArray *tab_array, PangoTabAlign **alignments, gint **locations) 
+=for apidoc
+Returns a list of Gtk2::Pango::TabAlign's, alignments, and integers, locations. 
+Even elemtents are alignments and odd elements are locations, so 0 is the first
+alignment and 1 is the first location, 2 the second alignment, 3 the second 
+location, etc.
+=cut
 void
 pango_tab_array_get_tabs (tab_array)
 	PangoTabArray *tab_array

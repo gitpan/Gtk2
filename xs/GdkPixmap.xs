@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.11 2003/11/12 03:14:57 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.12 2003/11/18 04:36:33 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -90,6 +90,9 @@ gdk_pixmap_create_from_data (class, drawable, data, width, height, depth, fg, bg
 	drawable, data, width, height, depth, fg, bg
 
  ## GdkPixmap* gdk_pixmap_create_from_xpm (GdkDrawable *drawable, GdkBitmap **mask, GdkColor *transparent_color, const gchar *filename)
+=for apidoc
+=signature (pixmap, mask) = Gtk2::Gdk::Pixmap->create_from_xpm ($drawable, $transparent_color, $filename)
+=cut
 void
 gdk_pixmap_create_from_xpm (class, drawable, transparent_color, filename)
 	GdkDrawable *drawable
@@ -106,6 +109,9 @@ gdk_pixmap_create_from_xpm (class, drawable, transparent_color, filename)
 	PUSHs (sv_2mortal (newSVGdkBitmap_noinc (mask)));
 
  ## GdkPixmap* gdk_pixmap_colormap_create_from_xpm (GdkDrawable *drawable, GdkColormap *colormap, GdkBitmap **mask, GdkColor *transparent_color, const gchar *filename)
+=for apidoc
+=signature (pixmap, mask) = Gtk2::Gdk::Pixmap->colormap_create_from_xpm ($drawable, $colormap, $transparent_color, $filename)
+=cut
 void
 gdk_pixmap_colormap_create_from_xpm (class, drawable, colormap, transparent_color, filename)
 	GdkDrawable *drawable

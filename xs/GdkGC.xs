@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.12 2003/10/18 07:05:15 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.13 2003/11/21 06:31:49 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -170,7 +170,7 @@ gdk_gc_new (class, GdkDrawable * drawable, SV * values=NULL)
     ALIAS:
 	new_with_values = 1
     CODE:
-	if (values && SvTRUE (values)) {
+	if (values && SvOK (values)) {
 		GdkGCValuesMask m;
 		GdkGCValues v;
 		read_gcvalues_from_sv (values, &v, &m);

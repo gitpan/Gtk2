@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.6 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.8 2003/11/21 06:31:49 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -59,6 +59,10 @@ gtk_tree_sortable_sort_column_changed (sortable)
 	GtkTreeSortable *sortable
 
 #### gboolean gtk_tree_sortable_get_sort_column_id (GtkTreeSortable *sortable, gint *sort_column_id, GtkSortType *order)
+=for apidoc
+=signature (sort_column_id, order) = $sortable->get_sort_column_id
+Returns sort_column_id, an integer and order, a Gtk2::SortType.
+=cut
 void
 gtk_tree_sortable_get_sort_column_id (sortable)
 	GtkTreeSortable *sortable
@@ -101,7 +105,7 @@ gtk_tree_sortable_set_default_sort_func (sortable, sort_func, user_data=NULL)
 	SV * sort_func
 	SV * user_data
     CODE:
-	if (!sort_func || !SvTRUE (sort_func)) {
+	if (!sort_func || !SvOK (sort_func)) {
 		gtk_tree_sortable_set_default_sort_func
 					(sortable, NULL, NULL, NULL);
 	} else {

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.12 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.13 2003/11/18 04:36:34 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -50,6 +50,9 @@ gtk_curve_set_range (curve, min_x, max_x, min_y, max_y)
 	gfloat     max_y
 
 ## void gtk_curve_get_vector (GtkCurve *curve, int veclen, gfloat vector[])
+=for apidoc
+Returns a list of real numbers, the curve's vector.
+=cut
 void
 gtk_curve_get_vector (curve, veclen=32)
 	GtkCurve * curve

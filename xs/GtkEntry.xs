@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.8 2003/10/29 17:48:27 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.9 2003/11/18 06:28:17 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -48,18 +48,16 @@ gboolean
 gtk_entry_get_visibility (entry)
 	GtkEntry *entry
 
-# FIXME  need typemap for gunichar
  ## void gtk_entry_set_invisible_char (GtkEntry *entry, gunichar ch)
- ##void
- ##gtk_entry_set_invisible_char (entry, ch)
- ##	GtkEntry *entry
- ##	gunichar ch
- #
-# FIXME need typemap for gunichar
+void
+gtk_entry_set_invisible_char (entry, ch)
+	GtkEntry *entry
+	gunichar ch
+
  ## gunichar gtk_entry_get_invisible_char (GtkEntry *entry)
- ##gunichar
- ##gtk_entry_get_invisible_char (entry)
- ##	GtkEntry *entry
+gunichar
+gtk_entry_get_invisible_char (entry)
+	GtkEntry *entry
 
 void
 gtk_entry_set_has_frame (entry, setting)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.11 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.12 2003/11/18 04:36:34 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -133,6 +133,9 @@ gtk_accel_groups_activate (object, accel_key, accel_mods)
 	GdkModifierType   accel_mods
 
 ## GSList* gtk_accel_groups_from_object (GObject *object)
+=for apidoc
+Returns a list of Gtk2::AccelGroup's.
+=cut
 void
 gtk_accel_groups_from_object (object)
 	GObject * object
@@ -164,6 +167,11 @@ gtk_accel_groups_from_object (object)
 MODULE = Gtk2::AccelGroup	PACKAGE = Gtk2::Accelerator	PREFIX = gtk_accelerator_
 
 ## void gtk_accelerator_parse (const gchar *accelerator, guint *accelerator_key, GdkModifierType *accelerator_mods)
+=for apidoc
+=signature (accelerator_key, accelerator_mods) = Gtk2::Accelerator->parse ($accelerator)
+Returns accelerator_key, an unsigned interger and accelerator_mods, a 
+Gtk2::Gdk::ModifierType.
+=cut
 void
 gtk_accelerator_parse (class, accelerator)
 	const gchar     * accelerator

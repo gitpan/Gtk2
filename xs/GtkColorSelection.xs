@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkColorSelection.xs,v 1.8 2003/10/18 07:05:04 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkColorSelection.xs,v 1.9 2003/11/18 04:36:34 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -114,6 +114,9 @@ gtk_color_selection_is_adjusting (colorsel)
 	GtkColorSelection * colorsel
 
 ## gboolean gtk_color_selection_palette_from_string (const gchar *str, GdkColor **colors, gint *n_colors)
+=for apidoc
+Returns a list of Gtk2::Gdk::color's.
+=cut
 void
 gtk_color_selection_palette_from_string (class, string)
 	gchar * string

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.8 2003/11/11 05:58:45 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.11 2003/11/19 20:15:53 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -41,10 +41,10 @@ gtk2perl_editable_insert_text_marshal (GClosure * closure,
                                        gpointer invocation_hint,
                                        gpointer marshal_data)
 {
-	dGPERL_CLOSURE_MARSHAL_ARGS;
 	int len;
 	gint * position_p;
 	SV * string, * position;
+	dGPERL_CLOSURE_MARSHAL_ARGS;
 
 	GPERL_CLOSURE_MARSHAL_INIT (closure, marshal_data);
 
@@ -119,6 +119,7 @@ gtk2perl_editable_insert_text_marshal (GClosure * closure,
 	SvREFCNT_dec (string);
 	SvREFCNT_dec (position);
 
+	PUTBACK;
 	FREETMPS;
 	LEAVE;
 }
@@ -138,7 +139,10 @@ gtk_editable_select_region (editable, start, end)
 
 
  ## returns an empty list if there is no selection
-
+=for apidoc
+=signature (start, end) = $editable->get_selection_bounds
+Returns integers, start and end.
+=cut
 void
 gtk_editable_get_selection_bounds (editable)
 	GtkEditable *editable

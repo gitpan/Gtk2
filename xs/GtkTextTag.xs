@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextTag.xs,v 1.8 2003/10/18 07:04:43 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextTag.xs,v 1.9 2003/11/21 07:38:06 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -55,10 +55,6 @@ gtk_text_attributes_new (class)
     C_ARGS:
 	/* void */
 
-GtkTextAttributes_own*
-gtk_text_attributes_copy (src)
-	GtkTextAttributes *src
-
 ## void gtk_text_attributes_copy_values (GtkTextAttributes *src, GtkTextAttributes *dest)
 ### swapping the order of these, because i think the method is pulling the
 ### parameters from another object; as a method, you modify yourself, not
@@ -70,5 +66,7 @@ gtk_text_attributes_copy_values (dest, src)
     C_ARGS:
 	src, dest
 
+ ### taken care of by Glib::Boxed
+#### GtkTextAttributes * gtk_text_attributes_copy (GtkTextAttributes *src)
 #### void gtk_text_attributes_unref (GtkTextAttributes *values)
 #### void gtk_text_attributes_ref (GtkTextAttributes *values)

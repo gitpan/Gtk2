@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.8 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.11 2003/11/21 07:38:06 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -94,7 +94,7 @@ newSVGtkTargetList (GtkTargetList * list)
 GtkTargetList *
 SvGtkTargetList (SV * sv)
 {
-	if (!SvTRUE (sv) || !SvROK (sv) ||
+	if (!sv || !SvROK (sv) ||
 	    !sv_derived_from (sv, "Gtk2::TargetList"))
 		croak ("variable is not of type Gtk2::TargetList");
 	return (GtkTargetList*) SvUV (SvRV (sv));
@@ -279,6 +279,13 @@ gtk_selection_data_get_text (selection_data)
 	GtkSelectionData *selection_data
 
 ##  gboolean gtk_selection_data_get_targets (GtkSelectionData *selection_data, GdkAtom **targets, gint *n_atoms) 
+=for apidoc
+Gets the contents of selection_data as an array of targets. This can be used to
+interpret the results of getting the standard TARGETS target that is always
+supplied for any selection.
+
+Returns a list of GdkAtoms, the targets.
+=cut
 void
 gtk_selection_data_get_targets (selection_data)
 	GtkSelectionData *selection_data
@@ -318,11 +325,7 @@ gtk_selection_clear (widget, event)
 ##  gboolean _gtk_selection_notify (GtkWidget *widget, GdkEventSelection *event) 
 ##  gboolean _gtk_selection_property_notify (GtkWidget *widget, GdkEventProperty *event) 
 
- ## boxed wrapper support, export only _copy
+ ## boxed wrapper support, taken care of by Glib::Boxed
 ##  GtkSelectionData *gtk_selection_data_copy (GtkSelectionData *data) 
-GtkSelectionData_own *
-gtk_selection_data_copy (data)
-	GtkSelectionData *data
-
 ##  void gtk_selection_data_free (GtkSelectionData *data) 
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDrawable.xs,v 1.10 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDrawable.xs,v 1.11 2003/11/17 15:35:12 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -279,6 +279,9 @@ gdk_draw_layout_with_colors (drawable, gc, x, y, layout, foreground, background)
 	GdkColor *foreground
 	GdkColor *background
 
+
+MODULE = Gtk2::Gdk::Drawable	PACKAGE = Gtk2::Gdk::Drawable	PREFIX = gdk_drawable_
+
  ## GdkImage* gdk_drawable_get_image (GdkDrawable *drawable, gint x, gint y, gint width, gint height)
 GdkImage*
 gdk_drawable_get_image (drawable, x, y, width, height)
@@ -287,4 +290,5 @@ gdk_drawable_get_image (drawable, x, y, width, height)
 	gint y
 	gint width
 	gint height
+
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.20 2003/11/10 06:50:08 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.21 2003/11/17 02:43:10 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -275,8 +275,9 @@ gtk_tree_view_get_column (tree_view, n)
 	GtkTreeView * tree_view
 	gint n
 
-### return the columns on the stack.
-### GList*      gtk_tree_view_get_columns       (GtkTreeView *tree_view);
+=for apidoc
+Retuns an array of columns.
+=cut
 void
 gtk_tree_view_get_columns (tree_view)
 	GtkTreeView * tree_view

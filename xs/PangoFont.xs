@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.10 2003/11/12 04:09:09 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.11 2003/11/17 02:43:10 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -237,6 +237,10 @@ pango_font_get_metrics (font, language)
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontFamily	PREFIX = pango_font_family_
 
 ## void pango_font_family_list_faces (PangoFontFamily *family, PangoFontFace ***faces, int *n_faces)
+=for apidoc
+Lists the different font faces that make up family. The faces in a family
+share a common design, but differ in slant, weight, width and other aspects.
+=cut
 void
 pango_font_family_list_faces (family)
 	PangoFontFamily *family

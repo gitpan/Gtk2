@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplayManager.xs,v 1.4 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplayManager.xs,v 1.5 2003/11/18 04:36:33 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -48,6 +48,9 @@ gdk_display_manager_set_default_display (display_manager, display)
 	GdkDisplay *display
 
 ##  GSList * gdk_display_manager_list_displays (GdkDisplayManager *display_manager) 
+=for apidoc
+Returns a list of Gtk2::Gdk::Display's.
+=cut
 void
 gdk_display_manager_list_displays (display_manager)
 	GdkDisplayManager *display_manager

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkScreen.xs,v 1.8 2003/10/27 17:06:40 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkScreen.xs,v 1.9 2003/11/18 04:36:34 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -99,6 +99,9 @@ gdk_screen_get_height_mm (screen)
 	GdkScreen *screen
 
 ##  GList * gdk_screen_list_visuals (GdkScreen *screen) 
+=for apidoc
+Returns a list of Gtk2::Gdk::Visual's.
+=cut
 void
 gdk_screen_list_visuals (screen)
 	GdkScreen *screen
@@ -111,6 +114,9 @@ gdk_screen_list_visuals (screen)
 	g_list_free (list);
 
 ##  GList * gdk_screen_get_toplevel_windows (GdkScreen *screen) 
+=for apidoc
+Returns a list of Gtk2::Gdk::Window's.
+=cut
 void
 gdk_screen_get_toplevel_windows (screen)
 	GdkScreen *screen
