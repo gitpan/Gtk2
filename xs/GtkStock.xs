@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStock.xs,v 1.5 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStock.xs,v 1.7 2003/06/26 18:16:35 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -40,6 +40,7 @@ stock_item_to_hv (GtkStockItem * item)
 	hv_store (hv, "label", 5, newSVpv (item->label, 0), 0);
 	hv_store (hv, "modifier", 8, newSVGdkModifierType (item->modifier), 0);
 	hv_store (hv, "keyval", 6, newSVuv (item->keyval), 0);
+	if (item->translation_domain)
 	hv_store (hv, "translation_domain", 18, newSVpv (item->translation_domain, 0), 0);
 	return hv;
 }
@@ -112,8 +113,7 @@ gtk_stock_lookup (class, stock_id)
 	if (! gtk_stock_lookup (stock_id, &item))
 		XSRETURN_UNDEF;
 	hv = stock_item_to_hv (&item);
-//	RETVAL = newRV_noinc ((SV*)hv);
-	RETVAL = newRV ((SV*)hv);
+	RETVAL = newRV_noinc ((SV*)hv);
     OUTPUT:
 	RETVAL
 

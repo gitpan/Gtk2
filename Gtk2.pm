@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.16 2003/06/20 16:03:21 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.19 2003/07/05 05:04:46 muppetman Exp $
 #
 
 package Gtk2;
@@ -12,16 +12,18 @@ use warnings;
 
 use Glib;
 
-require Exporter;
 require DynaLoader;
 
-our @ISA = qw(Exporter DynaLoader);
+our $VERSION = '0.26';
 
-# we export nothink.  nothink!
-our @EXPORT_OK = ();
-our @EXPORT = qw();
+our @ISA = qw(DynaLoader);
 
-our $VERSION = '0.24';
+sub import {
+	my $self = shift;
+	foreach (@_) {
+		$self->init,	next if /^-init$/;
+	}
+}
 
 # this is critical -- tell dynaloader to load the module so that its 
 # symbols are available to all other modules.  without this, nobody
@@ -44,8 +46,8 @@ sub create_item {
 			= @$entry;
 	} elsif ('HASH' eq ref $entry) {
 		($path, $accelerator, $callback, $action, $type, $extra)
-			= @$entry{qw(path accelerator callback action
-			             type extra)};
+			= @$entry{qw(path accelerator callback callback_action
+			             item_type extra_data)};
 	} else {
 		use Carp;
 		croak "badly formed Gtk Item Factory Entry; use either list for for hash form:\n"
@@ -53,11 +55,12 @@ sub create_item {
 		    . "        [ path, accel, callback, action, type ]\n"
 		    . "    hash form:\n"
 		    . "        {\n"
-		    . "           path => \$path,\n"
-		    . "           accel => \$accel,  # optional\n"
-		    . "           callback => \$callback,\n"
-		    . "           action => \$action,\n"
-		    . "           type => \$type,    # optional\n"
+		    . "           path            => \$path,\n"
+		    . "           accelerator     => \$accel,   # optional\n"
+		    . "           callback        => \$callback,\n"
+		    . "           callback_action => \$action,\n"
+		    . "           item_type       => \$type,    # optional\n"
+		    . "           extra_data      => \$extra,   # optional\n"
 		    . "         }\n"
 		    . "  ";
 	}
@@ -75,10 +78,13 @@ sub create_item {
 }
 
 sub create_items {
+	croak "usage: \$itemfactory->create_items(callback_data, entry, "
+		."[entry, ...]" if( scalar(@_) < 3 );
+
 	my $self = shift;
-	my $data = shift;
+	my $callback_data = shift;
 	foreach my $entry (@_) {
-		$self->create_item ($entry, $data);
+		$self->create_item ($entry, $callback_data);
 	}
 }
 
@@ -101,8 +107,8 @@ Gtk2 - Perl interface to the 2.x series of the Gimp Toolkit library
 
 =head1 SYNOPSIS
 
-  use Gtk2;
-  Gtk2->init;
+  use Gtk2 -init;
+  # Gtk2->init; works if you didn't use -init on use
   my $window = Gtk2::Window->new ('toplevel');
   my $button = Gtk2::Button->new ('Quit');
   $button->signal_connect (clicked => sub { Gtk2->main_quit });

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.4 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.5 2003/07/04 20:33:51 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -49,6 +49,15 @@ constant (class)
 	}
     OUTPUT:
 	RETVAL
+
+double
+PANGO_PIXELS (class, d)
+	SV * class
+	double d
+    ALIAS:
+	Gtk2::Pango::pixels = 1
+    C_ARGS:
+	d
 
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontDescription	PREFIX = pango_font_description_
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.5 2003/05/22 14:23:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.9 2003/07/04 20:33:42 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -195,11 +195,20 @@ GdkWindowState
 gdk_window_get_state (window)
 	GdkWindow *window
 
- ## GdkWindow* gdk_window_lookup (GdkNativeWindow anid)
- ##GdkWindow*
- ##gdk_window_lookup (anid)
- ##	GdkNativeWindow anid
- ##
+#ifndef GDK_MULTIHEAD_SAFE
+
+GdkWindow* gdk_window_foreign_new (SV * class, GdkNativeWindow anid);
+    C_ARGS:
+	anid
+
+GdkWindow* gdk_window_lookup (SV * class, GdkNativeWindow anid);
+    C_ARGS:
+	anid
+
+#endif
+ 
+ ##GdkWindow *gdk_window_foreign_new_for_display (GdkDisplay *display, GdkNativeWindow  anid);
+
  ## GdkWindow* gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
  ##GdkWindow*
  ##gdk_window_lookup_for_display (display, anid)
@@ -241,58 +250,59 @@ gdk_window_set_skip_pager_hint (window, skips_pager)
  ##	GdkGeometry *geometry
  ##	GdkWindowHints geom_mask
  ##
- ## void gdk_set_sm_client_id (const gchar *sm_client_id)
- ##void
- ##gdk_set_sm_client_id (sm_client_id)
- ##	const gchar *sm_client_id
- ##
+
+## void gdk_set_sm_client_id (const gchar *sm_client_id)
+void
+gdk_set_sm_client_id (sm_client_id)
+	const gchar *sm_client_id
+
  ## void gdk_window_begin_paint_rect (GdkWindow *window, GdkRectangle *rectangle)
- ##void
- ##gdk_window_begin_paint_rect (window, rectangle)
- ##	GdkWindow *window
- ##	GdkRectangle *rectangle
- ##
+void
+gdk_window_begin_paint_rect (window, rectangle)
+	GdkWindow *window
+	GdkRectangle *rectangle
+
  ## void gdk_window_begin_paint_region (GdkWindow *window, GdkRegion *region)
  ##void
  ##gdk_window_begin_paint_region (window, region)
  ##	GdkWindow *window
  ##	GdkRegion *region
- ##
+
  ## void gdk_window_end_paint (GdkWindow *window)
- ##void
- ##gdk_window_end_paint (window)
- ##	GdkWindow *window
- ##
+void
+gdk_window_end_paint (window)
+	GdkWindow *window
+
  ## void gdk_window_set_title (GdkWindow *window, const gchar *title)
- ##void
- ##gdk_window_set_title (window, title)
- ##	GdkWindow *window
- ##	const gchar *title
- ##
+void
+gdk_window_set_title (window, title)
+	GdkWindow *window
+	const gchar *title
+
  ## void gdk_window_set_role (GdkWindow *window, const gchar *role)
- ##void
- ##gdk_window_set_role (window, role)
- ##	GdkWindow *window
- ##	const gchar *role
- ##
+void
+gdk_window_set_role (window, role)
+	GdkWindow *window
+	const gchar *role
+
  ## void gdk_window_set_transient_for (GdkWindow *window, GdkWindow *parent)
- ##void
- ##gdk_window_set_transient_for (window, parent)
- ##	GdkWindow *window
- ##	GdkWindow *parent
- ##
+void
+gdk_window_set_transient_for (window, parent)
+	GdkWindow *window
+	GdkWindow *parent
+
  ## void gdk_window_set_background (GdkWindow *window, GdkColor *color)
- ##void
- ##gdk_window_set_background (window, color)
- ##	GdkWindow *window
- ##	GdkColor *color
- ##
+void
+gdk_window_set_background (window, color)
+	GdkWindow *window
+	GdkColor *color
+
  ## void gdk_window_set_back_pixmap (GdkWindow *window, GdkPixmap *pixmap, gboolean parent_relative)
- ##void
- ##gdk_window_set_back_pixmap (window, pixmap, parent_relative)
- ##	GdkWindow *window
- ##	GdkPixmap *pixmap
- ##	gboolean parent_relative
+void
+gdk_window_set_back_pixmap (window, pixmap, parent_relative = 0)
+	GdkWindow *window
+	GdkPixmap_ornull *pixmap
+	gboolean parent_relative
 
  ## void gdk_window_set_cursor (GdkWindow *window, GdkCursor *cursor)
 void
@@ -604,3 +614,9 @@ gdk_window_invalidate_rect (window, rectangle, invalidate_children)
  ##	gint *x_offset
  ##	gint *y_offset
 
+
+MODULE = Gtk2::Gdk::Window	PACKAGE = Gtk2::Gdk	PREFIX = gdk_
+
+GdkWindow *gdk_get_default_root_window (SV * class)
+    C_ARGS:
+	/*void*/

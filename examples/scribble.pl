@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/scribble.pl,v 1.5 2003/05/17 13:31:01 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/scribble.pl,v 1.6 2003/06/26 17:50:18 muppetman Exp $
 #
 
 
@@ -52,6 +52,14 @@ sub configure_event {
                            0, 0,
                            $widget->allocation->width,
                            $widget->allocation->height);
+
+#  warn "*****************************************************\n";
+#  use Devel::Peek;
+#  my ($foo, $bar);
+#  $foo = $widget->allocation;
+#  $bar = \$$foo;
+#  Dump ($widget->allocation);
+##  die;
 
   return TRUE;
 }

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbufLoader.xs,v 1.2 2003/05/22 14:23:22 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbufLoader.xs,v 1.3 2003/06/22 14:10:30 pcg Exp $
  */
 #include "gtk2perl.h"
 
@@ -55,23 +55,15 @@ gdk_pixbuf_loader_set_size (loader, width, height)
 
 ##  gboolean gdk_pixbuf_loader_write (GdkPixbufLoader *loader, const guchar *buf, gsize count, GError **error) 
 gboolean
-gdk_pixbuf_loader_write (loader, buf, count=0)
+gdk_pixbuf_loader_write (loader, buf)
 	GdkPixbufLoader *loader
 	SV * buf
-	gint count
     PREINIT:
 	GError * error = NULL;
+        STRLEN length;
+        const guchar *data = SvPVbyte (buf, length);
     CODE:
-	if (count == 0)
-//		count = SvCUR (buf);
-//		count = sv_len (ST (1));
-		count = sv_len (buf);
-//warn ("buf = %s\n", SvPVX (buf));
-//warn ("writing %d bytes from %p", count, buf);
-//warn ("   %d utf8 characters\n", sv_len_utf8 (buf));
-//	SvLEN (buf) = count;
-//	RETVAL = gdk_pixbuf_loader_write (loader, buf, count, &error);
-	RETVAL = gdk_pixbuf_loader_write (loader, SvPVX (buf), count, &error);
+	RETVAL = gdk_pixbuf_loader_write (loader, data, length, &error);
 	if (!RETVAL)
 		gperl_croak_gerror (NULL, error);
     OUTPUT:

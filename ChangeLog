@@ -1,10 +1,106 @@
+2003/07/04 16:31 muppetman
+
+	* xs/GdkWindow.xs: added gdk_get_default_root_window
+
+	* xs/PangoFont.xs: added PANGO_PIXELS
+
+	* Gtk2.pm: bump version for release
+
+2003/06/27 17:01 pcg
+
+	* xs/GdkWindow.xs: gdk_window_set_back_pixmap allows null pixmap.
+
+        * pm/Pango.pm: fix typo.
+
+        * api.pod: small doc changes (basically proofreading for the new
+        wrappers model).
+
+2003/06/27 17:00 muppetman
+
+	* Makefile.PL: require bleeding edge Glib.
+
+	* gtk-demo/appwindow.pl, gtk-demo/item_factory.pl,
+	gtk-demo/stock_browser.pl, testgtk.pl: remove bad usage of
+	set_data and get_data
+
+	* examples/histogramplot.pl: rewritten with new Glib::Object::Subclass
+	features.
+
+2003/06/26 14:49 rwmcfa1
+
+	* MANIFEST, MANIFEST.SKIP: the manifest was updated to include a few
+	missing files and a MANIFEST.SKIP file was added to simplify the
+	process in the future.
+
+	* Gtk2.pm: cleaned up some of the ItemFactory stuff esp. error messages
+
+	* xs/GtkItemFactor.xs: reworked all of the callback stuff, needs 
+	verification
+
+	* examples/item_factory_demo.pl: added, simple exmaple of how to 
+	use Gtk2::ItemFactory
+
+2003/06/26 13:48 muppetman
+
+	* pm/Pango.pm: new file allows you to import the Pango constants.
+
+	* Gtk2.pm: allow 'use Gtk2 -init', a la gtk-perl; bumped version
+	to 0.25 for CVS.
+
+	* Makefile.PL: add Pango.pm and api.pod to install; install manpages.
+
+	* gtk-demo/images.pl: use normal operators rather than ->eq (works on
+	overloaded and persistent wrappers)
+
+	* xs/GtkWidget.xs: support for requisitions as writable objects.
+	needed for supporting size_request event.
+
+	* xs/GtkStock.xs: watch out for NULLs in stock_item_to_hv; this fixes
+	a crash that resulted whenever the stock browser wasn't the first
+	thing opened in gtk-demo.
+
+2003/06/26 01:11 pcg
+
+	* META.yml: Add module meta-data in YAML for CPAN.
+
+2003/06/24 08:58 rwmcfa1
+
+	* maps: added GTK_TYPE_LIST and GTK_TYPE_LIST_ITEM
+
+	* xs/GtkList.xs, xs/GtkListItem.xs: initial import required for use of
+	Gtk2::Combo from perl even though they are both deprecated. in the 
+	future hopefully this won't be necessary. (also added files to the
+	MANIFEST)
+
+2003/06/23 12:07 pcg
+
+	* xs/GtkWidget.xs: implement {get,create}_pango_context.
+
+2003/06/22 13:37 pcg
+
+        * gtk-demo/*: fix various minor problems, including using
+        binmode for binary streams, and removing misleading "use bytes".
+
+        * xs/GdkPixbufLoader.xs: the right way to access scalars is *not*
+        SvPVX, but SvPV. Also removed "count" from ->write, since strings
+        in perl are always counted and exposing this c-ism gives no benefit.
+
+        * Makefile.PL: change the glib-not-found error message to the perl
+        standard.
+
+        * xs/GdkWindow.xs: enabled various non-deprecated methods I needed
+        but weren't implemented yet, plus some rarely used ones.
+
+        * t/01.GtkWindow.t: compare references with == not eq, and
+        "$x == undef" is not the right way to tets defined'ness.
+
 2003/06/20 11:33 muppetman
 
 	* Gtk2.pm, README: bump version for 0.24 release
 
 	* Makefile.PL: just seeing if Glib is available isn't enough, make
 	sure it's recent enough, too.  oh, and bump the required glib 
-	ersion while we're at it
+	version while we're at it
 
 2003/06/19 13:46 joered
 	* xs/GdkColor.xs: added accessors for GdkColor struct members.

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTable.xs,v 1.3 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTable.xs,v 1.4 2003/07/02 11:37:44 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -89,7 +89,7 @@ MODULE = Gtk2::Table	PACKAGE = Gtk2::Table	PREFIX = gtk_table_
 
 
 GtkWidget *
-gtk_table_new (class, rows, columns, homogeneous)
+gtk_table_new (class, rows, columns, homogeneous=FALSE)
 	SV * class
 	guint    rows
 	guint    columns

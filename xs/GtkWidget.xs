@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.16 2003/06/17 02:22:58 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.19 2003/06/26 17:48:32 muppetman Exp $
  */
 #include "gtk2perl.h"
 #include "ppport.h"
@@ -51,6 +51,45 @@ DESTROY (sv)
     CODE:
 	//warn ("Gtk2::Allocation::DESTROY");
 	g_boxed_free (GDK_TYPE_RECTANGLE, GUINT_TO_POINTER (SvIV (SvRV (sv))));
+
+
+MODULE = Gtk2::Widget	PACKAGE = Gtk2::Requisition
+
+gint
+width (requisition, newval=NULL)
+	GtkRequisition * requisition
+	SV * newval
+    ALIAS:
+	width = 0
+	height = 1
+    CODE:
+	switch (ix) {
+		case 0:
+			RETVAL = requisition->width;
+			if (newval) requisition->width = SvIV (newval);
+			break;
+		case 1:
+			RETVAL = requisition->height;
+			if (newval) requisition->height = SvIV (newval);
+			break;
+	}
+    OUTPUT:
+	RETVAL
+
+GtkRequisition_own*
+new (class, width=0, height=0)
+	SV * class
+	gint width
+	gint height
+    PREINIT:
+	GtkRequisition req;
+    CODE:
+	req.width = width;
+	req.height = height;
+	RETVAL = &req;
+    OUTPUT:
+	RETVAL
+
 
 MODULE = Gtk2::Widget	PACKAGE = Gtk2::Widget	PREFIX = gtk_widget_
 
@@ -532,7 +571,12 @@ gtk_widget_modify_font (widget, font_desc)
 
 
  #PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
+PangoContext_noinc *
+gtk_widget_create_pango_context (GtkWidget *widget)
+
  #PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
+PangoContext *
+gtk_widget_get_pango_context (GtkWidget *widget)
 
 PangoLayout_noinc *
 gtk_widget_create_pango_layout (widget, text)

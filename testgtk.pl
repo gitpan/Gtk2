@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/testgtk.pl,v 1.3 2003/05/17 13:31:01 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/testgtk.pl,v 1.5 2003/06/27 21:18:03 muppetman Exp $
 #
 
 
@@ -22,9 +22,12 @@ warn Dumper(\@ARGV);
 #$window->show;
 
 $dialog = Gtk2::MessageDialog->new (undef, [], 'info', 'ok', 'hello world');
-print "dialog is $dialog".sprintf("%p",$$dialog)."\n";
 $dialog->show;
-$dialog->set_data ('private', 'foo');
+# this should croak
+eval {
+	$dialog->set_data ('private', 'foo');
+};
+$dialog->set_data (private => 42);
 print "data: ".$dialog->get_data ('private')."\n";
 $foo = $dialog->get_data ('private');
 print "$foo\n";
@@ -73,6 +76,20 @@ $window_position = undef;
 $window_position = $dialog->get ('window-position');
 print "   window-position: $window_position\n";
 $window_position = undef;
+
+
+print "  message-type: ".$dialog->get ('message-type')."\n";
+print " has-separator: ".$dialog->get ('has-separator')."\n";
+print "       buttons: ".$dialog->get ('buttons')."\n";
+print "  border-width: ".$dialog->get ('border-width')."\n";
+$dialog->set (message_type => 'error',
+              has_separator => 1,
+	      buttons => 'ok-cancel',
+	      border_width => 15,);
+print join("\n+", $dialog->get (qw/ message-type has-separator buttons border-width/))."\n";
+
+print Dumper($dialog->allocation);
+#print Dumper($dialog->size_request);
 
 Gtk2->main;
 

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.1 2003/06/05 15:01:02 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.2 2003/06/22 17:54:26 pcg Exp $
 #
 
 #########################
@@ -37,7 +37,7 @@ Glib::Idle->add(sub {
 		ok( eq_array( [ $win->get_frame_dimensions ],
 			[ 0, 0, 300, 500 ] ) );
 
-		ok( $_[0]->get_focus() == undef );
+		ok( !defined $_[0]->get_focus() );
 
 		$_[0]->activate_focus;
 
@@ -97,7 +97,7 @@ ok( $win->get_position );
 ok( $win->get_title eq 'GtkWindow.t Test Window' );
 
 # can fail b/c of get_title ???
-ok( $win2->get_transient_for->eq($win) );
+ok( $win2->get_transient_for == $win );
 
 # need a pixbuf
 #$win->set_icon($pixbuf);
