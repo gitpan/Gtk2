@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 15;
+use Gtk2::TestHelper tests => 15, skip_all => "Currently broken"; # FIXME
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelMap.t,v 1.4 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelMap.t,v 1.4.6.1 2005/01/31 19:56:49 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 

@@ -17,14 +17,14 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_date.pl,v 1.4 2004/02/11 19:26:08 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_date.pl,v 1.4.6.1 2005/01/30 04:21:18 muppetman Exp $
 #
 
 
 use strict;
 use Gtk2 -init;
 
-package Gtk2::CellRendererDate;
+package Kaf::CellRendererDate;
 
 use Glib::Object::Subclass
   "Gtk2::CellRenderer",
@@ -326,7 +326,7 @@ foreach (qw(2003-10-1 2003-10-2 2003-10-3)) {
   $model -> set($model -> append(), 0 => $_);
 }
 
-my $renderer = Gtk2::CellRendererDate -> new();
+my $renderer = Kaf::CellRendererDate -> new();
 $renderer -> set(mode => "editable");
 
 $renderer -> signal_connect(edited => sub {

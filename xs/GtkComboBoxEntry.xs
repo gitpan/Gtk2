@@ -3,12 +3,16 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBoxEntry.xs,v 1.7 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBoxEntry.xs,v 1.7.4.1 2005/01/30 04:21:48 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::ComboBoxEntry	PACKAGE = Gtk2::ComboBoxEntry	PREFIX = gtk_combo_box_entry_
+
+BOOT:
+	gperl_set_isa ("Gtk2::ComboBoxEntry", "Gtk2::CellEditable");
+	gperl_set_isa ("Gtk2::ComboBoxEntry", "Gtk2::CellLayout");
 
  ## GtkWidget *gtk_combo_box_entry_new (void);
  ## GtkWidget *gtk_combo_box_entry_new_with_model (GtkTreeModel *model, gint text_column);

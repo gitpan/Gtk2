@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModelSort.xs,v 1.6 2004/02/09 00:38:03 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModelSort.xs,v 1.6.6.1 2005/01/30 04:21:48 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,6 +26,7 @@ MODULE = Gtk2::TreeModelSort	PACKAGE = Gtk2::TreeModelSort	PREFIX = gtk_tree_mod
 BOOT:
 	gperl_set_isa ("Gtk2::TreeModelSort", "Gtk2::TreeModel");
 	gperl_set_isa ("Gtk2::TreeModelSort", "Gtk2::TreeSortable");
+	gperl_set_isa ("Gtk2::TreeModelSort", "Gtk2::TreeDragSource");
 
 
 GtkTreeModel_noinc *

@@ -1,13 +1,15 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 11;
+use Gtk2::TestHelper tests => 13;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSpinButton.t,v 1.4 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSpinButton.t,v 1.4.6.1 2005/01/30 04:21:47 muppetman Exp $
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 
 my $spin = Gtk2::SpinButton -> new($adjustment, 0.2, 1);
 isa_ok($spin, "Gtk2::SpinButton");
+isa_ok($spin, "Gtk2::CellEditable");
+isa_ok($spin, "Gtk2::Editable");
 
 $spin -> configure($adjustment, 0.2, 1);
 

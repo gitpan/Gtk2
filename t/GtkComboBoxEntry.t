@@ -1,15 +1,17 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBoxEntry.t,v 1.5 2004/03/17 03:52:24 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBoxEntry.t,v 1.5.4.1 2005/01/30 04:21:47 muppetman Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, "GtkComboBoxEntry is new in 2.4"],
-	tests => 8;
+	tests => 10;
 
 my $entry_box;
 
 $entry_box = Gtk2::ComboBoxEntry->new;
 isa_ok ($entry_box, 'Gtk2::ComboBoxEntry');
+isa_ok ($entry_box, 'Gtk2::CellEditable');
+isa_ok ($entry_box, 'Gtk2::CellLayout');
 
 my $model = Gtk2::ListStore->new (qw/Glib::String Glib::Int Glib::String/);
 foreach (qw/a b c d e f g/) {

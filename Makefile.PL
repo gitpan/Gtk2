@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2004 by the gtk2-perl team (see the file AUTHORS for the
+# Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 # full list)
 # 
 # This library is free software; you can redistribute it and/or modify it under
@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.93 2004/09/19 21:47:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.94.2.1 2005/01/31 19:59:34 kaffeetisch Exp $
 #
 
 use 5.008;
@@ -35,6 +35,11 @@ our %build_reqs = (
 	'perl-Glib'               => '1.060',
 	'Gtk+'                    => '2.0.0',
 );
+our %PREREQ_PM = (
+	'ExtUtils::Depends'   => $build_reqs{'perl-ExtUtils-Depends'},
+	'ExtUtils::PkgConfig' => $build_reqs{'perl-ExtUtils-PkgConfig'},
+	'Glib'                => $build_reqs{'perl-Glib'},
+);
 
 # Writing a fake Makefile ensures that CPAN will pick up the correct
 # dependencies and install them.
@@ -46,11 +51,7 @@ unless (eval "use ExtUtils::Depends '$build_reqs{'perl-ExtUtils-Depends'}';"
    warn "$@\n";
    WriteMakefile(
          PREREQ_FATAL => 1,
-         PREREQ_PM    => {
-            'ExtUtils::Depends'   => $build_reqs{'perl-ExtUtils-Depends'},
-            'ExtUtils::PkgConfig' => $build_reqs{'perl-ExtUtils-PkgConfig'},
-            'Glib'                => $build_reqs{'perl-Glib'},
-         },
+         PREREQ_PM    => \%PREREQ_PM,
    );
    exit 1; # not reached
 }
@@ -219,6 +220,7 @@ WriteMakefile(
     NAME          => 'Gtk2',
     VERSION_FROM  => 'Gtk2.pm', # finds $VERSION
     ABSTRACT_FROM => 'Gtk2.pm', # retrieve abstract from module
+    PREREQ_PM     => \%PREREQ_PM,
     XSPROTOARG    => '-noprototypes',
     MAN3PODS      => \%pod_files,
     FUNCLIST      => \@exports,

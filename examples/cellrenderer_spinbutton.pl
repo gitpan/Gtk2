@@ -18,7 +18,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_spinbutton.pl,v 1.5 2004/09/04 23:50:28 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_spinbutton.pl,v 1.5.2.1 2005/01/30 04:21:19 muppetman Exp $
 #
 
 use strict;
@@ -26,7 +26,7 @@ use strict;
 use Gtk2 -init;
 use Gtk2::Gdk::Keysyms;
 
-package Gtk2::CellRendererSpinButton;
+package Kaf::CellRendererSpinButton;
 
 use POSIX qw(DBL_MAX UINT_MAX);
 
@@ -223,7 +223,7 @@ sub cell_edited {
                 0 => $new_value);
 }
 
-my $renderer = Gtk2::CellRendererSpinButton -> new();
+my $renderer = Kaf::CellRendererSpinButton -> new();
 
 $renderer -> set(mode => "editable",
                  min => 0,
@@ -243,7 +243,7 @@ $view -> append_column($column);
 #
 # another, centered
 #
-$renderer = Gtk2::CellRendererSpinButton -> new();
+$renderer = Kaf::CellRendererSpinButton -> new();
 
 $renderer -> set(mode => "editable",
                  xalign => 0.5,
@@ -264,7 +264,7 @@ $view -> append_column($column);
 #
 # another, left-justified
 #
-$renderer = Gtk2::CellRendererSpinButton -> new();
+$renderer = Kaf::CellRendererSpinButton -> new();
 
 $renderer -> set(mode => "editable",
                  xalign => 0.0,

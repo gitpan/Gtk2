@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 50;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.10 2004/09/13 21:07:34 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.10.2.1 2005/01/30 04:21:35 muppetman Exp $
 
 my $label = Gtk2::Label -> new("Bla");
 my $context = $label -> create_pango_context();
@@ -20,7 +20,7 @@ $layout -> set_markup("Bla bla.");
 is($layout -> set_markup_with_accel("Bla _bla.", "_"), "b");
 
 SKIP: {
-  skip("set_font_description is slightly borken currently", 0)
+  skip("set_font_description was slightly borken", 0)
     unless (Gtk2::Pango -> CHECK_VERSION(1, 4, 0));
 
   $layout -> set_font_description(undef);
@@ -138,5 +138,5 @@ SKIP: {
 
 __END__
 
-Copyright (C) 2003-2004 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 7, noinit => 1;
+use Gtk2::TestHelper tests => 8, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelSort.t,v 1.3 2004/02/27 05:31:48 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelSort.t,v 1.3.6.1 2005/01/30 04:21:47 muppetman Exp $
 
 my $list = Gtk2::ListStore -> new("Glib::Int");
 
@@ -11,6 +11,7 @@ $list -> set($list -> append(), 0 => 23);
 
 my $sort = Gtk2::TreeModelSort -> new_with_model($list);
 isa_ok($sort, "Gtk2::TreeModelSort");
+isa_ok($sort, "Gtk2::TreeDragSource");
 is($sort -> get_model(), $list);
 
 my $path = Gtk2::TreePath -> new_from_string("1");

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileChooserWidget.xs,v 1.5 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileChooserWidget.xs,v 1.5.4.1 2005/01/30 04:21:48 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -13,6 +13,9 @@ MODULE = Gtk2::FileChooserWidget	PACKAGE = Gtk2::FileChooserWidget	PREFIX = gtk_
 BOOT:
 	/* GtkFileChooserWidget implements the GtkFileChooserIface */
 	gperl_prepend_isa ("Gtk2::FileChooserWidget", "Gtk2::FileChooser");
+	/* apparently private, but still in list_interfaces 
+	gperl_set_isa ("Gtk2::FileChooserWidget", "Gtk2::FileChooserEmbed");
+	 */
 
 GtkWidget *gtk_file_chooser_widget_new (class, GtkFileChooserAction action);
     C_ARGS:
