@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.17.2.1 2004/04/09 03:46:36 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.17.2.2 2004/05/28 22:41:26 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -181,7 +181,7 @@ MODULE = Gtk2::Gdk::Color	PACKAGE = Gtk2::Gdk::Color	PREFIX = gdk_color_
 Gdk's colors are 16-bit RGB values -- that is, the red, green, and blue
 components are integer values from 0 to 65535, with 65535 meaning full
 saturation.  If you are used to dealing with colors on the range of 0 to
-255, just scale those numbers by a factor of 8.
+255, just scale those numbers by a factor of 257 (yes, 257).
 
 =cut
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.9 2003/12/04 05:56:34 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.9.4.1 2004/06/04 17:57:00 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -24,11 +24,10 @@
 static GPerlCallback *
 new_sort_func (SV * sort_func, SV * user_data)
 {
-	GType param_types[] = {
-		GTK_TYPE_TREE_MODEL,
-		GTK_TYPE_TREE_ITER,
-		GTK_TYPE_TREE_ITER
-	};
+	GType param_types[3];
+	param_types[0] = GTK_TYPE_TREE_MODEL;
+	param_types[1] = GTK_TYPE_TREE_ITER;
+	param_types[2] = GTK_TYPE_TREE_ITER;
 	return gperl_callback_new (sort_func, user_data,
 	                           3, param_types, G_TYPE_INT);
 }

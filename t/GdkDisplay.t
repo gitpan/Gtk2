@@ -4,13 +4,11 @@ use Gtk2::TestHelper
   tests => 20,
   at_least_version => [2, 2, 0, "GdkDisplay is new in 2.2"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.5.2.1 2004/03/17 02:47:13 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.5.2.2 2004/04/25 11:26:32 kaffeetisch Exp $
 
 my $display = Gtk2::Gdk::Display -> open($ENV{DISPLAY});
 isa_ok($display, "Gtk2::Gdk::Display");
 ok(defined($display -> get_name()));
-
-# FIXME: $display -> close();
 
 $display = Gtk2::Gdk::Display -> get_default();
 isa_ok($display, "Gtk2::Gdk::Display");
@@ -61,6 +59,9 @@ SKIP: {
 
   isa_ok($display -> get_default_group(), "Gtk2::Gdk::Window");
 }
+
+# FIXME: currently segfaults for me.  see #85715.
+# $display -> close();
 
 __END__
 

@@ -1,3 +1,78 @@
+2004/06/13 12:28 (-0400) muppetman
+
+	* Gtk2.pm, README, NEWS: stable release 1.043
+
+2004/06/04 16:49 (-0400) muppetman
+
+	* xs/GtkCellLayout.xs, xs/GtkClipboard.xs, xs/GtkEntryCompletion.xs,
+	xs/GtkFileFilter.xs, xs/GtkItemFactory.xs, xs/GtkTreeModelFilter.xs,
+	xs/GtkTreeView.xs: more c89 initializer changes that the patch
+	missed (mostly 2.4 stuff)
+
+2004/06/04 13:52 (-0400) muppetman
+
+	* AUTHORS, xs/GdkEvent.xs, xs/GdkWindow.xs, xs/Gtk2.xs,
+	xs/GtkAccelMap.xs, xs/GtkCellRenderer.xs, xs/GtkClipboard.xs,
+	xs/GtkContainer.xs, xs/GtkMenu.xs, xs/GtkTextTagTable.xs,
+	xs/GtkTreeModel.xs, xs/GtkTreeSelection.xs, xs/GtkTreeSortable.xs,
+	xs/GtkTreeView.xs, xs/GtkTreeViewColumn.xs: patch from Albert Chin
+	removes non-static initializers so that we are compatible with
+	C89 (which doesn't allow them).  the patch converted C++ comments to
+	C, but most were on dead code, so i removed them instead.
+
+2004/05/29 16:24 (+0200) kaffeetisch
+
+	More merges from HEAD:
+
+	* Makefile.PL: Check for the correct versions of EU::Depends and
+	EU::PkgConfig.
+
+	* t/GdkEvent.t: Be a bit more tolerant to pass on older gtk+'s.
+
+	* t/GtkFontSelection.t: Convert font name to lowercase before
+	testing.
+
+2004/05/29 01:28 (+0200) pcg
+
+	Merge from HEAD:
+
+        * xs/GtkTextBuffer.xs: Allow creation of anonymous marks.
+        * xs/GdkColor.xs: scaling by 257 is better than scaling by 8.
+
+2004/04/25 13:25 (+0200) kaffeetisch
+
+	Merge from HEAD:
+
+	* t/GdkDisplay.t: Add a reference to the relevant bug to the FIXME
+	comment on close().
+
+	* t/GtkDnd.t: Check that $context is defined before using it.
+
+2004/04/19 20:10 (+0200) kaffeetisch
+
+	Merge from HEAD:
+
+	* pm/SimpleList.pm: Add parameter descriptions for pretty much
+	every method.
+
+	* xs/Gdk.xs: Remove a needless MODULE line.
+
+	* xs/PangoFont.xs: Add some apidoc.
+
+2004/04/14 19:44 (+0200) kaffeetisch
+
+	Merge from HEAD:
+
+	* AUTHORS: Add Nathan Kurz.
+
+	* t/GdkKeys.t: Don't test the same variable three times.
+
+	* xs/GdkKeys.xs: Whitespace fix.
+
+	* xs/PangoFont.xs: Don't warn about unregistered subclasses of
+	PangoFontFamily.  Rearrange the loop in
+	pango_font_family_list_faces.
+
 2004/04/12 00:10 (-0400) muppetman
 
 	* Gtk2.pm, NEWS, README: stable release 1.042

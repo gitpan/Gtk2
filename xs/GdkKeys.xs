@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkKeys.xs,v 1.4 2004/01/27 22:18:45 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkKeys.xs,v 1.4.2.1 2004/04/14 17:48:11 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -49,7 +49,7 @@ gdk_keymap_get_for_display (class, display)
 
 ##  gboolean gdk_keymap_translate_keyboard_state (GdkKeymap *keymap, guint hardware_keycode, GdkModifierType state, gint group, guint *keyval, gint *effective_group, gint *level, GdkModifierType *consumed_modifiers) 
 =for apidoc
-=for signature (keyval, effective_group,level, consumed_modifiers) = $keymap->translate_keyboard_state (hardware_keycode, state, group)
+=for signature (keyval, effective_group, level, consumed_modifiers) = $keymap->translate_keyboard_state (hardware_keycode, state, group)
 =cut
 void
 gdk_keymap_translate_keyboard_state (keymap, hardware_keycode, state, group)

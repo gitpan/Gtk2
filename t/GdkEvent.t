@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkEvent.t,v 1.11.2.3 2004/04/12 03:22:37 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkEvent.t,v 1.11.2.4 2004/05/29 14:25:56 kaffeetisch Exp $
 #
 
 #########################
@@ -189,11 +189,11 @@ is ($@, '', "nor does time with an arg");
 
 Gtk2::Gdk::Event->put ($event);
 is (Gtk2::Gdk->events_pending, 1);
-isa_ok (Gtk2::Gdk::Event->get, "Gtk2::Gdk::Event::Crossing");
+isa_ok (Gtk2::Gdk::Event->get, "Gtk2::Gdk::Event");
 
 Gtk2::Gdk::Event->put ($event);
 is (Gtk2::Gdk->events_pending, 1);
-isa_ok (Gtk2::Gdk::Event->peek, "Gtk2::Gdk::Event::Crossing");
+isa_ok (Gtk2::Gdk::Event->peek, "Gtk2::Gdk::Event");
 
 my $i_know_you = 0;
 
@@ -203,7 +203,7 @@ Gtk2::Gdk::Event -> handler_set(sub {
 	my ($ev, $data) = @_;
 
 	ok ((ref $ev eq 'Gtk2::Gdk::Event::Crossing' or
-	     ref $ev eq 'Gtk2::Gdk::Event'), '$ev of expected type');
+	     UNIVERSAL::isa ($ev, 'Gtk2::Gdk::Event')), '$ev of expected type');
 	is ($data, 'bla', 'user data passed properly');
 
 	# pass to gtk+ default handler

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellLayout.xs,v 1.3 2004/02/22 19:57:33 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellLayout.xs,v 1.3.2.1 2004/06/04 20:50:55 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -56,14 +56,13 @@ void gtk_cell_layout_add_attribute (GtkCellLayout *cell_layout, GtkCellRenderer 
 ###void gtk_cell_layout_set_cell_data_func (GtkCellLayout *cell_layout, GtkCellRenderer *cell, GtkCellLayoutDataFunc func, gpointer func_data, GDestroyNotify destroy);
 void gtk_cell_layout_set_cell_data_func (GtkCellLayout *cell_layout, GtkCellRenderer *cell, SV * func, SV * func_data=NULL);
     PREINIT:
-	GType param_types[] = {
-		GTK_TYPE_CELL_LAYOUT,
-		GTK_TYPE_CELL_RENDERER,
-		GTK_TYPE_TREE_MODEL,
-		GTK_TYPE_TREE_ITER
-	};
+	GType param_types[4];
 	GPerlCallback * callback;
     CODE:
+	param_types[0] = GTK_TYPE_CELL_LAYOUT;
+	param_types[1] = GTK_TYPE_CELL_RENDERER;
+	param_types[2] = GTK_TYPE_TREE_MODEL;
+	param_types[3] = GTK_TYPE_TREE_ITER;
 	callback = gperl_callback_new (func, func_data, 4, param_types,
 	                               G_TYPE_NONE);
 	gtk_cell_layout_set_cell_data_func

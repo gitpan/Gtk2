@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.39.2.5 2004/04/04 17:16:39 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.39.2.6 2004/06/04 17:57:00 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -77,7 +77,9 @@ install_key_snooper (SV * func, SV * data)
 {
 	guint id; 
 	GPerlCallback * callback;
-	GType param_types[] = { GTK_TYPE_WIDGET, GDK_TYPE_EVENT };
+	GType param_types[2];
+	param_types[0] = GTK_TYPE_WIDGET;
+	param_types[1] = GDK_TYPE_EVENT;
 	if (!key_snoopers)
 		key_snoopers =
 			g_hash_table_new_full (g_direct_hash,

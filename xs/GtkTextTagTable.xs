@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextTagTable.xs,v 1.4 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextTagTable.xs,v 1.4.8.1 2004/06/04 17:57:00 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -57,8 +57,9 @@ gtk_text_tag_table_foreach (table, callback, callback_data=NULL)
         SV * callback_data
     PREINIT:
 	GPerlCallback * real_callback;
-	GType param_types [] = { GTK_TYPE_TEXT_TAG };
+	GType param_types [1];
     CODE:
+    	param_types[0] = GTK_TYPE_TEXT_TAG;
 	real_callback = gperl_callback_new (callback, callback_data,
 	                                    1, param_types, G_TYPE_NONE);
 	gtk_text_tag_table_foreach (table, 

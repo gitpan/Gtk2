@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 15;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkKeys.t,v 1.3 2004/02/27 05:31:48 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkKeys.t,v 1.3.2.1 2004/04/14 17:48:11 kaffeetisch Exp $
 
 my $map = Gtk2::Gdk::Keymap -> get_default();
 isa_ok($map, "Gtk2::Gdk::Keymap");
@@ -17,8 +17,8 @@ SKIP: {
 
 my ($keyval, $group, $level, $mods) = $map -> translate_keyboard_state(10, [qw(shift-mask lock-mask)], 0);
 like($keyval, qr/^\d+$/);
-like($keyval, qr/^\d+$/);
-like($keyval, qr/^\d+$/);
+like($group, qr/^\d+$/);
+like($level, qr/^\d+$/);
 isa_ok($mods, "Gtk2::Gdk::ModifierType");
 
 ok(defined($map -> get_direction()));

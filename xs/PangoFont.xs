@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.17 2004/02/26 17:20:03 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.17.2.2 2004/04/19 18:12:28 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -243,8 +243,12 @@ pango_font_metrics_get_approximate_digit_width (metrics)
 
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontFamily	PREFIX = pango_font_family_
 
+BOOT:
+	gperl_object_set_no_warn_unreg_subclass (PANGO_TYPE_FONT_FAMILY, TRUE);
+
 ## void pango_font_family_list_faces (PangoFontFamily *family, PangoFontFace ***faces, int *n_faces)
 =for apidoc
+=for apidoc @faces = $family->list_faces
 Lists the different font faces that make up family. The faces in a family
 share a common design, but differ in slant, weight, width and other aspects.
 =cut
@@ -252,19 +256,17 @@ void
 pango_font_family_list_faces (family)
 	PangoFontFamily *family
     PREINIT:
-	PangoFontFace ** faces;
-	int 	         n_faces;
+	PangoFontFace ** faces = NULL;
+	int n_faces;
     PPCODE:
 	pango_font_family_list_faces(family, &faces, &n_faces);
-	if( n_faces < 1 || faces == NULL )
-		XSRETURN_EMPTY;
-	else
-	{
+	if (n_faces > 0) {
+		int i;
 		EXTEND(SP,n_faces);
-		for( ; n_faces >= 0; n_faces-- )
-			PUSHs(sv_2mortal(newSVPangoFontFace(faces[n_faces])));
+		for (i = 0 ; i < n_faces ; i++)
+			PUSHs(sv_2mortal(newSVPangoFontFace(faces[i])));
+		g_free (faces);
 	}
-	g_free(faces);
 
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::Font	PREFIX = pango_font_
 

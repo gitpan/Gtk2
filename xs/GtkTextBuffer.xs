@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.21.2.2 2004/04/09 03:46:36 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.21.2.3 2004/05/28 22:41:26 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -160,7 +160,7 @@ gtk_text_buffer_insert_child_anchor (buffer, iter, anchor)
 	GtkTextIter *iter
 	GtkTextChildAnchor *anchor
 
-GtkTextMark* gtk_text_buffer_create_mark (GtkTextBuffer *buffer, const gchar *mark_name, GtkTextIter *where, gboolean left_gravity);
+GtkTextMark* gtk_text_buffer_create_mark (GtkTextBuffer *buffer, const gchar_ornull *mark_name, GtkTextIter *where, gboolean left_gravity);
 
 ## void gtk_text_buffer_move_mark (GtkTextBuffer *buffer, GtkTextMark *mark, const GtkTextIter *where)
 void

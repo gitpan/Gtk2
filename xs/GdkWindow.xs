@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.35.2.2 2004/04/09 03:46:36 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.35.2.3 2004/06/04 17:56:59 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -108,9 +108,8 @@ SvGdkWindowAttr (SV *object)
 static GPerlCallback *
 gtk2perl_gdk_window_invalidate_maybe_recurse_func_create (SV * func, SV * data)
 {
-	GType param_types [] = {
-		GDK_TYPE_WINDOW,
-	};
+	GType param_types [1];
+	param_types[0] = GDK_TYPE_WINDOW;
 	return gperl_callback_new (func, data, G_N_ELEMENTS (param_types),
 				   param_types, G_TYPE_BOOLEAN);
 }

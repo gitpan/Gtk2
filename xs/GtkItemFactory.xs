@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.17.2.1 2004/03/21 01:26:58 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.17.2.2 2004/06/04 20:50:55 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -67,9 +67,8 @@ gtk2perl_item_factory_item_activate (gpointer    data,
 static GPerlCallback *
 gtk2perl_translate_func_create (SV * func, SV * data)
 {
-	GType param_types [] = {
-		G_TYPE_STRING
-	};
+	GType param_types[1];
+	param_types[0] = G_TYPE_STRING;
 	return gperl_callback_new (func, data, G_N_ELEMENTS (param_types),
 				   param_types, G_TYPE_STRING);
 }

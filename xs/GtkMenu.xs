@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenu.xs,v 1.18.2.3 2004/03/21 18:51:55 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenu.xs,v 1.18.2.4 2004/06/04 17:57:00 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -79,10 +79,9 @@ gtk2perl_menu_position_func (GtkMenu * menu,
 static GPerlCallback *
 gtk2perl_menu_detach_func_create (SV *func, SV *data)
 {
-	GType param_types [] = {
-		GTK_TYPE_WIDGET,
-		GTK_TYPE_MENU
-	};
+	GType param_types [2];
+	param_types[0] = GTK_TYPE_WIDGET;
+	param_types[1] = GTK_TYPE_MENU;
 	return gperl_callback_new (func, data, G_N_ELEMENTS (param_types),
 				   param_types, 0);
 }

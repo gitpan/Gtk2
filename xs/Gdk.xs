@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.18 2004/02/29 09:41:47 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.18.2.1 2004/04/19 18:12:28 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -281,6 +281,3 @@ gdk_threads_init (class)
 		default:
 			g_assert_not_reached ();
 	}
-
-
-MODULE = Gtk2::Gdk	PACKAGE = Gtk2::Gdk	PREFIX = gdk_

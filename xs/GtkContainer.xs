@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkContainer.xs,v 1.15 2004/02/29 09:41:35 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkContainer.xs,v 1.15.2.1 2004/06/04 17:57:00 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -85,8 +85,9 @@ gtk_container_foreach (container, callback, callback_data=NULL)
 	SV * callback_data
     PREINIT:
 	GPerlCallback * real_callback;
-	GType param_types [] = { GTK_TYPE_WIDGET };
+	GType param_types [1];
     CODE:
+    	param_types[0] = GTK_TYPE_WIDGET;
 	real_callback = gperl_callback_new (callback, callback_data,
 	                                    1, param_types, G_TYPE_NONE);
 	gtk_container_foreach (container, 
