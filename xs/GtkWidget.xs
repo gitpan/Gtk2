@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.38 2003/11/17 02:43:10 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.42.2.1 2003/12/12 17:38:47 muppetman Exp $
  */
 #include "gtk2perl.h"
 #include "ppport.h"
@@ -124,8 +124,8 @@ GtkStyle*
 style (widget)
 	GtkWidget * widget
     ALIAS:
-	Gtk2::Widget::style = 1
-	Gtk2::Widget::get_style = 2
+	Gtk2::Widget::style = 0
+	Gtk2::Widget::get_style = 1
     CODE:
 	PERL_UNUSED_VAR (ix);
 	RETVAL = gtk_widget_get_style(widget);
@@ -149,84 +149,200 @@ state (widget)
 
  ##define GTK_WIDGET_FLAGS(wid)		  (GTK_OBJECT_FLAGS (wid))
 
+=for apidoc Gtk2::Widget::toplevel
+=for signature $widget->toplevel ($value)
+=for signature boolean = $widget->toplevel
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::no_window
+=for signature $widget->no_window ($boolean)
+=for signature boolean = $widget->no_window
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::realized
+=for signature $widget->realized ($boolean)
+=for signature boolean = $widget->realized
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::mapped
+=for signature $widget->mapped ($boolean)
+=for signature boolean = $widget->mapped
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::visible
+=for signature $widget->visible ($boolean)
+=for signature boolean = $widget->visible
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::drawable
+=for signature $widget->drawable ($boolean)
+=for signature boolean = $widget->drawable
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::sensitive
+=for signature $widget->sensitive ($boolean)
+=for signature boolean = $widget->sensitive
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::parent_sensitive
+=for signature $widget->parent_sensitive ($boolean)
+=for signature boolean = $widget->parent_sensitive
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::is_sensitive
+=for signature $widget->is_sensitive ($boolean)
+=for signature boolean = $widget->is_sensitive
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::can_focus
+=for signature $widget->can_focus ($boolean)
+=for signature boolean = $widget->can_focus
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::has_focus
+=for signature $widget->has_focus ($boolean)
+=for signature boolean = $widget->has_focus
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::has_grab
+=for signature $widget->has_grab ($boolean)
+=for signature boolean = $widget->has_grab
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::rc_style
+=for signature $widget->rc_style ($boolean)
+=for signature boolean = $widget->rc_style
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::composite_child
+=for signature $widget->composite_child ($boolean)
+=for signature boolean = $widget->composite_child
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::app_paintable
+=for signature $widget->app_paintable ($boolean)
+=for signature boolean = $widget->app_paintable
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::receives_default
+=for signature $widget->receives_default ($boolean)
+=for signature boolean = $widget->receives_default
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::double_buffered
+=for signature $widget->double_buffered ($boolean)
+=for signature boolean = $widget->double_buffered
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::can_default
+=for signature $widget->can_default ($boolean)
+=for signature boolean = $widget->can_default
+=for arg ... (__hide__)
+=cut
+
+=for apidoc Gtk2::Widget::has_default
+=for signature $widget->has_default ($boolean)
+=for signature boolean = $widget->has_default
+=for arg ... (__hide__)
+=cut
+
 gboolean
-get_flags (widget, ...)
+flags_handler (widget, ...)
 	GtkWidget * widget
     ALIAS:
-	Gtk2::Widget::toplevel         =  1
-	Gtk2::Widget::no_window        =  2
-	Gtk2::Widget::realized         =  3
-	Gtk2::Widget::mapped           =  4
-	Gtk2::Widget::visible          =  5
-	Gtk2::Widget::drawable         =  6
-	Gtk2::Widget::sensitive        =  7
-	Gtk2::Widget::parent_sensitive =  8
-	Gtk2::Widget::is_sensitive     =  9
-	Gtk2::Widget::can_focus        = 10
-	Gtk2::Widget::has_focus        = 11
-	Gtk2::Widget::has_grab         = 12
-	Gtk2::Widget::rc_style         = 13
-	Gtk2::Widget::composite_child  = 14
-	Gtk2::Widget::app_paintable    = 15
-	Gtk2::Widget::receives_default = 16
-	Gtk2::Widget::double_buffered  = 17
-	Gtk2::Widget::can_default      = 18
-	Gtk2::Widget::has_default      = 19
+	Gtk2::Widget::toplevel         =  0
+	Gtk2::Widget::no_window        =  1
+	Gtk2::Widget::realized         =  2
+	Gtk2::Widget::mapped           =  3
+	Gtk2::Widget::visible          =  4
+	Gtk2::Widget::drawable         =  5
+	Gtk2::Widget::sensitive        =  6
+	Gtk2::Widget::parent_sensitive =  7
+	Gtk2::Widget::is_sensitive     =  8
+	Gtk2::Widget::can_focus        =  9
+	Gtk2::Widget::has_focus        = 10
+	Gtk2::Widget::has_grab         = 11
+	Gtk2::Widget::rc_style         = 12
+	Gtk2::Widget::composite_child  = 13
+	Gtk2::Widget::app_paintable    = 14
+	Gtk2::Widget::receives_default = 15
+	Gtk2::Widget::double_buffered  = 16
+	Gtk2::Widget::can_default      = 17
+	Gtk2::Widget::has_default      = 18
     PREINIT:
 	gboolean value;
 	GtkWidgetFlags flag;
     CODE:
-	if ( items > 2 ) {
-	    croak ("Usage: flag(widget[, value])");
-	    return;
+	if (items > 2) {
+		croak ("Usage: boolean = $widget->%s\n"
+		       "       $widget->%s (newvalue)\n"
+		       "   too many arguments",
+		       GvNAME (CvGV (cv)), GvNAME (CvGV (cv)));
 	}
 
         if ( items == 1 ) {
 	    switch (ix) {
-		case  1: RETVAL = GTK_WIDGET_TOPLEVEL         (widget); break;
-		case  2: RETVAL = GTK_WIDGET_NO_WINDOW        (widget); break;
-		case  3: RETVAL = GTK_WIDGET_REALIZED         (widget); break;
-		case  4: RETVAL = GTK_WIDGET_MAPPED           (widget); break;
-		case  5: RETVAL = GTK_WIDGET_VISIBLE          (widget); break;
-		case  6: RETVAL = GTK_WIDGET_DRAWABLE         (widget); break;
-		case  7: RETVAL = GTK_WIDGET_SENSITIVE        (widget); break;
-		case  8: RETVAL = GTK_WIDGET_PARENT_SENSITIVE (widget); break;
-		case  9: RETVAL = GTK_WIDGET_IS_SENSITIVE     (widget); break;
-		case 10: RETVAL = GTK_WIDGET_CAN_FOCUS        (widget); break;
-		case 11: RETVAL = GTK_WIDGET_HAS_FOCUS        (widget); break;
-		case 12: RETVAL = GTK_WIDGET_HAS_GRAB         (widget); break;
-		case 13: RETVAL = GTK_WIDGET_RC_STYLE         (widget); break;
-		case 14: RETVAL = GTK_WIDGET_COMPOSITE_CHILD  (widget); break;
-		case 15: RETVAL = GTK_WIDGET_APP_PAINTABLE    (widget); break;
-		case 16: RETVAL = GTK_WIDGET_RECEIVES_DEFAULT (widget); break;
-		case 17: RETVAL = GTK_WIDGET_DOUBLE_BUFFERED  (widget); break;
-		case 18: RETVAL = GTK_WIDGET_CAN_DEFAULT      (widget); break;
-		case 19: RETVAL = GTK_WIDGET_HAS_DEFAULT      (widget); break;
-		default: croak ("unhandled case (%s) in get_flags - shouldn't happen", ix);
+		case  0: RETVAL = GTK_WIDGET_TOPLEVEL         (widget); break;
+		case  1: RETVAL = GTK_WIDGET_NO_WINDOW        (widget); break;
+		case  2: RETVAL = GTK_WIDGET_REALIZED         (widget); break;
+		case  3: RETVAL = GTK_WIDGET_MAPPED           (widget); break;
+		case  4: RETVAL = GTK_WIDGET_VISIBLE          (widget); break;
+		case  5: RETVAL = GTK_WIDGET_DRAWABLE         (widget); break;
+		case  6: RETVAL = GTK_WIDGET_SENSITIVE        (widget); break;
+		case  7: RETVAL = GTK_WIDGET_PARENT_SENSITIVE (widget); break;
+		case  8: RETVAL = GTK_WIDGET_IS_SENSITIVE     (widget); break;
+		case  9: RETVAL = GTK_WIDGET_CAN_FOCUS        (widget); break;
+		case 10: RETVAL = GTK_WIDGET_HAS_FOCUS        (widget); break;
+		case 11: RETVAL = GTK_WIDGET_HAS_GRAB         (widget); break;
+		case 12: RETVAL = GTK_WIDGET_RC_STYLE         (widget); break;
+		case 13: RETVAL = GTK_WIDGET_COMPOSITE_CHILD  (widget); break;
+		case 14: RETVAL = GTK_WIDGET_APP_PAINTABLE    (widget); break;
+		case 15: RETVAL = GTK_WIDGET_RECEIVES_DEFAULT (widget); break;
+		case 16: RETVAL = GTK_WIDGET_DOUBLE_BUFFERED  (widget); break;
+		case 17: RETVAL = GTK_WIDGET_CAN_DEFAULT      (widget); break;
+		case 18: RETVAL = GTK_WIDGET_HAS_DEFAULT      (widget); break;
+		default: croak ("unhandled case (%s) in flags_handler - shouldn't happen", ix);
 	    }
 	} else {
 	    value = (gboolean) SvIV(ST(1));
 	    switch (ix) {
-		case  1: flag = GTK_TOPLEVEL	     ; break;
-		case  2: flag = GTK_NO_WINDOW	     ; break;
-		case  3: flag = GTK_REALIZED	     ; break;
-		case  4: flag = GTK_MAPPED	     ; break;
-		case  5: flag = GTK_VISIBLE	     ; break;
-		case  6: croak ("widget flag drawable is read only"); break;
-		case  7: flag = GTK_SENSITIVE	     ; break;
-		case  8: flag = GTK_PARENT_SENSITIVE ; break;
-		case  9: croak ("widget flag is_sensitive is read only"); break;
-		case 10: flag = GTK_CAN_FOCUS	     ; break;
-		case 11: flag = GTK_HAS_FOCUS	     ; break;
-		case 12: flag = GTK_HAS_GRAB	     ; break;
-		case 13: flag = GTK_RC_STYLE	     ; break;
-		case 14: flag = GTK_COMPOSITE_CHILD  ; break;
-		case 15: flag = GTK_APP_PAINTABLE    ; break;
-		case 16: flag = GTK_RECEIVES_DEFAULT ; break;
-		case 17: flag = GTK_DOUBLE_BUFFERED  ; break;
-		case 18: flag = GTK_CAN_DEFAULT      ; break;
-		case 19: flag = GTK_HAS_DEFAULT      ; break;
-		default: croak ("unhandled case (%s) in set_flags - shouldn't happen", ix);
+		case  0: flag = GTK_TOPLEVEL	     ; break;
+		case  1: flag = GTK_NO_WINDOW	     ; break;
+		case  2: flag = GTK_REALIZED	     ; break;
+		case  3: flag = GTK_MAPPED	     ; break;
+		case  4: flag = GTK_VISIBLE	     ; break;
+		case  5: croak ("widget flag drawable is read only"); break;
+		case  6: flag = GTK_SENSITIVE	     ; break;
+		case  7: flag = GTK_PARENT_SENSITIVE ; break;
+		case  8: croak ("widget flag is_sensitive is read only"); break;
+		case  9: flag = GTK_CAN_FOCUS	     ; break;
+		case 10: flag = GTK_HAS_FOCUS	     ; break;
+		case 11: flag = GTK_HAS_GRAB	     ; break;
+		case 12: flag = GTK_RC_STYLE	     ; break;
+		case 13: flag = GTK_COMPOSITE_CHILD  ; break;
+		case 14: flag = GTK_APP_PAINTABLE    ; break;
+		case 15: flag = GTK_RECEIVES_DEFAULT ; break;
+		case 16: flag = GTK_DOUBLE_BUFFERED  ; break;
+		case 17: flag = GTK_CAN_DEFAULT      ; break;
+		case 18: flag = GTK_HAS_DEFAULT      ; break;
+		default: croak ("unhandled case (%s) in flags_handler - shouldn't happen", ix);
 	    }
 	    if ( value ) {
 	    	GTK_WIDGET_SET_FLAGS(widget, flag);
@@ -236,6 +352,15 @@ get_flags (widget, ...)
 	    RETVAL=value;
 	}
 
+    OUTPUT:
+	RETVAL
+
+GtkWidgetFlags
+flags (GtkWidget * widget)
+    ALIAS:
+	get_flags = 1
+    CODE:
+	RETVAL = GTK_WIDGET_FLAGS (widget);
     OUTPUT:
 	RETVAL
 
@@ -512,7 +637,7 @@ gtk_widget_set_size_request (widget, width=-1, height=-1)
 This function is typically used when implementing a GtkContainer subclass.
 Obtains the preferred size of a widget. The container uses this information to
 arrange its child widgets and decide what size allocations to give them with
-L<"$widget-E<gt>size_allocate">.
+size_allocate ().
 
 You can also call this function from an application, with some caveats. Most
 notably, getting a size request requires the widget to be associated with a
@@ -522,7 +647,7 @@ should keep this in mind.
 Also remember that the size request is not necessarily the size a widget will
 actually be allocated.
 
-See also L<"$widget-E<gt>get_child_requisition">
+See also L<get_child_requisition ()|requisistion = $widget-E<gt>get_child_requisition>
 =cut
 void
 gtk_widget_get_size_request (widget)
@@ -828,10 +953,13 @@ gtk_widget_get_clipboard (widget, selection=GDK_SELECTION_CLIPBOARD)
 	GdkAtom     selection
 
 
-#GdkDisplay* gtk_widget_get_display (GtkWidget *widget)
-GdkDisplay *
-gtk_widget_get_display (widget)
-	GtkWidget * widget
+GdkDisplay * gtk_widget_get_display (GtkWidget * widget)
+
+GdkWindow * gtk_widget_get_root_window (GtkWidget * widget)
+
+GdkScreen * gtk_widget_get_screen (GtkWidget * widget)
+
+gboolean gtk_widget_has_screen (GtkWidget * widget);
 
 #endif
 

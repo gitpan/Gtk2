@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.22 2003/11/18 04:36:34 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.22.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -43,7 +43,7 @@ gdk_window_get_window_type (window)
 
  ## GdkWindow* gdk_window_at_pointer (gint *win_x, gint *win_y)
 =for apidoc
-=signature (window, win_x, win_y) = Gtk2::Gdk::Window->at_pointer
+=for signature (window, win_x, win_y) = Gtk2::Gdk::Window->at_pointer
 Returns window, a Gtk2::Gdk::Window and win_x and win_y, integers.
 =cut
 void
@@ -360,7 +360,7 @@ void gdk_window_get_root_origin (GdkWindow *window, OUTLIST gint x, OUTLIST gint
   ## itself at runtime.  can't quite figure it out.
 ###GdkWindow_ornull* gdk_window_get_pointer (GdkWindow *window, OUTLIST gint x, OUTLIST gint y, OUTLIST GdkModifierType mask)
 =for apidoc
-=signature (window_at_pointer, x, y, mask) = $window->get_pointer
+=for signature (window_at_pointer, x, y, mask) = $window->get_pointer
 Returns window_at_pointer, a Gtk2::Gdk::Window or undef, x and y, integers, and
 mask, a Gtk2::Gdk::ModifierType.
 =cut

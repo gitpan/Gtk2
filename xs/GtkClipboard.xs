@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.9 2003/11/07 10:57:00 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.9.4.2 2003/12/04 00:21:16 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -124,8 +124,11 @@ gtk_clipboard_get_display (clipboard)
 #endif /* >=2.2.0 */
 
 ####  gboolean gtk_clipboard_set_with_data (GtkClipboard *clipboard, const GtkTargetEntry *targets, guint n_targets, GtkClipboardGetFunc get_func, GtkClipboardClearFunc clear_func, gpointer user_data) 
+=for apidoc
+=for arg ... of Gtk2::TargetEntry's
+=cut
 gboolean
-gtk_clipboard_set_with_data (clipboard, get_func, clear_func, user_data, target1, ...)
+gtk_clipboard_set_with_data (clipboard, get_func, clear_func, user_data, ...)
 	GtkClipboard *clipboard
 	SV * get_func
 	SV * clear_func
@@ -190,8 +193,11 @@ gtk_clipboard_set_with_data (clipboard, get_func, clear_func, user_data, target1
 	g_free (targets);
 
 ##  gboolean gtk_clipboard_set_with_owner (GtkClipboard *clipboard, const GtkTargetEntry *targets, guint n_targets, GtkClipboardGetFunc get_func, GtkClipboardClearFunc clear_func, GObject *owner) 
+=for apidoc
+=for arg ... of Gtk2::TargetEntry's
+=cut
 gboolean
-gtk_clipboard_set_with_owner (clipboard, get_func, clear_func, owner, target1, ...)
+gtk_clipboard_set_with_owner (clipboard, get_func, clear_func, owner, ...)
 	GtkClipboard *clipboard
 	SV * get_func
 	SV * clear_func

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/20.GdkColor.t,v 1.4 2003/09/22 00:04:24 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/20.GdkColor.t,v 1.5 2003/11/29 17:20:46 rwmcfa1 Exp $
 #
 
 use strict;
@@ -24,6 +24,8 @@ else
 	plan skip_all =>
 		'Gtk2->init_check failed, probably unable to open DISPLAY';
 }
+
+require './t/ignore_keyboard.pl';
 
 my $cmap = Gtk2::Gdk::Colormap->get_system;
 ok ($cmap, 'system colormap');

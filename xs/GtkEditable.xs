@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.11 2003/11/19 20:15:53 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.11.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -140,7 +140,7 @@ gtk_editable_select_region (editable, start, end)
 
  ## returns an empty list if there is no selection
 =for apidoc
-=signature (start, end) = $editable->get_selection_bounds
+=for signature (start, end) = $editable->get_selection_bounds
 Returns integers, start and end.
 =cut
 void

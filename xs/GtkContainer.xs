@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkContainer.xs,v 1.9 2003/11/18 04:36:34 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkContainer.xs,v 1.10.2.1 2003/12/04 00:21:16 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -108,8 +108,18 @@ gtk_container_get_children (container)
  ##	GdkEventExpose *event
 
  ## void gtk_container_set_focus_chain (GtkContainer *container, GList *focusable_widgets)
+=for apidoc
+=for arg ... of Gtk2::Widget's, the focus chain
+Sets a focus chain, overriding the one computed automatically by GTK+.
+
+In principle each widget in the chain should be a descendant of the container,
+but this is not enforced by this method, since it's allowed to set the focus
+chain before you pack the widgets, or have a widget in the chain that isn't
+always packed. The necessary checks are done when the focus chain is actually
+traversed.
+=cut
 void
-gtk_container_set_focus_chain (container, widget1, ...)
+gtk_container_set_focus_chain (container, ...)
 	GtkContainer *container
     PREINIT:
 	GList *focusable_widgets = NULL;

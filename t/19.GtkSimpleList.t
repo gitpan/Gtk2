@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/19.GtkSimpleList.t,v 1.10 2003/10/03 17:21:28 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/19.GtkSimpleList.t,v 1.11 2003/11/29 17:20:46 rwmcfa1 Exp $
 #
 
 use strict;
@@ -26,6 +26,8 @@ else
 
 
 #########################
+
+require './t/ignore_keyboard.pl';
 
 Gtk2::SimpleList->add_column_type(
 	'ralacs', 	# think about it for a second...

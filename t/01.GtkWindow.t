@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.12 2003/09/24 18:18:21 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.13 2003/11/29 17:20:45 rwmcfa1 Exp $
 #
 
 use strict;
@@ -26,6 +26,8 @@ else
 }
 
 #########################
+
+require './t/ignore_keyboard.pl';
 
 use constant TRUE => 1;
 use constant FALSE => 0;

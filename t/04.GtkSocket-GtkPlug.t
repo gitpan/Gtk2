@@ -3,7 +3,7 @@
 # 	- rm
 #########################
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/04.GtkSocket-GtkPlug.t,v 1.8 2003/09/22 00:04:24 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/04.GtkSocket-GtkPlug.t,v 1.9 2003/11/29 17:20:46 rwmcfa1 Exp $
 #
 
 use strict;
@@ -33,6 +33,8 @@ else
 
 #########################
 
+require './t/ignore_keyboard.pl';
+
 ok( my $win = Gtk2::Window->new );
 
 ok( my $socket = Gtk2::Socket->new );
@@ -44,6 +46,8 @@ my $str = "$^X -Mblib -e '\$id = $id;\n\n".<<EOL;
 use Gtk2;
 
 Gtk2->init;
+
+require "./t/ignore_keyboard.pl";
 
 \$plug = Gtk2::Plug->new($id);
 \$plug->set_border_width(10);

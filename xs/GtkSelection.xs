@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.11 2003/11/21 07:38:06 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.12.2.2 2003/12/04 00:21:16 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -109,6 +109,9 @@ DESTROY (SV * list)
 	gtk_target_list_unref (SvGtkTargetList (list));
 
 ##  GtkTargetList *gtk_target_list_new (const GtkTargetEntry *targets, guint ntargets) 
+=for apidoc
+=for arg ... of Gtk2::TargetEntry's
+=cut
 GtkTargetList *
 gtk_target_list_new (class, ...)
     PREINIT:
@@ -136,8 +139,11 @@ gtk_target_list_add (list, target, flags, info)
 	guint info
 
 ##  void gtk_target_list_add_table (GtkTargetList *list, const GtkTargetEntry *targets, guint ntargets) 
+=for apidoc
+=for arg ... of Gtk2::TargetEntry's
+=cut
 void
-gtk_target_list_add_table (GtkTargetList * list, target, ...)
+gtk_target_list_add_table (GtkTargetList * list, ...)
     PREINIT:
 	GtkTargetEntry *targets;
 	guint ntargets;
@@ -201,8 +207,11 @@ gtk_selection_add_target (widget, selection, target, info)
 	guint info
 
 ##  void gtk_selection_add_targets (GtkWidget *widget, GdkAtom selection, const GtkTargetEntry *targets, guint ntargets) 
+=for apidoc
+=for arg ... of Gtk2::TargetEntry's
+=cut
 void
-gtk_selection_add_targets (widget, selection, target, ...)
+gtk_selection_add_targets (widget, selection, ...)
 	GtkWidget *widget
 	GdkAtom selection
     PREINIT:
@@ -233,24 +242,24 @@ SV *
 members (d)
 	GtkSelectionData * d
     ALIAS:
-	Gtk2::SelectionData::selection = 1
-	Gtk2::SelectionData::target    = 2
-	Gtk2::SelectionData::type      = 3
-	Gtk2::SelectionData::format    = 4
-	Gtk2::SelectionData::data      = 5
-	Gtk2::SelectionData::length    = 6
-	Gtk2::SelectionData::display   = 7
+	Gtk2::SelectionData::selection = 0
+	Gtk2::SelectionData::target    = 1
+	Gtk2::SelectionData::type      = 2
+	Gtk2::SelectionData::format    = 3
+	Gtk2::SelectionData::data      = 4
+	Gtk2::SelectionData::length    = 5
+	Gtk2::SelectionData::display   = 6
     CODE:
 	RETVAL = NULL;
 	switch (ix) {
-	    case 1: RETVAL = newSVGdkAtom (d->selection); break;
-	    case 2: RETVAL = newSVGdkAtom (d->target); break;
-	    case 3: RETVAL = newSVGdkAtom (d->type); break;
-	    case 4: RETVAL = newSViv (d->format); break;
-	    case 5: RETVAL = newSVpv (d->data, d->length); break;
-	    case 6: RETVAL = newSViv (d->length); break;
+	    case 0: RETVAL = newSVGdkAtom (d->selection); break;
+	    case 1: RETVAL = newSVGdkAtom (d->target); break;
+	    case 2: RETVAL = newSVGdkAtom (d->type); break;
+	    case 3: RETVAL = newSViv (d->format); break;
+	    case 4: RETVAL = newSVpv (d->data, d->length); break;
+	    case 5: RETVAL = newSViv (d->length); break;
 #if GTK_CHECK_VERSION(2,2,0)
-	    case 7: RETVAL = newSVGdkDisplay (d->display); break;
+	    case 6: RETVAL = newSVGdkDisplay (d->display); break;
 #endif
 	}
     OUTPUT:

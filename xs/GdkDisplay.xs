@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.7 2003/11/17 02:43:10 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.7.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -108,7 +108,7 @@ void gdk_display_get_pointer (GdkDisplay *display, OUTLIST GdkScreen *screen, OU
 ##  GdkWindow * gdk_display_get_window_at_pointer (GdkDisplay *display, gint *win_x, gint *win_y) 
 ###GdkWindow * gdk_display_get_window_at_pointer (GdkDisplay *display, OUTLIST gint win_x, OUTLIST gint win_y) 
 =for apidoc
-=signature (window, win_x, win_y) = $display->get_window_at_pointer ($display)
+=for signature (window, win_x, win_y) = $display->get_window_at_pointer ($display)
 =cut
 void
 gdk_display_get_window_at_pointer (GdkDisplay *display) 

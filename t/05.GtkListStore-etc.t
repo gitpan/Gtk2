@@ -3,7 +3,7 @@
 # 	- rm
 #########################
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/05.GtkListStore-etc.t,v 1.4 2003/09/22 00:04:24 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/05.GtkListStore-etc.t,v 1.5 2003/11/29 17:20:46 rwmcfa1 Exp $
 #
 
 use strict;
@@ -25,6 +25,8 @@ else
 }
 
 #########################
+
+require './t/ignore_keyboard.pl';
 
 ok( my $win = Gtk2::Window->new );
 

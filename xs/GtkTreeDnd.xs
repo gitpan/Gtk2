@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeDnd.xs,v 1.6 2003/11/18 04:36:34 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeDnd.xs,v 1.6.2.3 2003/12/04 00:21:16 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -37,7 +37,7 @@ gtk_tree_drag_source_drag_data_delete (drag_source, path)
 
 ### gboolean gtk_tree_drag_source_drag_data_get (GtkTreeDragSource *drag_source, GtkTreePath *path, GtkSelectionData *selection_data)
 GtkSelectionData_copy *
-gtk_tree_drag_source_drag_data_get (drag_source, path, selection_data)
+gtk_tree_drag_source_drag_data_get (drag_source, path)
 	GtkTreeDragSource *drag_source
 	GtkTreePath *path
     PREINIT:
@@ -77,7 +77,7 @@ gtk_tree_set_row_drag_data (selection_data, tree_model, path)
 
 ## gboolean gtk_tree_get_row_drag_data (GtkSelectionData *selection_data, GtkTreeModel **tree_model, GtkTreePath **path)
 =for apidoc
-=signature (tree_model, path) = $selection_data->get_row_drag_data
+=for signature (tree_model, path) = $selection_data->get_row_drag_data
 =cut
 void
 gtk_tree_get_row_drag_data (selection_data)

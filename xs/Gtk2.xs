@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.19 2003/11/18 04:36:34 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.20.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -126,7 +126,7 @@ BOOT:
  ##GTKMAIN_C_VAR const guint gtk_interface_age;
 
 =for apidoc
-=signature (major_version, minor_version, micro_version) = Gtk2->version_info
+=for signature (major_version, minor_version, micro_version) = Gtk2->version_info
 =cut
 void
 gtk_get_version_info (class)
@@ -412,3 +412,13 @@ gtk_get_event_widget (class, GdkEvent_ornull * event)
 
  ## the docs say you shouldn't need this outside implementing gtk itself.
  ##void gtk_propagate_event (GtkWidget * widget, GdkEvent * event);
+
+# this stuff is only here to generate pod pages for abstract and functionless
+# object, that is the objects exist only as parents and have no functions of
+# their own
+
+=for object Gtk2::Separator
+=cut
+
+=for object Gtk2::Scrollbar
+=cut

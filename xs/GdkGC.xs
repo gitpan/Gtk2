@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.13 2003/11/21 06:31:49 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.14.2.1 2003/12/04 00:21:16 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -303,6 +303,13 @@ gdk_gc_set_line_attributes (gc, line_width, line_style, cap_style, join_style)
 	GdkJoinStyle join_style
 
  ## void gdk_gc_set_dashes (GdkGC *gc, gint dash_offset, gint8 dash_list[], gint n)
+=for apidoc
+=for arg ... of integers, the length of the dash segments
+Sets the way dashed-lines are drawn. Lines will be drawn with alternating on
+and off segments of the lengths specified in list of dashes. The manner in
+which the on and off segments are drawn is determined by the line_style value
+of the GC.
+=cut
 void
 gdk_gc_set_dashes (gc, dash_offset, ...)
 	GdkGC * gc

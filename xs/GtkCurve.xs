@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.13 2003/11/18 04:36:34 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.14.2.1 2003/12/04 00:21:16 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -73,6 +73,9 @@ gtk_curve_get_vector (curve, veclen=32)
 	g_free(vector);
 
 ## void gtk_curve_set_vector (GtkCurve *curve, int veclen, gfloat vector[])
+=for apidoc
+=for arg ... of float's, the points of the curve
+=cut
 void
 gtk_curve_set_vector (curve, ...)
 	GtkCurve * curve

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.21 2003/11/17 02:43:10 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.21.2.2 2003/12/04 00:21:17 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -535,6 +535,9 @@ void gtk_tree_view_widget_to_tree_coords (GtkTreeView *tree_view, gint wx, gint 
 void gtk_tree_view_tree_to_widget_coords (GtkTreeView *tree_view, gint tx, gint ty, OUTLIST gint wx, OUTLIST gint wy)
 
 #### void gtk_tree_view_enable_model_drag_source (GtkTreeView *tree_view, GdkModifierType start_button_mask, const GtkTargetEntry *targets, gint n_targets, GdkDragAction actions)
+=for apidoc
+=for arg ... of Gtk2::TargetEntry's
+=cut
 void
 gtk_tree_view_enable_model_drag_source (tree_view, start_button_mask, actions, ...)
 	GtkTreeView *tree_view
@@ -555,6 +558,9 @@ gtk_tree_view_enable_model_drag_source (tree_view, start_button_mask, actions, .
 	g_free (targets);
 
 #### void gtk_tree_view_enable_model_drag_dest (GtkTreeView *tree_view, const GtkTargetEntry *targets, gint n_targets, GdkDragAction actions)
+=for apidoc
+=for arg ... of Gtk2::TargetEntry's
+=cut
 void
 gtk_tree_view_enable_model_drag_dest (tree_view, actions, ...)
 	GtkTreeView *tree_view

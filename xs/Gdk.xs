@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.11 2003/10/18 07:04:42 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.12 2003/11/28 17:53:17 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -105,17 +105,17 @@ gdk_flush (class)
 gint
 screendims (class)
     ALIAS:
-	Gtk2::Gdk::screen_width = 1
-	Gtk2::Gdk::screen_height = 2
-	Gtk2::Gdk::screen_width_mm = 3
-	Gtk2::Gdk::screen_height_mm = 4
+	Gtk2::Gdk::screen_width = 0
+	Gtk2::Gdk::screen_height = 1
+	Gtk2::Gdk::screen_width_mm = 2
+	Gtk2::Gdk::screen_height_mm = 3
     CODE:
 	RETVAL = 0;
 	switch (ix) {
-		case 1: RETVAL = gdk_screen_width (); break;
-		case 2: RETVAL = gdk_screen_height (); break;
-		case 3: RETVAL = gdk_screen_width_mm (); break;
-		case 4: RETVAL = gdk_screen_height_mm (); break;
+		case 0: RETVAL = gdk_screen_width (); break;
+		case 1: RETVAL = gdk_screen_height (); break;
+		case 2: RETVAL = gdk_screen_width_mm (); break;
+		case 3: RETVAL = gdk_screen_height_mm (); break;
 	}
     OUTPUT:
 	RETVAL
@@ -255,7 +255,7 @@ MODULE = Gtk2::Gdk	PACKAGE = Gtk2::Gdk::Threads	PREFIX = gdk_threads_
 ###  void gdk_threads_init (void) 
 
 void
-gdk_threads (class)
+gdk_threads_init (class)
     ALIAS:
 	enter = 1
 	leave = 2

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTabs.xs,v 1.6 2003/11/21 07:38:06 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTabs.xs,v 1.7 2003/11/28 17:53:18 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -29,8 +29,8 @@ pango_tab_array_new (class, initial_size, positions_in_pixels, ...)
 	gint initial_size
 	gboolean positions_in_pixels
     ALIAS:
-	new = 1
-	new_with_positions = 2
+	new = 0
+	new_with_positions = 1
     CODE:
 	PERL_UNUSED_VAR (ix);
 	RETVAL = pango_tab_array_new (initial_size, positions_in_pixels);

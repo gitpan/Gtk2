@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFontSelection.xs,v 1.8 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFontSelection.xs,v 1.9 2003/11/28 17:53:18 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -69,15 +69,15 @@ GtkWidget *
 members_get (fsd)
 	GtkFontSelectionDialog * fsd
     ALIAS:
-	Gtk2::FontSelectionDialog::ok_button = 1
-	Gtk2::FontSelectionDialog::apply_button = 2
-	Gtk2::FontSelectionDialog::cancel_button = 3
+	Gtk2::FontSelectionDialog::ok_button = 0
+	Gtk2::FontSelectionDialog::apply_button = 1
+	Gtk2::FontSelectionDialog::cancel_button = 2
     CODE:
 	switch(ix)
 	{
-		case 1:	RETVAL = fsd->ok_button; break;
-		case 2:	RETVAL = fsd->apply_button; break;
-		case 3:	RETVAL = fsd->cancel_button; break;
+		case 0:	RETVAL = fsd->ok_button; break;
+		case 1:	RETVAL = fsd->apply_button; break;
+		case 2:	RETVAL = fsd->cancel_button; break;
 		default: croak("unhandled case in members_get - shouldn't happen");
 	}
     OUTPUT:

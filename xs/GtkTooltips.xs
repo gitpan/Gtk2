@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.13 2003/11/21 06:31:49 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.13.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -63,7 +63,7 @@ gtk_tooltips_set_tip (tooltips, widget, tip_text, tip_private=NULL)
 
 ## GtkTooltipsData* gtk_tooltips_data_get (GtkWidget *widget)
 =for apidoc
-=signature hash = $tooltips->data_get ($widget)
+=for signature hash = $tooltips->data_get ($widget)
 Returns a hash with the keys: tooptips, widget, tip_text, and tip_private.
 
 tooltips is the GtkTooltips group that this tooltip belongs to. widget is the

@@ -16,12 +16,18 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.18 2003/11/17 02:43:10 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.21.2.2 2003/12/04 00:21:17 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Window	PACKAGE = Gtk2::Window	PREFIX = gtk_window_
+
+=for enum GtkWindowPosition
+=cut
+
+=for enum GtkWindowType
+=cut
 
 ## GtkWidget* gtk_window_new (GtkWindowType type)
 GtkWidget *
@@ -212,13 +218,13 @@ gtk_window_get_decorated (window)
 
 ## void gtk_window_set_icon_list (GtkWindow *window, GList *list)
 =for apidoc
-=arg ... (list) a list of Gtk2::Gdk::Pixbufs
+=for arg ... of Gtk2::Gdk::Pixbuf's
 Sets up the icon representing a Gtk2::Window. The icon is used when the window
 is minimized (also known as iconified). Some window managers or desktop
 environments may also place it in the window frame, or display it in other
 contexts.
 
-L<"$window-E<gt>set_icon_list"> allows you to pass in the same icon in several
+L<set_icon_list ()|$window-E<gt>set_icon_list> allows you to pass in the same icon in several
 hand-drawn sizes. The list should contain the natural sizes your icon is
 available in; that is, don't scale the image before passing it to GTK+.
 Scaling is postponed until the last minute, when the desired final size is
@@ -235,7 +241,7 @@ gtk_window_set_icon_list (window, ...)
 	GtkWindow * window
     PREINIT:
 	GList * list = NULL;
-    PPCODE:
+    CODE:
 	for( items--; items > 0; items-- )
 		list = g_list_prepend(list, SvGdkPixbuf(ST(items)));
 	if( list )
@@ -246,7 +252,7 @@ gtk_window_set_icon_list (window, ...)
 
 # GList* gtk_window_get_icon_list (GtkWindow *window)
 =for apidoc
-Retrieves the list of icons set by L<$window-E<gt>set_icon_list>.
+Retrieves the list of icons set by L<set_icon_list ()|$window-E<gt>set_icon_list>.
 =cut
 void
 gtk_window_get_icon_list (window)
@@ -303,6 +309,9 @@ gtk_window_get_icon (window)
 
 
 ## void gtk_window_set_default_icon_list (GList *list)
+=for apidoc
+=for signature $window->set_default_icon_list ($pixbuf1, ...)
+=cut
 void
 gtk_window_set_default_icon_list (class, pixbuf, ...)
     PREINIT:

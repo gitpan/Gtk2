@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkColorSelection.xs,v 1.9 2003/11/18 04:36:34 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkColorSelection.xs,v 1.10.2.1 2003/12/04 00:21:16 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -134,7 +134,11 @@ gtk_color_selection_palette_from_string (class, string)
 	g_free (colors);
 
 ## gchar* gtk_color_selection_palette_to_string (const GdkColor *colors, gint n_colors)
-
+=for apidoc
+=for signature (string) = Gtk::ColorSelection->palette_to_string (...)
+=for arg ... of Gtk2::Gdk::Color's for the palette
+Encodes a palette as a string, useful for persistent storage.
+=cut
 SV *
 gtk_color_selection_palette_to_string (class, ...)
     PREINIT:

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.8 2003/11/18 06:28:17 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.9.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -103,19 +103,19 @@ int
 int_getters (layout)
 	PangoLayout * layout
     ALIAS:
-	Gtk2::Pango::Layout::get_width = 1
-	Gtk2::Pango::Layout::get_indent = 2
-	Gtk2::Pango::Layout::get_spacing = 3
-	Gtk2::Pango::Layout::get_justify = 4
-	Gtk2::Pango::Layout::get_single_paragraph_mode = 5
+	Gtk2::Pango::Layout::get_width = 0
+	Gtk2::Pango::Layout::get_indent = 1
+	Gtk2::Pango::Layout::get_spacing = 2
+	Gtk2::Pango::Layout::get_justify = 3
+	Gtk2::Pango::Layout::get_single_paragraph_mode = 4
     CODE:
 	RETVAL = 0;
 	switch (ix) {
-		case 1: RETVAL = pango_layout_get_width (layout); break;
-		case 2: RETVAL = pango_layout_get_indent (layout); break;
-		case 3: RETVAL = pango_layout_get_spacing (layout); break;
-		case 4: RETVAL = pango_layout_get_justify (layout); break;
-		case 5: RETVAL = pango_layout_get_single_paragraph_mode (layout); break;
+		case 0: RETVAL = pango_layout_get_width (layout); break;
+		case 1: RETVAL = pango_layout_get_indent (layout); break;
+		case 2: RETVAL = pango_layout_get_spacing (layout); break;
+		case 3: RETVAL = pango_layout_get_justify (layout); break;
+		case 4: RETVAL = pango_layout_get_single_paragraph_mode (layout); break;
 	}
    OUTPUT:
 	RETVAL
@@ -130,18 +130,18 @@ int_setters (layout, newval)
 	PangoLayout * layout
 	int newval
     ALIAS:
-	Gtk2::Pango::Layout::set_width = 1
-	Gtk2::Pango::Layout::set_indent = 2
-	Gtk2::Pango::Layout::set_spacing = 3
-	Gtk2::Pango::Layout::set_justify = 4
-	Gtk2::Pango::Layout::set_single_paragraph_mode = 5
+	Gtk2::Pango::Layout::set_width = 0
+	Gtk2::Pango::Layout::set_indent = 1
+	Gtk2::Pango::Layout::set_spacing = 2
+	Gtk2::Pango::Layout::set_justify = 3
+	Gtk2::Pango::Layout::set_single_paragraph_mode = 4
     CODE:
 	switch (ix) {
-		case 1: pango_layout_set_width (layout, newval); break;
-		case 2: pango_layout_set_indent (layout, newval); break;
-		case 3: pango_layout_set_spacing (layout, newval); break;
-		case 4: pango_layout_set_justify (layout, newval); break;
-		case 5: pango_layout_set_single_paragraph_mode (layout, newval); break;
+		case 0: pango_layout_set_width (layout, newval); break;
+		case 1: pango_layout_set_indent (layout, newval); break;
+		case 2: pango_layout_set_spacing (layout, newval); break;
+		case 3: pango_layout_set_justify (layout, newval); break;
+		case 4: pango_layout_set_single_paragraph_mode (layout, newval); break;
 	}
 
 
@@ -216,6 +216,9 @@ pango_layout_get_log_attrs (layout)
 void pango_layout_move_cursor_visually (PangoLayout *layout, gboolean strong, int old_index, int old_trailing, int direction, OUTLIST int new_index, OUTLIST int new_trailing) 
 
 ##  gboolean pango_layout_xy_to_index (PangoLayout *layout, int x, int y, int *index_, int *trailing) 
+=for apidoc
+=for signature (index, trailing) = $layout->xy_to_index ($x, $y)
+=cut
 void
 pango_layout_xy_to_index (layout, x, y)
 	PangoLayout *layout

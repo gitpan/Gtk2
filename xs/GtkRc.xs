@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRc.xs,v 1.10 2003/11/19 16:43:36 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRc.xs,v 1.12.2.2 2003/12/04 00:21:16 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -35,6 +35,12 @@ gtk_rc_add_default_file (class, filename)
 	filename
 
 ## void gtk_rc_set_default_files (gchar **filenames)
+=for apidoc
+=for signature Gtk2::Rc->set_default_files (file1, ...)
+=for arg file1 
+=for arg ... of strings, the rc files to be parsed
+Sets the list of files that GTK+ will read at the end of Gtk2->init.
+=cut
 void
 gtk_rc_set_default_files (class, ...)
     PREINIT:
@@ -235,7 +241,6 @@ colors (GtkRcStyle * style, GtkStateType state, GdkColor_ornull * newcolor=NULL)
 ## GtkRcStyle* gtk_rc_style_new (void)
 GtkRcStyle_noinc *
 gtk_rc_style_new (class)
-	SV * class
     C_ARGS:
 	/*void*/
 

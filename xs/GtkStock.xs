@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStock.xs,v 1.12 2003/11/18 04:36:34 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStock.xs,v 1.14.2.1 2003/12/04 00:21:16 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -85,7 +85,13 @@ SvGtkStockItem (SV * sv)
 
 MODULE = Gtk2::Stock	PACKAGE = Gtk2::Stock	PREFIX = gtk_stock_
 
+=for include build/stock_items.podi
+=cut
+
 ###  void gtk_stock_add (const GtkStockItem *items, guint n_items) 
+=for apidoc
+=for arg ... of Gtk2::StockItem's to be added
+=cut
 void
 gtk_stock_add (class, ...)
     PREINIT:

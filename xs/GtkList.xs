@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkList.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkList.xs,v 1.7.2.2 2003/12/16 04:41:09 muppetman Exp $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you
@@ -39,8 +39,11 @@ gtk_list_new (class)
 ## parameter order flipped on this function so the item
 ## list soaks up the rest of the arg stack
 ##  void gtk_list_insert_items (GtkList *list, GList *items, gint position) 
+=for apidoc
+=for arg ... of Gtk2::ListItem's to be inserted
+=cut
 void
-gtk_list_insert_items (list, position, list_item, ...)
+gtk_list_insert_items (list, position, ...)
 	GtkList       * list
 	gint            position
     PREINIT:
@@ -49,15 +52,18 @@ gtk_list_insert_items (list, position, list_item, ...)
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));
-	if( list )
+	if( list_items )
 	{
 		gtk_list_insert_items(list, list_items, position);
 		g_list_free(list_items);
 	}
 
 ##  void gtk_list_append_items (GtkList *list, GList *items) 
+=for apidoc
+=for arg ... of Gtk2::ListItem's to be appended
+=cut
 void
-gtk_list_append_items (list, list_item, ...)
+gtk_list_append_items (list, ...)
 	GtkList       * list
     PREINIT:
 	GList * list_items = NULL;
@@ -65,15 +71,19 @@ gtk_list_append_items (list, list_item, ...)
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));
-	if( list )
+	if( list_items )
 	{
 		gtk_list_append_items(list, list_items);
 		g_list_free(list_items);
 	}
 
 ##  void gtk_list_prepend_items (GtkList *list, GList *items) 
+=for apidoc
+=for arg list_item 
+=for arg ... of Gtk2::ListItem's to be prepended
+=cut
 void
-gtk_list_prepend_items (list, list_item, ...)
+gtk_list_prepend_items (list, ...)
 	GtkList       * list
     PREINIT:
 	GList * list_items = NULL;
@@ -81,15 +91,19 @@ gtk_list_prepend_items (list, list_item, ...)
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));
-	if( list )
+	if( list_items )
 	{
 		gtk_list_prepend_items(list, list_items);
 		g_list_free(list_items);
 	}
 
 ##  void gtk_list_remove_items (GtkList *list, GList *items) 
+=for apidoc
+=for arg list_item 
+=for arg ... of Gtk2::ListItem's to be removed
+=cut
 void
-gtk_list_remove_items (list, list_item, ...)
+gtk_list_remove_items (list, ...)
 	GtkList       * list
     PREINIT:
 	GList * list_items = NULL;
@@ -97,7 +111,7 @@ gtk_list_remove_items (list, list_item, ...)
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));
-	if( list )
+	if( list_items )
 	{
 		gtk_list_remove_items(list, list_items);
 		g_list_free(list_items);
@@ -116,7 +130,7 @@ gtk_list_remove_items (list, list_item, ...)
 ##	for( items--; items > 0; items-- )
 ##		list_items = g_list_prepend(list_items, 
 ##					SvGtkListItem(ST(items)));
-##	if( list )
+##	if( list_items )
 ##	{
 ##		gtk_list_remove_items_no_unref(list, list_items);
 ##		g_list_free(list_items);

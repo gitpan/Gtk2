@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconFactory.xs,v 1.14 2003/11/21 07:38:06 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconFactory.xs,v 1.14.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -105,7 +105,7 @@ MODULE = Gtk2::IconFactory	PACKAGE = Gtk2::IconSize	PREFIX = gtk_icon_size_
 
 ##  gboolean gtk_icon_size_lookup (GtkIconSize size, gint *width, gint *height) 
 =for apidoc
-=signature (width, height) = Gtk2::IconSize->lookup ($size)
+=for signature (width, height) = Gtk2::IconSize->lookup ($size)
 =cut
 void
 gtk_icon_size_lookup (class, size)
@@ -124,7 +124,7 @@ gtk_icon_size_lookup (class, size)
 
 ##  gboolean gtk_icon_size_lookup_for_settings (GtkSettings *settings, GtkIconSize size, gint *width, gint *height) 
 =for apidoc
-=signature (width, height) = Gtk2::IconSize->lookup_for_settings ($settings, $size)
+=for signature (width, height) = Gtk2::IconSize->lookup_for_settings ($settings, $size)
 =cut
 void
 gtk_icon_size_lookup_for_settings (class, settings, size, width, height)

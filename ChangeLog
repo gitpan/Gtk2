@@ -1,3 +1,197 @@
+2003/12/15 23:18 (-0500) muppetman
+
+	* Gtk2.pm, README: stable (bugfix) release 1.021
+
+	* xs/GtkList.xs: merge ross' fix from HEAD; list validity checks
+	were being performed on the wrong values.
+
+	* xs/GtkTreeStore.xs: merged my treestore->reorder fix from HEAD; was
+	reading indexes from stack incorrectly.  regression tests are in HEAD.
+
+2003/12/14 14:41 (-0500) muppetman
+
+	* xs/GtkTreeModel.xs: typo in pod; kaffee's fix merged from HEAD.
+
+2003/12/12 11:39 (-0500) muppetman
+
+	* xs/GtkWidget.xs: alias values in get_flags got changed, but the
+	switches on ix were not updated, leading to bugs whenever apps tried
+	to read or write flag values.  fixed.  renamed get_flags to
+	flags_handler (it's hidden from API docs), and created a new xsub
+	named flags (aliased to get_flags) as a binding for GTK_WIDGET_FLAGS.
+
+	A t/01.GtkWidget.t
+	* MANIFEST: new test, an attempt to catch future flags regressions.
+
+	* MANIFEST: changelog says fetch_faq.pl was added to MANIFEST, but it
+	wasn't there.
+
+2003/12/11 22:16 (-0500) muppetman
+
+	* Gtk2.pm, README: stable release 1.020
+	
+	* Makefile.PL: require Glib 1.020
+
+	* podifystockitems.pl: don't use -init; not needed, and keeps the
+	build from working when no display is available.
+
+2003/12/11 16:53 (-0500) muppetman
+
+	* t/27.GtkClipboard.t, t/30.GtkCellRenderer.t, t/text-iter-searches.t:
+	these didn't skip all tests when there is no display, making builds
+	fail on headless build servers.  it would be nice to wrap up some of
+	this testing boilerplate a bit more.
+
+2003/12/04 22:28 (-0500) muppetman
+
+	* Gtk2.pm, README, Makefile.PL: bump version to 1.014 for release, and
+	require Glib.pm
+
+2003/12/04 09:44 (-0500) rwmcfa1
+
+	* : Merged from HEAD
+	
+	* Makefile.PL: --enable-faq added and worked out
+
+	* fetch_faq.pl, MANIFEST: initial import for fetch_faq.pl, needs 
+	testing
+
+2003/12/04 00:56 (-0500) rwmcfa1
+
+	* xs/GtkRadioButton.xs: broken signature fixed
+
+2003/12/03 21:13 (-0500) muppetman
+
+	* Gtk2.pm: sync the AUTHORS section with the AUTHORS file.
+
+	* AUTHORS: doesn't need to point to itself.  use a pointer to LICENSE
+	instead of boilerplate longer than the file's contents.
+
+2003/12/03 19:16 (-0500) rwmcfa1
+
+	* xs/(bunch).xs: ... (list) comments corrected
+
+	* xs/GtkTreeDnd.xs: ^ and fixed bug in api of 
+	gtk_tree_drag_source_drag_data_get, selection_data is an out param.
+
+2003/12/03 17:37 (-0500) rwmcfa1
+
+	* xs/(bunch).xs: s/=(arg|signature)/=for $1/
+
+2003/12/02 00:46 (-0500) muppetman
+
+	* xs/GdkEvent.xs, xs/GdkPixmap.xs, xs/GtkObject.xs: doc
+
+2003/12/01 23:25 (-0500) rwmcfa1
+
+	* xs/GdkDnd.xs xs/GdkProperty.xs, xs/GtkClipboard.xs, xs/GtkDnd.xs,
+	xs/GtkListStore.xs, xs/GtkSelection.xs, xs/GtkTextBuffer.xs,
+	xs/GtkTreeDnd.xs, xs/GtkTreeStore.xs, xs/GtkTreeView.xs,
+	xs/GtkTreeViewColumn.xs: api doc additions.
+
+
+2003/11/29 16:51 (-0500) muppetman
+
+	* t/ignore_keyboard.pl: merge test helper script from head
+	* Gtk2.pm, README: bump to 1.013
+	* Makefile.PL: require Glib 1.013
+
+2003/11/29 12:21 (-0500) muppetman
+
+	* xs/GtkMessageDialog.xs: gtk_message_dialog_new uses printf-like
+	semantics and does not offer a safe literal version.  pass the message
+	through "%s" to be safe, and allow Gtk2::MessageDialog->new to take
+	printf-like arguments to be nice.
+
+2003/11/29 11:23 (-0500) rwmcfa1
+
+	* MANIFEST: missing files added
+
+	* t/ignore_keyboard.pl: initial import
+
+	* t/*.t: use the new ignore_keyboard.pl stuff so that tests won't fail
+	if you accidentally type while they're going on.
+
+2003/11/29 11:23 (-0500) muppetman
+
+	* MANIFEST
+	A examples/inline-images.pl: new example
+
+	* xs/GdkPixbuf.xs: lots of pod for various hard-to-use functions.
+	removed unnecessary length() parameter from new_from_inline(), which
+	will break any code that was using it, but it's really hard to use
+	as it is so i can't imagine anyone's using it.  if you are, i
+	apologize.
+
+2003/11/28 21:57 (-0500) muppetman
+
+	* xs/GtkRc.xs: SV * class isn't needed
+
+2003/11/28 14:54 (-0500) rwmcfa1
+
+	* Makefile.PL: DOC_PL_DEPENDS -> POD_DEPENDS
+
+2003/11/28 12:44 (-0500) rwmcfa1
+
+	* Gtk2.pm: fixed bug in cleanpath code, spotty by kaffee
+ 
+	* Makefile.PL: when running podifystockitems.pl include blib path for 
+	Gtk2, it may not be installed yet.
+	
+	* xs/Gdk.xs: doc ^ and gdk_threads -> gdk_threads_init
+
+	* xs/GdkColor.xs, xs/GdkDnd.xs, xs/GdkDrawable.xs, xs/GdkGC.xs,
+	xs/GdkProperty.xs, xs/GdkSelection.xs, xs/GtkColorSelection.xs,
+	xs/GtkCombo.xs, xs/GtkContainer.xs, xs/GtkCurve.xs,
+	xs/GtkFontSelection.xs, xs/GtkList.xs, xs/GtkListStore.xs,
+	xs/GtkPaned.xs, xs/GtkRc.xs, xs/GtkSelection.xs, xs/GtkStock.xs,
+	xs/GtkStyle.xs, xs/GtkTreeStore.xs, xs/GtkWidget.xs, xs/PangoFont.xs,
+	xs/PangoLayout.xs, xs/PangoTabs.xs: doc updates, including ALIAS'es 
+	starting at 0 where appropriate.
+
+2003/11/25 11:46 (-0500) rwmcfa1
+
+	* podifystockitems.pl: initial import
+
+	* Gtk2.pm, xs/GtkButton.xs, xs/GtkWidget.xs, xs/GtkWindow.xs: link 
+	corrections
+
+	* Makefile.PL: use new DOC_PL_DEPENDS var, added rule for building 
+	stock_items.podi
+
+	* xs/Gtk2.xs: cause Gtk2::Separator and Gtk2::Scrollbar to have pages
+
+	* xs/GtkStock.xs: use new include system to put list of stock items in 
+	pod
+
+2003/11/24 11:27 (-0500) rwmcfa1
+
+	* xs/GtkCombo.xs, xs/GtkTextBuffer.xs, xs/GtkTextIter.xs,
+	xs/GtkTreeViewColumn.xs, xs/GtkWidget.xs, xs/GtkWindow.xs: doc updates
+
+2003/11/24 11:27 (-0500) muppetman
+
+	* MANIFEST: added GdkKeys.xs
+
+	* xs/GtkDialog.xs: nearly doubled the size of the file with api 
+	documentation, mostly copied or adapted from the C api reference.
+	re-ordered some of the xsubs to make more sense in the doc, but
+	changed no code.
+
+	* xs/GtkWidget.xs: added some 2.2.x methods that got omitted by
+	accident: get_root_window, get_screen, and has_screen.
+
+2003/11/23 20:01 (-0500) rwmcfa1
+
+	* xs/GdkKeys.xs: initial import, implements Gtk2::Gdk::Keymap and 
+	Gtk2::Gdk::Keyval functions. some need Gtk2::Gdk::KeymapKey typemap.
+
+	* xs_files-2.0: added ^
+
+2003/11/21 10:43 (-0500) muppetman
+
+	* xs/GtkWindow.xs: add some enums to Gtk2::Window's doc.
+
 2003/11/21 02:16 (-0500) muppetman
 
 	* Gtk2.pm, README, Makefile.PL: update requirements to Glib 1.012,

@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.56 2003/11/21 07:38:06 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.59.2.4 2003/12/12 03:24:35 muppetman Exp $
 #
 
 use 5.008;
@@ -32,7 +32,7 @@ use Cwd;
 our %build_reqs = (
 	'perl-ExtUtils-Depends'   => '0.1',
 	'perl-ExtUtils-PkgConfig' => '1.00',
-	'perl-Glib'               => '1.012',
+	'perl-Glib'               => '1.020',
 	'Gtk+'                    => '2.0.0',
 );
 
@@ -120,6 +120,27 @@ our %pod_files = (
 	Glib::MakeHelper->do_pod_files (@xs_files),
 );
 
+if (grep /enable[-_]faq/i, @ARGV)
+{
+	print STDERR "Including FAQ in pod, retrieved from Gtk2-Perl site.\n";
+	# Writing a fake Makefile ensures that CPAN will pick up the correct
+	# dependencies and install them.
+	unless (eval "use LWP; 1") 
+	{
+	   warn "$@\n";
+	   WriteMakefile(
+	         PREREQ_FATAL => 1,
+	         PREREQ_PM    => {
+	            'LWP' => 0.1,
+	         },
+	   );
+	   exit 1; # not reached
+	}
+	require 'fetch_faq.pl';
+	$pm_files{'build/FAQ.pod'} = '$(INST_LIBDIR)/Gtk2/FAQ.pod';
+	$pod_files{'build/FAQ.pod'} = '$(INST_MAN3DIR)/Gtk2::devel.$(MAN3EXT)';
+}
+
 #
 # autogeneration
 #
@@ -188,7 +209,8 @@ WriteMakefile(
 
 sub MY::postamble
 {
-	my $text = Glib::MakeHelper->postamble_clean ()
+	my $text = "POD_DEPENDS=build/stock_items.podi\n\n"
+		 . Glib::MakeHelper->postamble_clean ()
 	         . Glib::MakeHelper->postamble_docs (@xs_files)
 	         . Glib::MakeHelper->postamble_rpms (
 			'GTK_RUN' => $runtime_reqs{'Gtk+'},
@@ -203,6 +225,12 @@ sub MY::postamble
 	$text .= " 
 # rebuild the makefile if the file lists change
 Makefile : ".join(" ", @lists)."
+
+build/stock_items.podi: podifystockitems.pl
+	\$(PERL) -I \$(INST_LIB) -I \$(INST_ARCHLIB) \$< > \$@
+
+build/FAQ.pod: fetch_faq.pl
+	$^X \$<
 ";
 
 	# this installation stuff doesn't make sense on windows, where

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.8 2003/11/21 06:31:49 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.8.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -60,7 +60,7 @@ gtk_tree_sortable_sort_column_changed (sortable)
 
 #### gboolean gtk_tree_sortable_get_sort_column_id (GtkTreeSortable *sortable, gint *sort_column_id, GtkSortType *order)
 =for apidoc
-=signature (sort_column_id, order) = $sortable->get_sort_column_id
+=for signature (sort_column_id, order) = $sortable->get_sort_column_id
 Returns sort_column_id, an integer and order, a Gtk2::SortType.
 =cut
 void

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDnd.xs,v 1.6 2003/11/18 04:36:33 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDnd.xs,v 1.7.2.3 2003/12/04 00:21:16 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -27,26 +27,26 @@ SV *
 members (dc)
 	GdkDragContext * dc
     ALIAS:
-	Gtk2::Gdk::DragContext::protocol = 1
-	Gtk2::Gdk::DragContext::is_source = 2
-	Gtk2::Gdk::DragContext::source_window = 3
-	Gtk2::Gdk::DragContext::dest_window = 4
-	Gtk2::Gdk::DragContext::actions = 6
-	Gtk2::Gdk::DragContext::suggested_action = 7
-	Gtk2::Gdk::DragContext::action = 8
-	Gtk2::Gdk::DragContext::start_time = 9
+	Gtk2::Gdk::DragContext::protocol = 0
+	Gtk2::Gdk::DragContext::is_source = 1
+	Gtk2::Gdk::DragContext::source_window = 2
+	Gtk2::Gdk::DragContext::dest_window = 3
+	Gtk2::Gdk::DragContext::actions = 5
+	Gtk2::Gdk::DragContext::suggested_action = 6
+	Gtk2::Gdk::DragContext::action = 7
+	Gtk2::Gdk::DragContext::start_time = 8
     CODE:
 	RETVAL = NULL;
 	switch (ix) {
-	    case 1: RETVAL = newSVGdkDragProtocol (dc->protocol); break;
-	    case 2: RETVAL = newSViv (dc->is_source); break;
-	    case 3: RETVAL = newSVGdkWindow (dc->source_window); break;
-	    case 4: RETVAL = newSVGdkWindow (dc->dest_window); break;
+	    case 0: RETVAL = newSVGdkDragProtocol (dc->protocol); break;
+	    case 1: RETVAL = newSViv (dc->is_source); break;
+	    case 2: RETVAL = newSVGdkWindow (dc->source_window); break;
+	    case 3: RETVAL = newSVGdkWindow (dc->dest_window); break;
 	    /* must use get_targets to access targets */
-	    case 6: RETVAL = newSVGdkDragAction (dc->actions); break;
-	    case 7: RETVAL = newSVGdkDragAction (dc->suggested_action); break;
-	    case 8: RETVAL = newSVGdkDragAction (dc->action); break;
-	    case 9: RETVAL = newSVuv (dc->start_time); break;
+	    case 5: RETVAL = newSVGdkDragAction (dc->actions); break;
+	    case 6: RETVAL = newSVGdkDragAction (dc->suggested_action); break;
+	    case 7: RETVAL = newSVGdkDragAction (dc->action); break;
+	    case 8: RETVAL = newSVuv (dc->start_time); break;
 	}
     OUTPUT:
 	RETVAL
@@ -102,6 +102,9 @@ gdk_drag_get_selection (context)
 	GdkDragContext *context
 
 ##  GdkDragContext * gdk_drag_begin (GdkWindow *window, GList *targets) 
+=for apidoc
+=for arg ... of Gtk2::Gdk::Atom's
+=cut
 GdkDragContext_noinc *
 gdk_drag_begin (class, window, ...)
 	GdkWindow *window
@@ -122,7 +125,7 @@ gdk_drag_begin (class, window, ...)
 
 ##  guint32 gdk_drag_get_protocol_for_display (GdkDisplay *display, guint32 xid, GdkDragProtocol *protocol) 
 =for apidoc
-=signature (ret, protocol) = Gtk2::Gdk::DragContext->get_protocol_for_display ($display, $xid)
+=for signature (ret, protocol) = Gtk2::Gdk::DragContext->get_protocol_for_display ($display, $xid)
 =cut
 void
 gdk_drag_get_protocol_for_display (class, display, xid)
@@ -138,7 +141,7 @@ gdk_drag_get_protocol_for_display (class, display, xid)
 
 ##  void gdk_drag_find_window_for_screen (GdkDragContext *context, GdkWindow *drag_window, GdkScreen *screen, gint x_root, gint y_root, GdkWindow **dest_window, GdkDragProtocol *protocol) 
 =for apidoc
-=signature (dest_window, protocol) = $context->find_window_for_screen ($drag_window, $screen, $x_root, $y_root)
+=for signature (dest_window, protocol) = $context->find_window_for_screen ($drag_window, $screen, $x_root, $y_root)
 =cut
 void
 gdk_drag_find_window_for_screen (context, drag_window, screen, x_root, y_root)
@@ -161,7 +164,7 @@ gdk_drag_find_window_for_screen (context, drag_window, screen, x_root, y_root)
 
 ##  guint32 gdk_drag_get_protocol (guint32 xid, GdkDragProtocol *protocol) 
 =for apidoc
-=signature (ret, protocol) = Gtk2::Gdk::DragContext->get_protocol ($xid)
+=for signature (ret, protocol) = Gtk2::Gdk::DragContext->get_protocol ($xid)
 =cut
 void
 gdk_drag_get_protocol (class, xid)
@@ -177,7 +180,7 @@ gdk_drag_get_protocol (class, xid)
 
 ##  void gdk_drag_find_window (GdkDragContext *context, GdkWindow *drag_window, gint x_root, gint y_root, GdkWindow **dest_window, GdkDragProtocol *protocol) 
 =for apidoc
-=signature (dest_window, protocol) = $context->find_window ($drag_window, $x_root, $y_root)
+=for signature (dest_window, protocol) = $context->find_window ($drag_window, $x_root, $y_root)
 =cut
 void
 gdk_drag_find_window (context, drag_window, x_root, y_root)
