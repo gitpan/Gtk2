@@ -16,14 +16,14 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkNotebook.xs,v 1.6 2003/07/15 12:39:01 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkNotebook.xs,v 1.7 2003/09/10 01:19:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
 
 static GtkWidget *
-ensure_label (SV * sv)
+ensure_label_widget (SV * sv)
 {
 	GtkWidget * label = NULL;
 	if (!sv || !SvTRUE (sv))
@@ -42,6 +42,7 @@ GtkWidget *
 gtk_notebook_new (class)
 	SV * class
     C_ARGS:
+	/*void*/
 
 ## void gtk_notebook_append_page (GtkNotebook *notebook, GtkWidget *child, GtkWidget *tab_label)
 void
@@ -50,7 +51,7 @@ gtk_notebook_append_page (notebook, child, tab_label=NULL)
 	GtkWidget   * child
 	SV          * tab_label
     C_ARGS:
-	notebook, child, ensure_label (tab_label)
+	notebook, child, ensure_label_widget (tab_label)
 
 ## void gtk_notebook_append_page_menu (GtkNotebook *notebook, GtkWidget *child, GtkWidget *tab_label, GtkWidget *menu_label)
 void
@@ -67,7 +68,7 @@ gtk_notebook_prepend_page (notebook, child, tab_label=NULL)
 	GtkWidget   * child
 	SV          * tab_label
     C_ARGS:
-	notebook, child, ensure_label (tab_label)
+	notebook, child, ensure_label_widget (tab_label)
 
 ## void gtk_notebook_prepend_page_menu (GtkNotebook *notebook, GtkWidget *child, GtkWidget *tab_label, GtkWidget *menu_label)
 void
@@ -85,7 +86,7 @@ gtk_notebook_insert_page (notebook, child, tab_label, position)
 	SV          * tab_label
 	gint          position
     C_ARGS:
-	notebook, child, ensure_label (tab_label), position
+	notebook, child, ensure_label_widget (tab_label), position
 
 ## void gtk_notebook_insert_page_menu (GtkNotebook *notebook, GtkWidget *child, GtkWidget *tab_label, GtkWidget *menu_label, gint position)
 void

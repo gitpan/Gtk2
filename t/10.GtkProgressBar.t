@@ -1,6 +1,9 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/10.GtkProgressBar.t,v 1.3 2003/08/19 14:25:13 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/10.GtkProgressBar.t,v 1.4 2003/09/11 15:01:32 rwmcfa1 Exp $
 #
+
+use strict;
+use warnings;
 
 #########################
 # GtkProgressBar Tests
@@ -24,18 +27,19 @@ else
 
 #########################
 
-ok( $win = Gtk2::Window->new('toplevel') );
+ok( my $win = Gtk2::Window->new('toplevel') );
 
 $win->set_title('GtkProgressBar.t Test Window');
 
-ok( $vbox = Gtk2::VBox->new( 0, 5 ) );
+ok( my $vbox = Gtk2::VBox->new( 0, 5 ) );
 $win->add($vbox);
 
-@ori = qw/left-to-right right-to-left top-to-bottom bottom-to-top/;
+my @ori = qw/left-to-right right-to-left top-to-bottom bottom-to-top/;
 
+my @prog;
 foreach (@ori)
 {
-	ok( $prog = Gtk2::ProgressBar->new );
+	ok( my $prog = Gtk2::ProgressBar->new );
 	$vbox->pack_start($prog, 0, 0, 0);
 	$prog->set_orientation($_);
 	push @prog, $prog;

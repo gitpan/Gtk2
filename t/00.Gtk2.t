@@ -1,6 +1,9 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.5 2003/08/19 14:25:13 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.6 2003/09/11 15:01:31 rwmcfa1 Exp $
 #
+
+use strict;
+use warnings;
 
 #########################
 # Gtk2 Tests
@@ -33,6 +36,7 @@ SKIP:
 	Gtk2->init_add( sub { ok($_[0] eq 'foo'); }, 'foo' );
 	ok(1);
 
+	my $q1;
 	ok( $q1 = Gtk2->quit_add( 0, sub { Gtk2->quit_remove($q1); ok(1); } ) );
 	ok( Gtk2->quit_add( 0, sub { ok($_[0] eq 'bar'); }, 'bar' ) );
 

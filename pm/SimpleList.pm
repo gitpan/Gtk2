@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.8 2003/08/20 01:25:50 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.9 2003/09/03 23:23:32 rwmcfa1 Exp $
 #
 
 #########################
@@ -398,7 +398,7 @@ Gtk2::SimpleList - A simple interface to Gtk2's complex MVC list widget
 
 =head1 SYNOPSIS
 
-  use Gtk2 -init;
+  use Gtk2 '-init';
   use Gtk2::SimpleList;
 
   use constant TRUE  => 1;

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListStore.xs,v 1.10 2003/08/18 16:22:46 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListStore.xs,v 1.11 2003/09/07 19:56:54 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -69,7 +69,7 @@ gtk_list_store_set (list_store, iter, ...)
 	GtkListStore *list_store;
 	GtkTreeIter *iter
     PREINIT:
-	int i;
+	int i, ncols;
     CODE:
 	/* require at least one pair --- that means there needs to be
 	 * four items on the stack.  also require that the stack has an
@@ -79,6 +79,7 @@ gtk_list_store_set (list_store, iter, ...)
 		croak ("Usage: $liststore->set ($iter, column1, value1, column2, value2, ...)\n"
 		       "   there must be a value for every column number");
 	}
+	ncols = gtk_tree_model_get_n_columns (GTK_TREE_MODEL (list_store));
 	for (i = 2 ; i < items ; i+= 2) {
 		gint column;
 		GValue gvalue = {0, };
@@ -89,20 +90,28 @@ gtk_list_store_set (list_store, iter, ...)
 
 		//warn ("  %d   %d   %s\n", i, column, SvPV_nolen (ST (i+1)));
 
-		g_value_init (&gvalue,
-		              gtk_tree_model_get_column_type (GTK_TREE_MODEL (list_store),
-							      column));
-		if (!gperl_value_from_sv (&gvalue, ST (i+1))) {
-			/* FIXME need a more useful error message here,
-			 *   as this could be triggered by somebody who
-			 *   doesn't know how the function works, and i
-			 *   doubt this message would clue him in */
-			croak ("failed to convert parameter %d from SV to GValue",
-			       i);
+		if (column >= 0 && column < ncols) {
+
+			g_value_init (&gvalue,
+			              gtk_tree_model_get_column_type
+			                        (GTK_TREE_MODEL (list_store),
+			                         column));
+			if (!gperl_value_from_sv (&gvalue, ST (i+1))) {
+				/* FIXME need a more useful error message here,
+				 *   as this could be triggered by somebody who
+				 *   doesn't know how the function works, and i
+				 *   doubt this message would clue him in */
+				croak ("failed to convert parameter %d from SV to GValue",
+				       i);
+			}
+			gtk_list_store_set_value (GTK_LIST_STORE (list_store),
+			                          iter, column, &gvalue);
+			g_value_unset (&gvalue);
+
+		} else {
+			warn ("can't set value for column %d, model only has %d columns",
+			      column, ncols);
 		}
-		gtk_list_store_set_value (GTK_LIST_STORE (list_store),
-		                          iter, column, &gvalue);
-		g_value_unset (&gvalue);
 	}
 
 

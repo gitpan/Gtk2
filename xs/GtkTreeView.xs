@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.11 2003/08/27 22:42:46 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.12 2003/09/07 19:56:54 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -464,11 +464,12 @@ gtk_tree_view_get_path_at_pos (tree_view, x, y)
     PPCODE:
 	if (!gtk_tree_view_get_path_at_pos (tree_view, x, y, &path, &column, &cell_x, &cell_y))
 		XSRETURN_EMPTY;
-	EXTEND (SP, 4);
-	PUSHs (sv_2mortal (newSVGtkTreePath_own (path)));
-	PUSHs (sv_2mortal (newSVGtkTreeViewColumn (column)));
-	PUSHs (sv_2mortal (newSViv (cell_x)));
-	PUSHs (sv_2mortal (newSViv (cell_y)));
+	XPUSHs (sv_2mortal (newSVGtkTreePath_own (path)));
+	if (GIMME_V == G_ARRAY) {
+		XPUSHs (sv_2mortal (newSVGtkTreeViewColumn (column)));
+		XPUSHs (sv_2mortal (newSViv (cell_x)));
+		XPUSHs (sv_2mortal (newSViv (cell_y)));
+	}
 
 
 ### void gtk_tree_view_get_cell_area (GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, GdkRectangle *rect)

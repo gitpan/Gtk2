@@ -1,6 +1,9 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/18.GtkNotebook.t,v 1.2 2003/08/19 14:25:13 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/18.GtkNotebook.t,v 1.3 2003/09/11 15:01:32 rwmcfa1 Exp $
 #
+
+use strict;
+use warnings;
 
 #########################
 # GtkNotbook Tests
@@ -26,7 +29,7 @@ else
 
 my $win = Gtk2::Window->new;
 
-ok( $nb = Gtk2::Notebook->new );
+ok( my $nb = Gtk2::Notebook->new );
 $win->add($nb);
 ok(1);
 

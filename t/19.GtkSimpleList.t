@@ -1,6 +1,9 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/19.GtkSimpleList.t,v 1.6 2003/08/19 14:25:13 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/19.GtkSimpleList.t,v 1.7 2003/09/11 15:01:32 rwmcfa1 Exp $
 #
+
+use strict;
+use warnings;
 
 #########################
 # GtkSimpleList Tests

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.29 2003/08/29 03:17:08 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.33 2003/09/12 03:52:22 muppetman Exp $
 #
 
 package Gtk2;
@@ -14,7 +14,7 @@ use Glib;
 
 require DynaLoader;
 
-our $VERSION = '0.96';
+our $VERSION = '1.00rc1';
 
 our @ISA = qw(DynaLoader);
 
@@ -28,7 +28,15 @@ sub import {
 # this is critical -- tell dynaloader to load the module so that its 
 # symbols are available to all other modules.  without this, nobody
 # else can use important functions like gtk2perl_new_object!
-sub dl_load_flags { 0x01 }
+# 
+# hrm.  win32 doesn't really use this, because we have to link the whole
+# thing at compile time to ensure all the symbols are defined.
+#
+# on darwin, at least with the particular 5.8.0 binary i'm using, perl
+# complains "Can't make loaded symbols global on this platform" when this
+# is set to 0x01, but goes on to work fine.  returning 0 here avoids the
+# warning and doesn't appear to break anything.
+sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
 # now load the XS code.
 bootstrap Gtk2 $VERSION;
@@ -188,6 +196,13 @@ a little easier.
 
 Gtk2::SimpleList(3pm) makes the GtkListStore and GtkTreeModel a I<lot>
 easier to use.
+
+Gtk2::Pango(3pm) exports various little-used but important constants you may
+need to work with pango directly.
+
+Gtk2::Dialog::Responses(3pm) defines named constants for the numeric values
+of standard Gtk2::Dialog response codes seen only inside the response
+signal handler.
 
 Gtk2 also provides code to make it relatively painless to create perl
 wrappers for other GLib/Gtk-based libraries.  See Gtk2::CodeGen, 

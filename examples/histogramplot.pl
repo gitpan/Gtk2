@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/histogramplot.pl,v 1.5 2003/06/27 21:18:05 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/histogramplot.pl,v 1.6 2003/09/12 03:42:26 muppetman Exp $
 #
 # Copyright (c) 2002 by muppet, ported from C to gtk2-perl 2003 by muppet
 
@@ -58,11 +58,31 @@ sub threshold_to_screen {
 use Glib::Object::Subclass
 	'Gtk2::DrawingArea',
 	signals => {
+		#
+		# create a new signal...
+		#
 		threshold_changed => {
+			method      => 'do_threshold_changed',
 			flags       => [qw/run-first/],
 			return_type => undef, # void return
 			param_types => [], # instance and data are automatic
 		},
+		#
+		# override some built-ins...  note that for this to work
+		# there has to be a signal to go along with the virtual
+		# function you want to override...
+		#
+		# i chose do_size_request to keep from having the normal
+		# size_request method being called.
+		size_request => \&do_size_request,
+		# just to show it off...  you can use names, but you have
+		# to use a qualified name, or it looks in the current package
+		# at runtime, not setup time.
+		expose_event => __PACKAGE__.'::expose_event',
+		configure_event => \&configure_event,
+		motion_notify_event => \&motion_notify_event,
+		button_press_event => \&button_press_event,
+		button_release_event => \&button_release_event,
 	},
 	properties => [
 		Glib::ParamSpec->double ('threshold',
@@ -117,17 +137,6 @@ sub INIT_INSTANCE {
 			       button-release-mask
 			       pointer-motion-mask
 			       pointer-motion-hint-mask/]);
-
-	# we don't have proper virtual overrides yet.
-	# so, you need to connect to the signal of the base class.
-	# yes, i know this doesn't work if the method you need to override
-	# doesn't have a signal associated with it.
-	$plot->signal_connect (expose_event => \&expose_event);
-	$plot->signal_connect (configure_event => \&configure_event);
-	$plot->signal_connect (motion_notify_event => \&motion_notify_event);
-	$plot->signal_connect (button_press_event => \&button_press_event);
-	$plot->signal_connect (button_release_event => \&button_release_event);
-	$plot->signal_connect (size_request => \&size_request);
 }
 
 
@@ -181,23 +190,20 @@ sub calc_dims {
 	$plot->{textheight} = ($metrics->get_descent + $metrics->get_ascent)
 		            / Gtk2::Pango->scale; #PANGO_SCALE;
 	
-	#pango_font_metrics_unref (metrics);
-	
 	$plot->{chartleft} = $plot->{textwidth} + 2;
 	$plot->{chartwidth} = $plot->allocation->width - $plot->{chartleft};
 	$plot->{bottom} = $plot->allocation->height - $plot->{textheight} - 3;
 	$plot->{height} = $plot->{bottom};
 }
 
-
-# FIXME this virtual override doesn't get called, because the C function
-#       pointer in the parent class' class structure has not been altered.
-#  so, we have to connect to this as a signal.
-sub size_request {
+sub do_size_request {
 	my ($plot, $requisition) = @_;
+	warn "in class override for $_[0]\::do_size_request";
 
 	$requisition->width ($plot->{textwidth} + 2 + MIN_CHART_WIDTH);
 	$requisition->height ($plot->{textheight} + MIN_CHART_HEIGHT);
+
+	shift->signal_chain_from_overridden (@_);
 }
 
 

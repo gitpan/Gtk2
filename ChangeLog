@@ -1,3 +1,133 @@
+2003/09/11 23:51 muppetman
+
+	* ChangeLog, Gtk2.pm, MANIFEST, META.yml, README, debian/changelog,
+	debian/control: updated for 1.00rc1 release
+
+	* Makefile.PL: require Glib 1.00rc1
+
+2003/09/11 23:41 muppetman
+
+	* examples/histogramplot.pl: update to use the new, fixed overrides
+	features of Glib::Object::Subclass in Glib 1.00rc1.
+
+2003/09/11 11:01 rwmcfa1
+
+	* t/*.t: use strict and use warnings added and fixes made to allow
+	things to run with them.
+
+2003/09/10 15:04 rwmcfa1
+
+	* examples/socket.pl: make the same change in here that was made in 
+	the plug socket test way back when, use the perl socket is being run
+	with to run the plug script.
+
+2003/09/09 21:35 muppetman
+
+	* t/22.GtkListStore.t, t/23.GtkTreeStore.t, t/24.GtkTreeView.t,
+	 t/25.GtkTreeSelection.t: patch from torsten uses isa_ok() instead
+	 of is(ref(), ...) all over the place.
+
+2003/09/09 21:22 muppetman
+
+	* pm/Responses.pm, Gtk2.pm, Makefile.PL, gtk-demo/changedisplay.pl,
+	MANIFEST: tiny module adds named constants for the dialog responses,
+	with pod
+
+	* pm/Pango.pm: update the link in the see also section
+
+
+2003/09/09 19:52 rwmcfa1
+
+	* Makefile.PL: new rule to install examples/gtk-demo
+
+        * perl-Gtk2.spec: use new ^ rule to put examples and demo in bin rpm
+
+        * gtk-demo/appwindow.pl: fixed small bug with demo_find_file from last
+        commit.
+
+2003/09/09 17:28 rwmcfa1
+
+	* gtk-demo/(various): fixed things so that you do not have to be in the
+	gtk-demo directory to run it. the files just have to be in the same dir
+	as main.pl
+
+2003/09/08 23:15 muppetman
+
+	* xs/GtkNotebook.xs, api.pod: ensure that the second parameter to 
+	append_page, prepend_page and insert_page is always a widget by 
+	stringifying and wrapping a label around anything that's not a
+	Gtk2::Widget.
+
+2003/09/07 15:57 muppetman
+
+	* api.pod, xs/GtkTreeView.xs: patch from torsten makes get_path_at_pos
+	return just the path in scalar context.
+
+	* xs/GtkTreeStore.xs, xs/GtkListStore.xs: trap invalid columns supplied
+	to $(tree|list)store->set at the binding level, because the error
+	message from gtk doesn't make much sense.  (torsten's idea)
+
+2003/09/06 19:23 rwmcfa1
+
+	* Makefile.PL: dist-rpms build target added
+
+	* perl-Gtk2.spec.in: initial import
+
+2003/09/05 01:02 muppetman
+
+	* xs/Gtk2.xs: route Gtk-related g_log domains through gperl
+
+	* MANIFEST: updated
+
+	* xs/GdkRgb.xs: keep SvImageDataPointer private
+
+2003/09/04 22:20 muppetman
+
+	* Gtk2.pm, README, debian/changelog, META.yml, ChangeLog: prep for
+	0.97 release
+
+	* gtk2perl.h: export gtk2perl_menu_position_func
+
+	* Gtk2.exports, Makefile.PL: add exports file
+
+2003/09/04 18:48 rwmcfa1
+
+	* MANIFEST: gtk.typemap and t/26.GtkSimpleMenu.t added.
+
+2003/09/03 18:37 rwmcfa1
+
+	* pm/SimpleMenu.pm: pod doc added, no longer keep entries and menu_tree
+	around unless we're asked to.
+
+	* t/26.GtkSimpleMenu.t: inital import
+
+2003/08/31 19:59 muppetman
+
+	* CodeGen.pm, gdk.typemap: use Glib's new T_GPERL_GENERIC_WRAPPER to
+	cut out 2/3 of the typemap code.
+
+	* Gtk2.pm: don't set RTLD_GLOBAL on darwin, it generates a warning.
+
+	* Makefile.PL, README: we now require Glib 0.97 for 
+	T_GPERL_GENERIC_WRAPPER.
+
+	* gtk2perl.h, xs/GtkDnd.xs, xs/GtkSelection.xs, gtk.typemap: implement
+	GtkTargetList and several of the drag'n'drop APIs that depend on it.
+	done with custom code, as these are apparently somewhat internal
+	structures that don't have built-in boxed type support.
+
+2003/08/30 02:33 muppetman
+
+	changes made while listening to cheesy 80s scandinavian prog metal in
+	the middle of the night while everyone's asleep (oh, the nostalgia):
+
+	* AUTHORS, xs/GdkPixbuf.xs: patch from Anuradha Ratnaweera implements
+	Gtk2::Gdk::Pixbuf->new_from_xpm_data
+
+	* examples/timeouttest.pl: apparently this was broken for a long time.
+
+	* xs/Gtk2.xs: updated commentary.
+
 2003/08/28 23:17 muppetman
 
 	* Gtk2.pm, README, debian/changelog: updated for 0.96 release

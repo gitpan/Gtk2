@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/socket.pl,v 1.4 2003/05/17 13:31:01 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/socket.pl,v 1.5 2003/09/10 19:08:14 rwmcfa1 Exp $
 #
 
 
@@ -54,7 +54,7 @@ if( $pid < 0 )
 }
 if( $pid == 0 )
 {
-	exec(sprintf("perl plug.pl %d\n", $socket->get_id));
+	exec(sprintf("$^X plug.pl %d\n", $socket->get_id));
 }
 
 my $quitbtn = Gtk2::Button->new_from_stock('gtk-quit');

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.6 2003/08/18 07:59:59 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.7 2003/08/30 06:37:32 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -179,11 +179,22 @@ gdk_pixbuf_new_from_file (class, filename)
 #	GdkPixbufDestroyNotify destroy_fn
 #	gpointer destroy_fn_data
 
-### FIXME read data as list of strings on argument stack
-###  GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data) 
-#GdkPixbuf_noinc *
-#gdk_pixbuf_new_from_xpm_data (data)
-#	const char **data
+##  GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data) 
+GdkPixbuf_noinc *
+gdk_pixbuf_new_from_xpm_data (class, data, ...)
+	SV * class
+	SV * data
+	PREINIT:
+		char ** lines;
+		int i;
+	CODE:
+		lines = g_new (char *, items - 1);
+		for (i = 1; i < items; i++)
+			lines[i-1] = SvPV_nolen (ST (i));
+		RETVAL = gdk_pixbuf_new_from_xpm_data(lines);
+		g_free(lines);
+	OUTPUT:
+		RETVAL
 
 ## croaks on error
 ##  GdkPixbuf* gdk_pixbuf_new_from_inline (gint data_length, const guint8 *data, gboolean copy_pixels, GError **error) 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.10 2003/08/18 16:22:19 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.12 2003/09/05 05:04:05 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -31,8 +31,9 @@ gtk2perl_init_add_callback_invoke (GPerlCallback * callback)
 	retval = g_value_get_boolean (&return_value);
 	g_value_unset (&return_value);
 
-	/* TODO: it seems that this will only be called once.
-	 * if that is not the case then this next line is very bad */
+	/* according to the gtk source, init callbacks are forgotten
+	 * immediately after use; thus, we need to destroy the callback
+	 * object to avoid a leak. */
 	gperl_callback_destroy(callback);
 	
 	return retval;
@@ -62,6 +63,10 @@ BOOT:
 #include "register.xsh"
 	/* call the boot code for all the various other modules */
 #include "boot.xsh"
+	/* route Gtk+ log messages through perl's warn() and croak() */
+	gperl_handle_logs_for ("Gtk");
+	gperl_handle_logs_for ("Gdk");
+	gperl_handle_logs_for ("Pango");
 	}
 
  ##GTKMAIN_C_VAR const guint gtk_binary_age;
@@ -160,6 +165,7 @@ gint
 gtk_events_pending (class)
 	SV * class
     C_ARGS:
+	/*void*/
 
  ##
  ##/* The following is the event func GTK+ registers with GDK

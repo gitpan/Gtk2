@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.13 2003/08/18 16:22:46 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.15 2003/09/05 02:20:19 muppetman Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -106,5 +106,33 @@ void gtk2perl_read_gtk_target_entry (SV * sv, GtkTargetEntry * entry);
 		g_array_index ((arrayvar), GType, i-(first)) = t;	\
 	}								\
 	}
+
+
+/*
+ * some custom opaque object handling for private gtk structures needed 
+ * for doing drag and drop.
+ */
+typedef GtkTargetList GtkTargetList_ornull;
+SV * newSVGtkTargetList (GtkTargetList * list);
+#define newSVGtkTargetList_ornull(list)	((list) ? newSVGtkTargetList (list) : &PL_sv_undef)
+GtkTargetList * SvGtkTargetList (SV * sv);
+#define SvGtkTargetList_ornull(sv)	(SvTRUE (sv) ? SvGtkTargetList (sv) : NULL)
+
+SV * newSVGtkTargetEntry (GtkTargetEntry * entry);
+GtkTargetEntry * SvGtkTargetEntry (SV * sv);
+
+
+/*
+ * exported so Gnome2 can reuse it in wrappers.  other modules might want to
+ * do the same.  the callback for it needn't worry about param_types or
+ * return type, as this does all the marshaling by hand (the C function writes
+ * through the params, so we have to handle the stack specially).
+ */
+void gtk2perl_menu_position_func (GtkMenu       * menu,
+                                  gint          * x,
+                                  gint          * y,
+                                  gboolean      * push_in,
+                                  GPerlCallback * callback);
+
 
 #endif /* _GTK2PERL_H_ */

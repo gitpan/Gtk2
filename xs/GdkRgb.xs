@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.2 2003/08/18 07:59:59 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.3 2003/09/05 02:30:07 muppetman Exp $
  */
  #include "gtk2perl.h"
 
@@ -30,7 +30,7 @@
 ##  gulong gdk_rgb_xpixel_from_rgb (guint32 rgb) G_GNUC_CONST 
 */
 
-guchar *
+static guchar *
 SvImageDataPointer (SV * sv)
 {
 	if (SvIOK (sv))

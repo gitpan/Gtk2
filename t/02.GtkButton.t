@@ -1,6 +1,9 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/02.GtkButton.t,v 1.3 2003/08/19 14:25:13 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/02.GtkButton.t,v 1.4 2003/09/11 15:01:32 rwmcfa1 Exp $
 #
+
+use strict;
+use warnings;
 
 #########################
 # GtkButton Tests
@@ -24,10 +27,10 @@ else
 		'Gtk2->init_check failed, probably unable to open DISPLAY';
 }
 
-$win = Gtk2::Window->new;
+my $win = Gtk2::Window->new;
 $win->set_title('02.Gtkbutton.t');
 
-ok( $button = Gtk2::Button->new("Not Yet") );
+ok( my $button = Gtk2::Button->new("Not Yet") );
 ok(1);
 ok( $button = Gtk2::Button->new_with_label("Not Yet") );
 ok(1);
@@ -37,6 +40,7 @@ ok(1);
 $button->show;
 ok(1);
 
+my $win3;
 $button->signal_connect( "clicked" , sub
 	{
 		if( $_[0]->get_label eq 'Click _Me' )
@@ -71,9 +75,9 @@ ok(1);
 
 ok( $button->get_label eq 'Click _Me' );
 
-$win2 = Gtk2::Window->new;
+my $win2 = Gtk2::Window->new;
 
-ok( $button_stock = Gtk2::Button->new_from_stock('gtk-apply') );
+ok( my $button_stock = Gtk2::Button->new_from_stock('gtk-apply') );
 
 $win2->add($button_stock);
 ok(1);
@@ -88,7 +92,7 @@ ok( $button_stock->get_use_underline );
 
 $win3 = Gtk2::Window->new;
 
-ok( $button3 = Gtk2::Button->new('gtk-quit') );
+ok( my $button3 = Gtk2::Button->new('gtk-quit') );
 
 $button3->signal_connect( "clicked" , sub
 	{

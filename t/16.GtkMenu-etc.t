@@ -1,6 +1,9 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/16.GtkMenu-etc.t,v 1.5 2003/08/19 14:25:13 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/16.GtkMenu-etc.t,v 1.6 2003/09/11 15:01:32 rwmcfa1 Exp $
 #
+
+use strict;
+use warnings;
 
 #########################
 # GtkMenu-etc Tests
@@ -24,15 +27,16 @@ else
 
 #########################
 
-ok( $win = Gtk2::Window->new('toplevel') );
+ok( my $win = Gtk2::Window->new('toplevel') );
 $win->set_title('GtkMenu-etc.t Test Window');
 
-ok( $vbox = Gtk2::VBox->new(0, 5) );
+ok( my $vbox = Gtk2::VBox->new(0, 5) );
 $win->add($vbox);
 
-ok( $menubar = Gtk2::MenuBar->new );
+ok( my $menubar = Gtk2::MenuBar->new );
 $vbox->pack_start($menubar, 0, 0, 0);
 
+my ($num, $menu, $menuitem, $rootmenu, $optmenu);
 foreach $num (qw/1 2 3/)
 {
 	ok( $menu = Gtk2::Menu->new );

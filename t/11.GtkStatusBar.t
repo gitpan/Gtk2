@@ -1,6 +1,9 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/11.GtkStatusBar.t,v 1.3 2003/08/19 14:25:13 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/11.GtkStatusBar.t,v 1.4 2003/09/11 15:01:32 rwmcfa1 Exp $
 #
+
+use strict;
+use warnings;
 
 #########################
 # GtkStatusbar Tests
@@ -24,18 +27,18 @@ else
 
 #########################
 
-ok( $win = Gtk2::Window->new('toplevel') );
+ok( my $win = Gtk2::Window->new('toplevel') );
 $win->set_title('GtkStatusbar.t Test Window');
 $win->set_default_size(120,25);
 
-ok( $sts = Gtk2::Statusbar->new );
+ok( my $sts = Gtk2::Statusbar->new );
 $win->add($sts);
 
-ok( $sts_cid1 = $sts->get_context_id('Main') );
+ok( my $sts_cid1 = $sts->get_context_id('Main') );
 ok( $sts->push($sts_cid1, 'Ready 1-0') );
 ok( $sts->push($sts_cid1, 'Ready 1-1') );
 
-ok( $sts_cid2 = $sts->get_context_id('Not Main') );
+ok( my $sts_cid2 = $sts->get_context_id('Not Main') );
 ok( $sts->push($sts_cid2, 'Ready 2-0') );
 ok( $sts->push($sts_cid2, 'Ready 2-1') );
 

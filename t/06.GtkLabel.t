@@ -1,6 +1,9 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/06.GtkLabel.t,v 1.2 2003/08/19 14:25:13 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/06.GtkLabel.t,v 1.3 2003/09/11 15:01:32 rwmcfa1 Exp $
 #
+
+use strict;
+use warnings;
 
 #########################
 # GtkLabel Tests
@@ -24,10 +27,10 @@ else
 
 #########################
 
-ok( $win = Gtk2::Window->new() );
+ok( my $win = Gtk2::Window->new() );
 $win->set_border_width(10);
 
-ok( $label = Gtk2::Label->new("Hello World!") );
+ok( my $label = Gtk2::Label->new("Hello World!") );
 $win->add($label);
 
 ok( $label->get_text eq 'Hello World!' );

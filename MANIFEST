@@ -2,6 +2,7 @@ AUTHORS
 ChangeLog
 Changes
 CodeGen.pm
+Gtk2.exports
 Gtk2.pm
 LICENSE
 MANIFEST
@@ -26,8 +27,8 @@ examples/item_factory_demo.pl
 examples/layout.pl
 examples/plug.pl
 examples/scribble.pl
-examples/simplelist.pl
 examples/simple_menu.pl
+examples/simplelist.pl
 examples/socket.pl
 examples/testdnd.pl
 examples/timeouttest.pl
@@ -64,10 +65,13 @@ gtk-demo/sizegroup.pl
 gtk-demo/stock_browser.pl
 gtk-demo/textview.pl
 gtk-demo/tree_store.pl
+gtk.typemap
 gtk2perl.h
 maps
+perl-Gtk2.spec.in
 pm/Helper.pm
 pm/Pango.pm
+pm/Responses.pm
 pm/SimpleList.pm
 pm/SimpleMenu.pm
 ppport.h
@@ -97,7 +101,7 @@ t/22.GtkListStore.t
 t/23.GtkTreeStore.t
 t/24.GtkTreeView.t
 t/25.GtkTreeSelection.t
-testgtk.pl
+t/26.GtkSimpleMenu.t
 xs/Gdk.xs
 xs/GdkColor.xs
 xs/GdkCursor.xs

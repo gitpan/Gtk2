@@ -1,16 +1,15 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.26 2003/08/20 01:25:48 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.32 2003/09/12 03:52:29 muppetman Exp $
 #
 
 use 5.008;
-use strict;
 use ExtUtils::MakeMaker;
 use File::Spec;
 use Config;
 use Cwd;
 
 # minimum required version of Glib with which we can work.
-my $req_glib_ver = 0.92;
+my $req_glib_ver = '1.00rc1';
 
 # Writing a fake Makefile ensures that CPAN will pick up the correct
 # dependencies and install them.
@@ -18,7 +17,7 @@ unless (eval "use ExtUtils::Depends;"
            . "use Glib::PkgConfig;"
            # just seeing if Glib is available isn't enough, make sure
            # it's recent enough, too 
-           . "use Glib $req_glib_ver;"
+           . "use Glib '$req_glib_ver';"
            . "1") {
    warn "$@\n";
    WriteMakefile(
@@ -71,6 +70,7 @@ my %pm_files = (
 	'CodeGen.pm'       => '$(INST_LIBDIR)/Gtk2/CodeGen.pm',
 	'pm/Helper.pm'     => '$(INST_LIBDIR)/Gtk2/Helper.pm',
 	'pm/Pango.pm'      => '$(INST_LIBDIR)/Gtk2/Pango.pm',
+	'pm/Responses.pm'  => '$(INST_LIBDIR)/Gtk2/Dialog/Responses.pm',
 	'pm/SimpleList.pm' => '$(INST_LIBDIR)/Gtk2/SimpleList.pm',
 	'pm/SimpleMenu.pm' => '$(INST_LIBDIR)/Gtk2/SimpleMenu.pm',
 	'api.pod'          => '$(INST_LIBDIR)/Gtk2/api.pod',
@@ -82,6 +82,7 @@ my %pod_files = (
 	'CodeGen.pm'       => '$(INST_MAN3DIR)/Gtk2::CodeGen.$(MAN3EXT)',
 	'pm/Helper.pm'     => '$(INST_MAN3DIR)/Gtk2::Helper.$(MAN3EXT)',
 	'pm/Pango.pm'      => '$(INST_MAN3DIR)/Gtk2::Pango.$(MAN3EXT)',
+	'pm/Responses.pm'  => '$(INST_MAN3DIR)/Gtk2::Dialog::Responses.$(MAN3EXT)',
 	'pm/SimpleList.pm' => '$(INST_MAN3DIR)/Gtk2::SimpleList.$(MAN3EXT)',
 	'pm/SimpleMenu.pm' => '$(INST_MAN3DIR)/Gtk2::SimpleMenu.$(MAN3EXT)',
 	'api.pod'          => '$(INST_MAN3DIR)/Gtk2::api.$(MAN3EXT)',
@@ -102,11 +103,17 @@ $gtk2->set_libs ($pkgcfg{libs} . find_extra_libs());
 $gtk2->add_pm (%pm_files);
 $gtk2->add_xs (<xs/*.xs>);
 my $cwd = cwd();
-$gtk2->add_typemaps (map {File::Spec->catfile($cwd,$_)} 'gdk.typemap', 'build/gtk2perl.typemap');
+$gtk2->add_typemaps (map {File::Spec->catfile($cwd,$_)}
+		     'build/gtk2perl.typemap',
+                     'gdk.typemap', 'gtk.typemap',
+		     );
 $gtk2->add_headers ('gtk2perl.h');
 
 $gtk2->install (qw(gtk2perl.h build/gtk2perl-autogen.h));
 $gtk2->save_config ('build/IFiles.pm');
+
+# exports list needed for win32, unused on others
+require 'Gtk2.exports';
 
 WriteMakefile(
     NAME          => 'Gtk2',
@@ -115,6 +122,12 @@ WriteMakefile(
     XSPROTOARG    => '-noprototypes',
     MAN3PODS      => \%pod_files,
     # PREREQ see beginning of file
+    PREREQ_FATAL => 1,
+    PREREQ_PM    => {
+        Glib::  => $req_glib_ver, # keep this in sync
+    },
+    FUNCLIST      => \@exports,
+    DL_FUNCS      => { Gtk2 => [] },
     $gtk2->get_makefile_vars,
 );
 
@@ -124,6 +137,8 @@ WriteMakefile(
 # -o on the compiler command line.  this is a hackish fix for it.
 #
 package MY;
+use Cwd;
+
 sub const_cccmd {
 	my $inherited = shift->SUPER::const_cccmd (@_);
 	$inherited .= ' -o $@';
@@ -132,9 +147,31 @@ sub const_cccmd {
 
 sub postamble
 {
+	my @dirs = qw{rpms rpms/BUILD rpms/RPMS rpms/SOURCES
+		      rpms/SPECS rpms/SRPMS};
+	my $cwd = getcwd();
+
 	"
 realclean ::
 	-rm -Rf build
+
+# the tmp-xxx stuff is just so that only the pl files get installed
+install-\%: %
+	\@\$(MKPATH) tmp-\$+/
+	\@\$(CP) \$+/*.* tmp-\$+/
+	\@\$(MOD_INSTALL) ./tmp-\$+/ \\
+		\$(PREFIX)/share/doc/perl-\$(DISTNAME)/\$+
+	\@\$(RM_RF) tmp-\$+/
+
+rpms/:
+	-mkdir @dirs
+
+perl-\$(DISTNAME).spec: perl-\$(DISTNAME).spec.in
+	sed -e \"s/\@VERSION\@/\$(VERSION)/g\" -e \"s/\@SOURCE\@/\$(DISTNAME)-\$(VERSION).tar.gz/g\" \$< > \$@
+
+dist-rpms: Makefile dist perl-\$(DISTNAME).spec rpms/
+	cp \$(DISTNAME)-\$(VERSION).tar.gz rpms/SOURCES/
+	rpmbuild -ba --define \"_topdir $cwd/rpms\" perl-\$(DISTNAME).spec
 "
 }
 package main;
