@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDrawable.xs,v 1.12.2.1 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDrawable.xs,v 1.15.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -75,6 +75,16 @@ gdk_drawable_get_display (drawable)
 	GdkDrawable *drawable
 
 #endif
+
+## GdkRegion* gdk_drawable_get_clip_region (GdkDrawable *drawable)
+GdkRegion_own*
+gdk_drawable_get_clip_region (drawable)
+	GdkDrawable *drawable
+
+## GdkRegion* gdk_drawable_get_visible_region (GdkDrawable *drawable)
+GdkRegion_own*
+gdk_drawable_get_visible_region (drawable)
+	GdkDrawable *drawable
 
 MODULE = Gtk2::Gdk::Drawable	PACKAGE = Gtk2::Gdk::Drawable	PREFIX = gdk_
 
@@ -162,6 +172,14 @@ gdk_draw_image (drawable, gc, image, xsrc, ysrc, xdest, ydest, width, height)
 	gint ydest
 	gint width
 	gint height
+
+ ## void gdk_draw_point (GdkDrawable *drawable, GdkGC *gc, gint x, gint y)
+void
+gdk_draw_point (drawable, gc, x, y)
+	GdkDrawable *drawable
+	GdkGC *gc
+	gint x
+	gint y
 
  ## void gdk_draw_points (GdkDrawable *drawable, GdkGC *gc, GdkPoint *points, gint npoints)
  ## void gdk_draw_lines (GdkDrawable *drawable, GdkGC *gc, GdkPoint *points, gint npoints)
@@ -314,4 +332,22 @@ gdk_drawable_get_image (drawable, x, y, width, height)
 	gint width
 	gint height
 
+#if GTK_CHECK_VERSION(2, 4, 0)
 
+GdkImage *
+gdk_drawable_copy_to_image (drawable, image, src_x, src_y, dest_x, dest_y, width, height)
+	GdkDrawable     * drawable
+	GdkImage_ornull * image
+	gint              src_x
+	gint              src_y
+	gint              dest_x
+	gint              dest_y
+	gint              width
+	gint              height
+    CLEANUP:
+	/* if the return value has been allocated anew,
+	 * the caller will own it. */
+	if (!image)
+		g_object_unref (RETVAL);
+
+#endif

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.7.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.9.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -91,6 +91,12 @@ void gdk_display_put_event (GdkDisplay *display, GdkEvent *event)
 
 void gdk_display_set_double_click_time (GdkDisplay *display, guint msec) 
 
+#if GTK_CHECK_VERSION(2, 4, 0)
+
+void gdk_display_set_double_click_distance (GdkDisplay *display, guint distance)
+
+#endif
+
 ##  GdkDisplay *gdk_display_get_default (void) 
 GdkDisplay_ornull *
 gdk_display_get_default (class)
@@ -132,3 +138,20 @@ gdk_display_get_window_at_pointer (GdkDisplay *display)
 ##  GdkDisplay *gdk_display_open_default_libgtk_only (void) 
 
 #endif /* >= 2.2.0 */
+
+#if GTK_CHECK_VERSION(2, 4, 0)
+
+gboolean gdk_display_supports_cursor_alpha (GdkDisplay * display)
+
+gboolean gdk_display_supports_cursor_color (GdkDisplay * display)
+
+guint gdk_display_get_default_cursor_size (GdkDisplay * display)
+
+## void gdk_display_get_maximal_cursor_size (GdkDisplay *display, guint *width, guint *height)
+void gdk_display_get_maximal_cursor_size (GdkDisplay *display, OUTLIST guint width, OUTLIST guint height)
+
+void gdk_display_flush (GdkDisplay *display)
+
+GdkWindow *gdk_display_get_default_group (GdkDisplay *display)
+
+#endif

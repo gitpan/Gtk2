@@ -1,0 +1,247 @@
+Overview of Changes in 1.040
+============================
+
+  Since 1.02x (the previous stable series)
+  ----------------------------------------
+  * Updated requirements:
+    - Glib >= 1.040
+    - ExtUtils::Depends >= 0.2  (required only at build time)
+    - ExtUtils::PkgConfig >= 1.03  (require only at build time)
+  * Add support for new objects and API in gtk+-2.4.0.
+  * Derivation of Gtk2::CellRenderer has been reworked; it's much more sane
+    now, but we retain backward compatibility with the 1.02x code.
+  * It is now possible to implement GInterfaces in Perl code, so you can now
+    implement your own Gtk2::TreeModels and Gtk2::CellEditables.  Examples
+    are included.
+  * The SPLICE operation is now supported on Gtk2::SimpleList's tied data.
+  * New, standardized versioning API and documentation.
+  * Documentation enhancements all around.
+  * Huge test suite expansion and amazing increase in API coverage.
+  * New utility module Gtk2::TestHelper wraps up some of the boilerplate
+    involved in testing Gtk2-based modules.
+
+  Since 1.0391
+  ------------
+  * Test fixes.  [Torsten]
+  * Use INT2PTR to quell cast warnings.  [muppet]
+  * Documentation updates.  [all]
+  * Hide private symbols from ABI.  [muppet]
+  * Add examples/dialog.pl  [Ross]
+  * Assorted bits of code cleanup.  [muppet]
+
+Overview of Changes in 1.0391
+=============================
+
+* Disavow the existence of gtk+ 2.3.x, bump all version checks to 2.4. [muppet]
+* Add, document, and test Gtk2::GET_VERSION_INFO; rename
+  Gtk2::Pango::get_version_info to Gtk2::Pango::GET_VERSION_INFO.  [muppet]
+* New example, improved examples, improved commentary.  [Ross, muppet]
+* Documentation improvements.
+* Allow embedded \0s in property strings.  [Torsten]
+* Test suite stuff.
+* Portability fixes, and update the exports file for win32.  [muppet]
+
+Overview of Changes in Gtk2 1.039
+=================================
+
+* Update Glib requirement to 1.039, remove the unstable nastygram, and
+  generally prep things for a stable series.  [muppet]
+* Track upstream API changes for the GtkFileChooser.  [muppet]
+* Miscellaneous documentation improvements.  [muppet, Torsten, Ross]
+* Allow undef for the text parameter of Gtk2::ProgressBar::set_text.  [Torsten]
+* Un-break Gtk2::Gdk::Pixbuf::get_pixels.  [muppet]
+* New example, color_snooper.pl
+* More tests.
+
+Overview of Changes in Gtk2 1.038
+=================================
+
+* Despite the warning from Makefile.PL, this release marks an API freeze.
+* Code sweep removed many FIXMEs and fixed lots of problems, and uncovered
+  a large handful of missing trivial functions.
+* Cleanup on examples.  [Ross]
+* New bindings, with tests, for things new in gtk+ in the latest unstable
+  release, and for things we found at the last minute while auditing 
+  the code  [mostly Torsten]:
+   Gtk2::ComboBoxEntry::new_text (new in 2.3.5)
+   Gtk2::Entry::[gs]et_alignment
+   Gtk2::FileChooser::[gs]et_use_preview_label (new in gtk+ 2.3.5)
+   Gtk2::FileChooser::new_with_backend (new in gtk+ 2.3.5)
+   Gtk2::Gdk::Event::handler_set
+   Gtk2::Gdk::Event::set_state (and added setter capability to state())
+   Gtk2::Gdk::Event::set_time (and added setter capability to time())
+   Gtk2::MenuItem::toggle_size_allocate
+   Gtk2::MenuItem::toggle_size_request
+   Gtk2::Pango::Layout::[sg]et_auto_dir (new in pango 1.3.5)
+   Gtk2::Rc::reset_styles
+   Gtk2::TreeModel::ref_node
+   Gtk2::TreeModel::unref_node
+   Gtk2::TreeViewColumn::cell_get_size
+   Gtk2::TreeViewColumn::cell_set_cell_data
+   Gtk2::Widget::add_mnemonic_label
+   Gtk2::Widget::can_activate_accel (new in gtk+ 2.3.5)
+   Gtk2::Widget::child_focus
+   Gtk2::Widget::drag_source_[sg]et_target_list
+   Gtk2::Widget::list_mnemonic_labels
+   Gtk2::Widget::region_intersect
+   Gtk2::Widget::remove_mnemonic_label
+   Gtk2::Widget::requisition
+   Gtk2::Widget::saved_state
+   Gtk2::Widget::size_allocate
+   Gtk2::Window::activate_key
+   Gtk2::Window::propagate_key_event
+   Gtk2::draw_insertion_cursor
+   Gtk2::main_do_event
+  Removed API:
+   Gtk2::FileChooser::[gs]et_folder_mode (removed from gtk+ in 2.3.5)
+   Gtk2::Allocations have been replaced by Gtk2::Gdk::Rectangles; they
+    were just reblessed rectangles anyway.
+* Test fixes.  [muppet, Torsten, Ross]
+* Random pod updates all over the place.  [muppet]
+* Gtk2::CellRenderer now hides "this api is deprecated!" warnings unless env
+  var GTK2PERL_DEBUG is set and true.  [muppet]
+* Finally fixed Gtk2::Gdk::DragContext::find_window and friends.  [muppet]
+* New regression test for custom TreeModel interface implementations.  There
+  are several TODO tests that fail, as a reminder to muppet to fix them
+  properly.  [Torsten]
+* Build GdkX11.xs (and the associated Gtk2::Gdk::X11 namespace) only when
+  linking against the x11 gtk+ target.  [muppet]
+* Numerous bugfixes.  It was a busy weekend.  Some features important for
+  deriving containers in Perl code have been punted for the 1.060 API freeze.
+
+Overview of Changes in Gtk2 1.037
+=================================
+
+* Updated Glib requirement to 1.037.
+* Decided on a versioning scheme, implemented it, and applied it.
+  http://lists.gnome.org/archives/gtk-perl-list/2004-February/msg00085.html
+  New functions: Gtk2->CHECK_VERSION, Gtk2::MAJOR_VERSION, Gtk2::MINOR_VERSION,
+  Gtk2::MICRO_VERSION, Gtk2::major_version, Gtk2::minor_version,
+  Gtk2::micro_version.  Change Gtk2::Pango::check_version to
+  Gtk2::Pango::CHECK_VERSION.  [Ross, muppet]
+* New functions, tracking HEAD:
+  Gtk2::FileChooserDialog::new_with_backend.
+  Gtk2::RadioMenuItem::new_from_widget
+  Gtk2::RadioMenuItem::new_with_mnemonic_from_widget
+  Gtk2::RadioMenuItem::new_with_label_from_widget
+* Added to parse_maps the ability to generate error domain registrations;
+  use that for Gtk2's own error domains.  [muppet]
+* Use a weakref rather than object data to keep Tooltips objects alive.
+  [muppet, implementing yosh's suggestion]
+* Pod fixes and enhancements.  [Ross]
+* Fix up the license notifications in source files.  [Torsten]
+* Minor bugfixes, corrections, and cleanups.  [Torsten, Ross, muppet, Marc
+  Brockschmidt]
+* As always, more tests.  [Torsten]
+
+Overview of Changes in Gtk2 1.036
+=================================
+
+* Fix GdkDisplay test.  [Torsten]
+* Don't crash when when passing an empty list to Gtk2::TargetList.  [Torsten]
+* Register error domains for use with the new Glib::Error stuff.  [muppet]
+* Doc fixes.  [Ross]
+* Bind and test missing methods:
+  Gtk2::Gdk::Event::send_client_message
+  Gtk2::Gdk::Event::send_clientmessage_toall
+  Gtk2::Gdk::Event::send_client_message_for_display
+  Gtk2::Gdk::Event::Client::message_type
+  Gtk2::Gdk::Event::Client::data
+  Gtk2::Gdk::CHARS
+  Gtk2::Gdk::USHORTS
+  Gtk2::Gdk::ULONGS
+  Gtk2::CellRenderer::editing_canceled
+  Gtk2::Scale::get_layout
+  Gtk2::Scale::get_layout_offsets
+  [Torsten]
+* Miscellaneous test updates and fixes.  [Torsten]
+
+Overview of Changes in Gtk2 1.035
+=================================
+
+* Updated Glib requirement to 1.035.
+* Updated ExtUtils::Depends requirement to 0.200.
+* Added and updated POD in several places.  [muppet]
+* Added few more straggling missing bindings.  [Torsten]
+* Minor updates to example code.  [Torsten]
+* As always, added more tests.  [Tortsen]
+
+Overview of Changes in Gtk2 1.034
+=================================
+
+* Updated Glib requirement to 1.034.
+* Updated ExtUtils::PkgConfig requirement to 1.03.
+* Even yet still more tests, examples, and bugfixes.
+* Improved (corrected?) handling of Gtk2::CellRenderer derivation; based on
+  a more generic method for handling vfuncs as inheritable ALL_CAPS methods.
+  Includes backward compatibility, plenty of documentation, and updated
+  examples.  [muppet]
+* Allow perl implementations of the Gtk2::CellEditable and Gtk2::TreeModel
+  interfaces; two new examples included.  Huge thanks to Bjarne Steinsbo.
+  [muppet]
+* Per-entry callback data in SimpleMenu.  [Ross]
+* Add versioning macros for Pango.  [Torsten]
+* Implement startup-time version checking.  [Ross]
+* Add skip_all option to Gtk2::TestHelper.  [Ross]
+
+Overview of Changes in Gtk2 1.033
+=================================
+
+* Lots of new regresion tests, and exsting tests are more thorough
+* apidoc POD updates.
+* GdkCursor's type member now accessable.
+* GdkKeys incorrect mapping fixed, unreg'd subclass warnings quelled.
+* SimpleList now supports a column type markup, for pango marked-up text
+* x/y event members are now available where they should be, GdkEvent doc 
+  improved. corrected some invalid function -> package mappings.
+* missing/TODO functions implemented in GdkDrawable
+* Bug fix related to colormaps fixed in GdkGC 
+
+Overview of Changes in Gtk2 1.031
+=================================
+
+* Updated Glib requirement to 1.031.
+* Added binding support for objects and functions new in gtk+-2.3.x.  Not
+  all tests are complete.  Updated gtk-demo and examples to use the new stuff
+  if available.  This code will be protected by 2.4.0 version guards when
+  gtk+-2.4.0 is finally released.  Note: The unstable-2-3-x-branch in CVS
+  is now dead.  [muppet]
+* New example in gtk-demo (ported from C) shows how to make hyperlinks in
+  a TextView. [muppet, from gtk+]
+* Converted all of the Gtk2::Gdk::Event accessors into combination accessors
+  and mutators. [Ross]
+* Provide a fallback implementation of Gtk2::Gdk::Event::new when linking
+  against gtk+-2.0.x, so we can always create events (needed for synthesizing
+  events in tests). [muppet]
+* Even yet still more tests. [Torsten]
+* Don't copy colors when accessing Style members; this makes it possible to
+  change the colors in a style. [Torsten]
+* Various little bugfixes, memory leak plugs, ornulls, doc updates, build
+  enhancements, etc.
+
+Overview of Changes from Gtk2 1.02x to 1.030
+============================================
+
+* All of the fixes on the 1.02x branch have been made here as well, including
+  the 64-bit cleanliness stuff, the MessageDialog utf8 fix, and the SimpleList
+  base issue that broke upgrades from really old gtk2-perl.
+* Torsten has competely redone the test suite, more than doubling its size.
+  Exhaustive is a good word.  Added Gtk2::TestHelper, which automates
+  several tedious jobs for testing things based on Gtk2.
+* Lots of general clean up.  Many small bugfixes (add ornull here, fix a broken
+  call signature there, fix uninitialized variables all over the place, etc).
+  Adjust ALIASed xsubs to remove invalid methods from the perl namespace.
+  Never allow NULL to be passed to SvOK().
+* New examples: how to use Perl threads and Gtk2 together safely; how to
+  colorize rows in a SimpleList; how to add your own stock items; how to use
+  inline XPM images.
+* Add support for GdkRegions.  Improved support for GtkRcStyles.
+* Added lots of other esoteric functions.  Our api coverage is creeping up.
+* Move the implementation of the ItemFactory stuff from Perl to XS, and in
+  the process fixed the bug that kept accelerators from showing up properly.
+* Extended handling of GdkGeometry.  In addition to the method accessors,
+  you can create the geom as a hash; the bindings will calculate the valid
+  mask for you.
+* Implement custom marshaller for the rows-reordered signal, making it
+  usable.  (Patch from Roderich Schupp)
+* Completed the implementation of SPLICE on SimpleList's TiedList class.

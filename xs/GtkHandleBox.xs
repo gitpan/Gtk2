@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkHandleBox.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkHandleBox.xs,v 1.7 2003/12/29 22:03:05 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -62,3 +62,11 @@ GtkPositionType
 gtk_handle_box_get_snap_edge (handle_box)
 	GtkHandleBox * handle_box
 
+## Added to have an accessor for child_detached.
+gboolean
+gtk_handle_box_get_child_detached (handle_box)
+	GtkHandleBox * handle_box
+    CODE:
+	RETVAL = handle_box->child_detached;
+    OUTPUT:
+	RETVAL

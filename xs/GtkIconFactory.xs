@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconFactory.xs,v 1.14.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconFactory.xs,v 1.19.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -83,11 +83,10 @@ void
 gtk_icon_factory_add_default (factory)
 	GtkIconFactory *factory
 
-## not normally used, according to API ref
-###  void gtk_icon_factory_remove_default (GtkIconFactory *factory) 
-#void
-#gtk_icon_factory_remove_default (factory)
-#	GtkIconFactory *factory
+##  void gtk_icon_factory_remove_default (GtkIconFactory *factory) 
+void
+gtk_icon_factory_remove_default (factory)
+	GtkIconFactory *factory
 
 # apps should generally use themes for this, but the stock browser needs it
 ##  GtkIconSet* gtk_icon_factory_lookup_default (const gchar *stock_id) 
@@ -127,7 +126,7 @@ gtk_icon_size_lookup (class, size)
 =for signature (width, height) = Gtk2::IconSize->lookup_for_settings ($settings, $size)
 =cut
 void
-gtk_icon_size_lookup_for_settings (class, settings, size, width, height)
+gtk_icon_size_lookup_for_settings (class, settings, size)
 	GtkSettings *settings
 	GtkIconSize size
     PREINIT:
@@ -166,6 +165,8 @@ gtk_icon_size_from_name (class, name)
     C_ARGS:
 	name
 
+##  const gchar * gtk_icon_size_get_name (GtkIconSize size) 
+
 MODULE = Gtk2::IconFactory	PACKAGE = Gtk2::IconSet	PREFIX = gtk_icon_set_
 
 ##  GtkIconSet* gtk_icon_set_new (void) 
@@ -188,8 +189,8 @@ gtk_icon_set_new_from_pixbuf (class, pixbuf)
 
 #### apps should almost always use gtk_widget_render_icon
 ##  GdkPixbuf* gtk_icon_set_render_icon (GtkIconSet *icon_set, GtkStyle *style, GtkTextDirection direction, GtkStateType state, GtkIconSize size, GtkWidget *widget, const char *detail) 
-GdkPixbuf*
-gtk_icon_set_render_icon (icon_set, style, direction, state, size, widget, detail)
+GdkPixbuf_noinc*
+gtk_icon_set_render_icon (icon_set, style, direction, state, size, widget, detail=NULL)
 	GtkIconSet *icon_set
 	GtkStyle_ornull *style
 	GtkTextDirection direction
@@ -320,3 +321,18 @@ gtk_icon_source_get_state (source)
 GtkIconSize
 gtk_icon_source_get_size (source)
 	GtkIconSource *source
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+##  void gtk_icon_source_set_icon_name (GtkIconSource *source, const gchar *icon_name) 
+void
+gtk_icon_source_set_icon_name (source, icon_name)
+	GtkIconSource *source
+	const gchar *icon_name
+
+##  const gchar *gtk_icon_source_get_icon_name (const GtkIconSource *source) 
+const gchar *
+gtk_icon_source_get_icon_name (source)
+	GtkIconSource *source
+
+#endif

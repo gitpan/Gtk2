@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkImage.xs,v 1.13.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkImage.xs,v 1.16 2004/01/15 19:39:42 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -46,7 +46,7 @@ gtk_image_new_from_image (class, image, mask)
 
 GtkWidget*
 gtk_image_new_from_file (class, filename)
-	GPerlFilename filename
+	GPerlFilename_ornull filename
     C_ARGS:
         filename
 
@@ -94,7 +94,7 @@ gtk_image_set_from_image (image, gdk_image, mask)
 void
 gtk_image_set_from_file (image, filename)
 	GtkImage *image
-	GPerlFilename filename
+	GPerlFilename_ornull filename
 
 void
 gtk_image_set_from_pixbuf (image, pixbuf)
@@ -135,14 +135,15 @@ gtk_image_get_pixbuf (image)
 =cut
 void
 gtk_image_get_stock (image)
-	GtkImage *image
+	GtkImage * image
     PREINIT:
-	gchar *stock_id;
-	GtkIconSize size;
+	gchar        * stock_id;
+	GtkIconSize    size;
     PPCODE:
 	gtk_image_get_stock (image, &stock_id, &size);
 	EXTEND (SP, 2);
-	PUSHs (sv_2mortal (newSVpv (stock_id, 0)));
+	PUSHs (sv_2mortal (stock_id ? newSVpv (stock_id, 0) : 
+				       newSVsv(&PL_sv_undef)));
 	PUSHs (sv_2mortal (newSVGtkIconSize (size)));
 
  ## void gtk_image_get_icon_set (GtkImage *image, GtkIconSet **icon_set, GtkIconSize *size)

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleMenu.pm,v 1.3.4.1 2004/01/07 21:18:40 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleMenu.pm,v 1.7 2004/02/05 04:09:44 muppetman Exp $
 #
 
 package Gtk2::SimpleMenu;
@@ -9,7 +9,7 @@ use warnings;
 use Carp;
 use Gtk2;
 
-our @ISA = qw(Gtk2::ItemFactory);
+our @ISA = 'Gtk2::ItemFactory';
 
 our $VERSION = 0.50;
 
@@ -36,7 +36,10 @@ sub new
 	# convert our menu_tree into a set of entries for itemfactory
 	$self->parse;
 	# create the entries 
-	$self->create_items($self->{user_data}, @{$self->{entries}});
+	foreach (@{$self->{entries}})
+	{
+		$self->create_item ($_, $_->[6] || $self->{user_data});
+	}
 	# store the widget so our owner can easily get to it
 	$self->{widget} = $self->get_widget('<main>');
 	# cache the accel_group so the user can add it to something,
@@ -116,7 +119,8 @@ sub parse
 					 (exists($groups[$grp]) ? 
 						 $groups[$grp] :
 						 $itms->{item_type}), 
-					 $itms->{extra_data}, ];
+					 $itms->{extra_data},
+					 $itms->{callback_data} ];
 
 			# create the group identifier (path)
 			# so that next button in this group will
@@ -137,7 +141,8 @@ sub parse
 						 $default_callback ),
 					 $itms->{callback_action},
 					 $itms->{item_type},
-					 $itms->{extra_data}, ];
+					 $itms->{extra_data}, 
+					 $itms->{callback_data} ];
 		}
 	}
 
@@ -164,9 +169,6 @@ application menus
   use Gtk2 '-init';
   use Gtk2::SimpleMenu;
 
-  use constant TRUE  => 1;
-  use constant FALSE => 0;
-
   my $menu_tree = [
   	_File => {
 		item_type => '<Branch',
@@ -178,6 +180,7 @@ application menus
 			},
 			_Save => {
 				callback_action => 1,
+				callback_data => 'per entry cbdata',
 				accelerator => '<ctrl>S',
 			},
 			_Exec => {
@@ -313,9 +316,7 @@ Perl(1), Glib(3pm), Gtk2(3pm), examples/simple_menu.pl.
 
 =head1 AUTHORS
 
- muppet <scott at asofyet dot org>
  Ross McFarland <rwmcfa1 at neces dot com>
- Gavin Brown <gavin dot brown at uk dot com>
 
 =head1 COPYRIGHT AND LICENSE
 

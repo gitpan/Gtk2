@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkButton.xs,v 1.11.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkButton.xs,v 1.15.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -56,10 +56,9 @@ non-mnemonic version explicitly (e.g. C<Gtk2::Button::new_with_label>).
 =cut
 
 GtkWidget *
-gtk_button_news (class, label=NULL)
+gtk_button_new (class, label=NULL)
 	const gchar * label
     ALIAS:
-	Gtk2::Button::new = 0
 	Gtk2::Button::new_with_mnemonic = 1
 	Gtk2::Button::new_with_label = 2
     CODE:
@@ -143,3 +142,27 @@ gtk_button_set_use_stock (button, use_stock)
 gboolean
 gtk_button_get_use_stock (button)
 	GtkButton * button
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_button_set_focus_on_click (GtkButton * button, gboolean focus_on_click)
+
+gboolean gtk_button_get_focus_on_click (GtkButton * button)
+
+void gtk_button_set_alignment (GtkButton * button, gfloat xalign, gfloat yalign)
+
+ ## void gtk_button_get_alignment (GtkButton *button, gfloat *xalign, gfloat *yalign)
+void gtk_button_get_alignment (GtkButton *button, OUTLIST gfloat xalign, OUTLIST gfloat yalign)
+
+##void gtk_button_get_alignment (GtkButton *button)
+##    PREINIT:
+##	gfloat xalign;
+##	gfloat yalign;
+##    PPCODE:
+##	gtk_button_get_alignment (button, &xalign, &yalign);
+##	warn ("%.20f, %.20f", xalign, yalign);
+##	EXTEND (sp, 2);
+##	PUSHs (sv_2mortal (newSVnv (xalign)));
+##	PUSHs (sv_2mortal (newSVnv (yalign)));
+
+#endif

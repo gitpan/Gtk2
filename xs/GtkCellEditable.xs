@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellEditable.xs,v 1.4 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellEditable.xs,v 1.8 2004/03/03 04:26:42 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,13 +25,97 @@
 this is an interface
 */
 
+#define PREP		\
+	dSP;		\
+	ENTER;		\
+	SAVETMPS;	\
+	PUSHMARK (SP);	\
+	PUSHs (sv_2mortal (newSVGObject (G_OBJECT (cell))));
+
+#define CALL		\
+	PUTBACK;	\
+	call_sv ((SV *)GvCV (slot), G_VOID|G_DISCARD);
+
+#define FINISH		\
+	FREETMPS;	\
+	LEAVE;
+
+#define GET_METHOD(method)	\
+	HV * stash = gperl_object_stash_from_type (G_OBJECT_TYPE (cell)); \
+	GV * slot = gv_fetchmethod (stash, method);
+
+#define METHOD_EXISTS (slot && GvCV (slot))
+		
+
+static void
+gtk2perl_cell_editable_start_editing (GtkCellEditable *cell,
+                                      GdkEvent *event)
+{
+	GET_METHOD ("START_EDITING");
+
+	if (METHOD_EXISTS) {
+		PREP;
+		XPUSHs (sv_2mortal (newSVGdkEvent (event)));
+		CALL;
+		FINISH;
+	}
+}
+
+static void
+gtk2perl_cell_editable_editing_done (GtkCellEditable *cell)
+{
+	GET_METHOD ("EDITING_DONE");
+
+	if (METHOD_EXISTS) {
+		PREP;
+		CALL;
+		FINISH;
+	}
+}
+
+static void
+gtk2perl_cell_editable_remove_widget (GtkCellEditable *cell)
+{
+	GET_METHOD ("REMOVE_WIDGET");
+
+	if (METHOD_EXISTS) {
+		PREP;
+		CALL;
+		FINISH;
+	}
+}
+
+static void
+gtk2perl_cell_editable_init (GtkCellEditableIface * iface)
+{
+	iface->start_editing = gtk2perl_cell_editable_start_editing;
+	iface->editing_done  = gtk2perl_cell_editable_editing_done;
+	iface->remove_widget = gtk2perl_cell_editable_remove_widget;
+}
+
 MODULE = Gtk2::CellEditable	PACKAGE = Gtk2::CellEditable	PREFIX = gtk_cell_editable_
+
+=for apidoc __hide__
+=cut
+void
+_ADD_INTERFACE (class, const char * target_class)
+    CODE:
+    {
+	static const GInterfaceInfo iface_info = {
+		(GInterfaceInitFunc) gtk2perl_cell_editable_init,
+		(GInterfaceFinalizeFunc) NULL,
+		(gpointer) NULL
+	};
+	GType gtype = gperl_object_type_from_package (target_class);
+	g_type_add_interface_static (gtype, GTK_TYPE_CELL_EDITABLE,
+	                &iface_info);
+    }
 
 ## void gtk_cell_editable_start_editing (GtkCellEditable *cell_editable, GdkEvent *event)
 void
-gtk_cell_editable_start_editing (cell_editable, event)
+gtk_cell_editable_start_editing (cell_editable, event=NULL)
 	GtkCellEditable *cell_editable
-	GdkEvent *event
+	GdkEvent_ornull *event
 
 ## void gtk_cell_editable_editing_done (GtkCellEditable *cell_editable)
 void

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeStore.xs,v 1.13.2.3 2003/12/16 04:41:09 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeStore.xs,v 1.22 2004/03/08 23:04:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -64,6 +64,13 @@ GtkTreeStore *tree_store
 	                                 (GType*)(types->data));
 
 ## void gtk_tree_store_set (GtkTreeStore *tree_store, GtkTreeIter *iter, ...)
+=for apidoc Gtk2::TreeStore::set_value
+=for arg col1 (integer) the first column number
+=for arg val1 (scalar) the first value
+=for arg ... pairs of columns and values
+Alias for Gtk2::TreeStore::set().
+=cut
+
 =for apidoc
 =for arg col1 (integer) the first column number
 =for arg val1 (scalar) the first value
@@ -73,9 +80,12 @@ void
 gtk_tree_store_set (tree_store, iter, col1, val1, ...)
 	GtkTreeStore *tree_store
 	GtkTreeIter *iter
+    ALIAS:
+	Gtk2::TreeStore::set_value = 1
     PREINIT:
 	int i, ncols;
     CODE:
+	PERL_UNUSED_VAR (ix);
 	/* require at least one pair --- that means there needs to be
 	 * four items on the stack.  also require that the stack has an
 	 * even number of items on it. */
@@ -99,14 +109,8 @@ gtk_tree_store_set (tree_store, iter, col1, val1, ...)
 			              gtk_tree_model_get_column_type
 			                          (GTK_TREE_MODEL (tree_store),
 			                           column));
-			if (!gperl_value_from_sv (&gvalue, ST (i+1))) {
-				/* FIXME need a more useful error message here,
-				 *   as this could be triggered by somebody who
-				 *   doesn't know how the function works, and i
-				 *   doubt this message would clue him in */
-				croak ("failed to convert parameter %d from SV to GValue",
-				       i);
-			}
+			/* gperl_value_from_sv either succeeds or croaks. */
+			gperl_value_from_sv (&gvalue, ST (i+1));
 			gtk_tree_store_set_value (GTK_TREE_STORE (tree_store),
 			                          iter, column, &gvalue);
 			g_value_unset (&gvalue);
@@ -162,8 +166,7 @@ gtk_tree_store_insert_before (tree_store, parent, sibling)
 	GtkTreeIter_ornull * parent
 	GtkTreeIter_ornull * sibling
     ALIAS:
-	Gtk2::TreeStore::insert_before = 0
-	Gtk2::TreeStore::insert_after  = 1
+	Gtk2::TreeStore::insert_after = 1
     PREINIT:
 	GtkTreeIter iter;
     CODE:
@@ -184,8 +187,7 @@ gtk_tree_store_prepend (tree_store, parent)
 	GtkTreeStore *tree_store
 	GtkTreeIter_ornull *parent
     ALIAS:
-	Gtk2::TreeStore::prepend = 0
-	Gtk2::TreeStore::append  = 1
+	Gtk2::TreeStore::append = 1
     PREINIT:
 	GtkTreeIter iter;
     CODE:
@@ -224,7 +226,6 @@ gtk_tree_store_iter_is_valid (tree_store, iter)
 	GtkTreeStore *tree_store
 	GtkTreeIter *iter
 
-# TODO: definitely needs testing
 #### void gtk_tree_store_reorder (GtkTreeStore *tree_store, GtkTreeIter *parent, gint *new_order)
 =for apidoc
 =for arg ... of integer's, the new_order

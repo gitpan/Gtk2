@@ -25,11 +25,11 @@ to use this object, then go ahead, but remember the gpl.
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_popup.pl,v 1.4 2003/11/08 06:23:57 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_popup.pl,v 1.6.2.1 2004/03/24 02:01:33 muppetman Exp $
 #
 
-# we require things from post 1.00 development.
-use Gtk2 1.01, -init;
+# we require things from 1.04.
+use Gtk2 1.04, -init;
 
 package Mup::CellRendererPopup;
 
@@ -59,9 +59,6 @@ use Glib::Object::Subclass
 	],
 	;
 
-# !!!! very important !!!!
-__PACKAGE__->_install_overrides;
-
 use Data::Dumper;
 
 use constant xpad => 3;
@@ -80,7 +77,7 @@ sub calc_size {
 	return (0, 0, $w + xpad * 2 + arrow_width, $h + ypad * 2);
 }
 
-sub on_get_size {
+sub GET_SIZE {
 	my ($cell, $widget, $area) = @_;
 	if ($area) {
 		return (3, 3, $area->width - arrow_width - 2*xpad - 4, $area->height - 6);
@@ -96,7 +93,7 @@ sub get_layout {
 	return $cell->{layout} = $widget->create_pango_layout ("");
 }
 
-sub on_render {
+sub RENDER {
 	my ($cell, $drawable, $widget, $background_area, $cell_area, $expose_area, $flags) = @_;
 	my $state = 'normal';
 
@@ -173,7 +170,7 @@ sub editing_done {
 	$editable->remove_widget;
 }
 
-sub on_start_editing {
+sub START_EDITING {
 	my ($cell, $event, $widget, $path, $background_area, $cell_area, $flags) = @_;
 	my $menu = Gtk2::Menu->new;
 	my @data = @{ $cell->{list} };

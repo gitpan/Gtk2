@@ -1,6 +1,6 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/README,v 1.26.2.6 2004/01/16 06:21:47 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/README,v 1.40.2.2 2004/03/24 02:12:47 muppetman Exp $
 
-Gtk2 version 1.023
+Gtk2 version 1.040
 ==================
 
 Perl bindings to the 2.x series of the Gtk+ graphical user interface library.
@@ -9,10 +9,13 @@ object-oriented way, freeing you from the casting and memory management in C,
 yet remaining very close in spirit to original API.  Find out more about Gtk+
 at http://www.gtk.org.
 
-The GTK+ Reference Manual is also a handy companion when writing Gtk
-programs in any language.  http://developer.gnome.org/doc/API/2.0/gtk/
+The GTK+ Reference Manual [ http://developer.gnome.org/doc/API/2.0/gtk/ ]
+is also a handy companion when writing Gtk programs in any language.
 The perl bindings follow the C API very closely, and the C reference
-documentation should be considered the canonical source.
+should be considered the canonical documentation.
+
+Be sure to check out the example programs in the "examples" and "gtk-demo"
+directories.
 
 To discuss gtk2-perl, ask questions and flame/praise the authors,
 join gtk-perl-list@gnome.org at lists.gnome.org.
@@ -42,7 +45,9 @@ perl how to get to this library directory so you can use it; there are three
 ways:
 
   in your environment (the easiest):
-    PERL5LIB=/some/other/place/lib/perl5/site_perl:$PERL5LIB
+    # assuming a bourne-style shell
+    PERL5LIB=/some/other/place/lib/perl5/site_perl
+    export PERL5LIB
 
   on the perl command line:
     perl -I /some/other/place/lib/perl5/site_perl yourscript
@@ -56,13 +61,13 @@ DEPENDENCIES
 This module requires these other modules and libraries:
 
   perl >= 5.8.0
-  Glib >= 1.020 (perl module)
+  Glib >= 1.040 (perl module)
   GTK+ > 2.x (C library)
 
 In order to build it from source, you'll also need
 
-  ExtUtils::Depends >= 0.1
-  ExtUtils::PkgConfig >= 1.00
+  ExtUtils::Depends >= 0.2
+  ExtUtils::PkgConfig >= 1.03
 
 COPYRIGHT AND LICENSE
 

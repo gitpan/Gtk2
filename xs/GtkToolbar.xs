@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolbar.xs,v 1.11 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolbar.xs,v 1.14.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -61,10 +61,10 @@ gtk2perl_toolbar_insert_internal (GtkToolbar * toolbar,
 	const char * real_tooltip_text = NULL;
 	const char * real_tooltip_private_text = NULL;
 
-	if (tooltip_text && tooltip_text != &PL_sv_undef)
+	if (tooltip_text && SvOK (tooltip_text))
 		real_tooltip_text = SvGChar (tooltip_text);
 
-	if (tooltip_private_text && tooltip_private_text != &PL_sv_undef)
+	if (tooltip_private_text && SvOK (tooltip_private_text))
 		real_tooltip_private_text = SvGChar (tooltip_private_text);
 
 	switch (which) {
@@ -99,6 +99,8 @@ gtk2perl_toolbar_insert_internal (GtkToolbar * toolbar,
 			                             real_icon, NULL, NULL, 
 			                             SvIV (position));
 			break;
+		    default:
+			g_assert_not_reached ();
 		}
 		}
 		break;
@@ -137,6 +139,8 @@ gtk2perl_toolbar_insert_internal (GtkToolbar * toolbar,
 						        NULL, NULL,
 			                                SvIV (position));
 			break;
+		    default:
+			g_assert_not_reached ();
 		}
 		}
 		break;
@@ -160,11 +164,15 @@ gtk2perl_toolbar_insert_internal (GtkToolbar * toolbar,
 			                           real_tooltip_private_text,
 						   SvIV (position));
 			break;
+		    default:
+			g_assert_not_reached ();
 		}
 		}
 		break;
+		default:
+			g_assert_not_reached ();
 	}
-	if (callback && callback != &PL_sv_undef)
+	if (callback && SvOK (callback))
 		gperl_signal_connect (newSVGtkWidget (w), "clicked",
 		                      callback, user_data, 0);
 
@@ -179,6 +187,33 @@ GtkWidget *
 gtk_toolbar_new (class)
     C_ARGS:
 	/* void */
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_toolbar_insert (GtkToolbar *toolbar, GtkToolItem *item, gint pos);
+
+gint gtk_toolbar_get_item_index (GtkToolbar *toolbar, GtkToolItem *item);
+
+gint gtk_toolbar_get_n_items (GtkToolbar *toolbar);
+
+GtkToolItem_ornull * gtk_toolbar_get_nth_item (GtkToolbar *toolbar, gint n);
+
+gboolean gtk_toolbar_get_show_arrow (GtkToolbar *toolbar);
+
+void gtk_toolbar_set_show_arrow (GtkToolbar *toolbar, gboolean show_arrow);
+
+GtkReliefStyle gtk_toolbar_get_relief_style (GtkToolbar *toolbar);
+
+gint gtk_toolbar_get_drop_index (GtkToolbar *toolbar, gint x, gint y);
+
+void gtk_toolbar_set_drop_highlight_item (GtkToolbar * toolbar, GtkToolItem * tool_item, gint index);
+
+#endif
+
+#
+# just about everything from here to the end is deprecated as of 2.4.0,
+# but will not be disabled because it wasn't deprecated in 2.0.x and 2.2.x.
+#
 
 ##GtkWidget* gtk_toolbar_append_item (GtkToolbar *toolbar, const char *text, const char *tooltip_text, const char *tooltip_private_text, GtkWidget *icon, GtkSignalFunc callback, gpointer user_data)
 GtkWidget *

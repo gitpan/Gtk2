@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.15.2.1 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.20.2.1 2004/03/17 18:06:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -100,6 +100,8 @@ gtk2perl_dialog_response_marshal (GClosure * closure,
 
 MODULE = Gtk2::Dialog	PACKAGE = Gtk2::Dialog	PREFIX = gtk_dialog_
 
+=for position DESCRIPTION
+
 =head1 DESCRIPTION
 
 Dialog boxes are a convenient way to prompt the user for a small amount of
@@ -173,22 +175,26 @@ because unknown string values tend to be mapped to 0.
 
 =cut
 
+=for enum GtkDialogFlags
+=cut
+
 BOOT:
 	gperl_signal_set_marshaller_for (GTK_TYPE_DIALOG, "response",
 	                                 gtk2perl_dialog_response_marshal);
 
 GtkWidget *
-gtk_dialog_widgets (dialog)
+vbox (dialog)
 	GtkDialog * dialog
     ALIAS:
-	Gtk2::Dialog::vbox = 0
 	Gtk2::Dialog::action_area = 1
     CODE:
-	RETVAL = NULL;
 	switch(ix)
 	{
 	case(0): RETVAL = dialog->vbox; 	break;
 	case(1): RETVAL = dialog->action_area;	break;
+	default:
+		RETVAL = NULL;
+		g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL

@@ -17,18 +17,12 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/layout.pl,v 1.5 2003/09/22 00:04:23 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/layout.pl,v 1.6 2004/01/25 06:52:01 muppetman Exp $
 #
 
 use strict;
 use Gtk2;
-
-use Data::Dumper;
-
-use constant TRUE => 1;
-use constant FALSE => 0;
-
-Gtk2->init;
+use Glib ':constants';
 
 # Initialize GTK
 Gtk2->init;
@@ -56,7 +50,6 @@ $btn->set_size_request(100, 50);
 $layout->put($btn, 100, 120);
 my $i = 1;
 $btn->signal_connect( 'enter' => sub {
-		print Dumper( @_ );
 		if( $i > 14 )
 		{
 			$_[0]->set_label("Ok, Fine Then.");

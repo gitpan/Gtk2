@@ -1,22 +1,9 @@
 /*
  * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * Licensed under the LGPL, see LICENSE file for more information.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
- * Boston, MA  02111-1307  USA.
- *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextIter.xs,v 1.15.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextIter.xs,v 1.19.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -371,6 +358,18 @@ gtk_text_iter_backward_word_starts (iter, count)
 	GtkTextIter *iter
 	gint count
 
+#if GTK_CHECK_VERSION(2,4,0)
+
+gboolean gtk_text_iter_forward_visible_word_end (GtkTextIter *iter);
+
+gboolean gtk_text_iter_backward_visible_word_start (GtkTextIter *iter);
+
+gboolean gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter, gint count);
+
+gboolean gtk_text_iter_backward_visible_word_starts (GtkTextIter *iter, gint count);
+
+#endif
+
 ## gboolean gtk_text_iter_forward_sentence_end (GtkTextIter *iter)
 gboolean
 gtk_text_iter_forward_sentence_end (iter)
@@ -414,6 +413,18 @@ gboolean
 gtk_text_iter_backward_cursor_positions (iter, count)
 	GtkTextIter *iter
 	gint count
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+gboolean gtk_text_iter_forward_visible_cursor_position   (GtkTextIter *iter);
+
+gboolean gtk_text_iter_backward_visible_cursor_position  (GtkTextIter *iter);
+
+gboolean gtk_text_iter_forward_visible_cursor_positions  (GtkTextIter *iter, gint count);
+
+gboolean gtk_text_iter_backward_visible_cursor_positions (GtkTextIter *iter, gint count);
+
+#endif
 
 ## void gtk_text_iter_set_offset (GtkTextIter *iter, gint char_offset)
 void
@@ -464,14 +475,14 @@ gtk_text_iter_set_visible_line_index (iter, byte_on_line)
 ## gboolean gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter, GtkTextTag *tag)
 gboolean
 gtk_text_iter_forward_to_tag_toggle (iter, tag)
-	GtkTextIter *iter
-	GtkTextTag *tag
+	GtkTextIter       * iter
+	GtkTextTag_ornull * tag
 
 ## gboolean gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter, GtkTextTag *tag)
 gboolean
 gtk_text_iter_backward_to_tag_toggle (iter, tag)
-	GtkTextIter *iter
-	GtkTextTag *tag
+	GtkTextIter       * iter
+	GtkTextTag_ornull * tag
 
 ## gboolean gtk_text_iter_forward_find_char (GtkTextIter *iter, GtkTextCharPredicate pred, gpointer user_data, const GtkTextIter *limit)
 ## gboolean gtk_text_iter_backward_find_char (GtkTextIter *iter, GtkTextCharPredicate pred, gpointer user_data, const GtkTextIter *limit)
@@ -501,6 +512,11 @@ gtk_text_iter_forward_find_char (iter, pred, user_data=NULL, limit=NULL)
 
 ## gboolean gtk_text_iter_forward_search (const GtkTextIter *iter, const gchar *str, GtkTextSearchFlags flags, GtkTextIter *match_start, GtkTextIter *match_end, const GtkTextIter *limit)
 #### gboolean gtk_text_iter_backward_search (const GtkTextIter *iter, const gchar *str, GtkTextSearchFlags flags, GtkTextIter *match_start, GtkTextIter *match_end, const GtkTextIter *limit)
+
+=for apidoc backward_search
+=for signature (match_start, match_end) = $iter->forward_search ($str, $flags, $limit=NULL)
+=cut
+
 =for apidoc
 =for signature (match_start, match_end) = $iter->forward_search ($str, $flags, $limit=NULL)
 =cut

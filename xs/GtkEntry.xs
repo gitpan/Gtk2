@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.9 2003/11/18 06:28:17 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.11.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -112,6 +112,26 @@ gtk_entry_get_layout (entry)
  ## void gtk_entry_get_layout_offsets (GtkEntry *entry, gint *x, gint *y)
 void
 gtk_entry_get_layout_offsets (GtkEntry *entry, OUTLIST gint x, OUTLIST gint y)
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_entry_set_completion (GtkEntry *entry, GtkEntryCompletion *completion);
+
+GtkEntryCompletion *gtk_entry_get_completion (GtkEntry *entry);
+
+#endif
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_entry_set_alignment (GtkEntry *entry, gfloat xalign);
+
+gfloat gtk_entry_get_alignment (GtkEntry *entry);
+
+#endif
+
+##
+## hey, these are deprecated!  is that new as of 2.3.x?
+##
 
 void
 gtk_entry_append_text (entry, text)

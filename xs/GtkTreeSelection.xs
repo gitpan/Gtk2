@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSelection.xs,v 1.13 2003/11/10 14:14:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSelection.xs,v 1.14.2.1 2004/03/22 03:42:33 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -129,7 +129,8 @@ gtk_tree_selection_set_select_function (selection, func, data=NULL)
 						callback,
 						(GDestroyNotify) gperl_callback_destroy);
 
-## FIXME eh? i thought GObject took care of this 
+## FIXME this is a different user_data --- it's the user data that gets
+##       passed to the select function.  i don't understand why it is separate.
 ### gpointer gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
 #gpointer
 #gtk_tree_selection_get_user_data (selection)
@@ -166,6 +167,7 @@ gtk_tree_selection_get_selected (selection)
 
 ## GList * gtk_tree_selection_get_selected_rows (GtkTreeSelection *selection, GtkTreeModel **model)
 =for apidoc
+=for signature @paths = $selection->get_selected_rows
 Returns the Gtk2::TreePath of each selected row, or an empty list if no
 rows are selected.  The model is I<not> returned, as documented in the C
 API reference.  To get the model, try

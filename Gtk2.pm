@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.48.2.7 2004/01/16 06:21:47 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.62.2.3 2004/03/24 02:12:47 muppetman Exp $
 #
 
 package Gtk2;
@@ -31,7 +31,7 @@ use Glib;
 
 require DynaLoader;
 
-our $VERSION = '1.023';
+our $VERSION = '1.040';
 
 our @ISA = qw(DynaLoader);
 
@@ -60,97 +60,18 @@ sub import {
 sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
 # now load the XS code.
-bootstrap Gtk2 $VERSION;
+Gtk2->bootstrap ($VERSION);
 
 # Preloaded methods go here.
 
-package Gtk2::ItemFactory;
+package Gtk2::Gdk;
 
-sub create_item {
-	my ($factory, $entry, $callback_data) = @_;
-	my ($path, $accelerator, $callback, $callback_action, $item_type, 
-	    $extra_data, $cleanpath);
+sub CHARS { 8 };
+sub SHORTS { 16 };
+sub LONGS { 32 };
 
-	if ('ARRAY' eq ref $entry) {
-		($path, $accelerator, $callback, $callback_action, 
-		 $item_type, $extra_data) = @$entry;
-	} elsif ('HASH' eq ref $entry) {
-		foreach (keys %$entry)
-		{
-			if( $_ eq 'path' )
-			{
-				$path = $entry->{path};
-			}
-			elsif( $_ eq 'accelerator' )
-			{
-				$accelerator = $entry->{accelerator};
-			}
-			elsif( $_ eq 'callback' )
-			{
-				$callback = $entry->{callback};
-			}
-			elsif( $_ eq 'callback_action' )
-			{
-				$callback_action = $entry->{callback_action};
-			}
-			elsif( $_ eq 'item_type' )
-			{
-				$item_type = $entry->{item_type};
-			}
-			elsif( $_ eq 'extra_data' )
-			{
-				$extra_data = $entry->{extra_data};
-			}
-			else
-			{
-				use Carp;
-				carp("Gtk Item Factory Entry; unknown key ($_) "
-				   . "ignored, legal keys are: path, "
-				   . "accelerator, accel, callback, "
-				   . "callback_action, item_type, extra_data");
-			}
-		}
-	} else {
-		use Carp;
-		croak "badly formed Gtk Item Factory Entry; use either list for for hash form:\n"
-		    . "    list form:\n"
-		    . "        [ path, accel, callback, action, type ]\n"
-		    . "    hash form:\n"
-		    . "        {\n"
-		    . "           path            => \$path,\n"
-		    . "           accelerator     => \$accel,   # optional\n"
-		    . "           callback        => \$callback,\n"
-		    . "           callback_action => \$action,\n"
-		    . "           item_type       => \$type,    # optional\n"
-		    . "           extra_data      => \$extra,   # optional\n"
-		    . "         }\n"
-		    . "  ";
-	}
-
-	# we have this funky perl wrapper for the XS function entirely for
-	# those three lines right here --- strip underscores from the possibly
-	# unicode path, for use with gtk_item_factory_get_widget.
-	$cleanpath = $path;
-	$cleanpath =~ s/_(?!_+)//g;
-	$cleanpath =~ s/_+/_/g;
-
-	# the rest of the work happens in XS
-	$factory->_create_item ($path, $accelerator || '',
-				$callback_action || 0, $item_type || '', 
-				$extra_data, $cleanpath,
-	                        $callback||undef, $callback_data||undef);
-}
-
-sub create_items {
-	croak "usage: \$itemfactory->create_items(callback_data, entry, "
-		."[entry, ...]" if( scalar(@_) < 3 );
-
-	my $self = shift;
-	my $callback_data = shift;
-	foreach my $entry (@_) {
-		$self->create_item ($entry, $callback_data);
-	}
-}
+sub USHORTS { 16 };
+sub ULONGS { 32 };
 
 package Gtk2::Gdk::Atom;
 
@@ -182,11 +103,10 @@ Gtk2 - Perl interface to the 2.x series of the Gimp Toolkit library
 
 =head1 ABSTRACT
 
-  Perl bindings to the 2.x series of the Gtk+ widget set.
-  This module allows you to write graphical user interfaces in a 
-  perlish and object-oriented way, freeing you from the casting
-  and memory management in C, yet remaining very close in spirit
-  to original API.
+Perl bindings to the 2.x series of the Gtk+ widget set.  This module
+allows you to write graphical user interfaces in a perlish and
+object-oriented way, freeing you from the casting and memory management
+in C, yet remaining very close in spirit to original API.
 
 =head1 DESCRIPTION
 
@@ -249,7 +169,7 @@ The gtk2-perl team:
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2003 by the gtk2-perl team.
+Copyright 2003-2004 by the gtk2-perl team.
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public

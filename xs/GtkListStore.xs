@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListStore.xs,v 1.17.2.2 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListStore.xs,v 1.22 2004/02/29 09:41:54 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -69,6 +69,15 @@ gtk_list_store_set_column_types (list_store, ...)
 
 
 ## void gtk_list_store_set (GtkListStore *list_store, GtkTreeIter *iter, ...)
+=for apidoc Gtk2::ListStore::set_value
+=for signature $list_store->set_value ($iter, $col, $val)
+=for arg col (integer)
+=for arg val (scalar)
+=for arg col1 (__hide__)
+=for arg val1 (__hide__)
+=for arg ... (__hide__)
+=cut
+
 =for apidoc
 =for arg col1 (integer) the first column number
 =for arg val1 (scalar) the first value
@@ -78,9 +87,12 @@ void
 gtk_list_store_set (list_store, iter, col1, val1, ...)
 	GtkListStore *list_store
 	GtkTreeIter *iter
+    ALIAS:
+	Gtk2::ListStore::set_value = 1
     PREINIT:
 	int i, ncols;
     CODE:
+	PERL_UNUSED_VAR (ix);
 	/* require at least one pair --- that means there needs to be
 	 * four items on the stack.  also require that the stack has an
 	 * even number of items on it. */
@@ -106,14 +118,8 @@ gtk_list_store_set (list_store, iter, col1, val1, ...)
 			              gtk_tree_model_get_column_type
 			                        (GTK_TREE_MODEL (list_store),
 			                         column));
-			if (!gperl_value_from_sv (&gvalue, ST (i+1))) {
-				/* FIXME need a more useful error message here,
-				 *   as this could be triggered by somebody who
-				 *   doesn't know how the function works, and i
-				 *   doubt this message would clue him in */
-				croak ("failed to convert parameter %d from SV to GValue",
-				       i);
-			}
+			/* gperl_value_from_sv either succeeds or croaks. */
+			gperl_value_from_sv (&gvalue, ST (i+1));
 			gtk_list_store_set_value (GTK_LIST_STORE (list_store),
 			                          iter, column, &gvalue);
 			g_value_unset (&gvalue);
@@ -169,8 +175,7 @@ gtk_list_store_insert_before (list_store, sibling)
 	GtkListStore       * list_store
 	GtkTreeIter_ornull * sibling
     ALIAS:
-	Gtk2::ListStore::insert_before = 0
-	Gtk2::ListStore::insert_after  = 1
+	Gtk2::ListStore::insert_after = 1
     PREINIT:
 	GtkTreeIter iter;
     CODE:
@@ -189,8 +194,7 @@ GtkTreeIter_copy *
 gtk_list_store_prepend (list_store)
 	GtkListStore *list_store
     ALIAS:
-	Gtk2::ListStore::prepend = 0
-	Gtk2::ListStore::append  = 1
+	Gtk2::ListStore::append = 1
     PREINIT:
 	GtkTreeIter iter;
     CODE:

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCombo.xs,v 1.12.2.2 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCombo.xs,v 1.15 2004/02/26 00:57:54 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -85,16 +85,17 @@ gtk_combo_set_popdown_strings (combo, ...)
 	}
 
 GtkWidget *
-members (combo)
+entry (combo)
 	GtkCombo * combo
     ALIAS:
-	Gtk2::Combo::entry = 0
-	Gtk2::Combo::list  = 1
+	Gtk2::Combo::list = 1
     CODE:
-	RETVAL = NULL;
 	switch (ix) {
 	    case 0: RETVAL = combo->entry; break;
 	    case 1: RETVAL = combo->list;  break;
+	    default:
+		RETVAL = NULL;
+		g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL

@@ -1,33 +1,43 @@
 /*
  * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * Licensed under the LGPL, see LICENSE file for more information.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
- * Boston, MA  02111-1307  USA.
- *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCalendar.xs,v 1.7 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCalendar.xs,v 1.13.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Calendar	PACKAGE = Gtk2::Calendar	PREFIX = gtk_calendar_
 
+=for apidoc marked_date
+=for signature $widget->marked_date ($value)
+=for signature value = $widget->marked_date
+=cut
+
+=for apidoc year
+=for signature $widget->year ($value)
+=for signature value = $widget->year
+=cut
+
+=for apidoc month
+=for signature $widget->month ($value)
+=for signature value = $widget->month
+=cut
+
+=for apidoc selected_day
+=for signature $widget->selected_day ($value)
+=for signature value = $widget->selected_day
+=cut
+
+=for apidoc
+=for signature $widget->num_marked_dates ($value)
+=for signature value = $widget->num_marked_dates
+=cut
 void
-members (cal)
+num_marked_dates (cal)
 	GtkCalendar* cal
     ALIAS:
-	num_marked_dates  = 0
 	marked_date       = 1
 	year              = 2
 	month             = 3
@@ -55,6 +65,8 @@ members (cal)
 	    case 4:
 		PUSHs (sv_2mortal (newSViv (cal->selected_day)));
 		break;
+	    default:
+		g_assert_not_reached ();
 	}
 
 ## GtkWidget* gtk_calendar_new (void)
@@ -93,11 +105,37 @@ void
 gtk_calendar_clear_marks (calendar)
 	GtkCalendar * calendar
 
+## void gtk_calendar_set_display_options (GtkCalendar *calendar, GtkCalendarDisplayOptions flags)
 ## void gtk_calendar_display_options (GtkCalendar *calendar, GtkCalendarDisplayOptions flags)
+=for apidoc display_options
+The old name for C<set_display_options>.
+=cut
+
 void
-gtk_calendar_display_options (calendar, flags)
+gtk_calendar_set_display_options (calendar, flags)
 	GtkCalendar               * calendar
 	GtkCalendarDisplayOptions   flags
+    ALIAS:
+	display_options = 1
+    CODE:
+#if GTK_CHECK_VERSION(2,4,0)
+	gtk_calendar_set_display_options (calendar, flags);
+#else
+	gtk_calendar_display_options (calendar, flags);
+#endif
+    CLEANUP:
+	PERL_UNUSED_VAR (ix);
+
+GtkCalendarDisplayOptions
+gtk_calendar_get_display_options (GtkCalendar * calendar)
+    CODE:
+#if GTK_CHECK_VERSION(2,4,0)
+	RETVAL = gtk_calendar_get_display_options (calendar);
+#else
+	RETVAL = calendar->display_flags;
+#endif
+    OUTPUT:
+	RETVAL
 
 ## void gtk_calendar_get_date (GtkCalendar *calendar, guint *year, guint *month, guint *day)
 void

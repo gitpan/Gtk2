@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenu.xs,v 1.14 2003/11/19 20:15:53 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenu.xs,v 1.18.2.3 2004/03/21 18:51:55 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -31,6 +31,8 @@
  * this one's easy, though.
  */
 
+/* this is public so that other extensions which use GtkMenuPosFunc (e.g.
+ * libgnomeui) don't need to reimplement it. */
 void
 gtk2perl_menu_position_func (GtkMenu * menu,
                              gint * x,
@@ -74,7 +76,29 @@ gtk2perl_menu_position_func (GtkMenu * menu,
 	LEAVE;
 }
 
+static GPerlCallback *
+gtk2perl_menu_detach_func_create (SV *func, SV *data)
+{
+	GType param_types [] = {
+		GTK_TYPE_WIDGET,
+		GTK_TYPE_MENU
+	};
+	return gperl_callback_new (func, data, G_N_ELEMENTS (param_types),
+				   param_types, 0);
+}
 
+static void
+gtk2perl_menu_detach_func (GtkWidget *attach_widget,
+                           GtkMenu *menu)
+{
+	GPerlCallback *callback;
+
+	callback = g_object_get_data (G_OBJECT (attach_widget),
+	                              "__gtk2perl_menu_detach_func__");
+
+	if (callback)
+		gperl_callback_invoke (callback, NULL, attach_widget, menu);
+}
 
 MODULE = Gtk2::Menu	PACKAGE = Gtk2::Menu	PREFIX = gtk_menu_
 
@@ -94,7 +118,7 @@ gtk_menu_popup (menu, parent_menu_shell, parent_menu_item, menu_pos_func, data, 
 	guint activate_time
 	###guint32 activate_time
     CODE:
-	if (menu_pos_func == NULL || menu_pos_func == &PL_sv_undef) {
+	if (! (menu_pos_func && SvOK (menu_pos_func))) {
 		gtk_menu_popup (menu, parent_menu_shell, parent_menu_item,
 		                NULL, NULL, button, activate_time);
 	} else {
@@ -105,9 +129,14 @@ gtk_menu_popup (menu, parent_menu_shell, parent_menu_item, menu_pos_func, data, 
 		gtk_menu_popup (menu, parent_menu_shell, parent_menu_item,
 		        (GtkMenuPositionFunc) gtk2perl_menu_position_func,
 			callback, button, activate_time);
-		/* NOTE: this isn't a proper destructor, as it could leak
-		 *    if replaced somewhere else.  on the other hand, how
-		 *    likely is that? */
+		/* The menu will store the callback we give it, and can
+		 * conceivably invoke the callback multiple times
+		 * (repositioning, changing screens, etc).  Each call to
+		 * gtk_menu_popup() replaces the function pointer.  So,
+		 * if we use a weak reference, we can leak multiple callbacks;
+		 * if we use object data, we can clean up the ones we install
+		 * and reinstall.  Not likely, of course, but there are
+		 * pathological programmers out there. */
 		g_object_set_data_full (G_OBJECT (menu), "_menu_pos_callback",
 		                        callback,
 		                        (GDestroyNotify)
@@ -145,10 +174,24 @@ gtk_menu_set_accel_path (menu, accel_path)
 	GtkMenu *menu
 	const gchar *accel_path
 
-# FIXME nbeeds a callback
- ##void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
- ##					   GtkWidget	       *attach_widget,
- ##					   GtkMenuDetachFunc	detacher);
+void
+gtk_menu_attach_to_widget (menu, attach_widget, detacher)
+	GtkMenu *menu
+	GtkWidget *attach_widget
+	SV *detacher
+    PREINIT:
+	GPerlCallback *callback;
+    CODE:
+	callback = gtk2perl_menu_detach_func_create (detacher, NULL);
+
+	g_object_set_data_full (G_OBJECT (attach_widget),
+	                        "__gtk2perl_menu_detach_func__",
+			        callback,
+	                        (GDestroyNotify) gperl_callback_destroy);
+
+	gtk_menu_attach_to_widget (menu,
+	                           attach_widget,
+	                           gtk2perl_menu_detach_func);
 
 void
 gtk_menu_detach (menu)
@@ -192,5 +235,13 @@ void
 gtk_menu_set_screen (menu, screen)
 	GtkMenu   * menu
 	GdkScreen * screen
+
+#endif
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_menu_attach (GtkMenu *menu, GtkWidget *child, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach);
+
+void gtk_menu_set_monitor (GtkMenu *menu, gint monitor_num);
 
 #endif

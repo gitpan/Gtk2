@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDnd.xs,v 1.7.2.3 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDnd.xs,v 1.14 2004/03/01 07:06:44 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -24,10 +24,9 @@
 MODULE = Gtk2::Gdk::Dnd	PACKAGE = Gtk2::Gdk::DragContext	PREFIX = gdk_drag_context_
 
 SV *
-members (dc)
+protocol (dc)
 	GdkDragContext * dc
     ALIAS:
-	Gtk2::Gdk::DragContext::protocol = 0
 	Gtk2::Gdk::DragContext::is_source = 1
 	Gtk2::Gdk::DragContext::source_window = 2
 	Gtk2::Gdk::DragContext::dest_window = 3
@@ -36,7 +35,6 @@ members (dc)
 	Gtk2::Gdk::DragContext::action = 7
 	Gtk2::Gdk::DragContext::start_time = 8
     CODE:
-	RETVAL = NULL;
 	switch (ix) {
 	    case 0: RETVAL = newSVGdkDragProtocol (dc->protocol); break;
 	    case 1: RETVAL = newSViv (dc->is_source); break;
@@ -47,6 +45,9 @@ members (dc)
 	    case 6: RETVAL = newSVGdkDragAction (dc->suggested_action); break;
 	    case 7: RETVAL = newSVGdkDragAction (dc->action); break;
 	    case 8: RETVAL = newSVuv (dc->start_time); break;
+	    default:
+		RETVAL = NULL;
+		g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL
@@ -82,20 +83,6 @@ gdk_drag_status (context, action, time_=GDK_CURRENT_TIME)
 	GdkDragAction action
 	guint32 time_
 
-##  void gdk_drop_reply (GdkDragContext *context, gboolean ok, guint32 time_) 
-void
-gdk_drop_reply (context, ok, time_=GDK_CURRENT_TIME)
-	GdkDragContext *context
-	gboolean ok
-	guint32 time_
-
-##  void gdk_drop_finish (GdkDragContext *context, gboolean success, guint32 time_) 
-void
-gdk_drop_finish (context, success, time_=GDK_CURRENT_TIME)
-	GdkDragContext *context
-	gboolean success
-	guint32 time_
-
 ##  GdkAtom gdk_drag_get_selection (GdkDragContext *context) 
 GdkAtom
 gdk_drag_get_selection (context)
@@ -115,6 +102,8 @@ gdk_drag_begin (class, window, ...)
 	for (i = items - 1 ; i >= 2 ; i--)
 		targets = g_list_prepend (targets,
 		                        GUINT_TO_POINTER (SvGdkAtom (ST (i))));
+			/* the Gdk source code uses GUINT_TO_POINTER
+			 * when storing atoms in hashes. */
 	RETVAL = gdk_drag_begin (window, targets);
     OUTPUT:
 	RETVAL
@@ -137,7 +126,9 @@ gdk_drag_get_protocol_for_display (class, display, xid)
     PPCODE:
 	ret = gdk_drag_get_protocol_for_display (display, xid, &protocol);
 	XPUSHs (sv_2mortal (newSVuv (ret)));
-	XPUSHs (sv_2mortal (newSVGdkDragProtocol (protocol)));
+	XPUSHs (sv_2mortal (ret 
+	                    ? newSVGdkDragProtocol (protocol)
+	                    : newSVsv (&PL_sv_undef)));
 
 ##  void gdk_drag_find_window_for_screen (GdkDragContext *context, GdkWindow *drag_window, GdkScreen *screen, gint x_root, gint y_root, GdkWindow **dest_window, GdkDragProtocol *protocol) 
 =for apidoc
@@ -151,14 +142,16 @@ gdk_drag_find_window_for_screen (context, drag_window, screen, x_root, y_root)
 	gint x_root
 	gint y_root
     PREINIT:
-	GdkWindow *dest_window;
+	GdkWindow *dest_window = NULL;
 	GdkDragProtocol protocol;
     PPCODE:
 	gdk_drag_find_window_for_screen (context, drag_window, screen, 
 	                                 x_root, y_root, 
 	                                 &dest_window, &protocol);
 	XPUSHs (sv_2mortal (newSVGdkWindow (dest_window)));
-	XPUSHs (sv_2mortal (newSVGdkDragProtocol (protocol)));
+	XPUSHs (sv_2mortal ((dest_window
+	                     ? newSVGdkDragProtocol (protocol)
+	                     : newSVsv (&PL_sv_undef))));
 
 #endif /* >= 2.2.0 */
 
@@ -194,8 +187,10 @@ gdk_drag_find_window (context, drag_window, x_root, y_root)
     PPCODE:
 	gdk_drag_find_window (context, drag_window, x_root, y_root, 
 	                      &dest_window, &protocol);
-	XPUSHs (sv_2mortal (newSVGdkWindow (dest_window)));
-	XPUSHs (sv_2mortal (newSVGdkDragProtocol (protocol)));
+	XPUSHs (sv_2mortal (newSVGdkWindow_ornull (dest_window)));
+	XPUSHs (sv_2mortal (dest_window
+	                    ? newSVGdkDragProtocol (protocol)
+	                    : newSVsv (&PL_sv_undef)));
 
 
 ##  gboolean gdk_drag_motion (GdkDragContext *context, GdkWindow *dest_window, GdkDragProtocol protocol, gint x_root, gint y_root, GdkDragAction suggested_action, GdkDragAction possible_actions, guint32 time_) 
@@ -222,3 +217,18 @@ gdk_drag_abort (context, time_)
 	GdkDragContext *context
 	guint32 time_
 
+MODULE = Gtk2::Gdk::Dnd	PACKAGE = Gtk2::Gdk::DragContext	PREFIX = gdk_
+
+##  void gdk_drop_reply (GdkDragContext *context, gboolean ok, guint32 time_) 
+void
+gdk_drop_reply (context, ok, time_=GDK_CURRENT_TIME)
+	GdkDragContext *context
+	gboolean ok
+	guint32 time_
+
+##  void gdk_drop_finish (GdkDragContext *context, gboolean success, guint32 time_) 
+void
+gdk_drop_finish (context, success, time_=GDK_CURRENT_TIME)
+	GdkDragContext *context
+	gboolean success
+	guint32 time_

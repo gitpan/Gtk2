@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioButton.xs,v 1.12.2.2 2003/12/04 06:00:56 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioButton.xs,v 1.15 2004/01/10 04:26:26 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -35,7 +35,7 @@ gtk_radio_button_new (class, member_or_listref=NULL, label=NULL)
 	GSList         * group = NULL;
 	GtkRadioButton * member = NULL;
     CODE:
-	if( member_or_listref && member_or_listref != &PL_sv_undef
+	if( member_or_listref && SvOK (member_or_listref)
 	    && SvROK (member_or_listref)
 	    && SvRV (member_or_listref) != &PL_sv_undef )
 	{
@@ -89,13 +89,13 @@ gtk_radio_button_set_group (radio_button, member_or_listref)
 	GSList         * group = NULL;
 	GtkRadioButton * member = NULL;
     CODE:
-	if( member_or_listref && member_or_listref != &PL_sv_undef )
+	if( member_or_listref && SvOK (member_or_listref) )
 	{
 		if( SvTYPE(SvRV(member_or_listref)) == SVt_PVAV )
 		{
 			AV * av = (AV*)SvRV(member_or_listref);
 			SV ** svp = av_fetch(av, 0, 0);
-			if( SvOK(*svp) )
+			if( svp && SvOK(*svp) )
 			{
 				member = SvGtkRadioButton(*svp);
 			}

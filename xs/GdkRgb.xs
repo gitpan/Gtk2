@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.8.2.2 2004/03/22 15:55:00 muppetman Exp $
  */
  #include "gtk2perl.h"
 
@@ -34,13 +34,14 @@ static guchar *
 SvImageDataPointer (SV * sv)
 {
 	if (SvIOK (sv))
-		return (guchar*) SvUV (sv);
+		return INT2PTR (guchar*, SvUV (sv));
 	else if (SvPOK (sv))
 		return SvPV_nolen (sv);
 	else
 		croak ("expecting either a string containing pixel data or "
 		       "an integer pointing to the underlying C image data "
 		       "buffer");
+	/* not reached */
 }
 
 MODULE = Gtk2::Gdk::Rgb	PACKAGE = Gtk2::Gdk::GC	PREFIX = gdk_
@@ -48,7 +49,6 @@ MODULE = Gtk2::Gdk::Rgb	PACKAGE = Gtk2::Gdk::GC	PREFIX = gdk_
 ##  void gdk_rgb_gc_set_foreground (GdkGC *gc, guint32 rgb) 
 void gdk_rgb_gc_set_foreground (GdkGC * gc, guint32 rgb)
     ALIAS:
-	Gtk2::Gdk::GC::rgb_gc_set_foreground = 0
 	Gtk2::Gdk::GC::set_rgb_foreground = 1
     CLEANUP:
 	PERL_UNUSED_VAR (ix);
@@ -56,7 +56,6 @@ void gdk_rgb_gc_set_foreground (GdkGC * gc, guint32 rgb)
 ##  void gdk_rgb_gc_set_background (GdkGC *gc, guint32 rgb) 
 void gdk_rgb_gc_set_background (GdkGC * gc, guint32 rgb)
     ALIAS:
-	Gtk2::Gdk::GC::rgb_gc_set_background = 0
 	Gtk2::Gdk::GC::set_rgb_background = 1
     CLEANUP:
 	PERL_UNUSED_VAR (ix);
@@ -83,7 +82,6 @@ gdk_draw_rgb_image (drawable, gc, x, y, width, height, dith, buf, rowstride)
 	SV * buf
 	gint rowstride
     ALIAS:
-	draw_rgb_image = 0
 	draw_rgb_32_image = 1
 	draw_gray_image = 2
     CODE:
@@ -103,6 +101,8 @@ gdk_draw_rgb_image (drawable, gc, x, y, width, height, dith, buf, rowstride)
 		                     dith, SvImageDataPointer(buf),
 		                     rowstride);
 		break;
+	    default:
+		g_assert_not_reached ();
 	}
 
 ##  void gdk_draw_rgb_image_dithalign (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, gint width, gint height, GdkRgbDither dith, guchar *rgb_buf, gint rowstride, gint xdith, gint ydith) 
@@ -121,7 +121,6 @@ gdk_draw_rgb_image_dithalign (drawable, gc, x, y, width, height, dith, rgb_buf, 
 	gint xdith
 	gint ydith
     ALIAS:
-	draw_rgb_image_dithalign = 0
 	draw_rgb_32_image_dithalign = 1
     CODE:
 	if (ix == 1)

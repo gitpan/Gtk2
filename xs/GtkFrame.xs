@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFrame.xs,v 1.8 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFrame.xs,v 1.9 2003/12/28 00:07:22 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,21 +25,14 @@ MODULE = Gtk2::Frame	PACKAGE = Gtk2::Frame	PREFIX = gtk_frame_
 
 GtkWidget*
 gtk_frame_new (class, label=NULL)
-	SV * label
-    CODE:
-	RETVAL = gtk_frame_new ((!label || label == &PL_sv_undef)
-	                         ? NULL : SvGChar (label));
-    OUTPUT:
-	RETVAL
+	gchar_ornull *label
+    C_ARGS:
+	label
 
 void
-gtk_frame_set_label (frame, label)
+gtk_frame_set_label (frame, label=NULL)
 	GtkFrame *frame
-	SV * label
-    CODE:
-	/* label may be undef */
-	gtk_frame_set_label (frame, ((!label || label == &PL_sv_undef)
-	                             ? NULL : SvGChar (label)));
+	gchar_ornull *label
 
 void
 gtk_frame_set_label_widget (frame, label_widget)

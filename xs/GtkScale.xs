@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkScale.xs,v 1.5 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkScale.xs,v 1.7.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -57,3 +57,15 @@ gtk_scale_get_value_pos (scale)
 	GtkScale * scale
 
 ## void _gtk_scale_get_value_size (GtkScale *scale, gint *width, gint *height)
+
+
+#if GTK_CHECK_VERSION (2, 4, 0)
+
+## PangoLayout* gtk_scale_get_layout (GtkScale *scale)
+PangoLayout *
+gtk_scale_get_layout (scale)
+	GtkScale *scale
+
+void gtk_scale_get_layout_offsets (GtkScale *scale, OUTLIST gint x, OUTLIST gint y)
+
+#endif

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.8.4.1 2004/01/09 04:38:22 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.15.2.2 2004/03/16 07:00:51 muppetman Exp $
 #
 
 use strict;
@@ -12,35 +12,106 @@ use warnings;
 
 #########################
 
-use Test::More tests => 15;
+use Test::More tests => 34;
 BEGIN { use_ok('Gtk2') };
 
 #########################
 
 my @version = Gtk2->get_version_info;
 is( @version, 3, 'version info is three items long' );
-is( Gtk2->check_version(0,0,0), 'Gtk+ version too new (major mismatch)' );
-is( Gtk2->check_version(50,0,0), 'Gtk+ version too old (major mismatch)' );
+is (Gtk2->check_version(0,0,0), 'Gtk+ version too new (major mismatch)',
+    'check_version pass');
+is (Gtk2->check_version(50,0,0), 'Gtk+ version too old (major mismatch)',
+    'check_version fail');
+ok (defined (Gtk2::major_version), 'major_version');
+ok (defined (Gtk2::minor_version), 'minor_version');
+ok (defined (Gtk2::micro_version), 'micro_version');
+
+@version = Gtk2->GET_VERSION_INFO;
+is (@version, 3, 'version info is three items long');
+ok (Gtk2->CHECK_VERSION(0,0,0), 'CHECK_VERSION pass');
+ok (!Gtk2->CHECK_VERSION(50,0,0), 'CHECK_VERSION fail');
+is (Gtk2::MAJOR_VERSION, $version[0], 'MAJOR_VERSION');
+is (Gtk2::MINOR_VERSION, $version[1], 'MINOR_VERSION');
+is (Gtk2::MICRO_VERSION, $version[2], 'MICRO_VERSION');
+
+# Pango has only a compile-time version
+@version = Gtk2::Pango->GET_VERSION_INFO;
+is (@version, 3, 'version info is three items long');
+ok (Gtk2::Pango->CHECK_VERSION(0,0,0), 'CHECK_VERSION pass');
+ok (!Gtk2::Pango->CHECK_VERSION(50,0,0), 'CHECK_VERSION fail');
 
 SKIP:
 {
+	Gtk2->disable_setlocale;
+
+	@ARGV = qw(--help --g-fatal-warnings --name gtk2perl --urgs tree);
+
 	skip 'Gtk2->init_check failed, probably unable to open DISPLAY', 
-		11, unless( Gtk2->init_check );
+		18, unless( Gtk2->init_check );
 
 	ok( Gtk2->init );
+	ok( Gtk2->set_locale );
 
-	TODO: {
-	local $TODO = ((Gtk2->get_version_info)[1] > 2)
-	            ? "events_pending != 0 on 2.3.x ???"
-	            : undef;
-	is( Gtk2->events_pending, 0, 'no events pending on initialization' );
+	is_deeply(\@ARGV, [qw(--help --urgs tree)]);
+
+	isa_ok( Gtk2->get_default_language, "Gtk2::Pango::Language" );
+
+	is( Gtk2->main_level, 0, 'main level is zero when there are no loops' );
+
+	my $window = Gtk2::Object->new ("Gtk2::Window");
+	my $object = Gtk2::Object->new ("Gtk2::Label");
+
+	my $event = Gtk2::Gdk::Event->new ("button-press");
+
+	$event->button (1);
+	$event->time (time);
+	$event->state ([qw/shift-mask control-mask/]);
+
+	Gtk2::Gdk::Event->put ($event);
+
+	$window->add ($object);
+	$object->realize;
+
+	$object->propagate_event ($event);
+
+	# warn Gtk2->get_current_event;
+	# warn Gtk2->get_current_event_time;
+	# warn Gtk2->get_current_event_state;
+	# warn Gtk2->get_event_widget ($event);
+
+	my $events = 0;
+	my $retval;
+
+	while (Gtk2->events_pending) {
+		$retval = Gtk2->main_iteration;
+		$events++;
 	}
 
-	ok( Gtk2->main_level == 0 );
+	ok( $events );
+	ok( $retval );
+
+	Gtk2::Gdk::Event->put ($event);
+
+	$events = 0;
+
+	while (Gtk2->events_pending) {
+		$retval = Gtk2->main_iteration_do (0);
+		$events++;
+	}
+
+	ok( $events );
+	ok( $retval );
+
+	my $snooper;
+	ok( $snooper = Gtk2->key_snooper_install (sub { warn @_; 0; }, "bla") );
+	Gtk2->key_snooper_remove ($snooper);
 
 	Gtk2->init_add( sub { ok(1); } );
 	Gtk2->init_add( sub { ok($_[0] eq 'foo'); }, 'foo' );
 	ok(1);
+
+	Gtk2->quit_add_destroy (1, $object);
 
 	my $q1;
 	ok( $q1 = Gtk2->quit_add( 0, sub { Gtk2->quit_remove($q1); ok(1); } ) );
@@ -54,18 +125,4 @@ SKIP:
 __END__
 
 Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
-full list)
-
-This library is free software; you can redistribute it and/or modify it under
-the terms of the GNU Library General Public License as published by the Free
-Software Foundation; either version 2.1 of the License, or (at your option) any
-later version.
-
-This library is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Library General Public License for more
-details.
-
-You should have received a copy of the GNU Library General Public License along
-with this library; if not, write to the Free Software Foundation, Inc., 59
-Temple Place - Suite 330, Boston, MA  02111-1307  USA.
+full list).  See LICENSE for more information.

@@ -1,5 +1,12 @@
 #!/usr/bin/perl -w
 
+=doc
+
+This is a direct port from C to Perl of the testdnd program in the gtk+
+source distribution.  YMMV.
+
+=cut
+
 # Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the full
 # list)
 # 
@@ -17,7 +24,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/testdnd.pl,v 1.2 2003/09/22 00:04:23 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/testdnd.pl,v 1.3.2.1 2004/03/14 08:52:57 muppetman Exp $
 #
 
 # TITLE: DND
@@ -292,9 +299,9 @@ use constant  TARGET_STRING => 0;
 use constant  TARGET_ROOTWIN => 1;
 
 @target_table = (
-	{'target' => "STRING", 'flags' => 0, 'info' => TARGET_STRING},
-	{'target' => "text/plain", 'flags' => 0, 'info' => TARGET_STRING},
-	{'target' => "application/x-rootwin-drop", 'flags' => 0, 'info' => TARGET_ROOTWIN},
+	{'target' => "STRING", 'flags' => [], 'info' => TARGET_STRING},
+	{'target' => "text/plain", 'flags' => [], 'info' => TARGET_STRING},
+	{'target' => "application/x-rootwin-drop", 'flags' => [], 'info' => TARGET_ROOTWIN},
 );
 
 sub target_drag_leave {
@@ -535,15 +542,12 @@ $pixmap->signal_connect ("drag_drop", \&target_drag_drop);
 
 $pixmap->signal_connect ("drag_data_received", \&target_drag_data_received);
 
-#  /* Drag site */
+# Drag site
 
 $button = new Gtk2::Button ("Drag Here\n");
 
 $button->drag_source_set (['button1_mask', 'button3_mask'], ['copy', 'move'], @target_table);
 $button->drag_source_set_icon ($window->get_colormap,  $drag_icon, $drag_mask);
-
-#$drag_icon->unref;
-#$drag_mask->unref;
 
 $table->attach ($button, 0, 1, 1, 2, ['expand', 'fill'], ['expand', 'fill'], 0, 0);
 

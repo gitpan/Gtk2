@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.8.2.2 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.16.2.2 2004/03/17 16:05:34 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -41,7 +41,6 @@ gdk_atom_intern (class, atom_name, only_if_exists=FALSE)
 	const gchar *atom_name
 	gboolean only_if_exists
     ALIAS:
-	Gtk2::Gdk::Atom::intern = 0
 	Gtk2::Gdk::Atom::new = 1
     C_ARGS:
 	atom_name, only_if_exists
@@ -55,11 +54,14 @@ gdk_atom_name (atom)
 
 MODULE = Gtk2::Gdk::Property	PACKAGE = Gtk2::Gdk::Window	PREFIX = gdk_
 
- ### the docs warn us not to use this one, but don't say it's deprecated.
-
+### the docs warn us not to use this one, but don't say it's deprecated.
 ##  gboolean gdk_property_get (GdkWindow *window, GdkAtom property, GdkAtom type, gulong offset, gulong length, gint pdelete, GdkAtom *actual_property_type, gint *actual_format, gint *actual_length, guchar **data) 
 =for apidoc
+
 =for signature (property_type, format, length) = $window->property_get ($property, $type, $offset, $length, $pdelete)
+
+See I<property_change> for an explanation of the meaning of I<format>.
+
 =cut
 void
 gdk_property_get (window, property, type, offset, length, pdelete)
@@ -74,28 +76,109 @@ gdk_property_get (window, property, type, offset, length, pdelete)
 	gint actual_format;
 	gint actual_length;
 	guchar *data;
+	guint i;
     PPCODE:
-	if (gdk_property_get (window, property, type, offset, length, pdelete,
-	                      &actual_property_type, &actual_format,
-	                      &actual_length, &data))
+	if (! gdk_property_get (window, property, type, offset, length, pdelete,
+	                        &actual_property_type, &actual_format,
+	                        &actual_length, &data))
 		XSRETURN_EMPTY;
-	EXTEND (SP, 3);
+
+	EXTEND (SP, 2);
 	PUSHs (sv_2mortal (newSVGdkAtom (actual_property_type)));
 	PUSHs (sv_2mortal (newSViv (actual_format)));
-	PUSHs (sv_2mortal (newSVpv (data, actual_length)));
-	g_free (data);
 
- ## nelements is the number of elements in the data, not the number of bytes.
+	if (data) {
+		switch (actual_format) {
+			case 8: {
+				gchar *char_data = (gchar *) data;
+				XPUSHs (sv_2mortal (newSVpv (char_data, actual_length)));
+				break;
+			}
+			case 16: {
+				gushort *short_data = (gushort *) data;
+				for (i = 0; i < (actual_length / sizeof (gushort)); i++)
+					XPUSHs (sv_2mortal (newSVuv (short_data[i])));
+				break;
+			}
+			case 32: {
+				gulong *long_data = (gulong *) data;
+				for (i = 0; i < (actual_length / sizeof (gulong)); i++)
+					XPUSHs (sv_2mortal (newSVuv (long_data[i])));
+				break;
+			}
+			default:
+				warn ("Unhandled format value %d in gdk_property_get, should not happen",
+				      actual_format);
+		}
+
+		g_free (data);
+	}
+
+### nelements is the number of elements in the data, not the number of bytes.
 ##  void gdk_property_change (GdkWindow *window, GdkAtom property, GdkAtom type, gint format, GdkPropMode mode, const guchar *data, gint nelements) 
+=for apidoc
+
+=for arg ... property value(s)
+
+Depending on the value of I<format>, the property value(s) can be:
+
+  +--------------------+------------------------------------+
+  |      format        |                value               |
+  +--------------------+------------------------------------+
+  | Gtk2::Gdk::CHARS   | a string                           |
+  | Gtk2::Gdk::USHORTS | one or more unsigned short numbers |
+  | Gtk2::Gdk::ULONGS  | one or more unsigned long numbers  |
+  +--------------------+------------------------------------+
+
+=cut
 void
-gdk_property_change (window, property, type, format, mode, data, nelements)
+gdk_property_change (window, property, type, format, mode, ...)
 	GdkWindow *window
 	GdkAtom property
 	GdkAtom type
 	gint format
 	GdkPropMode mode
-	const guchar *data
-	gint nelements
+    PREINIT:
+	guchar *data = NULL;
+	int i;
+	int first_index = 5;
+	gint nelements;
+    CODE:
+	switch (format) {
+		case 8: {
+			SV *sv = ST (first_index);
+
+			/* need to use sv_len here because \0's are allowed. */
+			nelements = sv_len (sv);
+			data = (guchar *) SvPV (sv, nelements);
+			break;
+		}
+		case 16: {
+			gushort *short_data = gperl_alloc_temp (sizeof (gushort) * (items - first_index));
+
+			for (i = first_index; i < items; i++)
+				short_data[i - first_index] = (gushort) SvUV (ST (i));
+
+			data = (guchar *) short_data;
+			nelements = items - first_index;
+			break;
+		}
+		case 32: {
+			gulong *long_data = gperl_alloc_temp (sizeof (gulong) * (items - first_index));
+
+			for (i = first_index; i < items; i++)
+				long_data[i - first_index] = (gulong) SvUV (ST (i));
+
+			data = (guchar *) long_data;
+			nelements = items - first_index;
+			break;
+		}
+		default:
+			croak ("Illegal format value %d used; should be either 8, 16 or 32", 
+			       format);
+	}
+
+	gdk_property_change (window, property, type, format, mode, data, nelements);
 
 ##  void gdk_property_delete (GdkWindow *window, GdkAtom property) 
 void

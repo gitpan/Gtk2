@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVScrollbar.xs,v 1.1 2003/11/03 05:51:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVScrollbar.xs,v 1.2 2003/12/17 03:45:12 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -31,6 +31,8 @@ gtk_vscrollbar_new (class, adjustment=NULL)
 	Gtk2::VScrollBar::new = 1
     C_ARGS:
 	adjustment
+    CLEANUP:
+	PERL_UNUSED_VAR (ix);
 
 =for apidoc Gtk2::VScrollBar::new
 

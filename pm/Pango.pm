@@ -1,8 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/Pango.pm,v 1.4 2003/09/22 00:04:24 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/Pango.pm,v 1.6 2004/01/25 06:19:02 muppetman Exp $
 #
 
 package Gtk2::Pango;
+
+our $VERSION = '0.01';
 
 use strict;
 require Exporter;
@@ -104,7 +106,7 @@ This stuff is hardcoded directly from the headers of pango 1.2.1.
 
 =head1 SEE ALSO
 
-perl(1), Gtk2(3pm)
+L<perl>(1), L<Gtk2>(3pm)
 
 =head1 AUTHOR
 

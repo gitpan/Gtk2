@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAlignment.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAlignment.xs,v 1.7.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -42,3 +42,11 @@ gtk_alignment_set (alignment, xalign, yalign, xscale, yscale)
 	gfloat         xscale
 	gfloat         yscale
 
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_alignment_set_padding (GtkAlignment *alignment, guint padding_top, guint padding_bottom, guint padding_left, guint padding_right);
+
+## void gtk_alignment_get_padding (GtkAlignment *alignment, guint *padding_top, guint *padding_bottom, guint *padding_left, guint *padding_right);
+void gtk_alignment_get_padding (GtkAlignment *alignment, OUTLIST guint padding_top, OUTLIST guint padding_bottom, OUTLIST guint padding_left, OUTLIST guint padding_right);
+
+#endif

@@ -16,11 +16,14 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkKeys.xs,v 1.1.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkKeys.xs,v 1.4 2004/01/27 22:18:45 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
-MODULE = Gtk2::Gdk::Keys PACKAGE = Gtk2::Gdk::Keymap PREFIX = gtk_keymap_
+MODULE = Gtk2::Gdk::Keys PACKAGE = Gtk2::Gdk::Keymap PREFIX = gdk_keymap_
+
+BOOT:
+	gperl_object_set_no_warn_unreg_subclass (GDK_TYPE_KEYMAP, TRUE);
 
 ##  GdkKeymap* gdk_keymap_get_default (void) 
 GdkKeymap*
@@ -126,7 +129,7 @@ gdk_keymap_get_direction (keymap)
 	GdkKeymap *keymap
 
 
-MODULE = Gtk2::Gdk::Keys PACKAGE = Gtk2::Gdk::Keyval PREFIX = gtk_keyval_
+MODULE = Gtk2::Gdk::Keys PACKAGE = Gtk2::Gdk PREFIX = gdk_
 
 gchar *
 gdk_keyval_name (class, keyval)

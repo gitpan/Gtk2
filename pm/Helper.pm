@@ -1,8 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/Helper.pm,v 1.4 2003/09/22 00:04:24 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/Helper.pm,v 1.5 2003/12/30 16:50:45 rwmcfa1 Exp $
 #
 
 package Gtk2::Helper;
+
+our $VERSION = '0.01';
 
 use Carp;
 use strict;

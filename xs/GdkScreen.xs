@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkScreen.xs,v 1.9 2003/11/18 04:36:34 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkScreen.xs,v 1.10 2004/02/29 09:41:35 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -170,8 +170,7 @@ gdk_screen_broadcast_client_message (screen, event)
 	GdkScreen *screen
 	GdkEvent *event
 
- ## FIXME should this be _noinc?:  i think no, because gdk manages a list of
- ##       these things, and we probably shouldn't mess with that...
+ ## Gdk owns this object, so no _noinc
 ##  GdkScreen *gdk_screen_get_default (void) 
 GdkScreen_ornull *
 gdk_screen_get_default (class)

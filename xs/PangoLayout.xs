@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.9.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.16.2.1 2004/03/13 04:09:57 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,16 +26,19 @@ newSVPangoLogAttr (PangoLogAttr * logattr)
 {
 	HV * hv = newHV ();
 
-	hv_store (hv, "is_line_break",        13, newSViv (logattr->is_line_break),        0);
-	hv_store (hv, "is_mandatory_break",   18, newSViv (logattr->is_mandatory_break),   0);
-	hv_store (hv, "is_char_break",        13, newSViv (logattr->is_char_break),        0);
-	hv_store (hv, "is_white",              8, newSViv (logattr->is_white),             0);
-	hv_store (hv, "is_cursor_position",   18, newSViv (logattr->is_cursor_position),   0);
-	hv_store (hv, "is_word_start",        13, newSViv (logattr->is_word_start),        0);
-	hv_store (hv, "is_word_end",          11, newSViv (logattr->is_word_end),          0);
-	hv_store (hv, "is_sentence_boundary", 20, newSViv (logattr->is_sentence_boundary), 0);
-	hv_store (hv, "is_sentence_start",    17, newSViv (logattr->is_sentence_start),    0);
-	hv_store (hv, "is_sentence_end",      15, newSViv (logattr->is_sentence_end),      0);
+	hv_store (hv, "is_line_break",               13, newSVuv (logattr->is_line_break),               0);
+	hv_store (hv, "is_mandatory_break",          18, newSVuv (logattr->is_mandatory_break),          0);
+	hv_store (hv, "is_char_break",               13, newSVuv (logattr->is_char_break),               0);
+	hv_store (hv, "is_white",                     8, newSVuv (logattr->is_white),                    0);
+	hv_store (hv, "is_cursor_position",          18, newSVuv (logattr->is_cursor_position),          0);
+	hv_store (hv, "is_word_start",               13, newSVuv (logattr->is_word_start),               0);
+	hv_store (hv, "is_word_end",                 11, newSVuv (logattr->is_word_end),                 0);
+	hv_store (hv, "is_sentence_boundary",        20, newSVuv (logattr->is_sentence_boundary),        0);
+	hv_store (hv, "is_sentence_start",           17, newSVuv (logattr->is_sentence_start),           0);
+	hv_store (hv, "is_sentence_end",             15, newSVuv (logattr->is_sentence_end),             0);
+#if PANGO_CHECK_VERSION (1, 3, 0)
+	hv_store (hv, "backspace_deletes_character", 27, newSVuv (logattr->backspace_deletes_character), 0);
+#endif
 
 	return newRV_noinc ((SV*) hv);
 }
@@ -100,22 +103,23 @@ pango_layout_set_font_description (layout, desc)
 ##  gboolean pango_layout_get_justify (PangoLayout *layout) 
 ##  gboolean pango_layout_get_single_paragraph_mode (PangoLayout *layout) 
 int
-int_getters (layout)
+pango_layout_get_width (layout)
 	PangoLayout * layout
     ALIAS:
-	Gtk2::Pango::Layout::get_width = 0
 	Gtk2::Pango::Layout::get_indent = 1
 	Gtk2::Pango::Layout::get_spacing = 2
 	Gtk2::Pango::Layout::get_justify = 3
 	Gtk2::Pango::Layout::get_single_paragraph_mode = 4
     CODE:
-	RETVAL = 0;
 	switch (ix) {
 		case 0: RETVAL = pango_layout_get_width (layout); break;
 		case 1: RETVAL = pango_layout_get_indent (layout); break;
 		case 2: RETVAL = pango_layout_get_spacing (layout); break;
 		case 3: RETVAL = pango_layout_get_justify (layout); break;
 		case 4: RETVAL = pango_layout_get_single_paragraph_mode (layout); break;
+		default:
+			RETVAL = 0;
+			g_assert_not_reached ();
 	}
    OUTPUT:
 	RETVAL
@@ -126,11 +130,10 @@ int_getters (layout)
 ##  void pango_layout_set_justify (PangoLayout *layout, gboolean justify) 
 ##  void pango_layout_set_single_paragraph_mode (PangoLayout *layout, gboolean setting) 
 void
-int_setters (layout, newval)
+pango_layout_set_width (layout, newval)
 	PangoLayout * layout
 	int newval
     ALIAS:
-	Gtk2::Pango::Layout::set_width = 0
 	Gtk2::Pango::Layout::set_indent = 1
 	Gtk2::Pango::Layout::set_spacing = 2
 	Gtk2::Pango::Layout::set_justify = 3
@@ -142,6 +145,8 @@ int_setters (layout, newval)
 		case 2: pango_layout_set_spacing (layout, newval); break;
 		case 3: pango_layout_set_justify (layout, newval); break;
 		case 4: pango_layout_set_single_paragraph_mode (layout, newval); break;
+		default:
+			g_assert_not_reached ();
 	}
 
 
@@ -156,6 +161,20 @@ PangoWrapMode
 pango_layout_get_wrap (layout)
 	PangoLayout *layout
 
+#if PANGO_CHECK_VERSION (1, 3, 5)
+
+##  void pango_layout_set_auto_dir (PangoLayout *layout, gboolean auto_dir)
+void
+pango_layout_set_auto_dir (layout, auto_dir)
+	PangoLayout *layout
+	gboolean auto_dir
+
+##  gboolean pango_layout_get_auto_dir (PangoLayout *layout)
+gboolean
+pango_layout_get_auto_dir (layout)
+	PangoLayout *layout
+
+#endif
 
 ##  void pango_layout_set_alignment (PangoLayout *layout, PangoAlignment alignment) 
 void

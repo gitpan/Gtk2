@@ -16,9 +16,17 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoContext.xs,v 1.7 2003/11/11 05:58:49 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoContext.xs,v 1.8 2004/01/31 15:23:20 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
+
+/* FIXME: this is just a temporary place for the BOOT thingy.  Once
+ *        PangoFontset is bound, move it there. */
+
+MODULE = Gtk2::Pango::Context	PACKAGE = Gtk2::Pango::Fontset
+
+BOOT:
+	gperl_object_set_no_warn_unreg_subclass (PANGO_TYPE_FONTSET, TRUE);
 
 MODULE = Gtk2::Pango::Context	PACKAGE = Gtk2::Pango::Context	PREFIX = pango_context_
 

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w 
 #
-# Text Widget
+# Multiple Views
 #
 # The GtkTextView widget displays a GtkTextBuffer. One GtkTextBuffer
 # can be displayed by multiple GtkTextViews. This demo has two views
@@ -10,11 +10,9 @@
 
 package textview;
 
+use Glib qw(TRUE FALSE);
 use Gtk2;
 use Carp;
-
-use constant FALSE => 0;
-use constant TRUE => 1;
 
 # get the PANGO_WEIGHT_* constants
 use Gtk2::Pango;
@@ -48,16 +46,16 @@ sub create_tags {
 
   $buffer->create_tag ("heading",
 			weight => PANGO_WEIGHT_BOLD,
-			size => 15 * Gtk2::Pango->scale, #PANGO_SCALE,
+			size => 15 * PANGO_SCALE,
 			);
   
   $buffer->create_tag ("italic", style => 'italic');
   $buffer->create_tag ("bold", weight => PANGO_WEIGHT_BOLD); 
-  $buffer->create_tag ("big", size => 20 * Gtk2::Pango->scale); #PANGO_SCALE);
+  $buffer->create_tag ("big", size => 20 * PANGO_SCALE);
 			      # points times the PANGO_SCALE factor
 
-  $buffer->create_tag ("xx-small", scale => Gtk2::Pango->scale_xx_small); #PANGO_SCALE_XX_SMALL); 
-  $buffer->create_tag ("x-large", scale => Gtk2::Pango->scale_x_large); #PANGO_SCALE_X_LARGE); 
+  $buffer->create_tag ("xx-small", scale => PANGO_SCALE_XX_SMALL); 
+  $buffer->create_tag ("x-large", scale => PANGO_SCALE_X_LARGE); 
   $buffer->create_tag ("monospace", family => "monospace"); 
   $buffer->create_tag ("blue_foreground", foreground => "blue");  
   $buffer->create_tag ("red_background", background => "red");
@@ -84,13 +82,13 @@ sub create_tags {
   $buffer->create_tag ("double_underline", underline => 'double');
 
   $buffer->create_tag ("superscript",
-			rise => 10 * Gtk2::Pango->scale, #PANGO_SCALE,	  # 10 pixels
-			size => 8 * Gtk2::Pango->scale, #PANGO_SCALE,	  # 8 points
+			rise => 10 * PANGO_SCALE,	  # 10 pixels
+			size => 8 * PANGO_SCALE,	  # 8 points
 			);
   
   $buffer->create_tag ("subscript",
-			rise => -10 * Gtk2::Pango->scale, #PANGO_SCALE,   # 10 pixels
-			size => 8 * Gtk2::Pango->scale, #PANGO_SCALE,	   # 8 points
+			rise => -10 * PANGO_SCALE,   # 10 pixels
+			size => 8 * PANGO_SCALE,	   # 8 points
 			);
 
   $buffer->create_tag ("rtl_quote",
@@ -284,18 +282,22 @@ sub attach_widgets {
           $widget->signal_connect (clicked => \&easter_egg_callback);
 
       } elsif ($i == 1) {
-          my $menu = Gtk2::Menu->new;
-          
-          $widget = Gtk2::OptionMenu->new;
+	  if ((Gtk2->CHECK_VERSION (2, 4, 0)) {
+             $widget = Gtk2::ComboBox->new_text;
+             $widget->append_text ("Option 1");
+             $widget->append_text ("Option 2");
+             $widget->append_text ("Option 3");
 
-          my $menu_item = Gtk2::MenuItem->new ("Option 1");
-          $menu->append ($menu_item);
-          $menu_item = Gtk2::MenuItem->new ("Option 2");
-          $menu->append ($menu_item);
-          $menu_item = Gtk2::MenuItem->new ("Option 3");
-          $menu->append ($menu_item);
+          } else {
+             # ComboBox is not available, use OptionMenu instead
+             my $menu = Gtk2::Menu->new;
+             $menu->append (Gtk2::MenuItem->new ("Option 1"));
+             $menu->append (Gtk2::MenuItem->new ("Option 2"));
+             $menu->append (Gtk2::MenuItem->new ("Option 3"));
 
-          $widget->set_menu ($menu);
+             $widget = Gtk2::OptionMenu->new;
+             $widget->set_menu ($menu);
+          }
 
       } elsif ($i == 2) {
           $widget = Gtk2::HScale->new (undef);

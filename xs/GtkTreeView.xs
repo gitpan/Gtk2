@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.21.2.2 2003/12/04 00:21:17 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.26.2.1 2004/03/21 01:26:58 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -117,7 +117,7 @@ gtk2perl_tree_view_search_equal_func (GtkTreeModel * model,
 #if 0
 /* see commentary above gtk_tree_view_set_destroy_count_func() for details on
  * why this is commented out. */
-GPerlCallback *
+static GPerlCallback *
 gtk2perl_tree_view_destroy_count_func_create (SV * func, SV *data)
 {
 	GType param_types [] = {
@@ -128,7 +128,7 @@ gtk2perl_tree_view_destroy_count_func_create (SV * func, SV *data)
 	return gperl_callback_new (func, data, G_N_ELEMENTS(param_types), param_types, 0);
 }
 
-void
+static void
 gtk2perl_tree_view_destroy_count_func (GtkTreeView * tree_view,
 				       GtkTreePath * path,
 				       gint children,
@@ -441,17 +441,13 @@ void
 gtk_tree_view_get_cursor (tree_view)
 	GtkTreeView *tree_view
     PREINIT:
-	GtkTreePath *path;
-	GtkTreeViewColumn *focus_column;
+	GtkTreePath *path = NULL;
+	GtkTreeViewColumn *focus_column = NULL;
     PPCODE:
 	gtk_tree_view_get_cursor (tree_view, &path, &focus_column);
 	EXTEND (SP, 2);
-	PUSHs (sv_2mortal (path == NULL
-	                   ? &PL_sv_undef
-	                   : newSVGtkTreePath_copy (path)));
-	PUSHs (sv_2mortal (focus_column == NULL
-	                   ? &PL_sv_undef
-	                   : newSVGtkTreeViewColumn (focus_column)));
+	PUSHs (sv_2mortal (newSVGtkTreePath_own_ornull (path)));
+	PUSHs (sv_2mortal (newSVGtkTreeViewColumn_ornull (focus_column)));
 
 
 #### gboolean gtk_tree_view_get_path_at_pos (GtkTreeView *tree_view, gint x, gint y, GtkTreePath **path, GtkTreeViewColumn **column, gint *cell_x, gint *cell_y)
@@ -533,6 +529,8 @@ void gtk_tree_view_widget_to_tree_coords (GtkTreeView *tree_view, gint wx, gint 
 
 #### void gtk_tree_view_tree_to_widget_coords (GtkTreeView *tree_view, gint tx, gint ty, gint *wx, gint *wy)
 void gtk_tree_view_tree_to_widget_coords (GtkTreeView *tree_view, gint tx, gint ty, OUTLIST gint wx, OUTLIST gint wy)
+
+GdkPixmap * gtk_tree_view_create_row_drag_icon (GtkTreeView * tree_view, GtkTreePath * path);
 
 #### void gtk_tree_view_enable_model_drag_source (GtkTreeView *tree_view, GdkModifierType start_button_mask, const GtkTargetEntry *targets, gint n_targets, GdkDragAction actions)
 =for apidoc
@@ -679,23 +677,19 @@ gtk_tree_view_set_search_equal_func (tree_view, func, data=NULL)
 	                         (GDestroyNotify) gperl_callback_destroy);
 
 
-#if 0
-
-## according to the documentation, this function "should almost never be
-## used", and is exported for ATK.  i'll leave it out.
-#### void gtk_tree_view_set_destroy_count_func (GtkTreeView *tree_view, GtkTreeDestroyCountFunc func, gpointer data, GtkDestroyNotify destroy)
-void
-gtk_tree_view_set_destroy_count_func (tree_view, func, data=NULL)
-	GtkTreeView *tree_view
-	SV * func
-	SV * data
-    PREINIT:
-	GPerlCallback * callback;
-    CODE:
-	callback = gtk2perl_tree_view_destroy_count_func_create (func, data);
-	gtk_tree_view_set_destroy_count_func (tree_view,
-					      gtk2perl_tree_view_destroy_count_func,
-					      callback,
-					      (GDestroyNotify) gperl_callback_destroy);
-
-#endif
+#### according to the documentation, this function "should almost never be
+#### used", and is exported for ATK.  i'll leave it out.
+###### void gtk_tree_view_set_destroy_count_func (GtkTreeView *tree_view, GtkTreeDestroyCountFunc func, gpointer data, GtkDestroyNotify destroy)
+##void
+##gtk_tree_view_set_destroy_count_func (tree_view, func, data=NULL)
+##	GtkTreeView *tree_view
+##	SV * func
+##	SV * data
+##    PREINIT:
+##	GPerlCallback * callback;
+##    CODE:
+##	callback = gtk2perl_tree_view_destroy_count_func_create (func, data);
+##	gtk_tree_view_set_destroy_count_func (tree_view,
+##					      gtk2perl_tree_view_destroy_count_func,
+##					      callback,
+##					      (GDestroyNotify) gperl_callback_destroy);

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDnd.xs,v 1.6.4.2 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDnd.xs,v 1.11.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -35,23 +35,6 @@ gtk_drag_finish (context, success, del, time_)
 GtkWidget *
 gtk_drag_get_source_widget (context)
 	GdkDragContext *context
-
-
-MODULE = Gtk2::Dnd	PACKAGE = Gtk2::Drag	PREFIX = gtk_drag_
-
- ### FIXME do we own this object?:
-##  GdkDragContext *gtk_drag_begin (GtkWidget *widget, GtkTargetList *targets, GdkDragAction actions, gint button, GdkEvent *event) 
-GdkDragContext *
-gtk_drag_begin (class, widget, targets, actions, button, event)
-	GtkWidget *widget
-	GtkTargetList *targets
-	GdkDragAction actions
-	gint button
-	GdkEvent *event
-    C_ARGS:
-	widget, targets, actions, button, event
-
-MODULE = Gtk2::Dnd	PACKAGE = Gtk2::Gdk::DragContext	PREFIX = gtk_drag_
 
 ##  void gtk_drag_set_icon_widget (GdkDragContext *context, GtkWidget *widget, gint hot_x, gint hot_y) 
 void
@@ -92,8 +75,29 @@ void
 gtk_drag_set_icon_default (context)
 	GdkDragContext *context
 
+MODULE = Gtk2::Dnd	PACKAGE = Gtk2::Drag	PREFIX = gtk_drag_
+
+##  GdkDragContext *gtk_drag_begin (GtkWidget *widget, GtkTargetList *targets, GdkDragAction actions, gint button, GdkEvent *event) 
+GdkDragContext_noinc *
+gtk_drag_begin (class, widget, targets, actions, button, event)
+	GtkWidget *widget
+	GtkTargetList *targets
+	GdkDragAction actions
+	gint button
+	GdkEvent *event
+    C_ARGS:
+	widget, targets, actions, button, event
 
 MODULE = Gtk2::Dnd	PACKAGE = Gtk2::Widget	PREFIX = gtk_
+
+##  GdkDragContext *gtk_drag_begin (GtkWidget *widget, GtkTargetList *targets, GdkDragAction actions, gint button, GdkEvent *event) 
+GdkDragContext_noinc *
+gtk_drag_begin (widget, targets, actions, button, event)
+	GtkWidget *widget
+	GtkTargetList *targets
+	GdkDragAction actions
+	gint button
+	GdkEvent *event
 
 ##  void gtk_drag_get_data (GtkWidget *widget, GdkDragContext *context, GdkAtom target, guint32 time_) 
 void
@@ -172,7 +176,7 @@ gtk_drag_dest_set_target_list (widget, target_list)
 =for arg ... of Gtk2::TargetEntry's
 =cut
 void
-gtk_drag_source_set (widget, start_button_mask, actions, target1, ...)
+gtk_drag_source_set (widget, start_button_mask, actions, ...)
 	GtkWidget *widget
 	GdkModifierType start_button_mask
 	GdkDragAction actions
@@ -195,6 +199,19 @@ gtk_drag_source_set (widget, start_button_mask, actions, target1, ...)
 void
 gtk_drag_source_unset (widget)
 	GtkWidget *widget
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+GtkTargetList_ornull *
+gtk_drag_source_get_target_list (widget)
+	GtkWidget *widget
+
+void
+gtk_drag_source_set_target_list (widget, target_list)
+	GtkWidget *widget
+	GtkTargetList_ornull *target_list
+
+#endif
 
 ##  void gtk_drag_source_set_icon (GtkWidget *widget, GdkColormap *colormap, GdkPixmap *pixmap, GdkBitmap *mask) 
 void

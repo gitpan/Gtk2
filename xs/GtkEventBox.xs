@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEventBox.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEventBox.xs,v 1.7.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -29,3 +29,14 @@ gtk_event_box_new (class)
     C_ARGS:
 	/* void */
 
+#if GTK_CHECK_VERSION(2,4,0)
+
+gboolean gtk_event_box_get_visible_window (GtkEventBox *event_box);
+
+void gtk_event_box_set_visible_window (GtkEventBox *event_box, gboolean visible_window);
+
+gboolean gtk_event_box_get_above_child (GtkEventBox *event_box);
+
+void gtk_event_box_set_above_child (GtkEventBox *event_box, gboolean above_child);
+
+#endif

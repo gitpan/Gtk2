@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModelSort.xs,v 1.4 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModelSort.xs,v 1.6 2004/02/09 00:38:03 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -29,8 +29,10 @@ BOOT:
 
 
 GtkTreeModel_noinc *
-gtk_tree_model_sort_new_with_model (child_model)
+gtk_tree_model_sort_new_with_model (class, child_model)
 	GtkTreeModel * child_model
+    C_ARGS:
+	child_model
 
 GtkTreeModel *
 gtk_tree_model_sort_get_model (tree_model)
@@ -90,12 +92,9 @@ gtk_tree_model_sort_reset_default_sort_func (tree_model_sort)
 	GtkTreeModelSort *tree_model_sort
 
 
-## the API docs say this should almost never be called.
-## therefore, it's out unless somebody can find a need for it.
-#### void gtk_tree_model_sort_clear_cache (GtkTreeModelSort *tree_model_sort)
-##void
-##gtk_tree_model_sort_clear_cache (tree_model_sort)
-##	GtkTreeModelSort *tree_model_sort
+void
+gtk_tree_model_sort_clear_cache (tree_model_sort)
+	GtkTreeModelSort *tree_model_sort
 
 #if GTK_CHECK_VERSION(2,2,0)
 

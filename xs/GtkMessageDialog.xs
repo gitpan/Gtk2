@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.8.2.1 2004/01/15 03:51:57 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.13.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -60,3 +60,30 @@ gtk_message_dialog_new (class, parent, flags, type, buttons, format, ...)
 		 * gtk_message_dialog_new() explicitly allows it. */
     OUTPUT:
 	RETVAL
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+=for apidoc
+=for arg message a string containing Pango markup
+Like C<new>, but allowing Pango markup tags in the message.  Note that this
+version is not variadic.
+=cut
+GtkWidget *
+gtk_message_dialog_new_with_markup (class, parent, flags, type, buttons, message)
+	GtkWindow_ornull * parent
+	GtkDialogFlags flags
+	GtkMessageType type
+	GtkButtonsType buttons
+	gchar * message
+    CODE:
+	/* -Wall warns about the NULL format string here, but
+	 * gtk_message_dialog_new() explicitly allows it. */
+	RETVAL = gtk_message_dialog_new (parent, flags, type, buttons, NULL);
+	gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (RETVAL), message);
+    OUTPUT:
+	RETVAL
+
+void
+gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog, const gchar *str)
+
+#endif

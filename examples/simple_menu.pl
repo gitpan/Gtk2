@@ -17,7 +17,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/simple_menu.pl,v 1.2 2003/09/22 00:04:23 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/simple_menu.pl,v 1.3 2004/02/03 00:26:20 rwmcfa1 Exp $
 #
 # r.m.
 # 
@@ -51,11 +51,13 @@ my $menu_tree = [
 			},
 			_Save      => {
 				callback_action => $action++,
+				callback_data => 'cbdata 1',
 				accelerator => '<ctrl>S',
 			},
 			'Save _As' => {
 				callback => \&callback,
 				callback_action => $action++,
+				callback_data => 'cbdata 2',
 				accelerator => '<ctrl>A',
 			},
 			_Exit      => {

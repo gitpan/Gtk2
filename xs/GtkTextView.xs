@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextView.xs,v 1.10 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextView.xs,v 1.14.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -129,12 +129,25 @@ gtk_text_view_get_iter_at_location (text_view, x, y)
     OUTPUT:
 	RETVAL
 
-# TODO:  had to lose the const on GtkTextIter
 ## void gtk_text_view_get_line_yrange (GtkTextView *text_view, const GtkTextIter *iter, gint *y, gint *height)
-void gtk_text_view_get_line_yrange (GtkTextView *text_view, GtkTextIter *iter, OUTLIST gint y, OUTLIST gint height)
+void gtk_text_view_get_line_yrange (GtkTextView *text_view, const GtkTextIter *iter, OUTLIST gint y, OUTLIST gint height)
 
 ## void gtk_text_view_get_line_at_y (GtkTextView *text_view, GtkTextIter *target_iter, gint y, gint *line_top)
-void gtk_text_view_get_line_at_y (GtkTextView *text_view, GtkTextIter *target_iter, gint y, OUTLIST gint line_top)
+=for apidoc 
+=for signature (target_iter, line_top) = $text_view->get_line_at_y ($y)
+=cut
+void
+gtk_text_view_get_line_at_y (text_view, y)
+	GtkTextView *text_view
+	gint y
+    PREINIT:
+	GtkTextIter target_iter;
+	gint line_top;
+    PPCODE:
+	gtk_text_view_get_line_at_y (text_view, &target_iter, y, &line_top);
+	EXTEND (sp, 2);
+	PUSHs (sv_2mortal (newSVGtkTextIter_copy (&target_iter)));
+	PUSHs (sv_2mortal (newSViv (line_top)));
 
 ## void gtk_text_view_buffer_to_window_coords (GtkTextView *text_view, GtkTextWindowType win, gint buffer_x, gint buffer_y, gint *window_x, gint *window_y)
 void gtk_text_view_buffer_to_window_coords (GtkTextView *text_view, GtkTextWindowType win, gint buffer_x, gint buffer_y, OUTLIST gint window_x, OUTLIST gint window_y)
@@ -191,12 +204,11 @@ gtk_text_view_backward_display_line_start (text_view, iter)
 	GtkTextView * text_view
 	GtkTextIter * iter
 
-# TODO:  had to lose the const on GtkTextIter
 ## gboolean gtk_text_view_starts_display_line (GtkTextView *text_view, const GtkTextIter *iter)
 gboolean
 gtk_text_view_starts_display_line (text_view, iter)
 	GtkTextView * text_view
-	GtkTextIter * iter
+	const GtkTextIter * iter
 
 ## gboolean gtk_text_view_move_visually (GtkTextView *text_view, GtkTextIter *iter, gint count)
 gboolean
@@ -237,6 +249,18 @@ gtk_text_view_set_editable (text_view, setting)
 gboolean
 gtk_text_view_get_editable (text_view)
 	GtkTextView * text_view
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_text_view_set_overwrite (GtkTextView *text_view, gboolean overwrite);
+
+gboolean gtk_text_view_get_overwrite (GtkTextView *text_view);
+
+void gtk_text_view_set_accepts_tab (GtkTextView	*text_view, gboolean accepts_tab);
+
+gboolean gtk_text_view_get_accepts_tab (GtkTextView *text_view);
+
+#endif
 
 ## void gtk_text_view_set_pixels_above_lines (GtkTextView *text_view, gint pixels_above_lines)
 void
@@ -322,7 +346,7 @@ gtk_text_view_set_tabs (text_view, tabs)
 	PangoTabArray * tabs
 
 ## PangoTabArray* gtk_text_view_get_tabs (GtkTextView *text_view)
-PangoTabArray *
+PangoTabArray_own *
 gtk_text_view_get_tabs (text_view)
 	GtkTextView * text_view
 
@@ -340,7 +364,7 @@ gtk_text_view_set_wrap_mode (text_view, wrap_mode)
 	GtkWrapMode   wrap_mode
 
 ##GtkTextAttributes* gtk_text_view_get_default_attributes (GtkTextView *text_view)
-GtkTextAttributes*
+GtkTextAttributes_own *
 gtk_text_view_get_default_attributes (text_view)
 	GtkTextView * text_view
 

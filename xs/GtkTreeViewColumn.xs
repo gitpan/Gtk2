@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.15.2.3 2003/12/04 00:21:17 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.21.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -77,6 +77,11 @@ gtk2perl_tree_cell_data_func (GtkTreeViewColumn * tree_column,
 
 
 MODULE = Gtk2::TreeViewColumn	PACKAGE = Gtk2::TreeViewColumn	PREFIX = gtk_tree_view_column_
+
+BOOT:
+#if GTK_CHECK_VERSION(2,4,0)
+	gperl_set_isa ("Gtk2::TreeViewColumn", "Gtk2::CellLayout");
+#endif
 
 
 GtkTreeViewColumn *
@@ -262,6 +267,14 @@ const gchar *
 gtk_tree_view_column_get_title (tree_column)
 	GtkTreeViewColumn *tree_column
 
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_tree_view_column_set_expand (GtkTreeViewColumn *tree_column, gboolean expand);
+
+gboolean gtk_tree_view_column_get_expand (GtkTreeViewColumn *tree_column);
+
+#endif
+
 void
 gtk_tree_view_column_set_clickable (tree_column, clickable)
 	GtkTreeViewColumn *tree_column
@@ -325,26 +338,30 @@ GtkSortType
 gtk_tree_view_column_get_sort_order (tree_column)
 	GtkTreeViewColumn *tree_column
 
-# FIXME 
 #### void gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column, GtkTreeModel *tree_model, GtkTreeIter *iter, gboolean is_expander, gboolean is_expanded)
-##void
-##gtk_tree_view_column_cell_set_cell_data (tree_column, tree_model, iter, is_expander, is_expanded)
-##	GtkTreeViewColumn *tree_column
-##	GtkTreeModel *tree_model
-##	GtkTreeIter *iter
-##	gboolean is_expander
-##	gboolean is_expanded
-##
-# FIXME need to return a rectangle from the stack, OUTLIST won't work
+void
+gtk_tree_view_column_cell_set_cell_data (tree_column, tree_model, iter, is_expander, is_expanded)
+	GtkTreeViewColumn *tree_column
+	GtkTreeModel *tree_model
+	GtkTreeIter *iter
+	gboolean is_expander
+	gboolean is_expanded
+
 #### void gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column, GdkRectangle *cell_area, gint *x_offset, gint *y_offset, gint *width, gint *height)
-##void
-##gtk_tree_view_column_cell_get_size (tree_column, cell_area, x_offset, y_offset, width, height)
-##	GtkTreeViewColumn *tree_column
-##	GdkRectangle *cell_area
-##	gint *x_offset
-##	gint *y_offset
-##	gint *width
-##	gint *height
+void
+gtk_tree_view_column_cell_get_size (tree_column)
+	GtkTreeViewColumn *tree_column
+    PREINIT:
+	GdkRectangle cell_area = {0};
+	gint x_offset = 0, y_offset = 0, width = 0, height = 0;
+    PPCODE:
+	gtk_tree_view_column_cell_get_size (tree_column, &cell_area, &x_offset, &y_offset, &width, &height);
+	EXTEND (sp, 5);
+	PUSHs (sv_2mortal (newSViv (x_offset)));
+	PUSHs (sv_2mortal (newSViv (y_offset)));
+	PUSHs (sv_2mortal (newSViv (width)));
+	PUSHs (sv_2mortal (newSViv (height)));
+	PUSHs (sv_2mortal (newSVGdkRectangle (&cell_area)));
 
 #### gboolean gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
 gboolean

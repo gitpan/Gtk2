@@ -18,21 +18,29 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/histogramplot.pl,v 1.9 2003/11/08 06:23:57 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/histogramplot.pl,v 1.10.2.1 2004/03/14 08:52:56 muppetman Exp $
 #
 
 # originally written in C by muppet in 2001 or 2002, i can't remember.
 # ported from C to gtk2-perl 2003 by muppet
 
+=doc
+
+Create a new, self-drawing widget in Perl code.  This example shows how to
+subclass Glib::Object/Gtk2::Widget types, how to override class closures,
+how to define how much size you want to request for yourself, how to draw
+shapes and text with Gdk, how to handle mouse events, why you'd want to
+implement SET_PROPERTY for yourself, and how to emit signals.  And the
+widget is actually functional, too.  :-)
+
+=cut
+
 package Histogram::Plot;
 
-use Gtk2;
 use warnings;
 use strict;
-use Data::Dumper;
-
-use constant FALSE => 0;
-use constant TRUE => 1;
+use Glib qw/TRUE FALSE/;
+use Gtk2;
 
 use constant MIN_CHART_WIDTH  => 256;
 use constant MIN_CHART_HEIGHT => 100;
@@ -530,9 +538,8 @@ sub do_threshold_changed {
 #
 package main;
 
-use Gtk2 qw/-init -locale/;
-use constant TRUE => 1;
-use constant FALSE => 0;
+use Glib qw/TRUE FALSE/;
+use Gtk2 qw/-init/;
 
 my $window = Gtk2::Window->new;
 $window->signal_connect (delete_event => sub { Gtk2->main_quit; FALSE });

@@ -16,21 +16,23 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.12 2003/11/28 17:53:18 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.17 2004/02/26 17:20:03 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango
 
+BOOT:
+	gperl_object_set_no_warn_unreg_subclass (PANGO_TYPE_FONT, TRUE);
+
 =for object Gtk2::Pango::FontDescription
 =cut
 
 ### some constants...
 double
-constant (class)
+scale (class)
     ALIAS:
-	Gtk2::Pango::scale          = 0
 	Gtk2::Pango::scale_xx_small = 1
 	Gtk2::Pango::scale_x_small  = 2
 	Gtk2::Pango::scale_small    = 3
@@ -39,7 +41,6 @@ constant (class)
 	Gtk2::Pango::scale_x_large  = 6
 	Gtk2::Pango::scale_xx_large = 7
     CODE:
-	RETVAL = 0.0;
 	switch (ix) {
 		case 0: RETVAL = (double)PANGO_SCALE; break;
 		case 1: RETVAL = PANGO_SCALE_XX_SMALL; break;
@@ -49,6 +50,9 @@ constant (class)
 		case 5: RETVAL = PANGO_SCALE_LARGE; break;
 		case 6: RETVAL = PANGO_SCALE_X_LARGE; break;
 		case 7: RETVAL = PANGO_SCALE_XX_LARGE; break;
+		default:
+			RETVAL = 0.0;
+			g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL
@@ -97,6 +101,11 @@ void
 pango_font_description_set_family_static (desc, family)
 	PangoFontDescription *desc
 	const char *family
+
+## void pango_font_description_get_family (PangoFontDescription *desc, )
+const char *
+pango_font_description_get_family (desc)
+	PangoFontDescription *desc
 
 ## void pango_font_description_set_style (PangoFontDescription *desc, PangoStyle style)
 void
@@ -182,12 +191,12 @@ pango_font_description_merge_static (desc, desc_to_merge, replace_existing)
 gboolean
 pango_font_description_better_match (desc, old_match, new_match)
 	PangoFontDescription *desc
-	PangoFontDescription *old_match
+	PangoFontDescription_ornull *old_match
 	PangoFontDescription *new_match
 
 
 ##PangoFontDescription *pango_font_description_from_string (const char *str)
-PangoFontDescription *
+PangoFontDescription_own *
 pango_font_description_from_string (class, str)
 	const char * str
     C_ARGS:
@@ -197,11 +206,15 @@ pango_font_description_from_string (class, str)
 char *
 pango_font_description_to_string (desc)
 	PangoFontDescription *desc
+    CLEANUP:
+	g_free (RETVAL);
 
 ## char * pango_font_description_to_filename (const PangoFontDescription *desc)
 char *
 pango_font_description_to_filename (desc)
 	PangoFontDescription *desc
+    CLEANUP:
+	g_free (RETVAL);
 
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontMetrics	PREFIX = pango_font_metrics_
 
@@ -228,12 +241,6 @@ int
 pango_font_metrics_get_approximate_digit_width (metrics)
 	PangoFontMetrics *metrics
 
-## PangoFontMetrics * pango_font_get_metrics (PangoFont *font, PangoLanguage *language)
-PangoFontMetrics *
-pango_font_get_metrics (font, language)
-	PangoFont *font
-	PangoLanguage *language
-
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontFamily	PREFIX = pango_font_family_
 
 ## void pango_font_family_list_faces (PangoFontFamily *family, PangoFontFace ***faces, int *n_faces)
@@ -259,8 +266,19 @@ pango_font_family_list_faces (family)
 	}
 	g_free(faces);
 
-###MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::Font	PREFIX = pango_font_
-###
+MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::Font	PREFIX = pango_font_
+
+## PangoFontMetrics * pango_font_get_metrics (PangoFont *font, PangoLanguage *language)
+PangoFontMetrics *
+pango_font_get_metrics (font, language)
+	PangoFont *font
+	PangoLanguage *language
+
+## PangoFontDescription* pango_font_describe (PangoFont *font)
+PangoFontDescription *
+pango_font_describe (font)
+	PangoFont *font
+
 ### no typemaps for this stuff.
 ### it looks like it would only be useful from C, though.
 ### PangoCoverage * pango_font_get_coverage (PangoFont *font, PangoLanguage *language)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToggleButton.xs,v 1.8 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToggleButton.xs,v 1.9 2004/01/10 04:26:26 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -24,10 +24,9 @@
 MODULE = Gtk2::ToggleButton	PACKAGE = Gtk2::ToggleButton	PREFIX = gtk_toggle_button_
 
 GtkWidget*
-gtk_toggle_button_news (class, label=NULL)
+gtk_toggle_button_new (class, label=NULL)
 	const gchar * label
     ALIAS:
-	Gtk2::ToggleButton::new = 0
 	Gtk2::ToggleButton::new_with_mnemonic = 1
 	Gtk2::ToggleButton::new_with_label = 2
     CODE:

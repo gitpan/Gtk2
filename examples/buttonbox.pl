@@ -20,19 +20,15 @@
 # You should have received a copy of the GNU Library General Public License
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/buttonbox.pl,v 1.4 2003/09/22 00:04:23 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/buttonbox.pl,v 1.5 2004/01/25 06:52:01 muppetman Exp $
 #
 
 # this was originally gtk-2.2.1/examples/buttonbox/buttonbox.c
 # ported to gtk2-perl by rm
 
 use strict;
-use Gtk2;
-
-use constant TRUE => 1;
-use constant FALSE => 0;
-
-Gtk2->init;
+use Glib qw(TRUE FALSE);
+use Gtk2 -init;
 
 # Create a Button Box with the specified parameters
 sub create_bbox

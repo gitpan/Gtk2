@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.13.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.16 2004/02/27 03:54:23 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -52,19 +52,19 @@ gtk_tooltips_set_tip (tooltips, widget, tip_text, tip_private=NULL)
 	if (tip_private && SvOK (tip_private))
 		real_tip_private = SvGChar (tip_private);
 	gtk_tooltips_set_tip (tooltips, widget, tip_text, real_tip_private);
-	/* work around a (bug|questionable behavior) in Gtk+, wherein the
-	 * widget on which you set a tooltip does not hold a reference on
-	 * the tooltips object.  we'll just stash a reference to the object
-	 * in the widget's user data, so that the object will live at least
-	 * as long as the widget. */
+	/* gtk+'s widgets do not hold a reference on the tooltips object,
+	 * as you might expect; in fact, it's the other way around.
+	 * let's use a weakref on the widget to keep the tooltips object
+	 * alive as long as the widget is alive. */
 	g_object_ref (G_OBJECT (tooltips));
-	g_object_set_data_full (G_OBJECT (widget), "_gtk2perl_tooltips_stash",
-	                        tooltips, (GDestroyNotify)g_object_unref);
+	g_object_weak_ref (G_OBJECT (widget),
+	                   (GWeakNotify)g_object_unref, tooltips);
 
 ## GtkTooltipsData* gtk_tooltips_data_get (GtkWidget *widget)
 =for apidoc
-=for signature hash = $tooltips->data_get ($widget)
-Returns a hash with the keys: tooptips, widget, tip_text, and tip_private.
+=for signature hash_ref = $tooltips->data_get ($widget)
+Returns a hash reference with the keys: tooptips, widget, tip_text, and
+tip_private.
 
 tooltips is the GtkTooltips group that this tooltip belongs to. widget is the
 GtkWidget that this tooltip data is associated with. tip_text is a string
@@ -84,11 +84,18 @@ gtk_tooltips_data_get (class, widget)
 	ret = gtk_tooltips_data_get(widget);
 	if( !ret )
 		XSRETURN_UNDEF;
+
 	hv = newHV();
-	hv_store(hv, "tooltips", 8, newSVGtkTooltips(ret->tooltips),0);
-	hv_store(hv, "widget", 6, newSVGtkWidget(GTK_WIDGET(ret->widget)),0);
-	hv_store(hv, "tip_text", 8, newSVpv(ret->tip_text, PL_na),0);
-	hv_store(hv, "tip_private", 11, newSVpv(ret->tip_private, PL_na),0);
+
+	if (ret->tooltips)
+		hv_store(hv, "tooltips", 8, newSVGtkTooltips(ret->tooltips),0);
+	if (ret->widget)
+		hv_store(hv, "widget", 6, newSVGtkWidget(GTK_WIDGET(ret->widget)),0);
+	if (ret->tip_text)
+		hv_store(hv, "tip_text", 8, newSVpv(ret->tip_text, PL_na),0);
+	if (ret->tip_private)
+		hv_store(hv, "tip_private", 11, newSVpv(ret->tip_private, PL_na),0);
+
 	XPUSHs(sv_2mortal(newRV_noinc((SV*)hv)));
 
 ## void gtk_tooltips_force_window (GtkTooltips *tooltips)

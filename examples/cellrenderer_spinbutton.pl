@@ -17,7 +17,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_spinbutton.pl,v 1.2 2003/11/08 06:23:57 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_spinbutton.pl,v 1.3 2004/02/04 07:14:53 muppetman Exp $
 #
 
 use strict;
@@ -58,7 +58,6 @@ use Glib::Object::Subclass
        ["step",  "Step",  "Okay.",                      5.0])
   ]
 ;
-__PACKAGE__->_install_overrides;
 
 sub INIT_INSTANCE {
 	my $self = shift;
@@ -87,7 +86,7 @@ sub format_text {
 	sprintf $format, $cell->{value};
 }
 
-sub on_get_size {
+sub GET_SIZE {
   my ($cell, $widget, $area) = @_;
 
   my $layout = $cell -> get_layout($widget);
@@ -102,7 +101,7 @@ sub get_layout {
   return $widget -> create_pango_layout("");
 }
 
-sub on_render {
+sub RENDER {
   my ($cell, $window, $widget, $background_area, $cell_area, $expose_area, $flags) = @_;
   my $state;
 
@@ -132,7 +131,7 @@ sub on_render {
                                        $layout);
 }
 
-sub on_start_editing {
+sub START_EDITING {
   my ($cell, $event, $view, $path, $background_area, $cell_area, $flags) = @_;
   my $spin_button = Gtk2::SpinButton -> new_with_range($cell -> get(qw(min max step)));
 

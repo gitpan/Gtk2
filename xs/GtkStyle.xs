@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStyle.xs,v 1.15.2.1 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStyle.xs,v 1.21.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -33,10 +33,9 @@ BOOT:
 	gperl_object_set_no_warn_unreg_subclass (GTK_TYPE_STYLE, TRUE);
 
 SV *
-stateless_member (style)
+black (style)
 	GtkStyle * style
     ALIAS:
-	Gtk2::Style::black = 0
 	Gtk2::Style::white = 1
 	Gtk2::Style::font_desc = 2
 	Gtk2::Style::xthickness = 3
@@ -45,26 +44,25 @@ stateless_member (style)
 	Gtk2::Style::white_gc = 6
     CODE:
 	switch (ix) {
-	    /* FIXME: is it correct to _copy these? */
-	    case 0: RETVAL = newSVGdkColor_copy (&(style->black)); break;
-	    case 1: RETVAL = newSVGdkColor_copy (&(style->white)); break;
+	    case 0: RETVAL = newSVGdkColor (&(style->black)); break;
+	    case 1: RETVAL = newSVGdkColor (&(style->white)); break;
 	    case 2: RETVAL = newSVPangoFontDescription_copy (style->font_desc); break;
 	    case 3: RETVAL = newSViv (style->xthickness); break;
 	    case 4: RETVAL = newSViv (style->ythickness); break;
 	    case 5: RETVAL = newSVGdkGC (style->black_gc); break;
 	    case 6: RETVAL = newSVGdkGC (style->white_gc); break;
-	    default: croak ("augh! unhandled stateless style member");
+	    default: 
+		RETVAL = NULL;
+		g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL
 
-## FIXME: is it correct to _copy these?
-GdkColor_copy *
-state_color (style, state)
+GdkColor *
+fg (style, state)
 	GtkStyle * style
 	GtkStateType state
     ALIAS:
-	Gtk2::Style::fg = 0
 	Gtk2::Style::bg = 1
 	Gtk2::Style::light = 2
 	Gtk2::Style::dark = 3
@@ -82,18 +80,19 @@ state_color (style, state)
 	    case 5: RETVAL = &(style->text[state]); break;
 	    case 6: RETVAL = &(style->base[state]); break;
 	    case 7: RETVAL = &(style->text_aa[state]); break;
-	    default: croak ("augh! unhandled style state color");
+	    default: 
+		RETVAL = NULL;
+		g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL
 
 # legitimate reference, not a copy
 GdkGC *
-state_gc (style, state)
+fg_gc (style, state)
 	GtkStyle * style
 	GtkStateType state
     ALIAS:
-	Gtk2::Style::fg_gc = 0
 	Gtk2::Style::bg_gc = 1
 	Gtk2::Style::light_gc = 2
 	Gtk2::Style::dark_gc = 3
@@ -111,7 +110,9 @@ state_gc (style, state)
 	    case 5: RETVAL = style->text_gc[state]; break;
 	    case 6: RETVAL = style->base_gc[state]; break;
 	    case 7: RETVAL = style->text_aa_gc[state]; break;
-	    default: croak ("augh! unhandled style state color");
+	    default: 
+		RETVAL = NULL;
+		g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL
@@ -140,11 +141,23 @@ GtkStyle_noinc*
 gtk_style_copy (style)
 	GtkStyle *style
 
+gboolean
+gtk_style_attached (style)
+	GtkStyle *style
+    CODE:
+	RETVAL = GTK_STYLE_ATTACHED (style);
+    OUTPUT:
+	RETVAL
+
  ## GtkStyle* gtk_style_attach (GtkStyle *style, GdkWindow *window)
-GtkStyle_noinc*
+GtkStyle *
 gtk_style_attach (style, window)
 	GtkStyle *style
 	GdkWindow *window
+    CLEANUP:
+	if (RETVAL != style)
+		/* claim ownership of new object */
+		g_object_unref (RETVAL);
 
  ## void gtk_style_detach (GtkStyle *style)
 void
@@ -514,8 +527,25 @@ gtk_paint_resize_grip (style, window, state_type, area, widget, detail, edge, x,
 	gint width
 	gint height
 
+MODULE = Gtk2::Style	PACKAGE = Gtk2	PREFIX = gtk_
+
+#if GTK_CHECK_VERSION (2, 4, 0)
+
+void
+gtk_draw_insertion_cursor (class, widget, drawable, area, location, is_primary, direction, draw_arrow)
+	GtkWidget *widget
+	GdkDrawable *drawable
+	GdkRectangle *area
+	GdkRectangle *location
+	gboolean is_primary
+	GtkTextDirection direction
+	gboolean draw_arrow
+    C_ARGS:
+	widget, drawable, area, location, is_primary, direction, draw_arrow
+
+#endif
+
   # for boxed support, not needed
  ## void gtk_border_free ( GtkBorder *border_)
   # private
  ## void _gtk_style_init_for_settings (GtkStyle *style, GtkSettings *settings)
- ## void _gtk_draw_insertion_cursor (GtkWidget *widget, GdkDrawable *drawable, GdkGC *gc, GdkRectangle *location, GtkTextDirection direction, gboolean draw_arrow)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.9.4.2 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.16.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -39,6 +39,9 @@ stem ## _quark (void) 							\
 
 DEFINE_QUARK (clipboard_received);
 DEFINE_QUARK (clipboard_text_received);
+#if GTK_CHECK_VERSION (2, 4, 0)
+DEFINE_QUARK (clipboard_targets_received);
+#endif
 DEFINE_QUARK (clipboard_get);
 DEFINE_QUARK (clipboard_clear);
 DEFINE_QUARK (clipboard_user_data);
@@ -68,6 +71,32 @@ gtk2perl_clipboard_text_received_func (GtkClipboard *clipboard,
 
 	PERL_UNUSED_VAR (data);
 }
+
+#if GTK_CHECK_VERSION(2, 4, 0)
+
+static void
+gtk2perl_clipboard_targets_received_func (GtkClipboard *clipboard,
+                                          GdkAtom * targets,
+                                          gint n_targets,
+                                          gpointer data)
+{
+	SV * targetlist;
+	AV * av;
+	int i;
+	GPerlCallback * callback = (GPerlCallback*)
+		g_object_get_qdata (G_OBJECT (clipboard),
+		                    clipboard_targets_received_quark());
+
+	av = newAV ();
+	for (i = 0 ; i < n_targets ; i++)
+		av_push (av, newSVGdkAtom (targets[i]));
+	targetlist = sv_2mortal (newRV_noinc ((SV*) av));
+	gperl_callback_invoke (callback, NULL, clipboard, targetlist);
+
+	PERL_UNUSED_VAR (data);
+}
+
+#endif
 
 static void
 gtk2perl_clipboard_get_func (GtkClipboard *clipboard,
@@ -189,8 +218,6 @@ gtk_clipboard_set_with_data (clipboard, get_func, clear_func, user_data, ...)
 	}
     OUTPUT:
 	RETVAL
-    CLEANUP:
-	g_free (targets);
 
 ##  gboolean gtk_clipboard_set_with_owner (GtkClipboard *clipboard, const GtkTargetEntry *targets, guint n_targets, GtkClipboardGetFunc get_func, GtkClipboardClearFunc clear_func, GObject *owner) 
 =for apidoc
@@ -273,7 +300,7 @@ void gtk_clipboard_set_text (GtkClipboard *clipboard, const gchar_length *text, 
 
 ##  void gtk_clipboard_request_contents (GtkClipboard *clipboard, GdkAtom target, GtkClipboardReceivedFunc callback, gpointer user_data) 
 void
-gtk_clipboard_request_contents (clipboard, target, callback, user_data)
+gtk_clipboard_request_contents (clipboard, target, callback, user_data=NULL)
 	GtkClipboard *clipboard
 	GdkAtom target
 	SV * callback
@@ -294,7 +321,7 @@ gtk_clipboard_request_contents (clipboard, target, callback, user_data)
 
 ##  void gtk_clipboard_request_text (GtkClipboard *clipboard, GtkClipboardTextReceivedFunc callback, gpointer user_data) 
 void
-gtk_clipboard_request_text (clipboard, callback, user_data)
+gtk_clipboard_request_text (clipboard, callback, user_data=NULL)
 	GtkClipboard *clipboard
 	SV * callback
 	SV * user_data
@@ -332,5 +359,47 @@ gtk_clipboard_wait_for_text (clipboard)
 gboolean
 gtk_clipboard_wait_is_text_available (clipboard)
 	GtkClipboard *clipboard
+
+#if GTK_CHECK_VERSION (2, 4, 0)
+
+ ## void gtk_clipboard_request_targets (GtkClipboard *clipboard, GtkClipboardTargetsReceivedFunc  callback, gpointer user_data);
+void gtk_clipboard_request_targets (GtkClipboard *clipboard, SV * callback, SV * user_data=NULL)
+    PREINIT:
+	GType param_types[] = {
+		GTK_TYPE_CLIPBOARD,
+		GPERL_TYPE_SV
+	};
+	GPerlCallback * real_callback;
+    CODE:
+	real_callback = gperl_callback_new (callback, user_data,
+	                                    2, param_types, G_TYPE_NONE);
+	g_object_set_qdata_full (G_OBJECT (clipboard),
+	                         clipboard_targets_received_quark (),
+	                         real_callback,
+	                         (GDestroyNotify) gperl_callback_destroy);
+	gtk_clipboard_request_targets
+			(clipboard,
+			 gtk2perl_clipboard_targets_received_func,
+			 real_callback);
+
+=for apidoc
+Returns a list of GdkAtom's.
+=cut
+ ## gboolean gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard, GdkAtom **targets, gint *n_targets);
+void gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard)
+    PREINIT:
+	GdkAtom *targets = NULL;
+	gint n_targets, i;
+    PPCODE:
+	if (!gtk_clipboard_wait_for_targets (clipboard, &targets, &n_targets))
+		XSRETURN_EMPTY;
+	if (targets) {
+		EXTEND (SP, n_targets);
+		for (i = 0 ; i < n_targets ; i++)
+			PUSHs (sv_2mortal (newSVGdkAtom (targets[i])));
+		g_free (targets);
+	}
+
+#endif
 
 #endif /* defined GTK_TYPE_CLIPBOARD */

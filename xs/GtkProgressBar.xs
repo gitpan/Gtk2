@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkProgressBar.xs,v 1.8 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkProgressBar.xs,v 1.9 2004/03/12 02:05:43 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -39,8 +39,8 @@ gtk_progress_bar_new (class)
 ## void gtk_progress_bar_set_text (GtkProgressBar *pbar, const gchar *text)
 void
 gtk_progress_bar_set_text (pbar, text)
-	GtkProgressBar * pbar
-	const gchar    * text
+	GtkProgressBar     * pbar
+	const gchar_ornull * text
 
 ## void gtk_progress_bar_set_fraction (GtkProgressBar *pbar, gdouble fraction)
 void
@@ -81,7 +81,7 @@ gtk_progress_bar_pulse (pbar)
 	GtkProgressBar * pbar
 
 ##G_CONST_RETURN gchar * gtk_progress_bar_get_text (GtkProgressBar *pbar)
-const gchar *
+const gchar_ornull *
 gtk_progress_bar_get_text (pbar)
 	GtkProgressBar * pbar
 

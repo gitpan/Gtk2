@@ -21,106 +21,42 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/calendar.pl,v 1.5 2003/09/22 00:04:23 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/calendar.pl,v 1.6.2.1 2004/03/14 08:53:38 muppetman Exp $
 #
 
-# this was originally gtk-2.2.1/examples/buttonbox/buttonbox.c
+# this was originally gtk-2.2.1/examples/calendar/calendar.c
 # ported to gtk2-perl (and perl-ized) by rm
 
 use strict;
 use Gtk2;
 
-use constant TRUE => 1;
-use constant FALSE => 0;
+use Glib ':constants';
 
 use constant DEF_PAD => 10;
 use constant DEF_PAD_SMALL => 5;
 
 use constant TM_YEAR_BASE => 1900;
 
-=com
-
-void calendar_font_selection_ok (GtkWidget    *button,
-                                 CalendarData *calendar)
-{
-  GtkRcStyle *style;
-  char *font_name;
-
-  if (calendar->window)
-    {
-      font_name = gtk_font_selection_dialog_get_font_name (GTK_FONT_SELECTION_DIALOG (calendar->font_dialog));
-      if (font_name) 
-	{
-	  style = gtk_rc_style_new ();
-	  pango_font_description_free (style->font_desc);
-	  style->font_desc = pango_font_description_from_string (font_name);
-	  gtk_widget_modify_style (calendar->window, style);
-	  g_free (font_name);
-	}
-    }
-
-  gtk_widget_destroy (calendar->font_dialog);
-}
-
-void calendar_select_font (GtkWidget    *button,
-                           CalendarData *calendar)
-{
-  GtkWidget *window;
-
-  if (!calendar->font_dialog) {
-    window = gtk_font_selection_dialog_new ("Font Selection Dialog");
-    g_return_if_fail (GTK_IS_FONT_SELECTION_DIALOG (window));
-    calendar->font_dialog = window;
-    
-    gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
-    
-    g_signal_connect (window, "destroy",
-		      G_CALLBACK (gtk_widget_destroyed),
-		      &calendar->font_dialog);
-    
-    g_signal_connect (GTK_FONT_SELECTION_DIALOG (window)->ok_button,
-		      "clicked", G_CALLBACK (calendar_font_selection_ok),
-		      calendar);
-    g_signal_connect_swapped (GTK_FONT_SELECTION_DIALOG (window)->cancel_button,
-			     "clicked", G_CALLBACK (gtk_widget_destroy), 
-			     calendar->font_dialog);
-  }
-  window = calendar->font_dialog;
-  if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-
-}
-
-=cut
-
 sub calendar_select_font
 {
 	my $calendar = shift;
 
-	my $fsd = Gtk2::FontSelectionDialog->new(
-		'Font Selection Dialog');
+	my $fsd = Gtk2::FontSelectionDialog->new ('Font Selection Dialog');
 	$fsd->set_position('mouse');
 
-#	$fsd->signal_connect( 'destroy' => sub {
-# TODO:			$fsd->destroyed;
-#		});
+	$fsd->set_font_name ($calendar->get_style->font_desc->to_string);
 
-	$fsd->ok_button->signal_connect( 'clicked' => sub {
-		my $font_name = $fsd->get_font_name;
-		if( $font_name ne '' )
-		{
-			$calendar->modify_font(
-				Gtk2::Pango::FontDescription->from_string(
-					$font_name) );
+	$fsd->signal_connect ('response' => sub {
+		my (undef, $response) = @_;
+		if ($response eq 'ok') {
+			my $font_name = $fsd->get_font_name;
+			return unless $font_name;
+			$calendar->modify_font
+				(Gtk2::Pango::FontDescription->from_string
+				 	($font_name));
 		}
 		$fsd->destroy;
 	});
-
-	$fsd->cancel_button->signal_connect_swapped( 'clicked' => sub {
-			$fsd->destroy;
-		});
 
 	$fsd->show;
 }
@@ -162,9 +98,6 @@ sub create_calendar
 	$window->signal_connect( 'destroy' => sub {
 			Gtk2->main_quit;
 		} );
-#  g_signal_connect (window, "delete-event",
-#		    G_CALLBACK (gtk_false),
-#		    NULL);
 	$window->set_resizable(FALSE);
 
 	$vbox = Gtk2::VBox->new(FALSE, DEF_PAD);
@@ -271,7 +204,7 @@ sub create_calendar
 		$_ = lc($_);
 	}
 	
-	# Build the right font-button */ 
+	# Build the right font-button
 	$button = Gtk2::Button->new('Font...');
 	$button->signal_connect( 'clicked' => sub {
 			calendar_select_font($_[1]);

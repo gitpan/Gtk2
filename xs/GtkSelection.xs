@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.12.2.2 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.22.2.1 2004/03/22 15:55:01 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -69,7 +69,7 @@ gtk2perl_read_gtk_target_entry (SV * sv,
 		if ((s=hv_fetch (h, "target", 6, 0)) && SvOK (*s))
 			e->target = SvPV (*s, len);
 		if ((s=hv_fetch (h, "flags", 5, 0)) && SvOK (*s))
-			e->flags = SvUV (*s);
+			e->flags = SvGtkTargetFlags (*s);
 		if ((s=hv_fetch (h, "info", 4, 0)) && SvOK (*s))
 			e->info = SvUV (*s);
 	} else {
@@ -77,7 +77,7 @@ gtk2perl_read_gtk_target_entry (SV * sv,
 		if ((s=av_fetch (a, 0, 0)) && SvOK (*s))
 			e->target = SvPV (*s, len);
 		if ((s=av_fetch (a, 1, 0)) && SvOK (*s))
-			e->flags = SvUV (*s);
+			e->flags = SvGtkTargetFlags (*s);
 		if ((s=av_fetch (a, 2, 0)) && SvOK (*s))
 			e->info = SvUV (*s);
 	}
@@ -97,11 +97,52 @@ SvGtkTargetList (SV * sv)
 	if (!sv || !SvROK (sv) ||
 	    !sv_derived_from (sv, "Gtk2::TargetList"))
 		croak ("variable is not of type Gtk2::TargetList");
-	return (GtkTargetList*) SvUV (SvRV (sv));
+	return INT2PTR (GtkTargetList*, SvUV (SvRV (sv)));
 }
 
 
+MODULE = Gtk2::Selection	PACKAGE = Gtk2::TargetEntry
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  # as a HASH
+  $target_entry = {
+      target => 'text/plain', # some string representing the drag type
+      flags => [], # Gtk2::TargetFlags
+      info => 42,  # some app-defined integer identifier
+  };
+
+  # as an ARRAY, for compactness
+  $target_entry = [ $target, $flags, $info ];
+
+=cut
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+A Gtk2::TargetEntry data structure represents a single type of data than can
+be supplied for by a widget for a selection or for supplied or received during
+drag-and-drop.  It  contains a string representing the drag type, a flags field
+(used only for drag and drop - see Gtk2::TargetFlags), and an application
+assigned integer ID.  The integer ID will later be passed as a signal parameter
+for signals like "selection_get".  It allows the application to identify the
+target type without extensive string compares. 
+
+=cut
+
+=for flags GtkTargetFlags
+=cut
+
+=for see_also Gtk2::TargetList
+=cut
+
 MODULE = Gtk2::Selection	PACKAGE = Gtk2::TargetList	PREFIX = gtk_target_list_
+
+=for see_also Gtk2::TargetEntry
+=cut
 
 void
 DESTROY (SV * list)
@@ -123,7 +164,6 @@ gtk_target_list_new (class, ...)
     OUTPUT:
 	RETVAL
     CLEANUP:
-	g_free (targets);
 	gtk_target_list_unref (RETVAL);
 
  ## unmapped, automagical
@@ -150,8 +190,6 @@ gtk_target_list_add_table (GtkTargetList * list, ...)
     CODE:
 	GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (1, targets, ntargets);
 	gtk_target_list_add_table (list, targets, ntargets);
-    CLEANUP:
-	g_free (targets);
 
 ##  void gtk_target_list_remove (GtkTargetList *list, GdkAtom target) 
 void
@@ -198,6 +236,9 @@ gtk_selection_owner_set_for_display (class, display, widget, selection, time_)
 
 MODULE = Gtk2::Selection	PACKAGE = Gtk2::Widget	PREFIX = gtk_
 
+=for see_also Gtk2::TargetEntry
+=cut
+
 ##  void gtk_selection_add_target (GtkWidget *widget, GdkAtom selection, GdkAtom target, guint info) 
 void
 gtk_selection_add_target (widget, selection, target, info)
@@ -220,7 +261,6 @@ gtk_selection_add_targets (widget, selection, ...)
     CODE:
 	GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (2, targets, ntargets);
 	gtk_selection_add_targets (widget, selection, targets, ntargets);
-	g_free (targets);
 
 ##  void gtk_selection_clear_targets (GtkWidget *widget, GdkAtom selection) 
 void
@@ -236,13 +276,17 @@ gtk_selection_convert (widget, selection, target, time_)
 	GdkAtom target
 	guint32 time_
 
+##  void gtk_selection_remove_all (GtkWidget *widget) 
+void
+gtk_selection_remove_all (widget)
+	GtkWidget *widget
+
 MODULE = Gtk2::Selection	PACKAGE = Gtk2::SelectionData	PREFIX = gtk_selection_data_
 
 SV *
-members (d)
+selection (d)
 	GtkSelectionData * d
     ALIAS:
-	Gtk2::SelectionData::selection = 0
 	Gtk2::SelectionData::target    = 1
 	Gtk2::SelectionData::type      = 2
 	Gtk2::SelectionData::format    = 3
@@ -250,7 +294,6 @@ members (d)
 	Gtk2::SelectionData::length    = 5
 	Gtk2::SelectionData::display   = 6
     CODE:
-	RETVAL = NULL;
 	switch (ix) {
 	    case 0: RETVAL = newSVGdkAtom (d->selection); break;
 	    case 1: RETVAL = newSVGdkAtom (d->target); break;
@@ -261,6 +304,9 @@ members (d)
 #if GTK_CHECK_VERSION(2,2,0)
 	    case 6: RETVAL = newSVGdkDisplay (d->display); break;
 #endif
+	    default:
+		RETVAL = NULL;
+		g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL
@@ -283,7 +329,8 @@ gtk_selection_data_set_text (selection_data, str, len=-1)
 	gint len
 
 ##  guchar * gtk_selection_data_get_text (GtkSelectionData *selection_data) 
-guchar *
+#guchar *
+gchar_own *
 gtk_selection_data_get_text (selection_data)
 	GtkSelectionData *selection_data
 
@@ -314,11 +361,6 @@ gtk_selection_data_get_targets (selection_data)
 gboolean
 gtk_selection_data_targets_include_text (selection_data)
 	GtkSelectionData *selection_data
-
-##  void gtk_selection_remove_all (GtkWidget *widget) 
-void
-gtk_selection_remove_all (widget)
-	GtkWidget *widget
 
 ##  gboolean gtk_selection_clear (GtkWidget *widget, GdkEventSelection *event) 
 gboolean

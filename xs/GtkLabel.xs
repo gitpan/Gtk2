@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.10.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.14 2004/01/17 07:25:05 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -24,10 +24,12 @@
 
 MODULE = Gtk2::Label	PACKAGE = Gtk2::Label	PREFIX = gtk_label_
 
+=for enum GtkJustification
+=cut
 
 GtkWidget *
 gtk_label_new (class, str=NULL)
-	const gchar * str
+	const gchar_ornull * str
     C_ARGS:
 	str
 
@@ -41,16 +43,22 @@ gtk_label_new_with_mnemonic (class, str)
 void
 gtk_label_set_text (label, str)
 	GtkLabel      * label
-	const gchar    * str
+	const gchar_ornull    * str
 
-const gchar *
+const gchar_ornull *
 gtk_label_get_text (label)
 	GtkLabel      * label
 
 void gtk_label_set_attributes (GtkLabel * label, PangoAttrList * attrs)
 
-# can return NULL, but we don't have a boxed _ornull OUTPUT variant. :-/
-PangoAttrList * gtk_label_get_attributes    (GtkLabel      * label);
+PangoAttrList *
+gtk_label_get_attributes (GtkLabel * label)
+    CODE:
+	RETVAL = gtk_label_get_attributes (label);
+	if (!RETVAL)
+		XSRETURN_UNDEF;
+    OUTPUT:
+	RETVAL
 
 ### gtk_label_[gs]et_label ---- string includes any embedded stuff
 void
@@ -98,9 +106,9 @@ gtk_label_get_mnemonic_keyval (label)
 void
 gtk_label_set_mnemonic_widget (label, widget)
 	GtkLabel * label
-	GtkWidget * widget
+	GtkWidget_ornull * widget
 
-GtkWidget *
+GtkWidget_ornull *
 gtk_label_get_mnemonic_widget (label)
 	GtkLabel * label
 

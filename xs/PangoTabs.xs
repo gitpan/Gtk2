@@ -1,22 +1,9 @@
 /*
  * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * Licensed under the LGPL, see LICENSE file for more information.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
- * Boston, MA  02111-1307  USA.
- *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTabs.xs,v 1.7 2003/11/28 17:53:18 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTabs.xs,v 1.10 2004/02/18 20:17:31 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -24,12 +11,21 @@ MODULE = Gtk2::Pango::TabArray	PACKAGE = Gtk2::Pango::TabArray	PREFIX = pango_ta
 
 ##  PangoTabArray *pango_tab_array_new (gint initial_size, gboolean positions_in_pixels) 
 ###  PangoTabArray *pango_tab_array_new_with_positions (gint size, gboolean positions_in_pixels, PangoTabAlign first_alignment, gint first_position, ...) 
+
+=for apidoc Gtk2::Pango::TabArray::new
+=for arg ... pairs of Gtk2::PangoTabAlign's and integers, the alignments and positions of the tab stops.
+=cut
+
+=for apidoc new_with_positions
+=for arg ... pairs of Gtk2::PangoTabAlign's and integers, the alignments and positions of the tab stops.
+Alias for L<new|tabarray = Gtk2::Pango::TabArray-E<gt>new ($initial_size, $positions_in_pixels, ...)>.
+=cut
+
 PangoTabArray_own *
 pango_tab_array_new (class, initial_size, positions_in_pixels, ...)
 	gint initial_size
 	gboolean positions_in_pixels
     ALIAS:
-	new = 0
 	new_with_positions = 1
     CODE:
 	PERL_UNUSED_VAR (ix);

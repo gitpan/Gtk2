@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.17.2.3 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.21.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -210,6 +210,13 @@ gtk_text_buffer_place_cursor (buffer, where)
 	GtkTextBuffer *buffer
 	GtkTextIter *where
 
+#if GTK_CHECK_VERSION(2,4,0)
+
+## void gtk_text_buffer_select_range (GtkTextBuffer *buffer, const GtkTextIter *ins, const GtkTextIter *bound);
+void gtk_text_buffer_select_range (GtkTextBuffer *buffer, GtkTextIter *ins, GtkTextIter *bound);
+
+#endif
+
 ## void gtk_text_buffer_apply_tag (GtkTextBuffer *buffer, GtkTextTag *tag, const GtkTextIter *start, const GtkTextIter *end)
 void
 gtk_text_buffer_apply_tag (buffer, tag, start, end)
@@ -362,7 +369,6 @@ GtkTextIter_copy *
 gtk_text_buffer_get_start_iter (buffer)
 	GtkTextBuffer *buffer
     ALIAS:
-	Gtk2::TextBuffer::get_start_iter = 0
 	Gtk2::TextBuffer::get_end_iter = 1
     PREINIT:
 	GtkTextIter iter;

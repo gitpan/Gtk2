@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbufLoader.xs,v 1.7 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbufLoader.xs,v 1.9.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -29,6 +29,8 @@ gdk_pixbuf_loader_new (class)
 	/* void */
 
 ##  GdkPixbufLoader * gdk_pixbuf_loader_new_with_type (const char *image_type, GError **error) 
+=for apidoc __gerror__
+=cut
 GdkPixbufLoader_noinc *
 gdk_pixbuf_loader_new_with_type (image_type)
 	const char *image_type
@@ -40,6 +42,24 @@ gdk_pixbuf_loader_new_with_type (image_type)
 		gperl_croak_gerror (NULL, error);
     OUTPUT:
 	RETVAL
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+## GdkPixbufLoader * gdk_pixbuf_loader_new_with_mime_type (const char *mime_type, GError **error);
+=for apidoc __gerror__
+=cut
+GdkPixbufLoader_noinc *
+gdk_pixbuf_loader_new_with_mime_type (const char *mime_type)
+    PREINIT:
+	GError * error = NULL;
+    CODE:
+	RETVAL = gdk_pixbuf_loader_new_with_mime_type (mime_type, &error);
+	if (!RETVAL)
+		gperl_croak_gerror (NULL, error);
+    OUTPUT:
+	RETVAL
+
+#endif
 
 #if GTK_CHECK_VERSION(2,2,0)
 
@@ -53,6 +73,8 @@ gdk_pixbuf_loader_set_size (loader, width, height)
 #endif /* >= 2.2.0 */
 
 ##  gboolean gdk_pixbuf_loader_write (GdkPixbufLoader *loader, const guchar *buf, gsize count, GError **error) 
+=for apidoc __gerror__
+=cut
 gboolean
 gdk_pixbuf_loader_write (loader, buf)
 	GdkPixbufLoader *loader
@@ -79,6 +101,8 @@ gdk_pixbuf_loader_get_animation (loader)
 	GdkPixbufLoader *loader
 
 ##  gboolean gdk_pixbuf_loader_close (GdkPixbufLoader *loader, GError **error) 
+=for apidoc __gerror__
+=cut
 void
 gdk_pixbuf_loader_close (loader)
 	GdkPixbufLoader *loader

@@ -1,57 +1,12 @@
 /*
  * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * Licensed under the LGPL, see LICENSE file for more information.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA  02111-1307  USA.
- *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.42.2.1 2003/12/12 17:38:47 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.57.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 #include "gtk2perl.h"
 #include "ppport.h"
-
-/*
-gtkwidget.h typedefs GtkAllocation to be the same as GdkRectangle;
-unfortunately, there is no type macro associated with GtkAllocation itself.
-on the other hand, it's only used in one or two places, and is used only for
-looking at the width and height members, anyway.  so, we treat is specially
-here.
-
-since allocations are notoriously read-only, we specify that it's always a
-copy.
-*/
-SV *
-newSVGtkAllocation (GtkAllocation * allocation)
-{
-	SV * sv = gperl_new_boxed_copy (allocation, GDK_TYPE_RECTANGLE);
-	return sv_bless (sv, gv_stashpv ("Gtk2::Allocation", TRUE));
-}
-
-
-MODULE = Gtk2::Widget	PACKAGE = Gtk2::Allocation
-
-BOOT:
-	gperl_set_isa ("Gtk2::Allocation", "Gtk2::Gdk::Rectangle");
-
- ## we'll need to destroy this explicitly because of the name mangling.
-void
-DESTROY (sv)
-	SV * sv
-    CODE:
-	/* warn ("Gtk2::Allocation::DESTROY"); */
-	g_boxed_free (GDK_TYPE_RECTANGLE, GUINT_TO_POINTER (SvIV (SvRV (sv))));
-
 
 MODULE = Gtk2::Widget	PACKAGE = Gtk2::Requisition
 
@@ -60,10 +15,8 @@ width (requisition, newval=NULL)
 	GtkRequisition * requisition
 	SV * newval
     ALIAS:
-	width = 0
 	height = 1
     CODE:
-	RETVAL = 0;
 	switch (ix) {
 		case 0:
 			RETVAL = requisition->width;
@@ -73,6 +26,9 @@ width (requisition, newval=NULL)
 			RETVAL = requisition->height;
 			if (newval) requisition->height = SvIV (newval);
 			break;
+		default:
+			RETVAL = 0;
+			g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL
@@ -105,17 +61,24 @@ window (widget)
     OUTPUT:
 	RETVAL
 
+GtkRequisition *
+requisition (widget)
+	GtkWidget * widget
+    CODE:
+	RETVAL = &(widget->requisition);
+    OUTPUT:
+	RETVAL
+
 =for apidoc
 =for signature allocation = $widget->allocation
-Returns I<$widget>'s current allocated size as a read-only rectangle
-(re-blessed as a Gtk2::Allocation); the allocated size is not necessarily
-the same as the requested size.
+Returns I<$widget>'s current allocated size as a read-only rectangle; the
+allocated size is not necessarily the same as the requested size.
 =cut
-SV *
+GdkRectangle *
 allocation (widget)
 	GtkWidget * widget
     CODE:
-	RETVAL = newSVGtkAllocation (&(widget->allocation));
+	RETVAL = &(widget->allocation);
     OUTPUT:
 	RETVAL
 
@@ -124,7 +87,6 @@ GtkStyle*
 style (widget)
 	GtkWidget * widget
     ALIAS:
-	Gtk2::Widget::style = 0
 	Gtk2::Widget::get_style = 1
     CODE:
 	PERL_UNUSED_VAR (ix);
@@ -136,16 +98,20 @@ style (widget)
 
  ##define GTK_WIDGET_TYPE(wid)		  (GTK_OBJECT_TYPE (wid))
  ##define GTK_WIDGET_STATE(wid)		  (GTK_WIDGET (wid)->state)
+ ##define GTK_WIDGET_SAVED_STATE(wid)	  (GTK_WIDGET (wid)->saved_state)
 GtkStateType
 state (widget)
 	GtkWidget * widget
+    ALIAS:
+	Gtk2::Widget::saved_state = 1
     CODE:
-	RETVAL = GTK_WIDGET_STATE (widget);
+	switch (ix) {
+	    case 0: RETVAL = GTK_WIDGET_STATE (widget);       break;
+	    case 1: RETVAL = GTK_WIDGET_SAVED_STATE (widget); break;
+	    default: RETVAL = 0; g_assert_not_reached ();
+	}
     OUTPUT:
 	RETVAL
-
- ##define GTK_WIDGET_SAVED_STATE(wid)	  (GTK_WIDGET (wid)->saved_state)
-
 
  ##define GTK_WIDGET_FLAGS(wid)		  (GTK_OBJECT_FLAGS (wid))
 
@@ -264,10 +230,9 @@ state (widget)
 =cut
 
 gboolean
-flags_handler (widget, ...)
+toplevel (widget, ...)
 	GtkWidget * widget
     ALIAS:
-	Gtk2::Widget::toplevel         =  0
 	Gtk2::Widget::no_window        =  1
 	Gtk2::Widget::realized         =  2
 	Gtk2::Widget::mapped           =  3
@@ -287,8 +252,8 @@ flags_handler (widget, ...)
 	Gtk2::Widget::can_default      = 17
 	Gtk2::Widget::has_default      = 18
     PREINIT:
-	gboolean value;
-	GtkWidgetFlags flag;
+	gboolean value = FALSE;
+	GtkWidgetFlags flag = 0;
     CODE:
 	if (items > 2) {
 		croak ("Usage: boolean = $widget->%s\n"
@@ -318,7 +283,9 @@ flags_handler (widget, ...)
 		case 16: RETVAL = GTK_WIDGET_DOUBLE_BUFFERED  (widget); break;
 		case 17: RETVAL = GTK_WIDGET_CAN_DEFAULT      (widget); break;
 		case 18: RETVAL = GTK_WIDGET_HAS_DEFAULT      (widget); break;
-		default: croak ("unhandled case (%s) in flags_handler - shouldn't happen", ix);
+		default:
+			RETVAL = FALSE;
+			g_assert_not_reached ();
 	    }
 	} else {
 	    value = (gboolean) SvIV(ST(1));
@@ -342,7 +309,9 @@ flags_handler (widget, ...)
 		case 16: flag = GTK_DOUBLE_BUFFERED  ; break;
 		case 17: flag = GTK_CAN_DEFAULT      ; break;
 		case 18: flag = GTK_HAS_DEFAULT      ; break;
-		default: croak ("unhandled case (%s) in flags_handler - shouldn't happen", ix);
+		default:
+			flag = FALSE;
+			g_assert_not_reached ();
 	    }
 	    if ( value ) {
 	    	GTK_WIDGET_SET_FLAGS(widget, flag);
@@ -360,6 +329,7 @@ flags (GtkWidget * widget)
     ALIAS:
 	get_flags = 1
     CODE:
+	PERL_UNUSED_VAR (ix);
 	RETVAL = GTK_WIDGET_FLAGS (widget);
     OUTPUT:
 	RETVAL
@@ -420,9 +390,8 @@ unset_flags (widget, flags)
 ## resultant stripped i686 object file.
 ##
 void
-void_methods (GtkWidget * widget)
+destroy (GtkWidget * widget)
     ALIAS:
-	destroy   = 0
 	unparent  = 1
 	show      = 2
 	show_now  = 3
@@ -460,6 +429,8 @@ void_methods (GtkWidget * widget)
 		case 15: gtk_widget_queue_resize (widget); break;
 		case 16: gtk_widget_freeze_child_notify (widget); break;
 		case 17: gtk_widget_thaw_child_notify   (widget); break;
+		default:
+			 g_assert_not_reached ();
 	}
 
 void
@@ -481,8 +452,12 @@ gtk_widget_size_request (widget)
     OUTPUT:
 	RETVAL
 
-## GtkAllocation is not in typemap
+
 ##void gtk_widget_size_allocate (GtkWidget * widget, GtkAllocation * allocation);
+void
+gtk_widget_size_allocate (widget, allocation)
+	GtkWidget * widget
+	GdkRectangle * allocation
 
 ## function is only useful for widget implementations
 ##void gtk_widget_get_child_requisition (GtkWidget *widget, GtkRequisition *requisition);
@@ -570,8 +545,7 @@ gtk_widget_intersect (widget, area)
     OUTPUT:
 	RETVAL
 
-# FIXME needs typemap for GdkRegion
- #GdkRegion *gtk_widget_region_intersect (GtkWidget *widget, GdkRegion *region);
+GdkRegion * gtk_widget_region_intersect (GtkWidget * widget, GdkRegion * region)
 
 void gtk_widget_child_notify (GtkWidget	*widget, const gchar *child_property);
 
@@ -587,8 +561,8 @@ gtk_widget_get_name (widget)
 	GtkWidget    *widget
 
  # gtk doc says only used for widget implementations
- #void                  gtk_widget_set_state              (GtkWidget    *widget,
- #							 GtkStateType  state);
+void 
+gtk_widget_set_state (GtkWidget * widget, GtkStateType state);
 
 void
 gtk_widget_set_sensitive (widget, sensitive)
@@ -601,12 +575,17 @@ void gtk_widget_set_double_buffered (GtkWidget *widget, gboolean double_buffered
 
 void gtk_widget_set_redraw_on_allocate (GtkWidget *widget, gboolean redraw_on_allocate);
 
- # gtk doc says useful only for impelemnting container sub classes, never to be
- # called by apps
- #void gtk_widget_set_parent (GtkWidget *widget, GtkWidget *parent);
- #void gtk_widget_set_parent_window (GtkWidget *widget, GdkWindow *parent_window);
- #void gtk_widget_set_child_visible (GtkWidget *widget, gboolean is_visible);
- #gboolean gtk_widget_get_child_visible (GtkWidget *widget);
+void 
+gtk_widget_set_parent (GtkWidget *widget, GtkWidget *parent);
+
+void 
+gtk_widget_set_parent_window (GtkWidget *widget, GdkWindow *parent_window);
+
+void 
+gtk_widget_set_child_visible (GtkWidget *widget, gboolean is_visible);
+
+gboolean 
+gtk_widget_get_child_visible (GtkWidget *widget);
 
 
  ## must allow NULL on return, in case somebody calls this on
@@ -616,16 +595,13 @@ GtkWidget_ornull *
 gtk_widget_get_parent (widget)
 	GtkWidget * widget
     ALIAS:
-	Gtk2::Widget::get_parent = 0
 	Gtk2::Widget::parent = 1
     CLEANUP:
 	PERL_UNUSED_VAR (ix);
 
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
 
- # gtk doc says this is only useful for widget impelementations, never for apps
- #gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
- #                                           GtkDirectionType     direction);
+gboolean gtk_widget_child_focus (GtkWidget *widget, GtkDirectionType direction);
 
 void
 gtk_widget_set_size_request (widget, width=-1, height=-1)
@@ -812,16 +788,32 @@ gchar* gtk_widget_get_composite_name (GtkWidget *widget)
 #/* Descend recursively and set rc-style on all widgets without user styles */
 void gtk_widget_reset_rc_styles (GtkWidget *widget)
  
-void gtk_widget_push_colormap (SV *class_or_widget, GdkColormap *cmap)
+=for apidoc
+=for signature Gtk2::Widget->push_colormap (cmap)
+=for signature $widget->push_colormap (cmap)
+=cut
+void gtk_widget_push_colormap (class_or_widget, GdkColormap *cmap)
     C_ARGS: cmap
 
-void gtk_widget_pop_colormap (SV *class_or_widget)
+=for apidoc
+=for signature Gtk2::Widget->pop_colormap (cmap)
+=for signature $widget->pop_colormap (cmap)
+=cut
+void gtk_widget_pop_colormap (class_or_widget)
     C_ARGS: /* void */
 
-void gtk_widget_push_composite_child (SV *class_or_widget)
+=for apidoc
+=for signature Gtk2::Widget->push_composite_child
+=for signature $widget->push_composite_child
+=cut
+void gtk_widget_push_composite_child (class_or_widget=NULL)
     C_ARGS: /* void */
 
-void gtk_widget_pop_composite_child (SV *class_or_widget)
+=for apidoc
+=for signature Gtk2::Widget->pop_composite_child
+=for signature $widget->pop_composite_child
+=cut
+void gtk_widget_pop_composite_child (class_or_widget=NULL)
     C_ARGS: /* void */
 
 # bunch of FIXMEs FIXME FIXME FIXME
@@ -833,31 +825,84 @@ void gtk_widget_pop_composite_child (SV *class_or_widget)
  #void gtk_widget_class_install_style_property_parser (GtkWidgetClass     *klass,
  #						     GParamSpec         *pspec,
  #						     GtkRcPropertyParser parser);
- #void gtk_widget_style_get_property (GtkWidget	     *widget,
- #				    const gchar    *property_name,
- #				    GValue	     *value);
- #void gtk_widget_style_get_valist   (GtkWidget	     *widget,
- #				    const gchar    *first_property_name,
- #				    va_list         var_args);
- #void gtk_widget_style_get          (GtkWidget	     *widget,
- #				    const gchar    *first_property_name,
- #				    ...);
- #
- #
+ #void gtk_widget_style_get_property (GtkWidget *widget, const gchar *property_name, GValue *value);
+ #void gtk_widget_style_get_valist (GtkWidget *widget, const gchar *first_property_name, va_list var_args);
+ #void gtk_widget_style_get (GtkWidget *widget, const gchar *first_property_name, ...);
+### gtk_widget_class_find_style_property isn't available until 2.2.0, so we
+### can't implement gtk_widget_style_get and friends until 2.2.0, because
+### we have to be able to query the property's pspec to know what type of
+### GValue to send it.
+
+#if GTK_CHECK_VERSION(2,2,0)
+
+=for apidoc style_get_property
+=for arg first_property_name (string)
+=for arg ... 0 or more additional property names
+An alias for style_get.
+=cut
+=for apidoc
+=for arg first_property_name (string)
+=for arg ... 0 or more additional property names
+Returns the values of the requested style properties.
+=cut
+void
+style_get (GtkWidget * widget, first_property_name, ...)
+    ALIAS:
+	style_get_property = 1
+    PREINIT:
+	int i;
+    PPCODE:
+	PERL_UNUSED_VAR (ix);
+	EXTEND (SP, items - 1);
+	for (i = 1 ; i < items ; i++) {
+		GValue value = {0, };
+		gchar * name = SvGChar (ST (i));
+		GParamSpec * pspec;
+		pspec = gtk_widget_class_find_style_property
+		                         (GTK_WIDGET_GET_CLASS (widget), name);
+		if (pspec) {
+			g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+			gtk_widget_style_get_property (widget, name, &value);
+			PUSHs (sv_2mortal (gperl_sv_from_value (&value)));
+			g_value_unset (&value);
+		} else {
+			warn ("Invalid property `%s' used", name);
+		}
+	}
+
+#endif
+
+
  #/* Set certain default values to be used at widget creation time.
  # */
 
-void gtk_widget_set_default_colormap (SV *class_or_widget, GdkColormap *colormap);
+=for apidoc
+=for signature Gtk2::Widget->set_default_colormap ($colormap)
+=for signature $widget->set_default_colormap ($colormap)
+=cut
+void gtk_widget_set_default_colormap (class_or_widget, GdkColormap *colormap);
     C_ARGS: colormap
 
+=for apidoc
+=for signature style = Gtk2::Widget->get_default_style
+=for signature style = $widget->get_default_style
+=cut
 GtkStyle*
-gtk_widget_get_default_style (SV *class_or_widget)
+gtk_widget_get_default_style (class_or_widget)
     C_ARGS: /* void */
 
-GdkColormap* gtk_widget_get_default_colormap (SV *class_or_widget)
+=for apidoc
+=for signature colormap = Gtk2::Widget->get_default_colormap
+=for signature colormap = $widget->get_default_colormap
+=cut
+GdkColormap* gtk_widget_get_default_colormap (class_or_widget)
     C_ARGS: /* void */
 
-GdkVisual* gtk_widget_get_default_visual (SV *class_or_widget)
+=for apidoc
+=for signature visual = Gtk2::Widget->get_default_visual
+=for signature visual = $widget->get_default_visual
+=cut
+GdkVisual* gtk_widget_get_default_visual (class_or_widget)
     C_ARGS: /* void */
 
  #
@@ -963,3 +1008,33 @@ gboolean gtk_widget_has_screen (GtkWidget * widget);
 
 #endif
 
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_widget_set_no_show_all (GtkWidget *widget, gboolean no_show_all);
+
+gboolean gtk_widget_get_no_show_all (GtkWidget *widget);
+
+void gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
+
+gboolean
+gtk_widget_can_activate_accel (widget, signal_id)
+	GtkWidget *widget
+	guint signal_id
+
+void
+gtk_widget_list_mnemonic_labels (widget)
+	GtkWidget *widget
+    PREINIT:
+	GList *i, *list = NULL;
+    PPCODE:
+	list = gtk_widget_list_mnemonic_labels (widget);
+	for (i = list; i != NULL; i = i->next)
+		XPUSHs (sv_2mortal (newSVGtkWidget (i->data)));
+	g_list_free (list);
+
+void gtk_widget_add_mnemonic_label (GtkWidget *widget, GtkWidget *label);
+
+void gtk_widget_remove_mnemonic_label (GtkWidget *widget, GtkWidget *label);
+
+#endif

@@ -16,12 +16,10 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRc.xs,v 1.12.2.2 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRc.xs,v 1.24.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
-
-/* TODO: this is very alpha and very un-understood. */
 
 MODULE = Gtk2::Rc	PACKAGE = Gtk2::Rc	PREFIX = gtk_rc_
 
@@ -34,10 +32,26 @@ gtk_rc_add_default_file (class, filename)
     C_ARGS:
 	filename
 
+=for apidoc
+Returns the list of files that GTK+ will read at the end of Gtk2->init.
+=cut
+## gchar** gtk_rc_get_default_files (void)
+void
+gtk_rc_get_default_files (class)
+    PREINIT:
+	gchar **filenames = NULL;
+	int i;
+    PPCODE:
+	PERL_UNUSED_VAR (ax);
+	filenames = gtk_rc_get_default_files ();
+	if (filenames)
+		for (i = 0; filenames[i]; i++)
+			XPUSHs (sv_2mortal (gperl_sv_from_filename (filenames[i])));
+
 ## void gtk_rc_set_default_files (gchar **filenames)
 =for apidoc
 =for signature Gtk2::Rc->set_default_files (file1, ...)
-=for arg file1 
+=for arg file1 (GPerlFilename)
 =for arg ... of strings, the rc files to be parsed
 Sets the list of files that GTK+ will read at the end of Gtk2->init.
 =cut
@@ -45,33 +59,57 @@ void
 gtk_rc_set_default_files (class, ...)
     PREINIT:
 	gchar **filenames = NULL;
+	int i;
     CODE:
 	filenames = g_new0(gchar*, items);
-	for( items--; items > 0; items-- )
-		filenames[items] = gperl_filename_from_sv (ST(items));
+
+	for( i = 1; i < items; i++ )
+		filenames[i - 1] = gperl_filename_from_sv (ST(i));
+
 	gtk_rc_set_default_files(filenames);
 	g_free(filenames);
 	
 
 ## GtkStyle* gtk_rc_get_style (GtkWidget *widget)
 GtkStyle*
-gtk_rc_get_style (widget)
+gtk_rc_get_style (class, widget)
 	GtkWidget *widget
+    C_ARGS:
+	widget
 
-# TODO: GType not in type map
 ## GtkStyle* gtk_rc_get_style_by_paths (GtkSettings *settings, const char *widget_path, const char *class_path, GType type)
-#GtkStyle*
-#gtk_rc_get_style_by_paths (settings, widget_path, class_path, type)
-#	GtkSettings *settings
-#	const char *widget_path
-#	const char *class_path
-#	GType type
+GtkStyle *
+gtk_rc_get_style_by_paths (class, settings, widget_path, class_path, package)
+	GtkSettings *settings
+	const char  * widget_path
+	const char  * class_path
+	const char  * package
+    PREINIT:
+	GType gtype = {0,};
+    CODE:
+	gtype = gperl_object_type_from_package (package);
+	RETVAL = gtk_rc_get_style_by_paths 
+			(settings, widget_path, class_path, gtype);
+    OUTPUT:
+	RETVAL
 
 ## gboolean gtk_rc_reparse_all_for_settings (GtkSettings *settings, gboolean force_load)
 gboolean
-gtk_rc_reparse_all_for_settings (settings, force_load)
+gtk_rc_reparse_all_for_settings (class, settings, force_load)
 	GtkSettings *settings
 	gboolean force_load
+    C_ARGS:
+	settings, force_load
+
+#if GTK_CHECK_VERSION (2, 4, 0)
+
+## void gtk_rc_reset_styles (GtkSettings *settings)
+void gtk_rc_reset_styles (class, settings)
+	GtkSettings *settings
+    C_ARGS:
+	settings
+
+#endif
 
 # TODO: GScanner * not in typemap
 ## gchar* gtk_rc_find_pixmap_in_path (GtkSettings *settings, GScanner *scanner, const gchar *pixmap_file)
@@ -101,30 +139,13 @@ gtk_rc_reparse_all (class)
     C_ARGS:
 	/* void */
 
-## void gtk_rc_add_widget_name_style (GtkRcStyle *rc_style, const gchar *pattern)
-void
-gtk_rc_add_widget_name_style (rc_style, pattern)
-	GtkRcStyle *rc_style
-	const gchar *pattern
-
-## void gtk_rc_add_widget_class_style (GtkRcStyle *rc_style, const gchar *pattern)
-void
-gtk_rc_add_widget_class_style (rc_style, pattern)
-	GtkRcStyle *rc_style
-	const gchar *pattern
-
-## void gtk_rc_add_class_style (GtkRcStyle *rc_style, const gchar *pattern)
-void
-gtk_rc_add_class_style (rc_style, pattern)
-	GtkRcStyle *rc_style
-	const gchar *pattern
-
-## gchar* gtk_rc_find_module_in_path (const gchar *module_file)
-gchar_own *
-gtk_rc_find_module_in_path (class, module_file)
-	const gchar * module_file
-    C_ARGS:
-	module_file
+# API docs: "This function is not useful for applications and should not be used."
+### gchar* gtk_rc_find_module_in_path (const gchar *module_file)
+#gchar_own *
+#gtk_rc_find_module_in_path (class, module_file)
+#	const gchar * module_file
+#    C_ARGS:
+#	module_file
 
 ## gchar* gtk_rc_get_theme_dir (void)
 gchar_own *
@@ -150,89 +171,112 @@ gtk_rc_get_im_module_file (class)
     C_ARGS:
 	/* void */
 
-# TODO: GScanner * not in type map
-## GScanner* gtk_rc_scanner_new (void)
-#GScanner*
-#gtk_rc_scanner_new (void)
-#	void
-
-# TODO: GScanner * not in type map
-## guint gtk_rc_parse_color (GScanner *scanner, GdkColor *color)
-#guint
-#gtk_rc_parse_color (scanner, color)
-#	GScanner *scanner
-#	GdkColor *color
-
-# TODO: GScanner * not in type map
-## guint gtk_rc_parse_state (GScanner *scanner, GtkStateType *state)
-#guint
-#gtk_rc_parse_state (scanner, state)
-#	GScanner *scanner
-#	GtkStateType *state
-
-# TODO: GScanner * not in type map
-## guint gtk_rc_parse_priority (GScanner *scanner, GtkPathPriorityType *priority)
-#guint
-#gtk_rc_parse_priority (scanner, priority)
-#	GScanner *scanner
-#	GtkPathPriorityType *priority
-
 MODULE = Gtk2::Rc	PACKAGE = Gtk2::RcStyle	PREFIX = gtk_rc_style_
 
-## void _gtk_rc_reset_styles (GtkSettings *settings)
-
 SV *
-members (GtkRcStyle * style)
+name (style, new=NULL)
+	GtkRcStyle *style
+	SV *new
     ALIAS:
-	name           = 0
-	xthickness     = 1
-	ythickness     = 2
+	font_desc  = 1
+	xthickness = 2
+	ythickness = 3
     CODE:
 	switch (ix) {
 		case 0: RETVAL = newSVGChar (style->name); break;
-		case 1: RETVAL = newSViv (style->xthickness); break;
-		case 2: RETVAL = newSViv (style->ythickness); break;
-		default: RETVAL = NULL;
+		case 1: RETVAL = newSVPangoFontDescription (style->font_desc); break;
+		case 2: RETVAL = newSViv (style->xthickness); break;
+		case 3: RETVAL = newSViv (style->ythickness); break;
+		default: 
+			RETVAL = NULL;
+			g_assert_not_reached ();
+	}
+
+	if (new) {
+		switch (ix) {
+		    case 0:
+			if (style->name)
+				g_free (style->name);
+			style->name = SvOK (new)
+			            ? g_strdup (SvGChar (new))
+				    : NULL;
+			break;
+		    case 1:
+			if (style->font_desc)
+				pango_font_description_free (style->font_desc);
+			style->font_desc = SvOK (new)
+			                 ? SvPangoFontDescription (new)
+					 : NULL;
+			if (style->font_desc)
+				style->font_desc = pango_font_description_copy
+							(style->font_desc);
+			break;
+		    case 2: style->xthickness = SvIV (new); break;
+		    case 3: style->ythickness = SvIV (new); break;
+		    default:
+			g_assert_not_reached ();
+		}
 	}
     OUTPUT:
 	RETVAL
 
-const gchar *
-bg_pixmap_name (GtkRcStyle * style, GtkStateType state)
+SV *
+bg_pixmap_name (style, state, new=NULL)
+	GtkRcStyle *style
+	GtkStateType state
+	gchar *new
     CODE:
-	RETVAL = style->bg_pixmap_name[state];
+	RETVAL = style->bg_pixmap_name[state]
+	       ? newSVGChar (style->bg_pixmap_name[state])
+	       : NULL;
+	if (new) {
+		if (style->bg_pixmap_name[state])
+			g_free (style->bg_pixmap_name[state]);
+		style->bg_pixmap_name[state] = g_strdup (new);
+	}
     OUTPUT:
 	RETVAL
 
 GtkRcFlags
-color_flags (GtkRcStyle * style, GtkStateType state, SV * newval=NULL)
+color_flags (style, state, new=0)
+	GtkRcStyle *style
+	GtkStateType state
+	GtkRcFlags new
     CODE:
 	RETVAL = style->color_flags[state];
-	if (newval)
-		style->color_flags[state] = SvGtkRcFlags (newval);
+	if (new)
+		style->color_flags[state] = new;
     OUTPUT:
 	RETVAL
 
 GdkColor_copy *
-colors (GtkRcStyle * style, GtkStateType state, GdkColor_ornull * newcolor=NULL)
+fg (style, state, new=NULL)
+	GtkRcStyle *style
+	GtkStateType state
+	GdkColor_ornull *new
     ALIAS:
-	fg          = 0
-	bg          = 1
-	text        = 2
-	base        = 3
+	bg   = 1
+	text = 2
+	base = 3
     CODE:
 	switch (ix) {
-	    case 0: RETVAL = &(style->fg[state]); break;
-	    case 1: RETVAL = &(style->bg[state]); break;
-	    case 2: RETVAL = &(style->text[state]); break;
-	    case 3: RETVAL = &(style->base[state]); break;
+		case 0: RETVAL = &(style->fg[state]); break;
+		case 1: RETVAL = &(style->bg[state]); break;
+		case 2: RETVAL = &(style->text[state]); break;
+		case 3: RETVAL = &(style->base[state]); break;
+		default:
+			RETVAL = NULL;
+			g_assert_not_reached ();
 	}
-	if (newcolor) {
+
+	if (new) {
 		switch (ix) {
-		    case 0: style->fg[state]   = *newcolor; break;
-		    case 1: style->bg[state]   = *newcolor; break;
-		    case 2: style->text[state] = *newcolor; break;
-		    case 3: style->base[state] = *newcolor; break;
+			case 0: style->fg[state]   = *new; break;
+			case 1: style->bg[state]   = *new; break;
+			case 2: style->text[state] = *new; break;
+			case 3: style->base[state] = *new; break;
+			default:
+				g_assert_not_reached ();
 		}
 	}
     OUTPUT:
@@ -248,19 +292,6 @@ gtk_rc_style_new (class)
 GtkRcStyle_noinc *
 gtk_rc_style_copy (orig)
 	GtkRcStyle * orig
-
-PangoFontDescription *
-get_font_desc (rcstyle)
-	GtkRcStyle * rcstyle
-    CODE:
-	RETVAL = rcstyle->font_desc;
-
-void
-set_font_desc(rcstyle, fd)
-	GtkRcStyle * rcstyle
-	PangoFontDescription * fd
-    CODE:
-	rcstyle->font_desc = fd;
 
 # should happen automagically
 ## void gtk_rc_style_ref (GtkRcStyle *rc_style)

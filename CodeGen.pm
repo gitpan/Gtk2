@@ -5,6 +5,8 @@ use warnings;
 use Carp;
 use IO::File;
 
+our $VERSION = '0.02';
+
 =head1 NAME
 
 Gtk2::CodeGen - code generation utilities for Glib-based bindings.
@@ -194,7 +196,9 @@ and an XSH file containing the proper code to register each of those types
 The I<PREFIX> is mandatory, and is used in some of the resulting filenames,
 You can also override the defaults by providing key=>val pairs:
 
-  input    input file name.  default is 'maps'
+  input    input file name.  default is 'maps'.  if this
+           key's value is an array reference, all the
+           filenames in the array will be scanned.
   header   name of the header file to create, default is
            build/$prefix-autogen.h
   typemap  name of the typemap file to create, default is
@@ -214,6 +218,17 @@ separated by whitespace.  the fields should be:
   package       name of the perl package to which this
                 class name should be mapped, e.g.
                 Gtk2::Widget
+
+As a special case, you can also use this same format to register error
+domains; in this case two of the four columns take on slightly different
+meanings:
+
+  domain macro     e.g., GDK_PIXBUF_ERROR
+  enum type macro  e.g., GDK_TYPE_PIXBUF_ERROR
+  base type        GError
+  package          name of the Perl package to which this
+                   class name should be mapped, e.g.,
+                   Gtk2::Gdk::Pixbuf::Error.
 
 =cut
 
@@ -236,9 +251,6 @@ sub parse_maps {
 	local *IN;
 	local *OUT;
 
-	open IN, "< $props{input}"
-		or die "can't open $props{input} for reading: $!\n";
-
 	my %seen = ();
 
 	@header = ();
@@ -247,7 +259,17 @@ sub parse_maps {
 	@output = ();
 	@boot = ();
 
-	while (<IN>) {
+	my @files = 'ARRAY' eq ref $props{input}
+	          ? @{ $props{input} }
+	          : $props{input};
+
+	foreach my $file (@files) {
+	    open IN, "< $file"
+		or die "can't open $file for reading: $!\n";
+
+	    my $n = 0;
+
+	    while (<IN>) {
 		chomp;
 		s/#.*//;
 		my ($typemacro, $classname, $base, $package) = split;
@@ -263,26 +285,28 @@ sub parse_maps {
 		} elsif ($base eq 'GBoxed') {
 			gen_boxed_stuff ($typemacro, $classname, $package);
 			$seen{$base}++;
-		
-#		} elsif ($base eq 'GObject' or $base eq 'GtkObject') {
+
+		# we treat GInterfaces as GObjects for these purposes.
 		} elsif ($base eq 'GObject' or $base eq 'GtkObject'
 		         or $base eq 'GInterface') {
 			gen_object_stuff ($typemacro, $classname, $base, $package);
 			$seen{$base}++;
 
-#		} elsif ($base eq 'GInterface') {
-#			# what do we do with interfaces?
-#			#gen_interface_stuff ($typemacro, $classname, $base, $package);
-#			warn "$classname is a $base -- what do we do with interfaces?\n";
-#			$seen{$base}++;
+		} elsif ($base eq 'GError') {
+			gen_error_domain_stuff ($typemacro, $classname, $package);
+			$seen{$base}++;
 
 		} else {
 			warn "unhandled type $typemacro $classname $base $package\n";
 			$seen{unhandled}++;
 		}
-	}
+		$n++;
+	    }
 
-	close IN;
+	    close IN;
+
+	    print "loaded $n type definitions from $file\n";
+	}
 
 	# create output
 
@@ -422,6 +446,15 @@ gperl_register_object ($typemacro, \"$package\");
 
 	# close the header ifdef
 	$header[$#header] .= "#endif /* $typemacro */\n";
+}
+
+sub gen_error_domain_stuff {
+	my ($domain, $enum, $package) = @_;
+
+	push @boot, "#if defined($domain) /* && defined($enum) */
+gperl_register_error_domain ($domain, $enum, \"$package\");
+#endif /* $domain */
+";
 }
 
 1;

@@ -1,9 +1,6 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.13 2003/11/29 17:20:45 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.26.2.1 2004/03/17 02:47:13 muppetman Exp $
 #
-
-use strict;
-use warnings;
 
 #########################
 # GtkWindow Tests
@@ -12,31 +9,15 @@ use warnings;
 
 #########################
 
-use Gtk2;
-use Test::More;
-
-if( Gtk2->init_check )
-{
-	plan tests => 87;
-}
-else
-{
-	plan skip_all =>
-		'Gtk2->init_check failed, probably unable to open DISPLAY';
-}
-
-#########################
-
-require './t/ignore_keyboard.pl';
-
-use constant TRUE => 1;
-use constant FALSE => 0;
+use Gtk2::TestHelper tests => 106;
 
 ok( my $win = Gtk2::Window->new );
 ok( $win = Gtk2::Window->new('popup') );
 ok( $win = Gtk2::Window->new('toplevel') );
 
 $win->set_title;
+ok(1);
+$win->set_title(undef);
 ok(1);
 $win->set_title('');
 ok(1);
@@ -64,7 +45,19 @@ ok(1);
 my @s = $win->get_default_size;
 ok( $s[0] == 640 && $s[1] == 480 );
 
-#$win->set_geometry_hints(...);
+my $geometry = {
+	min_width => 10,
+	min_height => 10
+};
+
+my $label = Gtk2::Label->new("Bla");
+
+$win->set_geometry_hints($label, $geometry);
+ok(1);
+$win->set_geometry_hints($label, $geometry, undef);
+ok(1);
+$win->set_geometry_hints($label, $geometry, qw(min-size));
+ok(1);
 
 foreach (qw/north-west north north-east west center east
 	    south-west south south-east static/)
@@ -80,9 +73,12 @@ foreach (qw/none center mouse center-always center-on-parent/)
 	$win->set_position($_);
 	ok(1, "set_position $_");
 }
-# i don't think this does what we think it does
-$win->get_position;
+
+$win->set_position('center');
 ok(1);
+
+my @position = $win->get_position;
+is(scalar(@position), 2);
 
 ok( my $win2 = Gtk2::Window->new );
 
@@ -98,6 +94,44 @@ ok( $win2->get_destroy_with_parent );
 
 my @toplvls = Gtk2::Window->list_toplevels;
 is(scalar(@toplvls), 4);
+
+use Gtk2::Gdk::Keysyms;
+my $mnemonic = $Gtk2::Gdk::Keysyms{ KP_Enter };
+
+$win2->add_mnemonic($mnemonic, $label);
+ok(1);
+
+# FIXME: is it correct to assume that it always returns false?
+ok( ! $win2->mnemonic_activate($mnemonic, "shift-mask") );
+
+SKIP: {
+	skip "activate_key and propagate_key_event are new in 2.4", 2
+		unless Gtk2->CHECK_VERSION (2, 4, 0);
+
+	my $event = Gtk2::Gdk::Event::Key->new ("key-press");
+	$event->keyval ($Gtk2::Gdk::Keysyms{ A });
+
+	ok ( ! $win2->activate_key ($event) );
+	ok ( ! $win2->propagate_key_event ($event) );
+}
+
+$win2->remove_mnemonic($mnemonic, $label);
+ok(1);
+
+$win2->set_mnemonic_modifier("control-mask");
+ok(1);
+
+is( $win2->get_mnemonic_modifier, "control-mask");
+
+$win2->set_focus;
+ok(1);
+
+$win2->set_focus(Gtk2::Entry->new());
+ok(1);
+
+my $button = Gtk2::Button->new ('i can default!');
+$button->can_default (TRUE);
+$win2->set_default($button);
 
 $win2->set_decorated(TRUE);
 ok(1);
@@ -123,7 +157,7 @@ foreach (qw/normal dialog menu toolbar/)
 
 SKIP: {
 	skip 'stuff missing in 2.0.x', 6
-		unless (Gtk2->get_version_info)[1] >= 2;
+		unless Gtk2->CHECK_VERSION (2, 2, 0);
 
 	foreach (qw/splashscreen utility dock desktop/)
 	{
@@ -162,6 +196,10 @@ ok( ! $win->get_icon );
 
 # doesn't have an icon ^
 ok( ! $win->get_icon_list );
+
+my $accel_group = Gtk2::AccelGroup->new;
+$win->add_accel_group ($accel_group);
+$win->remove_accel_group ($accel_group);
 
 Glib::Idle->add(sub {
 		$win2->show;
@@ -204,7 +242,7 @@ Glib::Idle->add(sub {
 			my $reason;
 			if ($^O eq 'MSWin32') {
 				$reason = 'GdkScreen not available on win32';
-			} elsif ((Gtk2->get_version_info)[1] < 2) {
+			} elsif (!Gtk2->CHECK_VERSION (2, 2, 0)) {
 				$reason = 'stuff not available before 2.2.x';
 			} else {
 				$reason = undef;
@@ -212,12 +250,40 @@ Glib::Idle->add(sub {
 
 			skip $reason, 1 if defined $reason;
 
-			# $win->set_screen(...)
-			ok( $win->get_screen );
+			$win->set_screen(Gtk2::Gdk::Screen->get_default());
+			is($win->get_screen, Gtk2::Gdk::Screen->get_default());
 
 			$win->fullscreen;
 			$win->unfullscreen;
 		}
+
+		SKIP: {
+			skip "new things in 2.4", 3
+				unless Gtk2->CHECK_VERSION (2, 4, 0);
+
+			TODO: {
+			local $TODO = (Gtk2->CHECK_VERSION (2, 4, 0))
+				? "is_active remote/non-gnome-desktop ???"
+				: undef;
+			is($win->is_active, 1);
+			is($win->has_toplevel_focus, 1);
+			}
+
+			$win->set_keep_above (1);
+			$win->set_keep_below (1);
+
+			$win->set_accept_focus (1);
+			is ($win->get_accept_focus, 1);
+
+			$win->set_default_icon (Gtk2::Gdk::Pixbuf->new ("rgb", 0, 8, 15, 15));
+		}
+
+		# Commented out because there seems to be no way to finish the
+		# drags.  We'd be getting stale pointer grabs otherwise.
+		# $win->begin_resize_drag("south-east", 1, 23, 42, 0);
+		# ok(1);
+		# $win->begin_move_drag(1, 23, 42, 0);
+		# ok(1);
 
 		$win->move(100, 100);
 
@@ -227,7 +293,7 @@ Glib::Idle->add(sub {
 		isa_ok( $tmp, 'Gtk2::Gdk::Rectangle' );
 		$tmp = $win->intersect(Gtk2::Gdk::Rectangle->new(-10, -10, 1, 1));
 		ok( !$tmp );
-		
+
 		$win->resize(480,600);
 
 		# window managers don't honor our size request exactly,
@@ -246,27 +312,29 @@ Glib::Idle->add(sub {
 
 $win->set_frame_dimensions(0, 0, 300, 500);
 
+ok( $win2->parse_geometry("100x100+10+10") );
+
+SKIP: {
+	skip 'set_auto_startup_notification is new in 2.2', 0
+		unless Gtk2->CHECK_VERSION(2, 2, 0);
+
+	$win2->set_auto_startup_notification(FALSE);
+}
+
 $win->show;
 ok(1);
 
 Gtk2->main;
 ok(1);
 
+my $group = Gtk2::WindowGroup->new;
+isa_ok( $group, "Gtk2::WindowGroup" );
+
+$group->add_window ($win);
+$group->remove_window ($win);
+
+
 __END__
 
 Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
-full list)
-
-This library is free software; you can redistribute it and/or modify it under
-the terms of the GNU Library General Public License as published by the Free
-Software Foundation; either version 2.1 of the License, or (at your option) any
-later version.
-
-This library is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Library General Public License for more
-details.
-
-You should have received a copy of the GNU Library General Public License along
-with this library; if not, write to the Free Software Foundation, Inc., 59
-Temple Place - Suite 330, Boston, MA  02111-1307  USA.
+full list).  See LICENSE for more information.

@@ -16,16 +16,15 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkSelection.xs,v 1.7.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkSelection.xs,v 1.10 2004/02/26 00:57:54 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Gdk::Selection	PACKAGE = Gtk2::Gdk
 
 GdkAtom
-predefs (class)
+SELECTION_PRIMARY (class)
     ALIAS:
-	Gtk2::Gdk::SELECTION_PRIMARY       =  0
 	Gtk2::Gdk::SELECTION_SECONDARY     =  1
 	Gtk2::Gdk::SELECTION_CLIPBOARD     =  2
 	Gtk2::Gdk::TARGET_BITMAP           =  3
@@ -42,7 +41,6 @@ predefs (class)
 	Gtk2::Gdk::SELECTION_TYPE_WINDOW   = 14
 	Gtk2::Gdk::SELECTION_TYPE_STRING   = 15
     CODE:
-	RETVAL = 0;
 	switch (ix) {
 	    case  0: RETVAL = GDK_SELECTION_PRIMARY; break;
 	    case  1: RETVAL = GDK_SELECTION_SECONDARY; break;
@@ -60,6 +58,9 @@ predefs (class)
 	    case 13: RETVAL = GDK_SELECTION_TYPE_PIXMAP; break;
 	    case 14: RETVAL = GDK_SELECTION_TYPE_WINDOW; break;
 	    case 15: RETVAL = GDK_SELECTION_TYPE_STRING; break;
+	    default:
+		RETVAL = 0;
+		g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL

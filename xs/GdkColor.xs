@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.11.2.1 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.17 2004/02/26 00:36:01 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -30,6 +30,8 @@ GdkColor_copy in all the right places.
 */
 
 MODULE = Gtk2::Gdk::Color	PACKAGE = Gtk2::Gdk::Colormap	PREFIX = gdk_colormap_
+
+=for position DESCRIPTION
 
 =head1 DESCRIPTION
 
@@ -45,9 +47,11 @@ allocated by C<alloc_color> and C<alloc_colors>.
 
  ## GdkColormap* gdk_colormap_new (GdkVisual *visual, gboolean allocate)
 GdkColormap_noinc*
-gdk_colormap_new (visual, allocate)
+gdk_colormap_new (class, visual, allocate)
 	GdkVisual *visual
 	gboolean allocate
+    C_ARGS:
+	visual, allocate
 
  ## deprecated
  ## GdkColormap* gdk_colormap_ref (GdkColormap *cmap)
@@ -102,6 +106,7 @@ gdk_colormap_alloc_colors (colormap, writeable, best_match, ...)
 		*(argcolors[i]) = colors[i];
 		PUSHs (sv_2mortal (newSViv (success[i])));
 	}
+	g_free (argcolors);
 	g_free (colors);
 	g_free (success);
 #undef first
@@ -153,7 +158,23 @@ gdk_colormap_query_color (colormap, pixel)
     OUTPUT:
 	RETVAL
 
+ ## GdkVisual* gdk_colormap_get_visual (GdkColormap *colormap)
+GdkVisual *
+gdk_colormap_get_visual (colormap)
+	GdkColormap *colormap
+
+#ifdef GDK_TYPE_SCREEN
+
+ ## GdkScreen* gdk_colormap_get_screen (GdkColormap *cmap)
+GdkScreen *
+gdk_colormap_get_screen (cmap)
+	GdkColormap *cmap
+
+#endif
+
 MODULE = Gtk2::Gdk::Color	PACKAGE = Gtk2::Gdk::Color	PREFIX = gdk_color_
+
+=for position DESCRIPTION
 
 =head1 DESCRIPTION
 
@@ -172,6 +193,9 @@ gdk_color_new (class, red, green, blue)
     PREINIT:
 	GdkColor c;
     CODE:
+	/* pixel==0 for unallocated color is not enforced by gdk, but
+	 * doing this hushes valgrind about using uninitialized values. */
+	c.pixel = 0;
 	c.red = red;
 	c.green = green;
 	c.blue = blue;
@@ -188,7 +212,7 @@ GdkColor_own *
 gdk_color_parse (class, spec)
 	const gchar *spec
     PREINIT:
-	GdkColor c;
+	GdkColor c = {0, 0, 0, 0}; /* initializers to hush valgrind */
     CODE:
 	RETVAL = gdk_color_copy (&c);
 	if (!gdk_color_parse (spec, RETVAL)) {

@@ -16,17 +16,25 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCursor.xs,v 1.7 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCursor.xs,v 1.9.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Gdk::Cursor	PACKAGE = Gtk2::Gdk::Cursor	PREFIX = gdk_cursor_
 
+GdkCursorType
+gdk_cursor_type (cursor)
+	GdkCursor *cursor
+    CODE:
+	RETVAL = cursor->type;
+    OUTPUT:
+	RETVAL
+
 #if GTK_CHECK_VERSION(2,2,0)
 
 ## GdkCursor* gdk_cursor_new_for_display (GdkDisplay *display, GdkCursorType cursor_type)
-GdkCursor*
+GdkCursor_own*
 gdk_cursor_new_for_display (class, display, cursor_type)
 	GdkDisplay *display
 	GdkCursorType cursor_type
@@ -59,3 +67,17 @@ gdk_cursor_new_from_pixmap (class, source, mask, fg, bg, x, y)
     C_ARGS:
 	source, mask, fg, bg, x, y
 
+
+#if GTK_CHECK_VERSION(2, 4, 0)
+
+## GdkCursor * gdk_cursor_new_from_pixbuf (GdkDisplay *display, GdkPixbuf  *pixbuf, gint x, gint y)
+GdkCursor_own *
+gdk_cursor_new_from_pixbuf (class, display, pixbuf, x, y)
+	GdkDisplay *display
+	GdkPixbuf  *pixbuf
+	gint x
+	gint y
+    C_ARGS:
+	display, pixbuf, x, y
+
+#endif

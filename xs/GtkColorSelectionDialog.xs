@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkColorSelectionDialog.xs,v 1.7 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkColorSelectionDialog.xs,v 1.9 2004/02/26 00:57:54 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -24,9 +24,23 @@
 MODULE = Gtk2::ColorSelectionDialog	PACKAGE = Gtk2::ColorSelectionDialog	PREFIX = gtk_color_selection_dialog_
 
 
-GtkWidget * colorsel (GtkColorSelectionDialog * dialog)
+GtkWidget *
+colorsel (dialog)
+	GtkColorSelectionDialog *dialog
+    ALIAS:
+	ok_button = 1
+	cancel_button = 2
+	help_button = 3
     CODE:
-	RETVAL = dialog->colorsel;
+	switch (ix) {
+		case 0: RETVAL = dialog->colorsel; break;
+		case 1: RETVAL = dialog->ok_button; break;
+		case 2: RETVAL = dialog->cancel_button; break;
+		case 3: RETVAL = dialog->help_button; break;
+		default:
+			RETVAL = NULL;
+			g_assert_not_reached ();
+	}
     OUTPUT:
 	RETVAL
 

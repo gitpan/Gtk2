@@ -16,12 +16,16 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkButtonBox.xs,v 1.5 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkButtonBox.xs,v 1.7.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::ButtonBox	PACKAGE = Gtk2::ButtonBox	PREFIX = gtk_button_box_
+
+=for enum GtkButtonBoxStyle
+
+=cut
 
 ## GtkButtonBoxStyle gtk_button_box_get_layout (GtkButtonBox *widget)
 GtkButtonBoxStyle
@@ -33,6 +37,12 @@ void
 gtk_button_box_set_layout (widget, layout_style)
 	GtkButtonBox      * widget
 	GtkButtonBoxStyle   layout_style
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+gboolean gtk_button_box_get_child_secondary (GtkButtonBox * widget, GtkWidget * child)
+
+#endif
 
 ## void gtk_button_box_set_child_secondary (GtkButtonBox *widget, GtkWidget *child, gboolean is_secondary)
 void

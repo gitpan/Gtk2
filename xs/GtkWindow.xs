@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.21.2.2 2003/12/04 00:21:17 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.34.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -39,10 +39,9 @@ gtk_window_new (class, type=GTK_WINDOW_TOPLEVEL)
 ## void gtk_window_set_title (GtkWindow *window, const gchar *title)
 void
 gtk_window_set_title (window, title=NULL)
-	GtkWindow   * window
-	const gchar * title
+	GtkWindow          * window
+	const gchar_ornull * title
 
-## TODO: the doc says don't use this, but not dep. should we remove?
 ## void gtk_window_set_wmclass (GtkWindow *window, const gchar *wmclass_name, const gchar *wmclass_class)
 void
 gtk_window_set_wmclass (window, wmclass_name, wmclass_class)
@@ -91,7 +90,7 @@ gtk_window_get_focus (window)
 
 ## void gtk_window_set_focus (GtkWindow *window, GtkWidget *focus)
 void
-gtk_window_set_focus (window, focus)
+gtk_window_set_focus (window, focus=NULL)
 	GtkWindow        * window
 	GtkWidget_ornull * focus
 
@@ -146,6 +145,14 @@ GdkWindowTypeHint
 gtk_window_get_type_hint (window)
 	GtkWindow * window
 
+#if GTK_CHECK_VERSION(2, 4, 0)
+
+gboolean gtk_window_get_accept_focus (GtkWindow *window)
+
+void gtk_window_set_accept_focus (GtkWindow *window, gboolean setting)
+
+#endif
+
 ## void gtk_window_set_destroy_with_parent (GtkWindow *window, gboolean setting)
 void
 gtk_window_set_destroy_with_parent (window, setting)
@@ -179,13 +186,37 @@ GdkGravity
 gtk_window_get_gravity (window)
 	GtkWindow * window
 
+=for apidoc
+
+=for signature $window->set_geometry_hints ($geometry_widget, $geometry)
+=for signature $window->set_geometry_hints ($geometry_widget, $geometry, $geom_mask)
+
+=for arg geometry (Gtk2::Gdk::Geometry)
+=for arg geom_mask (Gtk2::Gdk::WindowHints) optional, usually inferred from I<$geometry>
+
+The geom_mask argument, describing which fields in the geometry are valid, is
+optional.  If omitted it will be inferred from the geometry itself.
+
+=cut
 ## void gtk_window_set_geometry_hints (GtkWindow *window, GtkWidget *geometry_widget, GdkGeometry *geometry, GdkWindowHints geom_mask)
 void
-gtk_window_set_geometry_hints (window, geometry_widget, geometry, geom_mask)
-	GtkWindow      * window
-	GtkWidget      * geometry_widget
-	GdkGeometry    * geometry
-	GdkWindowHints   geom_mask
+gtk_window_set_geometry_hints (window, geometry_widget, geometry_ref, geom_mask_sv=NULL)
+	GtkWindow * window
+	GtkWidget * geometry_widget
+	SV        * geometry_ref
+	SV        * geom_mask_sv
+    PREINIT:
+	GdkGeometry *geometry;
+	GdkWindowHints geom_mask;
+    CODE:
+	if (! (geom_mask_sv && SvOK (geom_mask_sv))) {
+		geometry = SvGdkGeometryReal (geometry_ref, &geom_mask);
+	} else {
+		geometry = SvGdkGeometry (geometry_ref);
+		geom_mask = SvGdkWindowHints (geom_mask_sv);
+	}
+
+	gtk_window_set_geometry_hints (window, geometry_widget, geometry, geom_mask);
 
 ## gboolean gtk_window_get_has_frame (GtkWindow *window)
 gboolean
@@ -276,6 +307,8 @@ gtk_window_set_icon (window, icon)
 #if GTK_CHECK_VERSION(2,2,0)
 
 #gboolean gtk_window_set_icon_from_file (GtkWindow *window, const gchar *filename, GError **err)
+=for apidoc __gerror__
+=cut
 void
 gtk_window_set_icon_from_file (window, filename)
 	GtkWindow     * window
@@ -288,9 +321,12 @@ gtk_window_set_icon_from_file (window, filename)
 		gperl_croak_gerror (filename, error);
 
 #gboolean gtk_window_set_default_icon_from_file (GtkWindow *window, const gchar *filename, GError **err)
+=for apidoc __gerror__
+=for signature Gtk2::Window->set_default_icon_from_file ($filename)
+=for signature $window->set_default_icon_from_file ($filename)
+=cut
 void
 gtk_window_set_default_icon_from_file (class_or_instance, filename)
-        SV *class_or_instance
 	GPerlFilename filename
     PREINIT:
         GError *error = NULL;
@@ -301,7 +337,14 @@ gtk_window_set_default_icon_from_file (class_or_instance, filename)
 
 #endif
 
-## TODO: api doc doesn't say return can be null, but it can
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_window_set_default_icon (class, GdkPixbuf * icon)
+    C_ARGS:
+	icon
+
+#endif
+
 ## GdkPixbuf* gtk_window_get_icon (GtkWindow *window)
 GdkPixbuf_ornull *
 gtk_window_get_icon (window)
@@ -311,6 +354,8 @@ gtk_window_get_icon (window)
 ## void gtk_window_set_default_icon_list (GList *list)
 =for apidoc
 =for signature $window->set_default_icon_list ($pixbuf1, ...)
+=for arg pixbuf (__hide__)
+=for arg pixbuf1 (GdkPixbuf)
 =cut
 void
 gtk_window_set_default_icon_list (class, pixbuf, ...)
@@ -336,6 +381,7 @@ gtk_window_get_default_icon_list (class)
 	for (tmp = list ; tmp != NULL ; tmp = tmp->next)
 		XPUSHs (sv_2mortal (newSVGdkPixbuf (tmp->data)));
 	g_list_free (list);
+	PERL_UNUSED_VAR (ax);
 
 ## gboolean gtk_window_get_modal (GtkWindow *window)
 gboolean
@@ -357,6 +403,7 @@ gtk_window_list_toplevels (class)
 	/* documentation doesn't mention it, but according to the source,
 	 * it's on us to free this! */
 	g_list_free (toplvls);
+	PERL_UNUSED_VAR (ax);
 
 ## void gtk_window_add_mnemonic (GtkWindow *window, guint keyval, GtkWidget *target)
 void
@@ -482,24 +529,6 @@ gtk_window_parse_geometry (window, geometry)
 	GtkWindow   * window
 	const gchar * geometry
 
-## GtkWindowGroup * gtk_window_group_new (void)
-GtkWindowGroup *
-gtk_window_group_new (class)
-    C_ARGS:
-	/*void*/
-
-## void gtk_window_group_add_window (GtkWindowGroup *window_group, GtkWindow *window)
-void
-gtk_window_group_add_window (window_group, window)
-	GtkWindowGroup * window_group
-	GtkWindow      * window
-
-## void gtk_window_group_remove_window (GtkWindowGroup *window_group, GtkWindow *window)
-void
-gtk_window_group_remove_window (window_group, window)
-	GtkWindowGroup * window_group
-	GtkWindow      * window
-
 ## void gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
 void
 gtk_window_remove_embedded_xid (window, xid)
@@ -538,6 +567,18 @@ void
 gtk_window_unfullscreen (window)
 	GtkWindow * window
 
+#if GTK_CHECK_VERSION(2,4,0)
+
+void gtk_window_set_keep_above (GtkWindow *window, gboolean setting);
+
+void gtk_window_set_keep_below (GtkWindow *window, gboolean setting);
+
+gboolean gtk_window_is_active (GtkWindow *window);
+
+gboolean gtk_window_has_toplevel_focus (GtkWindow *window);
+
+#endif
+
 void
 gtk_window_set_skip_taskbar_hint (window, setting)
 	GtkWindow * window
@@ -556,10 +597,57 @@ gboolean
 gtk_window_get_skip_pager_hint (window)
 	GtkWindow * window
 
-void gtk_window_set_auto_startup_notification (setting)
+void
+gtk_window_set_auto_startup_notification (class, setting)
 	gboolean setting
+    C_ARGS:
+	setting
 
 #endif
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+=for apidoc
+=for arg event (Gtk2::Gdk::Event::Key)
+=cut
+gboolean
+gtk_window_activate_key (window, event)
+	GtkWindow *window
+	GdkEvent *event
+    C_ARGS:
+	window, (GdkEventKey *) event
+
+=for apidoc
+=for arg event (Gtk2::Gdk::Event::Key)
+=cut
+gboolean
+gtk_window_propagate_key_event (window, event)
+	GtkWindow *window
+	GdkEvent *event
+    C_ARGS:
+	window, (GdkEventKey *) event
+
+#endif
+
+MODULE = Gtk2::Window	PACKAGE = Gtk2::WindowGroup	PREFIX = gtk_window_group_
+
+## GtkWindowGroup * gtk_window_group_new (void)
+GtkWindowGroup *
+gtk_window_group_new (class)
+    C_ARGS:
+	/*void*/
+
+## void gtk_window_group_add_window (GtkWindowGroup *window_group, GtkWindow *window)
+void
+gtk_window_group_add_window (window_group, window)
+	GtkWindowGroup * window_group
+	GtkWindow      * window
+
+## void gtk_window_group_remove_window (GtkWindowGroup *window_group, GtkWindow *window)
+void
+gtk_window_group_remove_window (window_group, window)
+	GtkWindowGroup * window_group
+	GtkWindow      * window
 
  ## er... dunno about these.
  ##

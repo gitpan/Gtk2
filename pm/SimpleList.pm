@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.14.4.1 2004/01/07 21:18:40 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.21 2004/02/27 17:01:40 muppetman Exp $
 #
 
 #########################
@@ -9,32 +9,14 @@ use strict;
 use Carp;
 use Gtk2;
 
-our @ISA = qw(Gtk2::TreeView);
+our @ISA = 'Gtk2::TreeView';
 
-our $VERSION = '0.14';
-
-=cut
-
-this version of simplelist is a simple list widget, which has a list-of-lists
-data structure (under the key I<data>) which corresponds directly to the
-items in the list.  as it is tied, it is always synchronized.
-
-this is a very simple interface, giving you six column types:
-
-  text
-  int
-  double
-  bool
-  scalar
-  pixbuf
-
-only bool is editable, and that's set up for you.
-
-=cut
+our $VERSION = '0.15';
 
 our %column_types = (
   'hidden' => {type=>'Glib::String',                                        attr=>'hidden'},
   'text'   => {type=>'Glib::String',  renderer=>'Gtk2::CellRendererText',   attr=>'text'},
+  'markup' => {type=>'Glib::String',  renderer=>'Gtk2::CellRendererText',   attr=>'markup'},
   'int'    => {type=>'Glib::Int',     renderer=>'Gtk2::CellRendererText',   attr=>'text'},
   'double' => {type=>'Glib::Double',  renderer=>'Gtk2::CellRendererText',   attr=>'text'},
   'bool'   => {type=>'Glib::Boolean', renderer=>'Gtk2::CellRendererToggle', attr=>'active'},
@@ -248,16 +230,16 @@ sub TIEARRAY {
 	}, $class;
 }
 
-sub FETCH {
+sub FETCH { # this, index
 	return $_[0]->{model}->get ($_[0]->{iter}, $_[1]);
 }
 
-sub STORE {
+sub STORE { # this, index, value
 	return $_[0]->{model}->set ($_[0]->{iter}, $_[1], $_[2])
 		if defined $_[2]; # allow 0, but not undef
 }
 
-sub FETCHSIZE {
+sub FETCHSIZE { # this
 	return $_[0]{model}->get_n_columns;
 }
 
@@ -265,8 +247,8 @@ sub EXISTS {
 	return( $_[1] < $_[0]{model}->get_n_columns );
 }
 
-sub EXTEND { }
-sub CLEAR { }
+sub EXTEND { } # can't change the length, ignore
+sub CLEAR { } # can't change the length, ignore
 
 sub new {
 	my ($class, $model, $iter) = @_;
@@ -279,8 +261,8 @@ sub POP { croak "pop called on a TiedRow, but you can't change its size"; }
 sub PUSH { croak "push called on a TiedRow, but you can't change its size"; }
 sub SHIFT { croak "shift called on a TiedRow, but you can't change its size"; }
 sub UNSHIFT { croak "unshift called on a TiedRow, but you can't change its size"; }
-sub SPLICE { croak "splice called on a TiedRow, but you can't change it's size"; }
-sub DELETE { croak "delete called on a TiedRow, but you can't change it's size"; }
+sub SPLICE { croak "splice called on a TiedRow, but you can't change its size"; }
+#sub DELETE { croak "delete called on a TiedRow, but you can't change its size"; }
 sub STORESIZE { carp "STORESIZE operation not supported"; }
 
 
@@ -309,7 +291,7 @@ sub TIEARRAY {
 	}, $class;
 }
 
-sub FETCH {
+sub FETCH { # this, index
 	my $iter = $_[0]->{model}->iter_nth_child (undef, $_[1]);
 	return undef unless defined $iter;
 	my @row;
@@ -317,7 +299,7 @@ sub FETCH {
 	return \@row;
 }
 
-sub STORE {
+sub STORE { # this, index, value
 	my $iter = $_[0]->{model}->iter_nth_child (undef, $_[1]);
 	$iter = $_[0]->{model}->insert ($_[1])
 		if not defined $iter;
@@ -331,11 +313,11 @@ sub STORE {
 	return 1;
 }
 
-sub FETCHSIZE { 
+sub FETCHSIZE { # this
 	return $_[0]->{model}->iter_n_children (undef);
 }
 
-sub PUSH { 
+sub PUSH { # this, list
 	my $model = shift()->{model};
 	my $iter;
 	foreach (@_)
@@ -352,20 +334,20 @@ sub PUSH {
 	return 1;
 }
 
-sub POP { 
+sub POP { # this
 	my $model = $_[0]->{model};
 	my $index = $model->iter_n_children-1;
 	$model->remove($model->iter_nth_child(undef, $index))
 		if( $index >= 0 );
 }
 
-sub SHIFT { 
+sub SHIFT { # this
 	my $model = $_[0]->{model};
 	$model->remove($model->iter_nth_child(undef, 0))
 		if( $model->iter_n_children );
 }
 
-sub UNSHIFT { 
+sub UNSHIFT { # this, list
 	my $model = shift()->{model};
 	my $iter;
 	foreach (@_)
@@ -382,17 +364,25 @@ sub UNSHIFT {
 	return 1;
 }
 
-sub DELETE { 
+# note: really, arrays aren't supposed to support the delete operator this
+#       way, but we don't want to break existing code.
+sub DELETE { # this, key
 	my $model = $_[0]->{model};
-	$model->remove($model->iter_nth_child(undef, $_[1]))
-		if( $_[1] < $model->iter_n_children );
+	my $ret;
+	if ($_[1] < $model->iter_n_children (undef)) {
+		my $iter = $model->iter_nth_child (undef, $_[1]);
+		$ret = [ $model->get ($iter) ];
+		$model->remove ($iter);
+	}
+	return $ret;
 }
 
-sub CLEAR { 
+sub CLEAR { # this
 	$_[0]->{model}->clear;
 }
 
-sub EXISTS { 
+# note: arrays aren't supposed to support exists, either.
+sub EXISTS { # this, key
 	return( $_[1] < $_[0]->{model}->iter_n_children );
 }
 
@@ -406,21 +396,44 @@ sub get_model {
 
 sub STORESIZE { carp "STORESIZE: operation not supported"; }
 
-sub SPLICE {
-	if ($_[2] == 0 && 'ARRAY' eq ref($_[3])) {
-		my $iter = $_[0]->{model}->insert($_[1]);
-		my @row;
-		tie @row, 'Gtk2::SimpleList::TiedRow', $_[0]->{model}, $iter;
-		if ('ARRAY' eq ref $_[3]) {
-			@row = @{$_[3]};
-		} else {
-			$row[0] = $_[3];
-		}
-		return 1;
+sub SPLICE { # this, offset, length, list
+	my $self = shift;
+	# get the model and the number of rows	
+	my $model = $self->{model};
+	# get the offset
+	my $offset = shift || 0;
+	# if offset is neg, invert it
+	$offset = $model->iter_n_children (undef) + $offset if ($offset < 0);
+	# get the number of elements to remove
+	my $length = shift;
+	# if len was undef, not just false, calculate it
+	$length = $self->FETCHSIZE() - $offset unless (defined ($length));
+	# get any elements we need to insert into their place
+	my @list = @_;
+	
+	# place to store any returns
+	my @ret = ();
 
-	} else {
-		carp "SPLICE: operation not fully supported";
+	# remove the desired elements
+	for (my $i = $offset; $i < $offset+$length; $i++)
+	{
+		# things will be shifting forward, so always delete at offset
+		push @ret, $self->DELETE ($offset);
 	}
+
+	# insert the passed list at offset in reverse order, so the will
+	# be in the correct order
+	foreach (reverse @list)
+	{
+		# insert a new row
+		$model->insert ($offset);
+		# and put the data in it
+		$self->STORE ($offset, $_);
+	}
+	
+	# return deleted rows in array context, the last row otherwise
+	# if nothing deleted return empty
+	return (@ret ? (wantarray ? @ret : $ret[-1]) : ());
 }
 
 1;
@@ -434,14 +447,13 @@ Gtk2::SimpleList - A simple interface to Gtk2's complex MVC list widget
 
 =head1 SYNOPSIS
 
+  use Glib qw(TRUE FALSE);
   use Gtk2 '-init';
   use Gtk2::SimpleList;
 
-  use constant TRUE  => 1;
-  use constant FALSE => 0;
-
   my $slist = Gtk2::SimpleList->new (
                 'Text Field'    => 'text',
+                'Markup Field'  => 'markup',
                 'Int Field'     => 'int',
                 'Double Field'  => 'double',
                 'Bool Field'    => 'bool',
@@ -468,7 +480,8 @@ Gtk2::SimpleList - A simple interface to Gtk2's complex MVC list widget
   # simple way to make text columns editable
   $slist->set_column_editable ($col_num, TRUE);
 
-  # Gtk2::SimpleList is derived from Gtk2::TreeView
+  # Gtk2::SimpleList derives from Gtk2::TreeView, so all methods
+  # on a treeview are available.
   $slist->set_rules_hint (TRUE);
   $slist->signal_connect (row_activated => \&row_clicked);
 
@@ -512,7 +525,7 @@ arbitrary new column types before calling the new function.
            +--- Gtk2::TreeView
 	        +--- Gtk2::SimpleList
 
-=head1 FUNCTIONS
+=head1 METHODS
 
 =over
 
@@ -523,6 +536,7 @@ C<cname> is the name of the column, what will be displayed in the list headers i
 they are turned on. The parameter ctype is the type of the column, one of:
 
  text    normal text strings
+ markup  pango markup strings
  int     integer values
  double  double-precision floating point values
  bool    boolean values, displayed as toggle-able checkboxes
@@ -587,7 +601,10 @@ The first parameter is the column type name, the list of six are examples.
 There are no restrictions on the names and you may even overwrite the existing
 ones should you choose to do so. The remaining parameters are the type
 definition consisting of key value pairs. There are three required: type,
-renderer, and attr. The type key should be always be set to 'Glib::Scalar'. The
+renderer, and attr. The type key determines what actual datatype will be
+stored in the underlying model representation; this is a package name, e.g.
+Glib::String, Glib::Int, Glib::Boolean, but in general if you want an
+arbitrary Perl data structure you will want to use 'Glib::Scalar'. The
 renderer key should hold the class name of the cell renderer to create for this
 column type; this may be any of Gtk2::CellRendererText,
 Gtk2::CellRendererToggle, Gtk2::CellRendererPixbuf, or some other, possibly
@@ -655,8 +672,8 @@ section will prove redundant, but just in case:
     unshift @{$slist->{data}}, [col1_data, col2_data, ..., coln_data];
     # shift a row off of the beginning of the list
     $rowref = shift @{$slist->{data}};
-    # delete the row at index n, 0 indexed
-    delete $slist->{data}[n];
+    # delete the row at index $n, 0 indexed
+    splice @{ $slist->{data} }, $n, 1;
     # set the entire list to be the data in a array
     @{$slist->{data}} = ( [row1, ...], [row2, ...], [row3, ...] );
 
@@ -673,7 +690,8 @@ section will prove redundant, but just in case:
 
 =head1 SEE ALSO
 
-Perl(1), Glib(3pm), Gtk2(3pm).
+Perl(1), Glib(3pm), Gtk2(3pm), Gtk2::TreeView(3pm), Gtk2::TreeModel(3pm),
+Gtk2::ListStore(3pm).
 
 =head1 AUTHORS
 

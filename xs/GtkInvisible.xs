@@ -16,14 +16,10 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkInvisible.xs,v 1.7 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkInvisible.xs,v 1.8 2004/01/04 01:53:37 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
-
-/*
-FIXME this is an internal widget and we should not export it.
-*/
 
 MODULE = Gtk2::Invisible	PACKAGE = Gtk2::Invisible	PREFIX = gtk_invisible_
 
@@ -37,8 +33,10 @@ gtk_invisible_new (class)
 
 ##GtkWidget * gtk_invisible_new_for_screen (GdkScreen *screen)
 GtkWidget *
-gtk_invisible_new_for_screen (screen)
+gtk_invisible_new_for_screen (class, screen)
 	GdkScreen *screen
+    C_ARGS:
+	screen
 
 ##void gtk_invisible_set_screen (GtkInvisible *invisible, GdkScreen *screen)
 void gtk_invisible_set_screen (invisible, screen)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.12.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.20.2.1 2004/03/21 01:26:58 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -26,7 +26,7 @@ typedef struct {
 	const char * sv_str;
 } FindClosureData;
 
-gboolean
+static gboolean
 find_closure (GtkAccelKey * key,
               GClosure * closure,
 	      gpointer data)
@@ -45,8 +45,20 @@ find_closure (GtkAccelKey * key,
 
 MODULE = Gtk2::AccelGroup	PACKAGE = Gtk2::AccelGroup	PREFIX = gtk_accel_group_
 
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  my $win = Gtk2::Window->new;
+  my $accel = Gtk2::AccelGroup->new;
+  $accel->connect (42, ['control-mask'], ['visible'], 
+                   sub { # do something });
+  $win->add_accel_group ($accel);
+
+=cut
+
 ## GtkAccelGroup* gtk_accel_group_new (void)
-GtkAccelGroup *
+GtkAccelGroup_noinc *
 gtk_accel_group_new (class)
     C_ARGS:
 	/*void*/
@@ -79,7 +91,7 @@ gtk_accel_group_connect (accel_group, accel_key, accel_mods, accel_flags, func)
 	 * is the right thing to do, but with it in there i get a critical
 	 * assertion failure from glib when i try to disconnect the closure,
 	 * saying that the refcount was zero somehow. */
-	/* g_closure_unref (closure); */
+	/* g_closure_unref (closure); FIXME */
 
 ## void gtk_accel_group_connect_by_path (GtkAccelGroup *accel_group, const gchar *accel_path, GClosure *closure)
 void
@@ -93,7 +105,7 @@ gtk_accel_group_connect_by_path (accel_group, accel_path, func)
 	closure = gperl_closure_new (func, NULL, FALSE);
 	gtk_accel_group_connect_by_path (accel_group, accel_path, closure);
 	/* i wonder if we get the same problem here as above? */
-	g_closure_unref (closure);
+	/* g_closure_unref (closure); FIXME */
 
 # this will not work quite as advertised --- a GClosure can be
 # attached to only one GtkAccelGroup, but we'll be creating a new
@@ -124,28 +136,6 @@ gtk_accel_group_disconnect_key (accel_group, accel_key, accel_mods)
 	GtkAccelGroup   * accel_group
 	guint             accel_key
 	GdkModifierType   accel_mods
-
-## gboolean gtk_accel_groups_activate (GObject *object, guint accel_key, GdkModifierType accel_mods)
-gboolean
-gtk_accel_groups_activate (object, accel_key, accel_mods)
-	GObject         * object
-	guint             accel_key
-	GdkModifierType   accel_mods
-
-## GSList* gtk_accel_groups_from_object (GObject *object)
-=for apidoc
-Returns a list of Gtk2::AccelGroup's.
-=cut
-void
-gtk_accel_groups_from_object (object)
-	GObject * object
-    PREINIT:
-	GSList * groups, * i;
-    PPCODE:
-	groups = gtk_accel_groups_from_object (object);
-	for (i = groups ; i != NULL ; i = i->next)
-		XPUSHs (sv_2mortal (newSVGtkAccelGroup (i->data)));
-	/* according to the source, we should not free the list */
 
 # no typemap for GtkAccelKey, no boxed support, either
 ## GtkAccelKey* gtk_accel_group_find (GtkAccelGroup *accel_group, gboolean (*find_func) (GtkAccelKey *key, GClosure *closure, gpointer data), gpointer data)
@@ -203,7 +193,7 @@ gtk_accelerator_set_default_mod_mask (class, default_mod_mask)
 
 ## guint gtk_accelerator_get_default_mod_mask (void)
 ## call as Gtk2::Accelerator->get_default_mod_mask
-guint
+GdkModifierType
 gtk_accelerator_get_default_mod_mask (class)
     C_ARGS:
 	/* void */
@@ -217,9 +207,11 @@ gtk_accelerator_get_default_mod_mask (class)
 
 ##gboolean gtk_accelerator_valid (guint keyval, GdkModifierType modifiers) G_GNUC_CONST
 gboolean
-gtk_accelerator_valid (keyval, modifiers)
+gtk_accelerator_valid (class, keyval, modifiers)
 	guint           keyval
 	GdkModifierType modifiers
+    C_ARGS:
+	keyval, modifiers
 
 # internal
 ##GtkAccelGroupEntry* gtk_accel_group_query (GtkAccelGroup *accel_group, guint accel_key, GdkModifierType accel_mods, guint *n_entries)
@@ -240,4 +232,34 @@ gtk_accelerator_valid (keyval, modifiers)
 #	EXTEND(SP,n_entries);
 #	for( i = 0; i < n_entries; i++ )
 #		PUSHs(sv_2mortal(newSVGtkAccelGroupEntry(entries[i])));
+
+MODULE = Gtk2::AccelGroup	PACKAGE = Gtk2::AccelGroups	PREFIX = gtk_accel_groups_
+
+=for object Gtk2::AccelGroup
+
+=cut
+
+## gboolean gtk_accel_groups_activate (GObject *object, guint accel_key, GdkModifierType accel_mods)
+gboolean
+gtk_accel_groups_activate (class, object, accel_key, accel_mods)
+	GObject         * object
+	guint             accel_key
+	GdkModifierType   accel_mods
+    C_ARGS:
+	object, accel_key, accel_mods
+
+## GSList* gtk_accel_groups_from_object (GObject *object)
+=for apidoc
+Returns a list of Gtk2::AccelGroup's.
+=cut
+void
+gtk_accel_groups_from_object (class, object)
+	GObject * object
+    PREINIT:
+	GSList * groups, * i;
+    PPCODE:
+	groups = gtk_accel_groups_from_object (object);
+	for (i = groups ; i != NULL ; i = i->next)
+		XPUSHs (sv_2mortal (newSVGtkAccelGroup (i->data)));
+	/* according to the source, we should not free the list */
 

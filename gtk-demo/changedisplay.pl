@@ -30,9 +30,7 @@
 
 package changedisplay;
 
-use constant FALSE => 0;
-use constant TRUE => 1;
-
+use Glib qw(TRUE FALSE);
 use Gtk2;
 
 
@@ -151,7 +149,6 @@ sub query_for_toplevel {
       #
       while (!$clicked) {
 	Glib::MainContext->default->iteration (TRUE);
-#	Gtk2->main_iteration; ## FIXME doesn't block!!!
       }
       
       $toplevel = find_toplevel_at_pointer ($screen->get_display);
@@ -159,9 +156,7 @@ sub query_for_toplevel {
       $toplevel = undef if defined $toplevel and $toplevel == $popup;
     }
       
-#  gdk_cursor_unref (cursor);
   $popup->destroy;
-#  gdk_flush ();			# Really release the grab
   Gtk2::Gdk->flush;			# Really release the grab
   
   return $toplevel;
@@ -530,7 +525,6 @@ sub do {
 	$info->{window} = $dialog;
     } else {
 
-###      info->window = Gtk2::Dialog->new_with_buttons ("Change Screen or display",
       $info->{window} = Gtk2::Dialog->new ("Change Screen or display",
                                            undef, # parent
                                            'no-separator',

@@ -16,29 +16,29 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.12 2003/11/28 17:53:17 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.18 2004/02/29 09:41:47 muppetman Exp $
  */
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Gdk	PACKAGE = Gtk2::Gdk	PREFIX = gdk_
 
-###  void gdk_parse_args (gint *argc, gchar ***argv) 
-#void
-#gdk_parse_args (argc, argv)
-#	gint *argc
-#	gchar ***argv
-#
 ###  void gdk_init (gint *argc, gchar ***argv) 
 #void
 #gdk_init (argc, argv)
 #	gint *argc
 #	gchar ***argv
 
-#if GTK_CHECK_VERSION(2,2,0)
-
 ###  gboolean gdk_init_check (gint *argc, gchar ***argv) 
 #gboolean
 #gdk_init_check (argc, argv)
+#	gint *argc
+#	gchar ***argv
+
+#if GTK_CHECK_VERSION(2,2,0)
+
+###  void gdk_parse_args (gint *argc, gchar ***argv) 
+#void
+#gdk_parse_args (argc, argv)
 #	gint *argc
 #	gchar ***argv
 
@@ -62,7 +62,7 @@ gdk_set_locale (class)
 
 ## allow NULL to remove the property
 void
-gdk_set_sm_client_id (class, sm_client_id)
+gdk_set_sm_client_id (class, sm_client_id=NULL)
 	const gchar_ornull * sm_client_id
     C_ARGS:
 	sm_client_id
@@ -90,10 +90,14 @@ gdk_set_program_class (class, program_class)
 	program_class
 
 ##  gchar* gdk_get_display (void) 
-gchar_own *
+gchar *
 gdk_get_display (class)
     C_ARGS:
 	/* void */
+    CLEANUP:
+	/* in versions later than 2.2.0, this string is malloc'd. */
+	if (NULL == gtk_check_version (2, 2, 0))
+		g_free (RETVAL);
 
 ##  void gdk_flush (void) 
 void
@@ -103,19 +107,20 @@ gdk_flush (class)
 	
 
 gint
-screendims (class)
+screen_width (class)
     ALIAS:
-	Gtk2::Gdk::screen_width = 0
 	Gtk2::Gdk::screen_height = 1
 	Gtk2::Gdk::screen_width_mm = 2
 	Gtk2::Gdk::screen_height_mm = 3
     CODE:
-	RETVAL = 0;
 	switch (ix) {
 		case 0: RETVAL = gdk_screen_width (); break;
 		case 1: RETVAL = gdk_screen_height (); break;
 		case 2: RETVAL = gdk_screen_width_mm (); break;
 		case 3: RETVAL = gdk_screen_height_mm (); break;
+		default:
+			RETVAL = 0;
+			g_assert_not_reached ();
 	}
     OUTPUT:
 	RETVAL
@@ -227,26 +232,35 @@ MODULE = Gtk2::Gdk	PACKAGE = Gtk2::Gdk	PREFIX = gdk_
 ##  gchar *gdk_wcstombs (const GdkWChar *src) 
 ##  gint gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max) 
 
-# FIXME
-###  gboolean gdk_event_send_client_message (GdkEvent *event, GdkNativeWindow winid) 
-#gboolean
-#gdk_event_send_client_message (event, winid)
-#	GdkEvent *event
-#	GdkNativeWindow winid
-#
-# FIXME
-###  void gdk_event_send_clientmessage_toall (GdkEvent *event) 
-#void
-#gdk_event_send_clientmessage_toall (event)
-#	GdkEvent *event
-#
-# FIXME
-###  gboolean gdk_event_send_client_message_for_display (GdkDisplay *display, GdkEvent *event, GdkNativeWindow winid) 
-#gboolean
-#gdk_event_send_client_message_for_display (display, event, winid)
-#	GdkDisplay *display
-#	GdkEvent *event
-#	GdkNativeWindow winid
+MODULE = Gtk2::Gdk	PACKAGE = Gtk2::Gdk::Event	PREFIX = gdk_event_
+
+##  gboolean gdk_event_send_client_message (GdkEvent *event, GdkNativeWindow winid) 
+gboolean
+gdk_event_send_client_message (class, event, winid)
+	GdkEvent *event
+	GdkNativeWindow winid
+    C_ARGS:
+	event, winid
+
+##  void gdk_event_send_clientmessage_toall (GdkEvent *event) 
+void
+gdk_event_send_clientmessage_toall (class, event)
+	GdkEvent *event
+    C_ARGS:
+	event
+
+#if GTK_CHECK_VERSION (2, 2, 0)
+
+##  gboolean gdk_event_send_client_message_for_display (GdkDisplay *display, GdkEvent *event, GdkNativeWindow winid) 
+gboolean
+gdk_event_send_client_message_for_display (class, display, event, winid)
+	GdkDisplay *display
+	GdkEvent *event
+	GdkNativeWindow winid
+    C_ARGS:
+	display, event, winid
+
+#endif
 
 MODULE = Gtk2::Gdk	PACKAGE = Gtk2::Gdk::Threads	PREFIX = gdk_threads_
 
@@ -264,6 +278,8 @@ gdk_threads_init (class)
 		case 0: gdk_threads_init (); break;
 		case 1: gdk_threads_enter (); break;
 		case 2: gdk_threads_leave (); break;
+		default:
+			g_assert_not_reached ();
 	}
 
 

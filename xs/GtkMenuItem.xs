@@ -16,18 +16,76 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuItem.xs,v 1.8 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuItem.xs,v 1.11 2004/03/01 02:51:55 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
+#include <gperl_marshal.h>
+
+/*
+
+  void (* toggle_size_request)  (GtkMenuItem *menu_item,
+                                 gint        *requisition);
+
+*/
+
+static void
+gtk2perl_menu_item_toggle_size_request_marshal (GClosure * closure,
+                                                GValue * return_value,
+                                                guint n_param_values,
+                                                const GValue * param_values,
+                                                gpointer invocation_hint,
+                                                gpointer marshal_data)
+{
+	gint * requisition;
+	dGPERL_CLOSURE_MARSHAL_ARGS;
+
+	GPERL_CLOSURE_MARSHAL_INIT (closure, marshal_data);
+
+	PERL_UNUSED_VAR (return_value);
+	PERL_UNUSED_VAR (n_param_values);
+	PERL_UNUSED_VAR (invocation_hint);
+
+	ENTER;
+	SAVETMPS;
+
+	PUSHMARK (SP);
+
+	GPERL_CLOSURE_MARSHAL_PUSH_INSTANCE (param_values);
+
+	requisition = g_value_get_pointer (param_values+1);
+
+	GPERL_CLOSURE_MARSHAL_PUSH_DATA;
+
+	PUTBACK;
+
+	GPERL_CLOSURE_MARSHAL_CALL (G_SCALAR);
+
+	if (count == 1) {
+		*requisition = POPi;
+	} else {
+		/* NOTE: croaking here can cause bad things to happen to the
+		 * app, because croaking in signal handlers is bad juju. */
+		croak ("an toggle-size-request signal handler must return one "
+		       "item (the requisition), but the callback returned %d "
+		       "items", count);
+	}
+
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+}
 
 MODULE = Gtk2::MenuItem	PACKAGE = Gtk2::MenuItem	PREFIX = gtk_menu_item_
 
+BOOT:
+	gperl_signal_set_marshaller_for (GTK_TYPE_MENU_ITEM, "toggle_size_request",
+	                                 gtk2perl_menu_item_toggle_size_request_marshal);
+
 GtkWidget*
-gtk_menu_item_news (class, label=NULL)
+gtk_menu_item_new (class, label=NULL)
 	const gchar * label
     ALIAS:
-	Gtk2::MenuItem::new = 0
 	Gtk2::MenuItem::new_with_mnemonic = 1
 	Gtk2::MenuItem::new_with_label = 2
     CODE:
@@ -66,17 +124,12 @@ void
 gtk_menu_item_activate (menu_item)
 	GtkMenuItem *menu_item
 
- ## void gtk_menu_item_toggle_size_request (GtkMenuItem *menu_item, gint *requisition)
- ##void
- ##gtk_menu_item_toggle_size_request (menu_item, requisition)
- ##	GtkMenuItem *menu_item
- ##	gint *requisition
+void gtk_menu_item_toggle_size_request (GtkMenuItem *menu_item, OUTLIST gint requisition)
 
- ## void gtk_menu_item_toggle_size_allocate (GtkMenuItem *menu_item, gint allocation)
- ##void
- ##gtk_menu_item_toggle_size_allocate (menu_item, allocation)
- ##	GtkMenuItem *menu_item
- ##	gint allocation
+void
+gtk_menu_item_toggle_size_allocate (menu_item, allocation)
+	GtkMenuItem *menu_item
+	gint allocation
 
 void
 gtk_menu_item_set_right_justified (menu_item, right_justified)
@@ -87,10 +140,9 @@ gboolean
 gtk_menu_item_get_right_justified (menu_item)
 	GtkMenuItem *menu_item
 
- ## void gtk_menu_item_set_accel_path (GtkMenuItem *menu_item, const gchar *accel_path)
- ##void
- ##gtk_menu_item_set_accel_path (menu_item, accel_path)
- ##	GtkMenuItem *menu_item
- ##	const gchar *accel_path
+void
+gtk_menu_item_set_accel_path (menu_item, accel_path)
+	GtkMenuItem *menu_item
+	const gchar *accel_path
 
  ##void _gtk_menu_item_refresh_accel_path (GtkMenuItem *menu_item, const gchar *prefix, GtkAccelGroup *accel_group, gboolean group_changed)

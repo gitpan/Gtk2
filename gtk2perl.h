@@ -18,7 +18,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
  * 
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.19.2.1 2004/01/09 04:38:20 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.26.2.1 2004/03/17 02:47:13 muppetman Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -26,7 +26,13 @@
 
 #include <gperl.h>
 #include <gtk/gtk.h>
+
+/* custom GType for GdkRegion */
+#define GDK_TYPE_REGION (gtk2perl_gdk_region_get_type ())
+GType gtk2perl_gdk_region_get_type (void) G_GNUC_CONST;
+
 #include "gtk2perl-autogen.h"
+#include "gtk2perl-versions.h"
 
 #ifdef GDK_WINDOWING_WIN32 /* no plug/socket on win32 despite patches exist for years. */
 # undef GTK_TYPE_PLUG
@@ -62,6 +68,7 @@ typedef GdkBitmap GdkBitmap_noinc;
  * GType exists for GdkBitmap. */
 SV * newSVGdkBitmap (GdkBitmap * bitmap);
 SV * newSVGdkBitmap_noinc (GdkBitmap * bitmap);
+#define newSVGdkBitmap_ornull(b) (b ? newSVGdkBitmap (b) : Nullsv)
 
 
 /*
@@ -77,13 +84,18 @@ GtkTargetEntry * SvGtkTargetEntry (SV * sv);
 void gtk2perl_read_gtk_target_entry (SV * sv, GtkTargetEntry * entry);
 
 #define GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY(first, targets, ntargets) \
-	{							\
-	guint i;						\
-	ntargets = items - first;				\
-	targets = g_new0 (GtkTargetEntry, ntargets);		\
-	for (i = 0 ; i < ntargets ; i++)			\
-		gtk2perl_read_gtk_target_entry (ST (i + first),	\
-		                                targets + i);	\
+	{							        \
+	guint i;						        \
+	if (items <= first) {                                           \
+		ntargets = 0;                                           \
+		targets = NULL;                                         \
+	} else {                                                        \
+		ntargets = items - first;				\
+		targets = gperl_alloc_temp (sizeof (GtkTargetEntry) * ntargets); \
+		for (i = 0 ; i < ntargets ; i++)			\
+			gtk2perl_read_gtk_target_entry (ST (i + first),	\
+			                                targets + i);	\
+		}                                                       \
 	}
 
 /* 
@@ -124,7 +136,6 @@ GtkTargetList * SvGtkTargetList (SV * sv);
 SV * newSVGtkTargetEntry (GtkTargetEntry * entry);
 GtkTargetEntry * SvGtkTargetEntry (SV * sv);
 
-
 /*
  * exported so Gnome2 can reuse it in wrappers.  other modules might want to
  * do the same.  the callback for it needn't worry about param_types or
@@ -138,8 +149,8 @@ void gtk2perl_menu_position_func (GtkMenu       * menu,
                                   GPerlCallback * callback);
 
 
-#if ! GTK_CHECK_VERSION (2, 3, 0)
- /* in versions prior to 2.3.0, GtkTreeSearchFlags was declared such that
+#if ! GTK_CHECK_VERSION (2, 4, 0)
+ /* in versions prior to 2.4.0, GtkTreeSearchFlags was declared such that
   * glib-mkenums interpreted and registered it as a GEnum type.  sometime
   * before 2.3.0, this was corrected, and the type is registered as a GFlags.
   * The maps file has GFlags (since that's correct), but we have to mangle
@@ -149,5 +160,10 @@ void gtk2perl_menu_position_func (GtkMenu       * menu,
 # define SvGtkTextSearchFlags(sv)	(gperl_convert_enum (GTK_TYPE_TEXT_SEARCH_FLAGS, sv))
 # define newSVGtkTextSearchFlags(val)	(gperl_convert_back_enum (GTK_TYPE_TEXT_SEARCH_FLAGS, val))
 #endif
+
+/* object handling for GdkGeometry */
+SV * newSVGdkGeometry (GdkGeometry *geometry);
+GdkGeometry * SvGdkGeometry (SV *object);
+GdkGeometry * SvGdkGeometryReal (SV *object, GdkWindowHints *hints);
 
 #endif /* _GTK2PERL_H_ */

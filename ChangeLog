@@ -1,53 +1,2568 @@
-2004/01/16 01:20 (-0500) muppetman
+2004/03/23 21:15 (-0500) muppetman
 
-	* README, Gtk2.pm: release 1.023 (stable)
+	* Gtk2.pm, README, NEWS: stable release 1.040
 
-2004/01/08 23:10 (-0500) muppetman
+	* Makefile.PL: require Glib 1.040
 
-	* xs/GdkPixbuf.xs, xs/Gtk2.xs, xs/GtkEditable.xs: portability fixes
-	for x86_64 systems backported from HEAD.  mostly things like using
-	GUINT_TO_POINTER instead of plain casts, using STRLEN instead of
-	int, etc.
+	* examples/cellrenderer_popup.pl: bump version check to 1.040
 
-	* xs/GtkMessageDialog.xs: fix broken utf8 handling (backported from
-	HEAD)
+	* t/GtkTreeModelIface.t: disable the TODO failures.
 
-sfcvs commit -m updated ChangeLog
+2004/03/24 01:35 (+0100) kaffeetisch
 
-2004/01/08 23:10 (-0500) muppetman
+	* t/GtkFileChooser.t: Set select_multiple to FALSE again to make
+	the preview stuff work.
 
-	* Gtk2.pm, README: stable (bugfix) release 1.022
+	* t/GtkListStore.t: Change the values passed to reorder() to
+	something that works for all gtk+ versions.
 
-	* maps, gtk2perl.h: backport a fix from HEAD; the GType generated
-	for GtkTextSearchFlags changed on 2.3.0 -- this allows 1.022 to work
-	with gnome cvs (and eventually 2.4.0).
+2004/03/22 11:02 (-0500) muppetman
 
-	* t/00.Gtk2.t: backport from HEAD a workaround for test problems with
-	gtk+ > 2.2.x.
+	* xs/GdkRgb.xs, xs/GdkTypes.xs, xs/GtkSelection.xs: use INT2PTR to
+	hush warnings about improper casting on cygwin.
 
-2004/01/07 16:10 (-0500) muppetman
+2004/03/21 23:01 (-0500) muppetman
 
-	* pm/SimpleMenu.pm, pm/SimpleList.pm: manipulate @ISA directly, rather
-	than using the base pragma.  base attempts to require the module with
-	the same name as the base class; we have no pm files for
-	TreeView and ItemFactory, however, Gtk2 < 0.20 did.  picking up the
-	wrong pm files causes Very Bad Things to happen.  this solution is
-	completely avoids the problem.
-	http://lists.gnome.org/archives/gtk-perl-list/2004-January/msg00007.html
+	* xs/GtkTreeSelection: document the return type on get_selected_rows
 
-2003/12/15 23:18 (-0500) muppetman
+2004/03/21 14:01 (-0500) muppetman
 
-	* Gtk2.pm, README: stable (bugfix) release 1.021
+	* xs/GtkMenu.xs: un-hide gtk2perl_menu_pos_func, which is indeed
+	a public symbol.
 
-	* xs/GtkList.xs: merge ross' fix from HEAD; list validity checks
-	were being performed on the wrong values.
+2004/03/20 23:54 (-0500) muppetman
 
-	* xs/GtkTreeStore.xs: merged my treestore->reorder fix from HEAD; was
-	reading indexes from stack incorrectly.  regression tests are in HEAD.
+	* MANIFEST: add examples/dialog.pl
 
-2003/12/14 14:41 (-0500) muppetman
+2004/03/20 23:37 (-0500) muppetman
 
-	* xs/GtkTreeModel.xs: typo in pod; kaffee's fix merged from HEAD.
+	* xs/Gtk2.xs: fix broken see_also entry
+
+2004/03/20 22:28 (-0500) muppetman
+
+	* xs/GdkEvent.xs: remove cruft
+
+	* xs/GtkObject.xs: clean up properly on bad property in
+	Gtk2::Object::new
+
+2004/03/20 21:42 (-0500) muppetman
+
+	* examples/dialog.pl: handle delete-event, beef up commentary, use
+	$dialog->set_default_response, explain that response ids are magical.
+
+2004/03/20 20:32 (-0500) muppetman
+
+	* xs/GdkEvent.xs, xs/GtkAccelGroup.xs, xs/GtkAccelMap.xs,
+	xs/GtkItemFactory.xs, xs/GtkMenu.xs, xs/GtkTreeView.xs: remove
+	private symbols from ABI
+
+2004/03/19 03:56 (-0500) muppetman
+
+	* Gtk2.pm, Makefile.PL, NEWS: 1.040 release candidate 1 (1.0391)
+
+2004/03/18 22:06 (+0100) kaffeetisch
+
+	* t/GdkEvent.t
+	* xs/GdkEvent.xs: Prevent the return value of window() and
+	subwindow() from being destroyed and check for NULL before
+	unref()ing.  Allow undef to be passed to
+	Gtk2::Gdk::Event::Setting::name and
+	Gtk2::Gdk::Event::DND::context.
+
+2004/03/17 13:12 (-0500) rwmcfa1
+
+	* examples/dialog.pl: initial import, example of the two main ways to
+	use a Gtk2::Dialog. 
+
+	* xs/GtkDialog.xs: added an enum (GtkDialogFlags) to the apidoc
+
+2004/03/17 17:13 (+0100) kaffeetisch
+
+	* t/GdkProperty.t
+	* xs/GdkProperty.xs: Use sv_len instead of strlen in
+	Gtk2::Gdk::Property::change because \0's are allowed.  Test it.
+
+2004/03/16 22:08 (-0500) rwmcfa1
+
+	* examples/item_factory.pl: so the usage of accel_groups (based on
+	simple_menu code) and comment things a bit.
+
+2004/03/16 21:56 (-0500) muppetman
+
+	D maps-2.3
+	A maps-2.4
+	D xs_files-2.3
+	A xs_files-2.4
+	M MANIFEST
+	  rename the files related to 2.3
+
+2004/03/16 21:51 (-0500) muppetman
+
+	* gtk-demo/changedisplay.pl: remove cruft
+
+	* t/GdkEvent.t, t/GdkGC.t: unify the phrasing of some skip messages
+
+	* t/GtkFileChooser.t: enable tests for get_preview_filename and
+	get_preview_uri, but leave them as TODO, because i can't figure out
+	why they work in examples/file_chooser.pl and not here.  bump the
+	master version check to 2.4.0, and remove the others.
+
+	* gtk2perl.h, maps-2.0, examples/combo_box.pl,
+	examples/file_chooser.pl, gtk-demo/main.pl, t/01.GtkWindow.t,
+	t/GdkCursor.t, t/GdkDisplay.t, t/GdkDrawable.t, t/GdkPixbuf.t,
+	t/GtkAccelGroup.t, t/GtkAction.t, t/GtkActionGroup.t, t/GtkAlignment.t,
+	t/GtkButton.t, t/GtkButtonBox.t, t/GtkCellLayout.t,
+	t/GtkCellRenderer.t, t/GtkCheckMenuItem.t, t/GtkClipboard.t,
+	t/GtkColorButton.t, t/GtkComboBox.t, t/GtkComboBoxEntry.t, t/GtkDnd.t,
+	t/GtkEntry.t, t/GtkEntryCompletion.t, t/GtkEventBox.t, t/GtkExpander.t,
+	t/GtkFileChooserDialog.t, t/GtkFileChooserWidget.t, t/GtkFileFilter.t,
+	t/GtkFontButton.t, t/GtkIconFactory.t, t/GtkIconTheme.t,
+	t/GtkListStore.t, t/GtkMenu.t, t/GtkMenuShell.t, t/GtkMessageDialog.t,
+	t/GtkRadioAction.t, t/GtkRadioMenuItem.t, t/GtkRadioToolButton.t,
+	t/GtkRc.t, t/GtkScale.t, t/GtkSeparatorToolItem.t, t/GtkStyle.t,
+	t/GtkTextBuffer.t, t/GtkTextIter.t, t/GtkTextView.t,
+	t/GtkToggleAction.t, t/GtkToggleToolButton.t, t/GtkToolButton.t,
+	t/GtkToolItem.t, t/GtkToolbar.t, t/GtkTreeModelFilter.t,
+	t/GtkTreeView.t, t/GtkUIManager.t, t/GtkWidget.t, xs/GdkCursor.xs,
+	xs/GdkDisplay.xs, xs/GdkDrawable.xs, xs/GdkPixbuf.xs,
+	xs/GdkPixbufLoader.xs, xs/GdkWindow.xs, xs/GtkAlignment.xs,
+	xs/GtkButton.xs, xs/GtkButtonBox.xs, xs/GtkCalendar.xs,
+	xs/GtkCellRenderer.xs, xs/GtkCheckMenuItem.xs, xs/GtkClipboard.xs,
+	xs/GtkComboBoxEntry.xs, xs/GtkDnd.xs, xs/GtkEntry.xs,
+	xs/GtkEventBox.xs, xs/GtkFileChooserDialog.xs,
+	xs/GtkFileChooserWidget.xs, xs/GtkIconFactory.xs, xs/GtkMenu.xs,
+	xs/GtkMenuShell.xs, xs/GtkMessageDialog.xs, xs/GtkRadioMenuItem.xs,
+	xs/GtkRc.xs, xs/GtkScale.xs, xs/GtkStyle.xs, xs/GtkTextBuffer.xs,
+	xs/GtkTextIter.xs, xs/GtkTextView.xs, xs/GtkToolbar.xs,
+	xs/GtkTreeViewColumn.xs, xs/GtkWidget.xs, xs/GtkWindow.xs:
+	bump 2.3.x version checks to the stable 2.4.0.  we don't claim to
+	work with unstable gtk+.
+
+2004/03/16 02:03 (-0500) muppetman
+
+	* xs/Gtk2.xs: Pod updates.  Doc Pango version stuff in
+	Gtk2::Pango::version to avoid clobbering the pod from the pure-perl
+	Gtk2::Pango module (the one that exports the pango constants).
+
+2004/03/16 02:03 (-0500) muppetman
+
+	* pm/TestHelper.pm, gtk-demo/textview.pl, examples/combo_box.pl,
+	gtk-demo/sizegroup.pl: use compile-time version info for version tests
+
+	* examples/color_list.pl: explain why we use a runtime version
+	check here
+
+	* t/GtkFileChooser.t: can't set a shortcut folder to a filename
+ 
+	* xs/Gtk2.xs, t/00.Gtk2.t: add Gtk2::GET_VERSION_INFO, change
+	Gtk2::Pango::get_version_info to Gtk2::Pango::GET_VERSION_INFO,
+	and test.  oh, and fix the skip count.
+
+2004/03/14 21:11 (+0100) kaffeetisch
+
+	* t/00.Gtk2.t: Test Gtk2::Widget::propagate_event, make the tests
+	for main_iteration, main_iteration_do and events_pending more
+	robust.
+
+	* t/GtkMenu.t: Prevent random failures by making sure we only
+	execute the positioning callback once.
+
+2004/03/14 04:00 (-0500) muppetman
+
+	* examples/adding_stock_icons.pl, examples/customrenderer.pl,
+	examples/file_chooser.pl, examples/histogramplot.pl,
+	examples/insert-text-test.pl, examples/testdnd.pl:
+	improve commentary, so these make better examples.
+ 
+	* examples/calendar.pl: remove cruft; use dialog's response rather
+	than old-school manip of buttons.
+ 
+	* examples/combo_box.pl: do something more interesting with the
+	do-it-yourself cell renderer example.
+ 
+2004/03/12 23:11 (-0500) muppetman
+
+	* Gtk2.exports: fix missing symbols in the exports so we can link
+	on win32
+
+	* xs/GdkEvent.xs, xs/GdkProperty.xs, xs/GdkRgb.xs, xs/PangoLayout.xs:
+	little warning fixes; signedness, returning from all paths or at least
+	putting a note that the code is not reached, explicit casts, etc.
+
+2004/03/12 00:43 (-0500) muppetman
+
+	* Glib.pm, NEWS, README, Makefile.PL: beta release 1.039
+
+	* t/GdkDnd.t: get_selection() seems to fail when using Apple's X server,
+	but not any others.  making it a TODO test.
+
+	* t/GtkTreeStore.t, t/GtkListStore.t: correct skip counts
+
+	* t/GdkProgressBar.t: use ok() for boolean tests, because false is
+	sometimes '' and sometimes undef.
+
+2004/03/11 23:20 (-0500) muppetman
+
+	* README: give shout-outs to the examples and gtk-demo.
+
+2004/03/12 03:09 (+0100) kaffeetisch
+
+	* Gtk2.pm: Don't indent the abstract.
+
+	D examples/colorselectiontest.pl
+	* MANIFEST
+	* TODO: Remove the entries about the color selection test (and get
+	rid of the now needless example) and GdkRegion.
+
+	* t/GtkProgressBar.t
+	* xs/GtkProgressBar.xs: Allow and test undef for for the text
+	parameter of [sg]et_text.
+
+2004/03/09 00:06 (+0100) kaffeetisch
+
+	* t/GtkListStore.t
+	* t/GtkTreeStore.t: Test-drive both reorder functions a bit more.
+
+	* xs/GdkEvent.xs: Apidoc fix:
+	s/Gtk2::Gdk::main_do_event/Gtk2::main_do_event/.
+
+	* xs/GtkTextView.xs: Use const for two GtkTreeIter's -- the
+	typemap is now able to handle it.
+
+	* xs/GdkWindow.xs
+	* xs/GtkArrow.xs
+	* xs/GtkCellRenderer.xs
+	* xs/GtkRc.xs
+	* xs/GtkTreeStore.xs
+	* xs/GtkWindow.xs: Remove various outdated TODO and FIXME
+	comments.
+
+2004/03/07 22:01 (-0500) rwmcfa1
+
+	* xs/GdkPixbuf.xs, xs/GdkPixbufLoader.xs, xs/GtkFileChooser.xs,
+	xs/GtkIconTheme.xs, xs/GtkUIManager.xs, xs/GtkWindow.xs: use __gerror__
+	for apidoc where needed.
+
+2004/03/06 18:25 (-0500) muppetman
+
+	* xs/GtkFileChooser.xs, t/GtkFileChooser.t: track upstream API changes.
+
+2004/03/05 16:13 (+0100) kaffeetisch
+
+	* t/GdkEvent.t: Make sure the test doesn't fail when unexpected
+	mouse events occur.
+
+2004/03/04 02:42 (+0100) kaffeetisch
+
+	* t/GtkCellEditable.t: Test-drive the custom cell editable stuff.
+
+2004/03/03 15:58 (-0500) muppetman
+
+	A examples/color_snooper.pl
+	A t/GdkPixbuf.t
+	M MANIFEST
+	  new files.
+	
+	* xs/GdkEvent.xs: hush compiler warnings
+
+	* xs/GdkPixbuf.xs: un-break Gtk2::Gdk::Pixbuf::get_pixels by
+	providing the actual string length to newSVpv
+
+2004/03/03 00:04 (-0500) muppetman
+
+	* Gtk2.pm, README, NEWS: beta release 1.038
+
+	* Makefile.PL: require Glib 1.038
+ 
+	* t/GtkFileChooser.t, t/GtkListStore.t: disable some tests that
+	broke with gtk+ 2.3.5
+
+2004/03/02 23:35 (-0500) muppetman
+ 
+	* t/GdkEvent.t, xs/GdkEvent.xs: implement and test setters for
+	event.state and event.time
+
+	* xs/Gtk2.xs, t/GdkEvent.t: bind and test Gtk2::main_do_event
+
+2004/03/03 05:32 (+0100) kaffeetisch
+
+	* xs/GtkCellEditable.xs: Make implementing the GtkCellEditable
+	vfuncs optional by checking if they exist before calling them.
+
+2004/03/03 00:35 (+0100) kaffeetisch
+
+	* t/GtkFileChooser.t: Change the TODOs to SKIPs -- the bugs have
+	been fixed in 2.3.5.
+
+	* t/GtkDnd.t
+	* xs/GtkDnd.xs: Bind and test drag_source_[sg]et_target_list.
+
+	* t/GtkFileChooserDialog.t: Only test new_with_backend on versions
+	that have it.
+
+	* xs/GtkFileChooserDialog.xs: Add version guards around the
+	file-system-backend property.
+
+	* t/GtkFileChooserWidget.t
+	* xs/GtkFileChooserWidget.xs: Bind and test new_with_backend.
+
+	* t/01.GtkWindow.t
+	* xs/GtkWindow.xs: Bind and test propagate_key_event.
+
+	* t/PangoLayout.t
+	* xs/PangoLayout.xs: Bind and test [sg]et_auto_dir.
+
+2004/03/01 13:57 (-0500) rwmcfa1
+
+	* examples/file_chooser.pl: updated uri's to non-muppet specific 
+	directories so that example won't fail. it's uses $ENV{HOME} and /tmp/
+
+2004/03/01 19:55 (+0100) kaffeetisch
+
+	* t/GtkEntry.t
+	* xs/GtkEntry.xs: Bind and test [sg]et_alignment.
+
+	* t/01.GtkWindow.t
+	* xs/GtkWindow.xs: Bind and test activate_key.
+
+2004/03/01 02:24 (-0500) muppetman
+
+	* xs/GdkPixmap.xs: bad signature in pod
+
+	* xs/GtkCellRenderer.xs: hide deprecated warnings unless env var
+	GTK2PERL_DEBUG is set and true.
+
+2004/03/01 02:05 (-0500) muppetman
+
+	* t/GdkDnd.t: make the test not fail when the destination window
+	doesn't exist.
+
+	* t/GdkEvent.t: some settings don't exist if you're not running
+	gnome, e.g., remote to non-gnome desktop; don't fail if the setting
+	isn't there.
+
+	* xs/GdkDnd.xs: if find_window returns no destination window, the
+	protocol is garbage; don't try to convert it to a protocol enum
+	value.  this is half of the fix for the bizarre test problem
+	were seeing in t/GdkDnd.t
+
+2004/03/01 04:51 (+0100) kaffeetisch
+
+	* t/GtkFileChooser.t: Rearrange some function calls to avoid
+	warnings.  Expect that set_current_name doesn't care about the
+	existance of the file and adjust the test accordingly.
+
+2004/03/01 03:50 (+0100) kaffeetisch
+
+	A t/GtkTreeModelIface.t: New test for the custom tree model stuff.
+
+	* t/GdkEvent.t: Use the same window in multiple places.  Test
+	Gtk2::Gdk::setting_get.  Skip the
+	Gtk2::Gdk::Event::Selection::requestor test on Win32.
+
+	* t/GdkEvent.t
+	* xs/GdkEvent.xs: Bind and test handler_set.
+
+	* t/GtkMenuItem.t
+	* xs/GtkMenuItem.xs: Use a custom marshaller for the
+	toggle_size_request signal since it uses a pointer to an integer
+	as a means to return a value from a signal handler.  Bind and test
+	toggle_size_request and toggle_size_allocate.
+
+	* t/GtkTreeModel.t
+	* xs/GtkTreeModel.xs: Bind and test ref_node and unref_node.
+
+2004/03/01 01:54 (+0100) kaffeetisch
+
+	* t/GtkFileChooser.t
+	* xs/GtkFileChooser.xs: Bind and test [sg]et_use_preview_label.
+
+2004/02/29 05:09 (-0500) muppetman
+
+	* t/GtkWidget.t: skip style_get on 2.0.x; we can't implement style_get
+	without gtk_widget_class_find_style_property, which wasn't added until
+	2.2.0.
+
+	* t/GtkIconFactory.t: skip Gtk2::IconSize::lookup_for_settings on
+	2.0.x.
+
+	* t/GtkRc.t: Gtk2::Rc::reparse_all_for_settings seems to return
+	something different values on different machines/versions/etc.
+	just verify that we don't crash, don't check the value.
+
+2004/02/29 04:37 (-0500) muppetman
+
+	* Makefile.PL, xs_files-2.0: only build xs/GdkX11.xs when linking\
+	against the x11 gtk target.
+
+	* api.pod: updated
+
+	* gtk-demo/editable_cells.pl, tools/podifyenums.pl, xs/GdkScreen.xs,
+	xs/GtkActionGroup.xs, xs/GtkContainer.xs, xs/GtkTreeModel.xs,
+	xs/GtkTreeSelection.xs: remove outdated FIXME
+
+	* t/01.GtkWindow.t: implement a test for set_default
+
+	* t/GdkCursor.t: test new_from_pixmap
+
+	* t/GdkDnd.t: re-enable GdkDnd.t in hopes that its brokenness will
+	get it fixed
+
+	* xs/Gdk.xs: use runtime version check rather than compile-time check
+	to get around leak bug
+
+	* xs/GtkComboBoxEntry.xs, xs/GtkRadioMenuItem.xs, xs/GtkRc.xs,
+	xs/GtkStyle.xs, xs/GtkTreeViewColumn.xs: use C comment rather than
+	xs comment to keep from confusing xsubpp
+
+	* xs/GtkListStore.xs, xs/GtkObject.xs, xs/GtkTreeStore.xs: remove
+	unreachable code and strings that will never be used.
+	gperl_value_from_sv either succeeds or croaks, so there's no sense
+	in testing its return value.  the return value never changed, to
+	retain ABI compatibility.
+
+2004/02/29 00:11 (-0500) muppetman
+
+	* xs/GtkWidget.xs: fix the pod for (push|pop)_composite_child
+
+2004/02/29 01:39 (+0100) kaffeetisch
+
+	* t/GtkRc.t: Don't assume the return value of get_style_by_paths
+	is undef -- also allow a Gtk2::Style object.
+
+2004/02/28 18:18 (+0100) kaffeetisch
+
+	* t/GtkIconFactory.t: Test lookup_for_settings.
+
+	* t/GtkRc.t: Test get_style_by_paths and reparse_all_for_settings.
+
+	* t/GtkWidget.t: Test shape_combine_mask and
+	queue_resize_no_redraw.
+
+	* t/GtkComboBoxEntry.t
+	* xs/GtkComboBoxEntry.xs: Bind and test new_text.
+
+	* t/GtkFileChooser.t
+	* xs/GtkFileChooser.xs: Remove [sg]et_folder_mode.
+
+	* t/GtkRc.t
+	* xs/GtkRc.xs: Add a class argument to gtk_rc_get_style_by_paths,
+	test it.  Bind and test gtk_rc_reset_styles.
+
+	* t/GtkStyle.t
+	* xs/GtkStyle.xs: Bind and test Gtk2::draw_insertion_cursor.
+
+	* t/GtkTreeView.t
+	* xs/GtkTreeViewColumn.xs: Bind and test cell_set_cell_data and
+	cell_get_size.
+
+	* t/GtkWidget.t
+	* xs/GtkWidget.xs: Initialize value and flag in the flags xsub.
+	Bind and test list_mnemonic_labels, add_mnemonic_label, and
+	remove_mnemonic_label.
+
+2004/02/28 17:43 (+0100) kaffeetisch
+
+	* t/Gdk.t: Handle the case of an already grabbed pointer
+	gracefully.
+
+	* t/GdkWindow.t: Test shape_combine_mask and set_back_pixmap.
+	Re-enable the get_decorations test, in less strict fashion.
+
+	* t/GtkTextIter.t: Finally test the last missing methods:
+	get_toggled_tags, get_child_anchor, has_tag, get_tags, get_pixbuf,
+	and get_attributes.
+
+	* t/PangoLayout.t: Fix the skip: Pango 1.3.3 has been released.
+
+2004/02/27 15:20 (-0500) muppetman
+
+	* t/GtkWidget.t, xs/GtkWidget.xs: large patch from Torsten adds
+	several things that are of importance when deriving containers in
+	Perl.
+	- removed Gtk2::Allocation, use use Gtk2::Gdk::Rectangle
+	- new bindings for
+	  Gtk2::Widget::requisition
+	  Gtk2::Widget::size_allocate
+	  Gtk2::Widget::saved_state
+	  Gtk2::Widget::can_activate_accel (new in 2.4)
+	  Gtk2::Widget::region_intersect
+	  Gtk2::Widget::child_focus
+	- don't segfault when a style property is not found.
+
+2004/02/27 11:55 (-0500) muppetman
+
+	* pm/SimpleList.pm: updated see-alsos and other pod, bump version.
+
+2004/02/27 02:19 (-0500) muppetman
+
+	* README, Gtk2.pm, NEWS: unstable release 1.037
+
+	* t/GtkFileChooser.t: skip some tests until the file chooser is no
+	longer broken in HEAD
+
+2004/02/27 01:12 (-0500) muppetman
+
+	* ChangeLog, t/00.Gtk2.t, t/01.GtkWindow.t, t/Gdk.t, t/GdkColor.t,
+	t/GdkCursor.t, t/GdkDisplay.t, t/GdkDnd.t, t/GdkDrawable.t,
+	t/GdkEvent.t, t/GdkGC.t, t/GdkKeys.t, t/GdkSelection.t, t/GdkWindow.t,
+	t/GdkX11.t, t/GtkAccelGroup.t, t/GtkAlignment.t, t/GtkButton.t,
+	t/GtkButtonBox.t, t/GtkCellRenderer.t, t/GtkCheckMenuItem.t,
+	t/GtkClipboard.t, t/GtkComboBox.t, t/GtkEntry.t, t/GtkEventBox.t,
+	t/GtkIconFactory.t, t/GtkIconTheme.t, t/GtkInvisible.t,
+	t/GtkListStore.t, t/GtkMenu.t, t/GtkMenuShell.t, t/GtkMessageDialog.t,
+	t/GtkPaned.t, t/GtkRadioMenuItem.t, t/GtkScale.t, t/GtkSelection.t,
+	t/GtkStyle.t, t/GtkTextBuffer.t, t/GtkTextIter.t, t/GtkTextView.t,
+	t/GtkToolbar.t, t/GtkTreeModel.t, t/GtkTreeModelSort.t,
+	t/GtkTreeSelection.t, t/GtkTreeStore.t, t/GtkTreeView-Dnd.t,
+	t/GtkTreeView.t: use Gtk2->CHECK_VERSION instead of check_version
+	and get_version_info.
+
+	* examples/combo_box.pl, examples/file_chooser.pl,
+	gtk-demo/hypertext.pl, gtk-demo/main.pl: ditto.
+
+	* xs/Gtk2.xs: commentary
+
+2004/02/26 23:00 (-0500) muppetman
+
+	* README: update the sandbox instructions.
+
+	* t/GtkMenu.t: have the position func return a location farther away
+	from the corner of the screen, to keep the test from creating gtk+
+	warnings on stderr about allocating a widget with negative size.
+
+	* xs/GtkTooltips.xs: use a weakref instead of object data to trigger
+	the unref of the tooltips object; this keeps from polluting the
+	widget's object data.  (Thanks to yosh for the idea.)
+
+	* xs/Gtk2.xs, t/PangoLayout.t, t/PangoTabs.t: correct the semantics
+	of the boot-time version check; it was backwards, warning when the
+	runtime version was newer instead of older.  add pod for the version
+	stuff, now in the Gtk2::version manpage. 
+	change Gtk2::Pango::check_version to Gtk2::Pango::CHECK_VERSION, to
+	stick with the versioning scheme decision:
+	http://lists.gnome.org/archives/gtk-perl-list/2004-February/msg00085.html
+
+	* xs/GtkMenu.xs: commentary
+
+	* xs/GtkScale.xs: move comment to keep older versions of
+	ExtUtils::ParseXS from ignoring the #if
+
+	* xs/GtkWidget.xs: code to hush uninitialized value warning was
+	setting the wrong var.
+
+2004/02/26 23:29 (+0100) kaffeetisch
+
+	* xs/GtkCellEditable.xs (CALL): Don't call SPAGAIN since we're not
+	accessing the stack again.
+
+2004/02/16 18:21 (+0100) kaffeetisch
+
+	* t/GtkIconTheme.t: Skip some tests if we can't find an icon.
+
+	* xs/PangoFont.xs
+	* xs/PangoLayout.xs: Use "default" instead of "defualt" in the
+	switch statement.
+
+2004/02/25 19:38 (-0500) rwmcfa1
+
+	* xs/Gdk.xs, xs/GdkDnd.xs, xs/GdkEvent.xs, xs/GdkProperty.xs,
+	xs/GdkRgb.xs, xs/GdkSelection.xs, xs/GdkTypes.xs, xs/Gtk2.xs,
+	xs/GtkAdjustment.xs, xs/GtkCalendar.xs, xs/GtkCellRenderer.xs,
+	xs/GtkColorSelectionDialog.xs, xs/GtkCombo.xs, xs/GtkDialog.xs,
+	xs/GtkFileChooser.xs, xs/GtkFileSelection.xs, xs/GtkFontSelection.xs,
+	xs/GtkPaned.xs, xs/GtkRc.xs, xs/GtkSelection.xs, xs/GtkStyle.xs,
+	xs/GtkToolbar.xs, xs/GtkWidget.xs, xs/PangoFont.xs, xs/PangoLayout.xs:
+	improved switch error handling, better way of quiting un-init'd values
+	and don't wast str's on hard to reach cases, just assert not reached.
+
+2004/02/25 19:38 (-0500) rwmcfa1
+
+	* xs/GdkColor.xs xs/GdkEvent.xs xs/GtkAccelGroup.xs xs/GtkAccelMap.xs
+	xs/GtkCellRenderer.xs xs/GtkDialog.xs xs/GtkSelection.xs
+	xs/GtkTreeModel.xs: =pod position=<pos> -> =for position <pos> 
+	some pod parsers don't like text after =pod.
+
+2004/02/25 15:45 (-0500) rwmcfa1
+
+	* xs/GdkColor.xs, xs/GdkEvent.xs, xs/GtkAccelGroup.xs,
+	xs/GtkAccelMap.xs, xs/GtkCellRenderer.xs, xs/GtkDialog.xs,
+	xs/GtkSelection.xs, xs/GtkStock.xs, xs/GtkTreeModel.xs:	apidoc pod 
+	positioning updates
+
+2004/02/23 15:16 (-0500) rwmcfa1
+
+	* t/00.Gtk2.t: versions could be 0, which would fail before, check for
+	defined.
+
+2004/02/23 14:38 (-0500) muppetman
+
+	* CodeGen.pm: add to parse_maps the ability to generate error
+	domain registrations.
+
+	* maps-2.0, maps-2.3, xs/GdkPixbuf.xs, xs/GtkFileChooser.xs,
+	xs/GtkIconTheme.xs: use the new code in Gtk2::CodeGen::parse_maps
+	to register error domains automatically from the maps files, rather
+	than by hand.
+
+2004/02/22 15:35 (-0500) rwmcfa1
+
+	* xs/Gtk2.xs: added gtk_(major|minor|micro)_version and
+	GTK_(MAJOR|MINOR|MICRO)_VERSION and finally CHECK_VERSION. thus the 
+	correct method for handling version numbers begins. more doc on howto
+	do version checking and using this stuff where appliciable to come.
+
+	* t/00.Gtk2.t: test out new stuff ^.
+
+2004/02/22 20:56 (+0100) kaffeetisch
+
+	* t/GtkFileChooserDialog.t
+	* xs/GtkFileChooserDialog.xs: Bind and test new_with_backend.
+
+	* t/GtkAction.t
+	* t/GtkActionGroup.t
+	* t/GtkColorButton.t
+	* t/GtkComboBox.t
+	* t/GtkComboBoxEntry.t
+	* t/GtkEntryCompletion.t
+	* t/GtkExpander.t
+	* t/GtkFileChooser.t
+	* t/GtkFileChooserDialog.t
+	* t/GtkFileChooserWidget.t
+	* t/GtkFileFilter.t
+	* t/GtkFontButton.t
+	* t/GtkRadioAction.t
+	* t/GtkSeparatorToolItem.t
+	* t/GtkToggleAction.t
+	* t/GtkToggleToolButton.t
+	* t/GtkToolButton.t
+	* t/GtkToolItem.t
+	* t/GtkTreeView-Dnd.t
+	* xs/GtkAction.xs
+	* xs/GtkActionGroup.xs
+	* xs/GtkCellLayout.xs
+	* xs/GtkColorButton.xs
+	* xs/GtkComboBox.xs
+	* xs/GtkComboBoxEntry.xs
+	* xs/GtkEntryCompletion.xs
+	* xs/GtkExpander.xs
+	* xs/GtkFileChooser.xs
+	* xs/GtkFileChooserDialog.xs
+	* xs/GtkFileChooserWidget.xs
+	* xs/GtkFileFilter.xs
+	* xs/GtkFontButton.xs
+	* xs/GtkRadioAction.xs
+	* xs/GtkRadioToolButton.xs
+	* xs/GtkSeparatorToolItem.xs
+	* xs/GtkToggleAction.xs
+	* xs/GtkToggleToolButton.xs
+	* xs/GtkToolButton.xs
+	* xs/GtkToolItem.xs
+	* xs/GtkUIManager.xs: Add a license hint.
+
+2004/02/21 18:03 (-0500) muppetman
+
+	* t/GtkToolbar.t: correct skip count
+
+2004/02/21 16:18 (+0100) kaffeetisch
+
+	* t/GtkRadioMenuItem.t
+	* xs/GtkRadioMenuItem.xs: Bind and test new_from_widget,
+	new_with_mnemonic_from_widget, and new_with_label_from_widget.
+
+2004/02/20 22:32 (+0100) kaffeetisch
+
+	* t/GtkIconTheme.t: Test lookup_icon, load_icon, add_builtin_icon
+	and Gtk2::IconInfo::get_base_size, ::get_filename,
+	::set_raw_coordinates.
+
+	* t/GtkButton.t
+	* t/GtkImageMenuItem.t
+	* t/GtkMessageDialog.t: Don't use noinit.  Recent changes seem to
+	require an initialized gtk+.
+
+	* t/GtkToolbar.t: Test the new 2.4 stuff: get_drop_index, insert,
+	get_item_index, get_n_items, get_nth_item, get_relief_style,
+	[sg]et_show_arrow, and set_drop_highlight_item.
+
+	Fixes for stuff found by Marc Brockschmidt:
+
+	* t/GdkWindow.t: Only test if get_origin returned the correct
+	number of values, but not if they are what we expect.
+
+	* t/GtkFileSelection.t: Only test if button_area is a Gtk2::Widget
+	since certain file selector modifications seem to use different
+	kinds of widgets for it.
+
+	* t/GtkSimpleList.t: Don't test for quoted "0.1"'s because this
+	fails with locales that use different decimal delimiters.
+
+2004/02/20 01:38 (-0500) muppetman
+
+	* Gtk2.pm, README, Makefile.PL, NEWS: unstable release 1.036
+
+2004/02/19 13:47 (+0100) kaffeetisch
+
+	* t/GdkDisplay.t: Only test if get_name's return value is defined.
+
+2004/02/19 12:53 (+0100) kaffeetisch
+
+	* gtk2perl.h: Alter GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY to
+	return NULL if there are no arguments to use.
+
+	* t/GtkSelection.t: Call Gtk2::TargetList::new without arguments
+	to test for regressions of the above change.
+
+2004/02/19 01:50 (-0500) muppetman
+
+	* xs/GdkPixbuf.xs, xs/GtkFileChooser.xs, xs/GtkIconTheme.xs:
+	register error domains.
+
+2004/02/18 15:20 (-0500) rwmcfa1
+
+	* xs/PangoTabs.xs: apidoc fix, new needed fully qualified name
+
+2004/02/17 21:14 (+0100) kaffeetisch
+
+	* Makefile.PL: Use COPYRIGHT_FROM instead of COPYRIGHT.
+
+	* t/Gdk.t
+	* xs/Gdk.xs: Bind and test Gtk2::Gdk::Event::send_client_message,
+	::send_clientmessage_toall, and ::send_client_message_for_display.
+
+	* t/GdkEvent.t
+	* xs/GdkEvent.xs: Implement and test
+	Gtk2::Gdk::Event::Client::message_type and ::data.  Document
+	::data_format.
+
+	* Gtk2.pm
+	* t/GdkProperty.t
+	* xs/GdkProperty.xs: Use Gtk2::Gdk::CHARS, ::USHORTS, and ::ULONGS
+	instead of the magic numbers 8, 16, and 32.
+
+2004/02/14 21:54 (+0100) kaffeetisch
+
+	* t/GtkCellRenderer.t
+	* xs/GtkCellRenderer.xs: Bind and test editing_canceled.
+
+	* xs/GtkClipboard.xs: Provide a default for the user_data
+	arguments of request_contents and request_text.
+
+	* t/GtkScale.t
+	* xs/GtkScale.t: Bind and test get_layout and get_layout_offsets.
+
+2004/02/14 00:29 (+0100) kaffeetisch
+
+	* t/GtkComboBox.t: Use a proper skip.  The bug's fixed in cvs now.
+
+	* t/GtkIconTheme.t: Change the TODO into a SKIP.  The bug's been
+	fixed in cvs.  Test list_icons.
+
+	* t/GtkItemFactory.t: Skip two tests if a certain function
+	returned undef.  Very rarely caused test failures for me.
+
+	* t/PangoTabs.t: Change the skip_all into a normal skip.  The bug
+	is fixed in cvs and will hopefully be in the next release.
+
+2004/02/12 19:00 (-0500) muppetman
+
+	* Gtk2.pm, Makefile.PL, README, NEWS: unstable release 1.035
+
+2004/02/12 19:08 (+0100) kaffeetisch
+
+	* t/GtkFileChooser.t
+	* t/GtkIconTheme.t: Mark some tests as TODOs.  They are broken
+	because of what seems to be gtk+ bugs.
+
+2004/02/11 20:25 (+0100) kaffeetisch
+
+	* examples/cellrenderer_date.pl: Adjust the positioning code to
+	work correctly with scrolled tree views.
+
+	* t/GtkUIManager.t: Test insert_action_group, get_action_groups,
+	remove_action_group, get_accel_group, add_ui_from_string,
+	add_ui_from_string, add_ui, remove_ui, ensure_update, get_ui,
+	get_widget, get_toplevels, and get_action.
+
+2004/02/11 00:37 (+0100) kaffeetisch
+
+	* t/GtkComboBox.t: Test new, new_with_model, set_wrap_width,
+	set_row_span_column, set_column_span_column, and [sg]et_active.
+
+	* t/GtkFileChooser.t: Test add_shortcut_folder(_uri)?,
+	list_shortcut_folders(_uris)?, and remove_shortcut_folder(_uri)?.
+
+	* t/GtkRadioToolButton.t: Implement.
+
+	* t/GtkAction.t
+	* xs/GtkAction.xs: Add and test (is|get)_sensitive and
+	(is|get)_visible.
+
+	* t/GtkActionGroup.t
+	* xs/GtkActionGroup.xs: Add and test [sg]et_sensitive,
+	[sg]et_visible, and add_action_with_accel.
+
+	* xs/GnomeIconTheme.xs: Allow undef for the context argument of
+	list_icons.
+
+2004/02/10 01:45 (-0500) muppetman
+
+	A copyright.pod
+	A doctypes
+	M MANIFEST
+	  add copyright.pod and doctypes
+
+	* Makefile.PL: require ExtUtils::Depends 0.2; use
+	Glib::MakeHelper->postamble_docs_full(); use and install doctypes,
+	to add mappings for unregistered types.
+
+	* README: update the ExtUtils::Depends and ExtUtils::PkgConfig
+	requirements.
+
+	* t/GtkCellRenderer.t: 'focused' was not a valid CellRendererState
+	value until 2.2.0
+
+	* xs/Gtk2.xs, xs/GtkTreeModel.xs, xs/GtkTreeStore.xs: pod updates
+
+2004/02/09 01:32 (+0100) kaffeetisch
+
+	* t/GtkTreeModelSort.t
+	* xs/GtkTreeModelSort.xs: Bind and test clear_cache.
+
+	* t/GtkTreeStore.t
+	* xs/GtkTreeStore.xs: Alias set_value to set.  Test it.
+
+2004/02/08 22:28 (+0100) kaffeetisch
+
+	* MANIFEST
+	A t/GtkCellRendererPixbuf.t
+	A t/GtkCellRendererText.t
+	A t/GtkCellRendererToggle.t: New tests.
+
+	* t/GtkCellRenderer.t: Test get_size, render, activate,
+	start_editing, and [sg]et_fixed_size.
+
+2004/02/09 01:24 (-0500) muppetman
+
+	* xs/GtkSelection.xs: make the parsing code for the array and hash
+	forms of Gtk2::TargetEntry agree on the value types.   add pod for the
+	format of a Gtk2::TargetEntry.
+
+2004/02/08 21:45 (-0500) muppetman
+
+	* Gtk2.pm, README, NEWS: unstable release 1.034
+
+	* Makefile.PL, README: require Glib 1.034
+
+	* t/GtkListStore.t, t/GtkTreeStore.t: update skips and such for
+	gtk+ 2.0.x
+
+2004/02/07 02:22 (-0500) muppetman
+
+	* xs/GtkCellEditable.xs: allow perl implementations of GtkCellEditable
+
+	* xs/GtkTreeModel.xs: allow perl implementations of GtkTreeModel.
+	big thanks to Bjarne Steinsbo for helping iron out the memory
+	management wrinkles for GtkTreeIter.  doc on writing tree models is
+	incomplete but started; i'd prefer if that doc section came *after*
+	the normal method listing, but Glib::GenPod doesn't support that
+	sort of thing at the moment.
+
+	* examples/customlist.pl, examples/customrenderer.pl, MANIFEST:
+	new examples, implementing interfaces
+
+2004/02/06 22:25 (+0100) kaffeetisch
+
+	* MANIFEST
+	A t/GtkCellEditable.t
+	A t/GtkEditable.t
+	A t/GtkTreeModelSort.t
+	A t/GtkTreeSortable.t: New tests.
+
+	* t/GtkTreeModelFilter.t
+	* t/GtkCellLayout.t: Implement.
+
+	A t/GtkTreeModel.t
+	* MANIFEST
+	* t/GtkListStore.t
+	* t/GtkTreeStore.t: Rearrange the tree model tests quite a bit to
+	better suit the XS layout.
+
+	* xs/GtkCellEditable.xs: Provide a default for the event argument
+	of start_editing.
+
+	* xs/GtkEditable.xs: Remove the string length argument from
+	insert_text but keep it compatible with the old version.
+
+	* xs/GtkObject.xs: Don't include "../gtk2perl.h" and "../ppport.h"
+	but "gtk2perl.h" and "ppport.h".
+
+	* xs/GtkTreeModelFilter.xs: Provide a default for the root
+	argument of new and for the func argument of set_modify_func.  Fix
+	an allocation bug.  Implement convert_child_iter_to_iter and
+	convert_iter_to_child_iter.
+
+	* xs/GtkTreeModelSort.xs: Add a class argument to new_with_model.
+
+	* xs/GtkComboBox.xs
+	* xs/GtkEntryCompletion.xs
+	* xs/GtkTreeViewColumn.xs: Add Gtk2::CellLayout to the ancestry.
+
+2004/02/06 00:39 (-0500) muppetman
+
+	A examples/cellrenderer_progress.pl
+	M MANIFEST
+	  add new cellrenderer example, ported from the TreeView tutorial.
+	
+	* xs/GtkCellRenderer.xs: big honkin' doc updates.  flesh out docs
+	for the process of deriving a new renderer, hide the methods that
+	are called behind the scenes, and swizzle the order of things so
+	that the meaningful methods are listed first.
+
+	* xs/Gtk2.xs: better message?
+ 
+2004/02/05 22:54 (+0100) kaffeetisch
+
+	* t/GdkWindow.t: Test Gtk2::Gdk::Rectangle::new, x, y, width,
+	height and values.
+
+	* t/GtkFileChooser.t: Make strict-safe.
+
+2004/02/05 22:46 (+0100) kaffeetisch
+
+	* gtk2perl.h
+	* Makefile.PL: Depend on ExtUtils::PkgConfig 1.03 for the new
+	write_version_macros.  Use it to create version macros for pango
+	in gtk2perl-versions.h.
+
+	* xs/Gtk2.xs: Implement xsub accessors to the above macros.
+
+	* xs/PangoLayout.xs
+	* t/PangoLayout.t: Use the new macros to protect
+	backspace_deletes_character.
+
+2004/02/04 19:09 (-0500) rwmcfa1
+
+	* t/00.Gtk2.t: skip count was incorrect, failed with no DISPLAY
+
+2004/02/05 02:40 (-0500) muppetman
+
+	A t/GtkFileChooser.t
+	M MANIFEST
+	  add a nearly-complete test of Gtk2::FileChooser.  some tests need
+	  to be fleshed out.
+
+2004/02/04 23:11 (-0500) muppetman
+
+	* pm/SimpleList.pm, xs/GdkDnd.xs: minor commentary updates.
+
+	* pm/SimpleMenu.pm: commentary updates; ross wrote SimpleMenu 
+	himself (unless i'm mistaken), but the doc appears to have been
+	copied from SimpleList.
+
+2004/02/04 19:09 (-0500) rwmcfa1
+
+	* xs/Gtk2.xs: implemented linked version checking in BOOT section
+
+2004/02/04 20:24 (+0100) kaffeetisch
+
+	* t/00.Gtk2.t
+	* xs/Gtk2.xs: Use and test Glib's new GPerlArgv.
+
+2004/02/04 19:20 (+0100) kaffeetisch
+
+	* t/GtkCellRenderer.t: Make strict-safe.  Use different counters
+	for the compatability and the new stuff.
+
+	* xs/GtkCellRenderer.xs: Hush a compiler warning.
+
+2004/02/04 02:13 (-0500) muppetman
+
+	* xs/GtkCellRenderer.xs: re-vamp vfunc support for be more natural
+	and perlish.  use inheritable ALL_CAPS_METHODS instead of the
+	freakish and highly non-standard system used in the past.  the update
+	is rather ugly, because we still support the old way for
+	backwards-compatibility.  requires new code just added to Glib which
+	calls _INSTALL_OVERRIDES as part of Glib::Type::register_object.
+
+	* examples/cellrenderer_popup.pl, examples/cellrenderer_spinbutton.pl,
+	t/GtkCellRenderer.t: updated for new cellrenderer techniques
+
+	* examples/cellrenderer_date.pl: updated for new cellrenderer
+	techniques; also copied in some of torsten's experimental date
+	renderer code from odot.
+
+2004/02/04 02:16 (+0100) kaffeetisch
+
+	* t/PangoLayout.t: Skip the call to set_font_description with
+	undef until another bug in pango has been fixed.
+
+	* t/PangoTabs.t: Skip the whole test for now until the bug in
+	pango has been fixed.
+
+2004/02/03 23:20 (+0100) kaffeetisch
+
+	* t/02.GtkContainer.t
+	* t/Gdk.t
+	* t/GdkCursor.t
+	* t/GdkDisplay.t
+	* t/GdkDisplayManager.t
+	* t/GdkDnd.t
+	* t/GdkGC.t
+	* t/GdkKeys.t
+	* t/GdkProperty.t
+	* t/GdkRegion.t
+	* t/GdkScreen.t
+	* t/GdkSelection.t
+	* t/GdkWindow.t
+	* t/GdkX11.t
+	* t/GtkAccelGroup.t
+	* t/GtkAccelLabel.t
+	* t/GtkAccelMap.t
+	* t/GtkAdjustment.t
+	* t/GtkAlignment.t
+	* t/GtkArrow.t
+	* t/GtkAspectFrame.t
+	* t/GtkBin.t
+	* t/GtkBox.t
+	* t/GtkButtonBox.t
+	* t/GtkCheckButton.t
+	* t/GtkCheckMenuItem.t
+	* t/GtkClipboard.t
+	* t/GtkColorButton.t
+	* t/GtkColorSelection.t
+	* t/GtkColorSelectionDialog.t
+	* t/GtkDnd.t
+	* t/GtkDrawingArea.t
+	* t/GtkEntry.t
+	* t/GtkEventBox.t
+	* t/GtkExpander.t
+	* t/GtkFileSelection.t
+	* t/GtkFixed.t
+	* t/GtkFontButton.t
+	* t/GtkFontSelection.t
+	* t/GtkFrame.t
+	* t/GtkHBox.t
+	* t/GtkHButtonBox.t
+	* t/GtkHPaned.t
+	* t/GtkHRuler.t
+	* t/GtkHScale.t
+	* t/GtkHScrollbar.t
+	* t/GtkHSeparator.t
+	* t/GtkIconFactory.t
+	* t/GtkImageMenuItem.t
+	* t/GtkInputDialog.t
+	* t/GtkInvisible.t
+	* t/GtkLayout.t
+	* t/GtkListStore.t
+	* t/GtkMenuBar.t
+	* t/GtkMenuItem.t
+	* t/GtkMenuShell.t
+	* t/GtkMessageDialog.t
+	* t/GtkMisc.t
+	* t/GtkObject.t
+	* t/GtkOptionMenu.t
+	* t/GtkPaned.t
+	* t/GtkRadioMenuItem.t
+	* t/GtkRange.t
+	* t/GtkRc.t
+	* t/GtkRuler.t
+	* t/GtkScale.t
+	* t/GtkScrolledWindow.t
+	* t/GtkSelection.t
+	* t/GtkSeparatorMenuItem.t
+	* t/GtkSizeGroup.t
+	* t/GtkSpinButton.t
+	* t/GtkStock.t
+	* t/GtkStyle.t
+	* t/GtkTable.t
+	* t/GtkTearoffMenuItem.t
+	* t/GtkTextBuffer.t
+	* t/GtkTextChildAnchor.t
+	* t/GtkTextMark.t
+	* t/GtkTextTag.t
+	* t/GtkTextTagTable.t
+	* t/GtkToggleButton.t
+	* t/GtkTreeSelection.t
+	* t/GtkTreeStore.t
+	* t/GtkTreeView.t
+	* t/GtkVBox.t
+	* t/GtkVButtonBox.t
+	* t/GtkVPaned.t
+	* t/GtkVRuler.t
+	* t/GtkVScale.t
+	* t/GtkVScrollbar.t
+	* t/GtkVSeparator.t
+	* t/GtkViewport.t
+	* t/GtkWidget.t
+	* t/PangoContext.t
+	* t/PangoFont.t
+	* t/PangoTabs.t: Add a Header tag to all tests that don't have one
+	already.  Sigh.  Somebody remind me about adding those in the
+	first place next time.
+
+	* xs/GdkProperty.xs
+	* xs/GtkClipboard.xs: Apidoc updates.
+
+2004/02/02 22:37 (-0500) rwmcfa1
+
+	* xs/GtkTreeView.xs: gtk_tree_view_create_row_drag_icon was missing, 
+	now implemented.
+
+	* t/GtkTreeView-Dnd.t: initial import, awaiting simulating a dnd
+
+2004/02/02 19:39 (-0500) rwmcfa1
+
+	* examples/simple_menu.pl, pm/SimpleMenu.pm: examples/doc on how to use
+	new per-entry callback_data.
+
+2004/02/02 19:22 (-0500) rwmcfa1
+
+	* pm/SimpleMenu.pm, t/GtkSimpleMenu.t: added the ability to do per 
+	entry user_data. tested that desired user data is passed to callbacks
+	in all cases.
+
+2004/02/02 18:06 (-0500) rwmcfa1
+
+	* pm/TestHelper.pm: added the ablity to skip_all, pretty much just a
+	pass through to Test::More, but a nice feature to have anyway.
+
+2004/02/03 00:21 (+0100) kaffeetisch
+
+	* xs/PangoLayout.xs: Change the PangoLogAttr to use UVs instead of
+	IVs.  Add backspace_deletes_character.
+
+	A t/PangoLayout.t
+	* MANIFEST: New test.
+
+2004/02/02 23:34 (+0100) kaffeetisch
+
+	* t/GdkDrawable.t: Change the TODO into another block that gets
+	skipped if copy_to_image returns undef.
+
+	* t/GtkComboBox.t: Always skip the failing tests because it's
+	gtk+'s fault.  Needs to be changed once it's fixed.
+
+2004/02/02 22:30 (+0100) kaffeetisch
+
+	* t/GtkTextIter.t: Test begins_tag, ends_tag, toggles_tag,
+	forward_to_tag_toggle, backward_to_tag_toggle and all the stuff
+	introduced in 2.4.
+
+	* t/GtkTextView.t: Test scroll_to_mark, scroll_mark_onscreen,
+	move_mark_onscreen.
+
+2004/02/01 01:12 (+0100) kaffeetisch
+
+	* t/GtkTextView.t: Test [sg]et_overwrite and [sg]et_accepts_tab.
+
+2004/01/31 23:59 (+0100) kaffeetisch
+
+	A t/GdkX11.t
+	A t/PangoContext.t
+	A t/PangoFont.t
+	A t/PangoTabs.t
+	* MANIFEST: New tests.
+
+2004/01/31 16:19 (+0100) kaffeetisch
+
+	* t/GtkFileChooserDialog.t
+	* t/GtkFileChooserWidget.t: Initialize gtk+.
+
+	* xs/PangoContext: Don't warn about unregistered subclasses of
+	Gtk2::Pango::Fontset.
+
+	* xs/PangoFont.xs: Don't warn about unregistered subclasses.
+	Implement get_family.  Make better_match also accept undef for
+	old_match.  Move Gtk2::PangoFont::get_metrics and implement
+	::describe.
+
+2004/01/30 22:49 (-0500) muppetman
+
+	A examples/filesel_multisel.pl
+	A examples/multisel.pl
+	M MANIFEST
+	  some examples i had lying around.
+
+2004/01/30 08:06 (-0500) rwmcfa1
+
+	* t/Gdk.t: wholey crap, s missing from the work test, DISPLAY was unset
+	so i didn't know it.
+
+2004/01/29 20:07 (-0500) rwmcfa1
+
+	* Glib.pm, README: unstable release 1.033
+
+	* NEWS: updated
+
+	* t/Gdk.t: init failure fixed, see below
+
+	1.032 isn't going public, was a test failure with no DISPLAY in Gtk2
+
+2004/01/29 19:10 (-0500) rwmcfa1
+
+	* Gtk2.pm, README: unstable release 1.032
+
+	* NEWS: updated
+
+2004/01/29 18:30 (-0500) rwmcfa1
+
+	* t/01.GtkWindow.t, t/GdkDrawable.t, t/GdkWindow.t, t/GtkPaned.t: 
+	temporary stop-gap fixes for test failures against HEAD, remotely 
+	running windowmaker, that's a mouth full.
+
+2004/01/28 15:42 (-0500) rwmcfa1
+
+	* xs/GtkCalendar.xs, xs/GtkRenderer.xs, xs/GtkTextChildAnchor.xs,
+	xs/GtkTextView.xs: apidoc updates
+
+2004/01/28 00:27 (+0100) kaffeetisch
+
+	A t/GdkSelection.t
+	* MANIFEST: New test.
+
+	* t/Gdk.t: Test Gtk2::Gdk::Threads::init, enter and leave.
+
+2004/01/27 23:10 (+0100) kaffeetisch
+
+	A t/GdkCursor.t
+	A t/GdkKeys.t
+	* MANIFEST: New tests.
+
+	* t/GdkEvent.t: Test get_time, get_state, [sg]et_screen, axis and
+	get_axis, coords and get_coords, put, get, peek,
+	[sg]et_show_events, and Gtk2::Gdk::events_pending.
+
+	* t/GtkTextIter.t: Test get_marks.
+
+	* xs/GdkCursor.xs: Implement an accessor for cursor->type.  Take
+	ownership of the cursor returned by new_for_display.  Add a class
+	argument to new_from_pixbuf.
+
+	* xs/GdkEvent.xs: Bind gdk_events_pending as
+	Gtk2::Gdk::events_pending instead of
+	Gtk2::Gdk::Event::gdk_events_pending.  Bind
+	gdk_event_get_graphics_expose as
+	Gtk2::Gdk::Event::get_graphics_expose.  Provide get_axis in
+	addition to axis.  state returns a guint, no gint.
+
+	* xs/GdkKeys.xs: Change the PREFIX from gtk_keymap_ to gk_keymap_.
+	Don't warn about unregistered subclasses.
+
+2004/01/26 21:35 (+0100) kaffeetisch
+
+	* t/GdkWindow.t: Use a parent window for calls that seem to
+	require one.
+
+2004/01/25 23:47 (-0500) muppetman
+
+	* t/GdkGC.t: skip GdkScreen-related stuff on 2.0.x
+
+2004/01/25 19:53 (-0500) muppetman
+
+	* xs/Gtk2.xs: revert the removal of shadow, and add some commentary
+	explaining why it is important.  it allows us to keep from leaking
+	strings removed from argv by gtk_init().
+
+2004/01/25 19:43 (-0500) rwmcfa1
+
+	* t/GdkDisplay.t: use DISPLAY env var instead of assuming :0.0 will 
+	work
+
+	* t/GtkComboBoxEntry.t: use ord to get rid of some errors trying to take
+	a to a power.
+
+2004/01/25 23:37 (+0100) kaffeetisch
+
+	* t/GdkDrawable.t: Skip the draw_image test if get_image returned
+	undef.
+
+	* examples/simplelist.pl
+	* pm/SimpleList.pm
+	* t/GtkSimpleList.t: Implement, document, test and demonstrate a
+	'markup' column type that can be used to put pango markup into
+	cells.
+
+	* xs/Gtk2.xs: Remove all references to the apparently unused
+	'shadow' variable in the gtk_init xsub.
+
+2004/01/25 10:51 (-0500) rwmcfa1
+
+	* xs/GdkEvent.xs: moved ->x/y out of base class (they didn't belong 
+	there anyway and into the specific events that have them. which allowed
+	them to be implemented as set/get accessors. the doc for event was 
+	messed up as well, all of the stuff was put on the event object when 
+	many of the methods were only available on certian even types. this does
+	now cause several event pod to be created, but that's much cleaner and
+	clearer. added custom pod to each of the event types saying they're 
+	parent is base event. also added a list of event types to the parent
+	event's pod.
+
+	* t/GdkEvent.t: test all of the new set/get x/y accessors on the 
+	appropriate event types.
+
+2004/01/25 13:13 (+0100) kaffeetisch
+
+	* MANIFEST
+	A t/GdkDrawable.t
+	A t/GdkGC.t
+	A t/GdkScreen.t: New tests.
+
+	* xs/GdkDrawable.xs: Implement get_clip_region, get_visible_region
+	and draw_point.
+
+	* xs/GdkGC.xs: Fix various typos.  Initialize the mask in
+	read_gcvalues_from_sv.  Implement set_values and get_colormap.
+	Remove a g_printerr.
+
+2004/01/25 04:10 (-0500) muppetman
+
+	* Gtk2.pm, README, NEWS: unstable release 1.031
+
+	* Makefile.PL, README: update Glib requirement to 1.031.
+
+2004/01/25 01:50 (-0500) muppetman
+
+	* examples/buttonbox.pl, examples/calendar.pl, examples/color_list.pl,
+	examples/histogramplot.pl, examples/layout.pl, examples/rulers.pl,
+	examples/scribble.pl, examples/socket.pl, examples/thread_usage.pl,
+	gtk-demo/appwindow.pl, gtk-demo/button_box.pl,
+	gtk-demo/changedisplay.pl, gtk-demo/colorsel.pl, gtk-demo/dialog.pl,
+	gtk-demo/drawingarea.pl, gtk-demo/editable_cells.pl,
+	gtk-demo/entry_completion.pl, gtk-demo/hypertext.pl,
+	gtk-demo/images.pl, gtk-demo/item_factory.pl, gtk-demo/list_store.pl,
+	gtk-demo/main.pl, gtk-demo/menus.pl, gtk-demo/panes.pl,
+	gtk-demo/pixbufs.pl, gtk-demo/sizegroup.pl, gtk-demo/stock_browser.pl,
+	gtk-demo/textview.pl, gtk-demo/tree_store.pl, gtk-demo/ui_manager.pl:
+	use the TRUE and FALSE constants exported by Glib
+
+2004/01/25 00:58 (-0500) muppetman
+
+	A NEWS
+	  add a file to summarize changes
+
+	A t/GtkAction.t
+	A t/GtkComboBoxEntry.t
+	A t/GtkFileFilter.t
+	  new tests
+
+	M MANIFEST
+	  updated
+
+	* pm/Pango.pm: add L<> to links in SEE ALSO.
+
+	* t/GtkButton.t: sprintf the values returned by get_alignment to
+	avoid precision mismatch problems
+
+	* t/GtkIconTheme.t: implement some tests
+
+	* t/GtkItemFactory.t: don't forget to return a string from the
+	translation func
+
+	* xs/GtkItemFactory.xs: keep the value returned from the perl
+	callback alive long enough to be used by the caller.
+
+2004/01/24 21:44 (-0500) rwmcfa1
+
+	* Makefile.PL: removed runtime_reqs stuff, replaced by the pkg-config 
+	trick
+	
+	* perl-Gtk2.spec.in: use pkg-config for Requires version
+
+2004/01/22 15:28 (-0500) muppetman
+
+	A NEWS
+	M MANIFEST
+	add a NEWS file that summarizes the ChangeLog in digestible terms.
+
+	* t/GtkStyle.t: versions of gtk+ prior to 2.2.0 handled only
+	'south-east', which isn't so bad, except that they actually called
+	g_assert_not_reached() in the branch of code that you reach by
+	passing other values.  so, eh, never pass anything but south-east
+	to old gtk+.
+
+	* t/GtkTextChildAnchor.t: letting an anchor die without having
+	inserted it into a buffer causes very bad things to happen.
+	dispose of it nicely.
+
+2004/01/22 15:28 (-0500) muppetman
+
+	* t/Gdk.t: don't forget the skip count.
+
+2004/01/22 02:15 (-0500) muppetman
+
+	* xs/GtkFileChooser.xs, xs/GtkIconFactory.xs, xs/GtkTreeView.xs,
+	xs/PangoFont.xs: plugging more memory leaks
+
+	* xs/GtkRc.xs: invalid free bug was triggered by letting g_free() try
+	to free perl's garbage collected memory.  GtkRc wants to g_free() the
+	bg_pixmap_name and name in its destructor, so we must g_strdup them.
+	don't forget to free the old values.
+
+2004/01/22 00:46 (-0500) muppetman
+
+	* xs/GtkAccelGroup.xs, xs/GtkTextChildAnchor.xs, xs/GtkTreeModel.xs:
+	stop memory leaks
+
+2004/01/21 17:16 (-0500) muppetman
+
+	* xs/Gdk.xs: before 2.2.0, gdk_get_display() returned a static string.
+	don't free it if we're on old gtk+.
+
+2004/01/21 00:32 (-0500) muppetman
+
+	* xs/GdkColor.xs: use initializers to keep valgrind happy.
+
+	* t/GdkColor.t: if we're testing that pixel is nonzero after
+	alloc_colors, test that it's zero before
+
+	* xs/GdkTypes.xs: always initialize the geometry hints
+
+	* xs/GdkWindow.xs: always initialize the attribute mask, regardless
+	of code path
+
+2004/01/20 21:42 (-0500) muppetman
+
+	* xs/GtkSelection.xs: free the value returned from 
+	gtk_selection_data_get_text().  also make sure Perl treats is as utf8.
+
+2004/01/20 21:00 (-0500) muppetman
+
+	* gtk2perl.h, xs/GtkClipboard.xs, xs/GtkSelection.xs: use
+	gperl_alloc_temp() instead of g_new0() in
+	GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY(), and adjust the code
+	to suit.
+
+2004/01/21 00:45 (+0100) kaffeetisch
+
+	* t/Gdk.t: Use show_now instead of show to make sure the window's
+	actually shown.
+
+2004/01/20 23:20 (+0100) kaffeetisch
+
+	* t/GtkMessageDialog.t: Fix skip count.
+
+	* xs/Gdk.xs: Make sm_client_id default to NULL in
+	set_sm_client_id.
+
+	* xs/GtkStyle.xs: Don't _copy the values in the color accessors.
+	Bind GTK_STYLE_ATTACHED as Gtk2::Style::attached.  Fix
+	Gtk2::Style::attach.
+
+2004/01/20 22:58 (+0100) kaffeetisch
+
+	A t/Gdk.t
+	A t/GdkDisplay.t
+	A t/GdkDisplayManager.t
+	A t/GtkStyle.t
+	* MANIFEST: New tests.
+
+2004/01/20 21:33 (+0100) kaffeetisch
+
+	* t/01.GtkWindow.t
+	* t/GtkMessageDialog.t
+	* t/GtkTreeView.t: Tests for 2.4 stuff.
+
+	* xs/GtkRc.xs: Add a FIXME comment about the weird sporadic
+	segfaults I'm seeing.
+
+2004/01/20 12:29 (-0500) muppetman
+
+	* xs/GdkKeys.xs: change PREFIX to fix gdk_keyval_* functions.
+	they are now Gtk2::Gdk->keyval_*, like in gtk-perl.
+
+2004/01/19 21:55 (-0500) muppetman
+
+	* t/GtkEntryCompletion.t: flesh this out a bit
+
+	* xs/GtkActionGroup.xs: remove debugging print
+
+	* xs/GtkComboBoxEntry.xs: apidoc
+
+2004/01/19 20:55 (-0500) rwmcfa1
+
+	* xs/GdkColor.xs: fixed mem leak, argcolors, in alloc_colors.
+
+	* xs/GdkWindow.xs: fixed mem leak, RETVAL, in get_frame_extents.
+
+	* xs/GtkAccelMap.xs: fixed mem leaks, callback needed destroying after
+	the foreach's were through, in map_foreach and map_foreach_unfiltered.
+
+2004/01/19 20:52 (-0500) muppetman
+
+	A t/GtkActionGroup.t
+	A t/GtkCellLayout.t
+	A t/GtkEntryCompletion.t
+	A t/GtkFileChooserDialog.t
+	A t/GtkFileChooserWidget.t
+	A t/GtkIconTheme.t
+	A t/GtkRadioAction.t
+	A t/GtkRadioToolButton.t
+	A t/GtkSeparatorToolItem.t
+	A t/GtkToggleAction.t
+	A t/GtkToggleToolButton.t
+	A t/GtkToolButton.t
+	A t/GtkToolItem.t
+	A t/GtkTreeModelFilter.t
+	A t/GtkUIManager.t
+	M MANIFEST
+	new tests
+
+	* xs/GtkActionGroup.xs: avoid core dumps
+
+2004/01/19 15:40 (-0500) muppetman
+
+	* Makefile.PL: refactor some of the code that handles picking up
+	files by version.  use only the maps files that contain stuff for
+	the gtk+ version against which we're compiling for enums.pod.
+
+2004/01/19 15:40 (-0500) muppetman
+
+	* xs/GtkIconTheme.xs, xs/GtkToggleToolButton.xs: add missing
+	class parameter
+
+	* xs/GtkRadioAction.xs: was checking for the wrong kind of object
+
+	* xs/GtkTreeModelFilter.xs: allow NULL for new's root
+
+2004/01/18 13:17 (-0500) rwmcfa1
+
+	* xs/GtkWidget.xs: valgrind found a mem leak, fix by muppet.
+
+2004/01/18 02:30 (+0100) kaffeetisch
+
+	* t/GtkEntry.t: Test [sg]et_completion.
+
+	* t/GtkEventBox.t: Test [sg]et_above_child and
+	[sg]et_visible_window.
+
+	* t/GtkMenu.t: Test attach and set_monitor.
+
+	* t/GtkTextBuffer.t: Test select_range.
+
+2004/01/17 16:26 (+0100) kaffeetisch
+
+	* t/GdkEvent.t: Only declare $event once to avoid warnings.
+
+	* t/GtkButton.t: Put a TODO block around get_alignment - it has
+	precision issues.
+
+	* t/GtkCalendar.t: Test [sg]et_display_options.
+
+	* t/GtkClipboard.t: Test request_targets.
+
+	* xs/GtkDnd.t
+	* t/GtkDnd.t: Implement and test both syntaxes:
+	Gtk2::Drag->begin($button, ...) and $button->drag_begin(...).
+
+	* xs/GtkIconFactory.xs:
+	* t/GtkIconFactory.t: Implement and test [sg]et_icon_name.
+
+	* t/GtkAccelGroup.t
+	* t/GtkAlignment.t
+	* t/GtkButton.t
+	* t/GtkButtonBox.t
+	* t/GtkCheckMenuItem.t
+	* t/GtkMenuShell.t: Test for 2.3.0 instead of 2.4.0 until we have
+	a stable release of gtk+.
+
+	* t/01.GtkWindow.t
+	* t/GtkPaned.t: Don't declare TRUE and FALSE, Gtk2::TestHelper
+	does that now.
+
+	* t/02.GtkContainer.t
+	* t/GtkDnd.t
+	* t/GtkTextTag.t
+	* t/GtkTreeView.t: Remove the Gtk2::Gdk::Event::new skips.
+
+	* t/GtkTreeView.t: Use true values to test functions that
+	return/take a boolean.  Only test stuff inside the cell_data_func
+	once.
+
+	* xs/GtkClipboard.xs: Use void for the return value of
+	wait_for_targets - it uses PPCODE.  Check targets for NULL instead
+	of n_targets.
+
+	* xs/GtkCalendar.xs
+	* xs/GtkComboBox.xs: Mark ix as unused.
+
+	* xs/GtkFileChooser.xs: Initialize ret to hush a compiler warning.
+
+	* MANIFEST
+	A t/GdkProperty.t
+	* xs/GdkProperty.xs: Fix and test property_get and
+	property_change.  Also test the other bound methods.
+
+2004/01/17 04:10 (-0500) muppetman
+
+	A t/GtkComboBox.t
+	M MANIFEST
+	new test.  doesn't seem to work right.
+
+2004/01/17 03:46 (-0500) muppetman
+
+	* Makefile.PL: maps is gone, use all of the maps-* files for
+	podifyenums.
+
+	* tools/podifyenums.pl: eat \$ARGV[0] and then process all files
+	on command line (with <>)
+
+	* examples/combo_box.pl, examples/color_list.pl,
+	examples/file_chooser.pl: refuse to run when linked against a
+	gtk+ that's too old
+
+	* examples/testdnd.pl: nobody told this example that the target
+	flags are no longer integers
+
+	* gtk-demo/hypertext.pl: bad logic kept hyperlinks from actually
+	working
+
+	* t/GtkTextBuffer.t: appropriate skips for 2.0.x
+
+	* xs/GdkEvent.xs: provide our own implementation of gdk_event_new()
+	on 2.0.x
+
+2004/01/17 02:35 (-0500) muppetman
+
+	* t/GtkExpander.t: doesn't need init.
+
+	* t/GtkColorButton.t, GtkFontButton.t: copy and paste bugs
+
+2004/01/17 02:00 (-0500) muppetman
+
+	The Giant Merge of the 2.3.x branch into HEAD.
+
+	D maps
+	A maps-2.0
+	A maps-2.2
+	A maps-2.3
+	Split the maps file into revision-specific pieces.  This lets us
+	track things a little more clearly.
+
+	A xs_files-2.3
+	A examples/combo_box.pl
+	A examples/file_chooser.pl
+	A gtk-demo/hypertext.pl
+	A gtk-demo/entry_completion.pl
+	A gtk-demo/ui_manager.pl
+	A t/GtkExpander.t
+	A t/GtkColorButton.t
+	A t/GtkFontButton.t
+	A xs/GtkAction.xs
+	A xs/GtkActionGroup.xs
+	A xs/GtkCellLayout.xs
+	A xs/GtkColorButton.xs
+	A xs/GtkComboBox.xs
+	A xs/GtkComboBoxEntry.xs
+	A xs/GtkEntryCompletion.xs
+	A xs/GtkExpander.xs
+	A xs/GtkFileChooser.xs
+	A xs/GtkFileChooserDialog.xs
+	A xs/GtkFileChooserWidget.xs
+	A xs/GtkFileFilter.xs
+	A xs/GtkFontButton.xs
+	A xs/GtkIconTheme.xs
+	A xs/GtkRadioAction.xs
+	A xs/GtkRadioToolButton.xs
+	A xs/GtkSeparatorToolItem.xs
+	A xs/GtkToggleAction.xs
+	A xs/GtkToggleToolButton.xs
+	A xs/GtkToolButton.xs
+	A xs/GtkToolItem.xs
+	A xs/GtkTreeModelFilter.xs
+	A xs/GtkUIManager.xs
+	new files for stuff that's new in 2.4, with three new tests.
+
+	* MANIFEST: updated for file churn.  alphabetized.
+
+	* CodeGen.pm: version 0.02 can merge maps from multiple files,
+	with full backward compatability.
+
+	* Makefile.PL: add xs_files for 2.3 if available.  merge maps from
+	various files by what's available.  NOTE: the 2.3 stuff will need
+	to be changed to 2.4 when 2.4 is released.
+
+	* gtk-demo/main.pl, gtk-demo/sizegroup.pl, gtk-demo/textview.pl:
+	cleanup, and updates for new things available in 2.4
+
+	* pm/TestHelper.pm: encourage the use of the TRUE/FALSE constants
+	in tests
+
+	* xs/GtkAccelGroup.xs: the closure unref thing bugs me, add FIXMEs
+
+	* xs/GtkLabel.xs: allow NULL where appropriate
+
+	* xs/GdkCursor.xs, xs/GdkDisplay.xs, xs/GdkDrawable.xs,
+	xs/GdkPixbuf.xs, xs/GdkPixbufLoader.xs, xs/GdkWindow.xs,
+	xs/GtkAlignment.xs, xs/GtkButton.xs, xs/GtkButtonBox.xs,
+	xs/GtkCalendar.xs, xs/GtkCheckMenuItem.xs, xs/GtkClipboard.xs,
+	xs/GtkEntry.xs, xs/GtkEventBox.xs, xs/GtkMenu.xs, xs/GtkMenuShell.xs,
+	xs/GtkMessageDialog.xs, xs/GtkTextBuffer.xs, xs/GtkTextIter.xs,
+	xs/GtkTextView.xs, xs/GtkToolbar.xs, xs/GtkTreeViewColumn.xs,
+	xs/GtkWidget.xs, xs/GtkWindow.xs: add new functions that appeared
+	in 2.3.x.  the CHECK_VERSION conditionals are marked with FIXMEs
+	to remind us to change them to 2.4.0 when gtk+-2.4.0 is finally
+	released.
+
+2004/01/17 00:46 (+0100) kaffeetisch
+
+	A t/GtkTextBuffer.t
+	A t/GtkTextMark.t
+	A t/GtkTextTag.t
+	A t/GtkTextTagTable.t
+	* MANIFEST: Initial import.
+
+2004/01/16 18:35 (-0500) rwmcfa1
+
+	* xs/GdkEvents.xs: implemented setters for most everything and getter's
+	for most everything that didn't have them. rest are TODO/FIXME'd.
+
+	* t/GdkEvent.t: initial import, test all of the above implementations,
+	pretty thorough.
+
+2004/01/16 11:14 (-0500) rwmcfa1
+
+	* Makefile.PL: use the new BLIB_DONE var as a dep of the things that 
+	need to know that blib has the .so's. (see Glib commit at same time)
+	fixes problems with -j make options. 
+
+2004/01/16 02:00 (-0500) muppetman
+
+	release 1.030 (unstable)
+
+2004/01/16 01:54 (-0500) muppetman
+
+	* t/GdkDnd.t: this test fails rather insistently on my system;
+	disabling it with loud FIXMEs so we can make a release.
+
+2004/01/16 00:53 (-0500) muppetman
+
+	* AUTHORS, TODO: updated
+
+	* Makefile.PL, README: update requirements to Glib-1.030 and
+	emphasize that this is an unstable series.
+
+2004/01/15 14:37 (-0500) muppetman
+
+	* t/GtkTextView.t: allow negative numbers when testing returns from
+	buffer_to_window_ccords.
+
+	* xs/GtkIconFactory.xs: remove return values from call signature of
+	lookup_for_settings
+
+	* xs/GtkImage.xs: allow null filename to new_from_file and
+	set_from_file, as documented in C API ref
+
+	* xs/GtkTreeView.xs: use XS comments to hide commented-out function
+	from ParseXSDoc (supress "missing" warnings)
+
+	* xs/GtkList.xs, xs/GtkRc.xs, xs/GtkWidget.xs, xs/GtkWindow.xs:
+	give types to faked args to hush warnings from podify
+
+2004/01/15 18:55 (+0100) kaffeetisch
+
+	A t/GdkDnd.t
+	A t/GtkObject.t
+	A t/GtkTextView.t
+	* MANIFEST: Initial import.
+
+	A t/GtkTextChildAnchor.t
+	A xs/GtkTextChildAnchor.xs
+	* MANIFEST
+	* xs_files-2.0: Initial implementation and test.
+
+	* xs/GtkTextView.xs: Fix get_line_at_y, use _own for the return
+	value of get_tabs and get_default_attributes.
+
+	* xs/GdkDnd.xs: Use appropriate PREFIX for gdk_drop_reply and
+	gdk_drop_finish.
+
+2004/01/14 21:29 (-0500) muppetman
+
+	* xs/GdkPixbuf.xs: we don't care about unregistered subclasses of
+	GdkPixbufAnimation.
+
+2004/01/14 20:44 (-0500) rwmcfa1
+
+	* t/GtkImage.t: nearly complete testing now, needs test for from_image
+	funcs. found problem that needs resolving with PixbufAnimation, see
+	warnings printed here, at this point.
+
+2004/01/14 17:53 (-0500) muppetman
+
+	test fixes on RH8.0 / gtk+-2.0.6
+
+	* t/GtkPaned.t: use show_now to ensure the window is on screen,
+	rather than unreliable timeout hacks.
+
+	* t/GtkTreeView.t: fix inverted logic on version guard for
+	set_cursor_on_cell.
+
+2004/01/14 12:06 (-0500) rwmcfa1
+
+	* xs/GtkImage.xs: fixed bug in gtk_image_stock_get xsub found when 
+	writing test below.
+
+2004/01/14 10:24 (-0500) rwmcfa1
+
+	* t/GtkImage.t: initial import, very very incomplete
+
+2004/01/14 09:16 (-0500) rwmcfa1
+
+	* t/GtkCurve.t: initial import, pretty much complete.
+
+2004/01/14 08:07 (-0500) rwmcfa1
+
+	* t/GtkTreeView.xs: apparently need to skip the tests needed events
+	unless we're on newer than 2.2.x
+
+2004/01/13 23:17 (-0500) muppetman
+
+	* gtk-demo/textview.pl: use the PANGO_* constants from Gtk2::Pango
+	instead of the rather obtuse Gtk2::Pango->* constants.
+
+2004/01/13 23:14 (-0500) muppetman
+
+	* gtk2perl.h: add newSVGdkBitmap_ornull.
+
+2004/01/13 23:03 (-0500) rwmcfa1
+
+	* xs/GtkTextIter.xs: _ornull's added to tag params for tag_toggle funcs
+	found by Dan Lyke
+
+2004/01/13 20:30 (-0500) rwmcfa1
+
+	* t/GtkTreeView.xs: added tests for set_cursor_on_cell, scroll_to_point,
+	get_path_at_pos, tree_to_widget_coords, and widget_to_tree_coords.
+
+2004/01/12 23:45 (+0100) kaffeetisch
+
+	* t/GtkDnd.t: Skip a few things if Gtk2::Gdk::Event::new isn't
+	available.
+
+2004/01/12 09:49 (-0500) rwmcfa1
+
+	* pm/TestHelper.pm: if we're not 2.2.0 or greated don't allow init
+	to be skipped. earlier rel's have to for some pagno thing.
+
+	* t/GtkClipboard.t: the clipboard didn't exist for sure until 2.2.0
+
+2004/01/11 23:59 (+0100) kaffeetisch
+
+	* MANIFEST
+	A t/GtkDnd.t: New test.
+
+	* t/GtkTextIter.t: Test everything.
+
+	* t/GdkRegion.t
+	* t/GdkWindow.t
+	* t/GtkAccelGroup.t
+	* t/GtkAccelLabel.t
+	* t/GtkAccelMap.t
+	* t/GtkAdjustment.t
+	* t/GtkAlignment.t
+	* t/GtkArrow.t
+	* t/GtkAspectFrame.t
+	* t/GtkBin.t
+	* t/GtkBox.t
+	* t/GtkButtonBox.t
+	* t/GtkCheckButton.t
+	* t/GtkCheckMenuItem.t
+	* t/GtkColorSelection.t
+	* t/GtkColorSelectionDialog.t
+	* t/GtkDrawingArea.t
+	* t/GtkEntry.t
+	* t/GtkEventBox.t
+	* t/GtkFileSelection.t
+	* t/GtkFixed.t
+	* t/GtkFontSelection.t
+	* t/GtkFrame.t
+	* t/GtkHBox.t
+	* t/GtkHButtonBox.t
+	* t/GtkHPaned.t
+	* t/GtkHRuler.t
+	* t/GtkHScale.t
+	* t/GtkHScrollbar.t
+	* t/GtkHSeparator.t
+	* t/GtkIconFactory.t
+	* t/GtkImageMenuItem.t
+	* t/GtkInputDialog.t
+	* t/GtkInvisible.t
+	* t/GtkLayout.t
+	* t/GtkMenuBar.t
+	* t/GtkMenuItem.t
+	* t/GtkMenuShell.t
+	* t/GtkMessageDialog.t
+	* t/GtkMisc.t
+	* t/GtkOptionMenu.t
+	* t/GtkRadioMenuItem.t
+	* t/GtkRange.t
+	* t/GtkRc.t
+	* t/GtkRuler.t
+	* t/GtkScale.t
+	* t/GtkScrolledWindow.t
+	* t/GtkSelection.t
+	* t/GtkSeparatorMenuItem.t
+	* t/GtkSizeGroup.t
+	* t/GtkSpinButton.t
+	* t/GtkStock.t
+	* t/GtkTable.t
+	* t/GtkTearoffMenuItem.t
+	* t/GtkToggleButton.t
+	* t/GtkTreeStore.t
+	* t/GtkTreeView.t
+	* t/GtkVBox.t
+	* t/GtkVButtonBox.t
+	* t/GtkVPaned.t
+	* t/GtkVRuler.t
+	* t/GtkVScale.t
+	* t/GtkVScrollbar.t
+	* t/GtkVSeparator.t
+	* t/GtkViewport.t: Remove needless 'use Gtk2;'s.
+
+2004/01/11 11:44 (-0500) rwmcfa1
+
+	* exmples/thread_usage.pl: initial import, example of the 'correct' way
+	to use threads and Gtk2.
+
+2004/01/11 00:56 (-0500) muppetman
+
+	* examples/color_list.pl: commentary and clean-up, and a little
+	sprucing.  add the attribute to all renderers in all columns of the
+	view, rather than depending on the location of the hidden column.
+
+2004/01/10 15:28 (-0500) muppetman
+
+	* xs/GdkTypes.xs: explicit zero initialization for GdkGeometries
+
+	* xs/GdkPixbuf.xs, xs/Gtk2.xs, xs/GtkEditable.xs: portability
+	fixes for x86_64 systems.  mostly things like using GUINT_TO_POINTER
+	instead of plain casts, using STRLEN instead of int, etc.
+
+2004/01/10 12:44 (-0500) rwmcfa1
+
+	* t/02.GtkContainer.t, t/GdkRegion.t, t/GtkAccelLabel.t,
+	t/GtkAdjustment.t, t/GtkAlignment.t, t/GtkArrow.t, t/GtkAspectFrame.t,
+	t/GtkBin.t, t/GtkBox.t, t/GtkButton.t, t/GtkButtonBox.t, t/GtkCalendar.t,
+	t/GtkCheckButton.t, t/GtkCheckMenuItem.t, t/GtkDrawingArea.t,
+	t/GtkEventBox.t, t/GtkFixed.t, t/GtkFrame.t, t/GtkHBox.t,
+	t/GtkHButtonBox.t, t/GtkHPaned.t, t/GtkHRuler.t, t/GtkHScale.t,
+	t/GtkHScrollbar.t, t/GtkHSeparator.t, t/GtkHandleBox.t,
+	t/GtkImageMenuItem.t, t/GtkLayout.t, t/GtkMenuBar.t, t/GtkMenuItem.t,
+	t/GtkMessageDialog.t, t/GtkMisc.t, t/GtkProgressBar.t,
+	t/GtkRadioButton.t, t/GtkRadioMenuItem.t, t/GtkRange.t, t/GtkRuler.t,
+	t/GtkScale.t, t/GtkScrolledWindow.t, t/GtkSeparatorMenuItem.t,
+	t/GtkSizeGroup.t, t/GtkStatusBar.t, t/GtkStock.t, t/GtkTable.t,
+	t/GtkTearoffMenuItem.t, t/GtkTextIter.t, t/GtkToggleButton.t,
+	t/GtkTreeSelection.t, t/GtkVBox.t, t/GtkVButtonBox.t, t/GtkVPaned.t,
+	t/GtkVRuler.t, t/GtkVScale.t, t/GtkVScrollbar.t, t/GtkVSeparator.t,
+	t/GtkViewport.t: used noinit => 1 with TestHelper b/c these seem to
+	be able to go about there business without init. and yes i know this is
+	a huge commit log, but it's useful to be able to see which tests i did
+	this to at a glance.
+
+2004/01/10 12:26 (-0500) muppetman
+
+	* t/GdkWindow.t: one more fix -- GdkScreen didn't exist on 2.0.x
+
+	* maps: commentary.
+
+2004/01/10 17:04 (+0100) kaffeetisch
+
+	* t/GdkWindow.t
+	* xs/GdkWindow.t: Don't initialize mask to 0, but *mask.  The mask
+	creation should work correctly now.
+
+2004/01/10 04:09 (-0500) muppetman
+
+	* t/01.GtkWindow.t: correct the skip count for 2.0.x
+
+	* t/GtkListStore.t: on RH8 with gtk+-2.0.6, i get a crash from pango
+	xft when attempting to create the TreeView, complaining that there's
+	no display.  later versions don't seem to require this; so, skip the
+	remaining tests on 2.0.6 if gtk_init_check fails.
+
+2004/01/10 07:15 (+0100) kaffeetisch
+
+	* t/GtkItemFactory.t: Only test if the return value of
+	get_widget_by_action is a Gtk2::Widget.
+
+	* t/GdkWindow.t: Move the get_position call around a bit to make
+	it pass.  Don't be too strict with get_toplevel.
+
+2004/01/10 05:35 (+0100) kaffeetisch
+
+	Merge from the test-suite-branch.
+
+	* t/00.Gtk2.t: Test disable_setlocale, set_locale,
+	get_default_language, main_iteration_do, key_snooper_install,
+	key_snooper_remove, and quit_add_destroy.
+
+	* t/01.GtkWindow.t: Test add_accel_group, remove_accel_group and
+	Gtk2::WindowGroup::new, ::add_window, and ::remove_window.
+
+	* MANIFEST
+	R t/01.GtkWidget.t
+	R t/02.GtkButton.t
+	A t/02.GtkContainer.t
+	R t/03.GtkGammaCurve.t
+	R t/04.GtkSocket-GtkPlug.t
+	R t/05.GtkListStore-etc.t
+	R t/06.GtkLabel.t
+	R t/07.GtkBoxes.t
+	R t/08.GtkCombo.t
+	R t/09.GtkRadioButton.t
+	R t/10.GtkProgressBar.t
+	R t/11.GtkStatusBar.t
+	R t/12.GtkDialog.t
+	R t/13.GtkTooltips.t
+	R t/14.GtkToolbar.t
+	R t/15.GtkHandleBox.t
+	R t/16.GtkMenu-etc.t
+	R t/17.GtkItemFactory.t
+	R t/18.GtkNotebook.t
+	R t/19.GtkSimpleList.t
+	R t/20.GdkColor.t
+	R t/21.GtkContainer.t
+	R t/22.GtkListStore.t
+	R t/23.GtkTreeStore.t
+	R t/24.GtkTreeView.t
+	R t/25.GtkTreeSelection.t
+	R t/26.GtkSimpleMenu.t
+	R t/27.GtkClipboard.t
+	R t/30.GtkCellRenderer.t
+	A t/GdkColor.t
+	A t/GdkRegion.t
+	A t/GdkWindow.t
+	A t/GtkAccelGroup.t
+	A t/GtkAccelLabel.t
+	A t/GtkAccelMap.t
+	A t/GtkAdjustment.t
+	A t/GtkAlignment.t
+	A t/GtkArrow.t
+	A t/GtkAspectFrame.t
+	A t/GtkBin.t
+	A t/GtkBox.t
+	A t/GtkButton.t
+	A t/GtkButtonBox.t
+	A t/GtkCalendar.t
+	A t/GtkCellRenderer.t
+	A t/GtkCheckButton.t
+	A t/GtkCheckMenuItem.t
+	A t/GtkClipboard.t
+	A t/GtkColorSelection.t
+	A t/GtkColorSelectionDialog.t
+	A t/GtkCombo.t
+	A t/GtkDialog.t
+	A t/GtkDrawingArea.t
+	A t/GtkEntry.t
+	A t/GtkEventBox.t
+	A t/GtkFileSelection.t
+	A t/GtkFixed.t
+	A t/GtkFontSelection.t
+	A t/GtkFrame.t
+	A t/GtkGammaCurve.t
+	A t/GtkHBox.t
+	A t/GtkHButtonBox.t
+	A t/GtkHPaned.t
+	A t/GtkHRuler.t
+	A t/GtkHScale.t
+	A t/GtkHScrollbar.t
+	A t/GtkHSeparator.t
+	A t/GtkHandleBox.t
+	A t/GtkIconFactory.t
+	A t/GtkImageMenuItem.t
+	A t/GtkInputDialog.t
+	A t/GtkInvisible.t
+	A t/GtkItemFactory.t
+	A t/GtkLabel.t
+	A t/GtkLayout.t
+	A t/GtkListStore.t
+	A t/GtkMenu.t
+	A t/GtkMenuBar.t
+	A t/GtkMenuItem.t
+	A t/GtkMenuShell.t
+	A t/GtkMessageDialog.t
+	A t/GtkMisc.t
+	A t/GtkNotebook.t
+	A t/GtkOptionMenu.t
+	A t/GtkPaned.t
+	A t/GtkProgressBar.t
+	A t/GtkRadioButton.t
+	A t/GtkRadioMenuItem.t
+	A t/GtkRange.t
+	A t/GtkRc.t
+	A t/GtkRuler.t
+	A t/GtkScale.t
+	A t/GtkScrolledWindow.t
+	A t/GtkSelection.t
+	A t/GtkSeparatorMenuItem.t
+	A t/GtkSimpleList.t
+	A t/GtkSimpleMenu.t
+	A t/GtkSizeGroup.t
+	A t/GtkSocket-GtkPlug.t
+	A t/GtkSpinButton.t
+	A t/GtkStatusBar.t
+	A t/GtkStock.t
+	A t/GtkTable.t
+	A t/GtkTearoffMenuItem.t
+	A t/GtkTextIter.t
+	A t/GtkToggleButton.t
+	A t/GtkToolbar.t
+	A t/GtkTooltips.t
+	A t/GtkTreeSelection.t
+	A t/GtkTreeStore.t
+	A t/GtkTreeView.t
+	A t/GtkVBox.t
+	A t/GtkVButtonBox.t
+	A t/GtkVPaned.t
+	A t/GtkVRuler.t
+	A t/GtkVScale.t
+	A t/GtkVScrollbar.t
+	A t/GtkVSeparator.t
+	A t/GtkViewport.t
+	A t/GtkWidget.t
+	R t/accel-group-map.t
+	R t/calendar.t
+	R t/file-selection.t
+	R t/paned.t
+	R t/text-iter-searches.t
+	R t/trivial-widgets.t: Rename, split, extend and/or create tests.
+	The new policy and long running goal is to have a .t for every
+	.xs.
+
+
+2004/01/10 05:17 (+0100) kaffeetisch
+
+	* xs/GtkMenu.xs
+	* xs/GtkRadioButton.xs
+	* xs/GtkRadioMenuItem.xs
+	* xs/GtkToolbar.xs: Instead of checking for != &PL_sv_undef, use
+	SvOK.
+
+	* xs/GtkWidget.xs: Adjust the apidoc of style_get to make it clear
+	that property values are returned.
+
+	* xs/Gdk.xs
+	* xs/GdkDnd.xs
+	* xs/GdkEvent.xs
+	* xs/GdkProperty.xs
+	* xs/GdkRgb.xs
+	* xs/GdkSelection.xs
+	* xs/GdkTypes.xs
+	* xs/GtkButton.xs
+	* xs/GtkCalendar.xs
+	* xs/GtkCellRenderer.xs
+	* xs/GtkCheckButton.xs
+	* xs/GtkCheckMenuItem.xs
+	* xs/GtkCombo.xs
+	* xs/GtkDialog.xs
+	* xs/GtkFontSelection.xs
+	* xs/GtkImageMenuItem.xs
+	* xs/GtkListStore.xs
+	* xs/GtkMenuItem.xs
+	* xs/GtkPaned.xs
+	* xs/GtkRadioMenuItem.xs
+	* xs/GtkStyle.xs
+	* xs/GtkTextBuffer.xs
+	* xs/GtkToggleButton.xs
+	* xs/GtkTreeStore.xs
+	* xs/GtkWidget.xs
+	* xs/PangoFont.xs
+	* xs/PangoLayout.xs
+	* xs/PangoTabs.xs: Rearrange ALIAS handling so that no unneeded
+	xsubs are generated.
+
+2004/01/10 02:54 (+0100) kaffeetisch
+
+	* xs/Gtk2.xs: Implement get_default_language, main_iteration_do
+	and, Gtk2::Widget::propagate_event.
+
+2004/01/09 14:33 (-0500) rwmcfa1
+
+	* AUTHORS, Gtk2.pm, README: mailing list addr correction
+
+2004/01/09 06:19 (+0100) kaffeetisch
+
+	* xs/GtkAccelGroup.xs: Don't unref the closure in connect_by_path.
+	Make Gtk2::Accelerator::get_default_mod_mask return a
+	GdkModifierType.  Add a class argument to
+	Gtk2::Accelerator::valid.
+
+	* xs/GtkSelection.xs: The flags member of GtkTargetEntry's is a
+	GtkTargetFlags not an UV.  Move Gtk2::Selection::remove_all to the
+	proper namespace.
+
+	* xs/GtkWindow.xs: Move the window group methods into the proper
+	namespace.
+
+2004/01/08 18:55 (-0500) rwmcfa1
+
+	* xs/GdkWindow.xs: fixed bug found in test branch where attribute_mask
+	was filled with random garbage, should of been initialized in
+	SvGdkWindowAttrReal.
+
+2004/01/08 18:55 (-0500) rwmcfa1
+
+	* pm/TestHelper.pm: added at_least_version paramter, very useful.
+
+	* t/27.GtkClipboard.t: use ^, to skip unless clipboard will be around.
+
+	* xs/Gtk2.xs: apidoc fix, version_info should of been get_version_info.
+
+2004/01/09 00:47 (+0100) kaffeetisch
+
+	* xs/GdkColor.xs: Add a class argument to Gtk2::Gdk::Colormap::new
+	and implement ::get_visual and ::get_screen.
+
+	* xs/GdkWindow.xs: Hush a compiler warning.
+
+	* xs/GtkIconFactory.xs: Bind remove_default.  Provide a default
+	value for the detail argument of set_render_icon.
+
+	* Gtk2.pm
+	* xs/GtkItemFactory.xs: Implement create_item and create_items in
+	XS.  Implement delete_entry, delete_entries, popup_data,
+	popup_data_from_widget, and set_translate_func.
+
+	* xs/GtkRc.xs: Implement get_default_files.  Fix
+	set_default_files.  Add a class argument to get_style and
+	reparse_all_for_settings.  Remove add_widget_name_style,
+	add_widget_class_style, and add_class_style since they're
+	deprecated.  Comment out find_module_in_path.  Rearrange member
+	handling of Gtk2::RcStyle's.  Turn [gs]et_font_desc into
+	font_desc.
+
+	* xs/GtkTooltips.xs: In data_get, check for NULL before converting
+	struct members to SVs.  Slightly modify apidoc.
+
+2004/01/07 16:01 (-0500) muppetman
+
+	* xs/GdkTypes.xs: xsubpp doesn't like aliases with the same ix.
+	use different numbers and switch fall-through instead.
+
+2004/01/05 21:55 (-0500) rwmcfa1
+
+	* examples/color_list.pl: initial import, an example of how to colorize
+	rows of a simple list (in as simple a way as possible). also shows 
+	another use of custom col types for SimpleList.
+
+2004/01/05 21:55 (-0500) muppetman
+
+	* xs/GtkRc.xs: gperl_object_type_from_package takes a string, not
+	a scalar.
+
+2004/01/05 11:41 (-0500) rwmcfa1
+
+	* xs/GdkWindow.xs: merged get_children and peek_children into one
+	function that always uses peek children since we're copying the list
+	anyway. also fixes decent bug where list was being freed from 
+	peek_children which would of likely caused big problems.
+
+	* xs/GdkRegion.xs, xs/GdkWindow.xs, xs/GtkCellRenderer.xs,
+	xs/GtkContainer.xs, xs/GtkTreeModel.xs, xs/GtkWidget.xs,
+	xs/GtkWindow.xs: doc updates. some just made =for xxx, some fixed bad
+	doc. just added new doc. complete according to doc_helper.pl at this 
+	point.
+
+2004/01/04 21:41 (-0500) rwmcfa1
+
+	* t/accel-group-map.t: test out newly implemented xsubs
+
+	* xs/GtkAccelMap.xs: implemented some missing xsubs, foreach's and
+	lookup_entry
+
+	* xs/GtkRc.xs: implemented gtk_rc_get_style_by_paths
+
+2004/01/04 19:11 (-0500) rwmcfa1
+
+	* pm/SimpleList.pm, pm/SimpleMenu.pm: quit using base and just add the 
+	parent type to @ISA by hand. this will prevent some problems with
+	co-existing (really old) inline versions of Gtk2-Perl.
+
+2004/01/04 11:49 (-0500) rwmcfa1
+
+	* xs/GdkWindow.xs: for some reason get_pointer was having issues with 
+	certian versions of perl/xsubpp. it seemed to be related to the both
+	having a return value and having OUTLIST's. this implements it as a 
+	PPCODE section doing the same thing.
+
+2004/01/04 02:50 (+0100) kaffeetisch
+
+	* t/10.GtkProgressBar.t: Test get_orientation, get_fraction,
+	[sg]et_text, and [sg]et_pulse_step.
+
+	* t/14.GtkToolbar.t: Test get_orientation, unset_style, get_style,
+	and get_tooltips.
+
+	* xs/GtkInvisible.xs: Add a class parameter to new_for_screen.
+
+2004/01/02 02:13 (+0100) kaffeetisch
+
+	* t/16.GtkMenu-etc.t: Test [sg]et_accel_group, set_accel_path,
+	[sg]et_title, [sg]et_tearoff_state, reposition, attach_to_widget,
+	get_attach_widget, detach, set_screen, [sg]et_active, and popdown.
+
+	* t/paned.t: Test add1, add2, and [sg]et_position.
+
+	* xs/GtkLayout.xs: Provide defaults for the hadjustment and
+	vadjustment arguments to new.
+
+	* xs/GtkMenu.xs: Implement attach_to_widget.
+
+	* xs/GtkMenuShell.xs: Implement select_first.
+
+2003/12/31 20:47 (+0100) kaffeetisch
+
+	* t/21.GtkContainer.t
+	* xs/GtkContainer.xs: Implement and test add_with_properties,
+	child_get, and child_set.
+
+2003/12/31 02:16 (-0500) muppetman
+
+	* xs/GdkPixbuf.xs, xs/GdkWindow.xs, xs/Gtk2.xs, xs/GtkStock.xs,
+	xs/GtkWindow.xs: mark ax unused in functions which don't touch the
+	input stack, to hush compiler warnings
+
+	* xs/GtkMessageDialog.xs: add commentary describing a known warning.
+
+2003/12/30 12:47 (-0500) muppetman
+
+	* xs/GtkMessageDialog.xs: fix broken utf8 handling.  also now properly
+	allows undef for the format specifier.
+
+2003/12/30 11:49 (-0500) rwmcfa1
+
+	* CodeGen.pm, pm/Helper.pm, pm/Pango.pm: version numbers added
+
+2003/12/30 04:03 (+0100) kaffeetisch
+
+	* t/11.GtkStatusbar.t: Test [sg]et_has_resize_grip and remove.
+
+2003/12/29 20:05 (-0500) rwmcfa1
+
+	* pm/TestHelper.pm: allow init_check to be skipped.
+
+	* t/22.GtkListStore.t, t/23.GtkTreeStore.t: don't init_check with 
+	TestHelper.pm
+
+2003/12/29 16:32 (-0500) rwmcfa1
+
+	* t/ignore_keyboard.pl: deleted, functionality in TestHelper.pm
+
+	* pm/TestHelper.pm: initial import
+
+	* Makefile.PL: added pm/TestHelper.pm to list of pm_files
+
+	* MANIFEST: added pm/TestHelper.pm and removed t/ignore_keyboard.pl
+ 
+	* t/*: quit using ignore_keyboard.pl and use TestHelper.pm instead
+
+2003/12/29 22:58 (+0100) kaffeetisch
+
+	* t/15.GtkHandleBox.t
+	* xs/GtkHandleBox.xs: Implement and test get_child_detached.
+
+	* xs/GtkMessageDialog.xs: Don't use "../" for including gtk2perl.h
+	and ppport.h.
+
+2003/12/29 16:32 (-0500) rwmcfa1
+
+	* perl-Gtk2.spec.in: use the new DATE replacement in conjunction with
+	VERSION to create the changlog on the fly, which is better.
+
+2003/12/29 06:19 (+0100) kaffeetisch
+
+	* t/01.GtkWindow.t: Disable the begin_resize_drag and
+	begin_move_drag tests.
+
+2003/12/29 03:21 (+0100) kaffeetisch
+
+	* t/01.GtkWindow.t
+	* t/12.GtkDialog.t
+	* t/21.GtkContainer.t: Add tests for the remaining functions.
+
+	* xs/GtkColorSelectionDialog.xs
+	* xs/GtkFileSelection.xs: Provide accessors for all struct fields.
+
+	* xs/GtkWindow.xs: Use gchar_ornull in set_title.  Provide a
+	default for the focus argument of set_focus and the mask argument
+	of set_geometry_hints.  Add a class parameter to
+	set_auto_startup_notification.
+
+2003/12/28 06:32 (+0100) kaffeetisch
+
+	* xs/GdkEvent.xs: Implement Gtk2::Gdk::Event::Expose::region.
+
+	* xs/GdkGC.xs: Implement set_clip_region.
+
+	* gtk2perl.h
+	* maps
+	* xs/GdkRegion.xs: Initial implementation.  Register a custom
+	GBoxed GType for GdkRegion.
+
+	* gdk.typemap
+	* gtk2perl.h
+	* xs/GdkTypes.xs: Extend the GdkGeometry handling.  In addition to
+	the accessor based approach, geometries can now also be
+	created/changed/accessed as hash references.  Change
+	constrain_size to make the flags argument optional.
+
+	* gdk.typemap
+	* xs/GdkWindow.xs: Implement new, which required implementing
+	GdkWindowAttr handling.  Implement set_user_data; one should still
+	use object though.  Implement shape_combine_region,
+	set_child_shapes, merge_child_shapes, set_static_gravities,
+	is_visible, begin_paint_region, get_frame_extents, get_parent,
+	get_children, peek_children, set_icon_list, set_icon,
+	get_decorations, get_toplevels, invalidate_region,
+	invalidate_maybe_recurse, get_update_area, and
+	get_internal_paint_info.
+
+	* xs/GdkWindow.xs
+	* xs/GtkWindow.xs: Change set_geometry_hints so that the mask
+	argument is optional.
+
+2003/12/28 00:58 (+0100) kaffeetisch
+
+	* xs/GtkContainer.xs: Implement propagate_expose.
+
+	* xs/GtkFrame.xs: Use gchar_ornull instead of custom code to check
+	for undef in new and set_label.
+
+	* xs/GtkImageMenuItem.xs: In new_from_stock, provide a default for
+	the accel_group argument so it can be omitted.
+
+	* xs/GtkMenuItem.xs: Add two FIXME's.  Enable
+	gtk_menu_item_set_accel_path -- it's a convenience wrapper around
+	gtk_widget_set_accel_path.
+
+	* xs/GtkRadioButton.xs
+	* xs/GtkRadioMenuItem.xs: Check for NULL-ness before using SvOK.
+
+2003/12/23 11:10 (-0500) rwmcfa1
+
+	* examples/adding_stock_icons.pl: an example of adding your own stock
+	id/icons.
+
+2003/12/18 12:56 (-0500) rwmcfa1
+
+	* xs/GtkWidget.xs: implementation of some functions that weren't before
+	for various reasons.
+
+	* t/01.GtkWidget.t: phase two of widget testing, will probably break for 
+	some, but that's the price we must pay for thorough testing. there's 46
+	tests here, there will be well over 100 before it's done
+
+	* t/accel-group-map.t: test out some of widget's stuff that we need
+	accel stuff for.
+
+2003/12/18 12:56 (-0500) muppetman
+
+	* gtk2perl.h: previous change #undef'd the wrong symbols, resulted in
+	"macro redefined" warnings all over the place.  bad muppet, no biscuit.
+
+2003/12/18 00:15 (-0500) muppetman
+
+	* gtk2perl.h, maps: in versions prior to 2.3.0, GtkTreeSearchFlags was
+	declared such that glib-mkenums interpreted and registered it as a
+	GEnum type.  sometime before 2.3.0, this was corrected, and the type
+	is registered as a GFlags.  Correct the maps file to declare this as
+	GFlags (since that's correct), and mangle things with macro tricks to
+	get things to work correctly with older libraries.
+
+	* t/00.Gtk2.t: immediately after init, events_pending returns 0 on
+	2.0.x and 2.2.x, but insists on returning 1 on my system.  marked
+	that test as TODO for >= 2.3.0 until we figure out what's up.
+
+2003/12/17 22:49 (-0500) muppetman
+
+	* xs/GtkLabel.xs: use _ornull on get_mnemonic_widget to avoid warnings
+	on 2.0.x.  it's perplexing that this didn't generate warnings on 2.2.4.
+	also flesh out get_attributes to allow proper NULL return.
+
+	* t/05.GtkListStore-etc.t: clarifying commentary, reminding us to remove
+	the special case if the workaround for $liststore->remove changes.
+
+2003/12/17 21:54 (-0500) rwmcfa1
+
+	* t/05.GtkListStore-etc.t: bad bugs fixed, skips were needed, and stuff
+	like that.
+
+2003/12/16 22:44 (-0500) rwmcfa1
+
+	* xs/GdkTypes.xs, xs/GdkWindow.xs, xs/GtkHScrollbar.xs, xs/GtkPaned.xs,
+	xs/GtkRc.xs, xs/GtkTreeModel.xs, xs/GtkVScrollbar.xs, xs/GtkWidget.xs,
+	xs/GtkWindow.xs: warnings fixes.
+
+2003/12/16 21:56 (-0500) rwmcfa1
+
+	* t/06.GtkLabel.t, t/08.GtkCombo.t: more complete testing
+
+	* t/05.GtkListStore-etc.t: added complete comment
+
+	* t/accel-group-map.t: added a version check to the skip, since it will
+	be fixed by 2.4.x
+
+	* xs/GtkListItem.xs: added an alias for new_with_label
+
+	* xs/GtkListStore.xs: added an alias for set_value
+
+2003/12/16 04:36 (-0500) rwmcfa1
+
+	* t/05.GtkListStore-etc.t: complete GtkListStore api testing.
+
+2003/12/16 13:16 (-0500) rwmcfa1
+
+	* Makefile.PL: use the new BLIB_MOD_EXISTS var in place of pure_all
+
+2003/12/16 09:23 (-0500) rwmcfa1
+
+	* Makefile.PL: \ should of been \\, caused a hang on perl with no 
+	script name.
+
+2003/12/15 23:11 (-0500) rwmcfa1
+
+	* xs/GtkList.xs: checks on non-null list should of been list_items, 
+	minor bug, but a bug nontheless.
+
+2003/12/15 20:44 (-0500) rwmcfa1
+
+	* Makefile.PL: added pure_all as a dep on a few things
+
+2003/12/15 13:44 (-0500) muppetman
+
+	* t/22.GtkListStore.t, t/23.GtkTreeStore.t: on GTK+ 2.0.x, gtk_main()
+	and friends appear to assume that gtk_init() has been called.  a plain
+	GMainLoop would not do this, but these tests actually have no need for
+	the main loop + idle hack in the first place.  also correct the skip
+	count.
+
+2003/12/15 13:25 (-0500) muppetman
+
+	* xs/GtkTreeModel.xs, AUTHORS: patch from Roderich Schupp implements
+	a custom marshaler for the rows-reordered signal.  applied with small
+	changes.
+
+	* xs/GtkTreeModel.xs: implement the old FIXMEd rows_reordered method.
+
+	* xs/GtkTreeStore.xs: off-by-one error in reorder().  changed loop
+	logic to be a little clearer at the expense of an extra iterator var.
+
+	* t/22.GtkListStore.t, t/23.GtkTreeStore.t: add code to test the
+	rows-reordered signal and rows_reordered method.  also removed the
+	init_check guards on these two, because they don't need a display
+	to run their tests.
+
+2003/12/14 17:16 (-0500) muppetman
+
+	* t/paned.t: wait for size-allocate instead of using timeouts... still
+	trying to get this test to be robust.
+
+2003/12/14 20:12 (+0100) kaffeetisch
+
+	* xs/GtkTreeModel.xs: Fix a slight glitch in the API doc of
+	gtk_tree_model_get.
 
 2003/12/12 11:39 (-0500) muppetman
 
@@ -60,17 +2575,10 @@ sfcvs commit -m updated ChangeLog
 	A t/01.GtkWidget.t
 	* MANIFEST: new test, an attempt to catch future flags regressions.
 
-	* MANIFEST: changelog says fetch_faq.pl was added to MANIFEST, but it
-	wasn't there.
+2003/12/11 18:01 (-0500) rwmcfa1
 
-2003/12/11 22:16 (-0500) muppetman
-
-	* Gtk2.pm, README: stable release 1.020
-	
-	* Makefile.PL: require Glib 1.020
-
-	* podifystockitems.pl: don't use -init; not needed, and keeps the
-	build from working when no display is available.
+	* tools/podifystockitems.pl: was doing Gtk2 '-init' no reason to and it
+	caused build (of doc) to fail when no display is set.
 
 2003/12/11 16:53 (-0500) muppetman
 
@@ -79,53 +2587,152 @@ sfcvs commit -m updated ChangeLog
 	fail on headless build servers.  it would be nice to wrap up some of
 	this testing boilerplate a bit more.
 
-2003/12/04 22:28 (-0500) muppetman
+2003/12/08 13:47 (-0500) rwmcfa1
 
-	* Gtk2.pm, README, Makefile.PL: bump version to 1.014 for release, and
-	require Glib.pm
+	* t/paned.t: use strict and use warnings
+
+	* xs/GtkLabel.xs, xs/GtkSizeGroup.xs, xs/GtkStock.xs: apidoc, added 
+	enum(s)
+
+2003/12/08 11:14 (-0500) muppetman
+
+	* pm/SimpleList.pm: call signature comments to make maintenance easier.
+
+	* t/paned.t: give effect to statement with no effect
+
+2003/12/08 02:39 (-0500) muppetman
+
+	* xs/GtkWidget.xs: implement gtk_widget_style_get for >= 2.2.0
+
+	* t/paned.t: more robust testing
+
+2003/12/07 22:34 (-0500) rwmcfa1
+
+	* t/trivial-widgets.t: initial import
+
+ 	* MANIFEST: added t/trivial-widgets.t, and xs/GtkAccelMap.xs
+
+ 	* xs/GtkArrow.xs: doc the GtkArrowtype and GtkShadowType enums in pod
+ 
+	* xs/GtkDnd.xs, xs/GtkTreeStore.xs, xs/GtkTreeView.xs: removed a xxx1 
+	param
+
+2003/12/07 21:44 (-0500) muppetman
+
+	* xs/GtkPaned.xs: turn the child[12]_(resize|shrink) accessors into
+	mutators, with doc; rearrange the xsubs to make more sense, and adapt
+	the docs from the C api reference for the description section.
+
+	A t/paned.t
+	* MANIFEST: new test
+
+2003/12/07 16:19 (-0500) rwmcfa1
+
+ 	* xs/GtkCalendar.xs, xs/GtkTextIter.xs, xs/GtkTreeModel.xs,
+	xs/GtkWidget.xs, xs/PangoTabs.xs: apidoc added/fixed.
+
+2003/12/07 16:19 (-0500) rwmcfa1
+
+	* pm/SimpleList.pm: DELETE fixed, SPLICE implemented for simplelist.
+
+	* t/19.SimpleList.t: test all of the splice stuff
+
+	* examples/simplelist.pl: (muppet) test the new splice stuff
+
+2003/12/06 01:30 (-0500) rwmcfa1
+
+ 	* xs/GtkAccelGroup.xs: Gtk2-> functions moved under Gtk2::AccellGroups
+	which seems to make more sense.
+
+ 	* xs/GtkAccelMap.xs: intial import, 3/4 complete.
+ 
+ 	* t/accel-group-map.t: test out the new AccelMap stuff, in conjunction
+ 	with AccelGroup. 
+
+	* xs_files-2.0: added xs/GtkAccelMap.xs
+
+2003/12/05 13:42 (-0500) muppetman
+
+	D Changes: we haven't maintained this since May, we use ChangeLog.
+
+	D fetch_faq.pl
+	D genkeysyms.pl
+	D genmaps.pl
+	D podifystockitems.pl
+	A tools/fetch_faq.pl
+	A tools/genkeysyms.pl
+	A tools/genmaps.pl
+	A tools/podifystockitems.pl
+	move the not-to-be-installed helper scripts to a subdirectory to
+	reduce clutter.
+
+	A tools/podifyenums.pl
+	* Makefile.PL: add tool and use it to generate a single pod file
+	listing the values of all the enum and flags types listed in the
+	maps file, installed as Gtk2::enums(3pm).
+
+	* MANIFEST: updated to reflect all that movement.
+
+2003/12/05 12:53 (-0500) rwmcfa1
+
+	* t/accel-group-map.t: updated and more complete
+
+	* xs/GtkAccelGroup.xs: added a synopsis mainly showing that 
+	Gtk2::Window::add_accel_group is normally used. moved activate and
+	groups_from_object to the Gtk2 namespace and added class params for
+	them.
+
+2003/12/05 07:49 (-0500) rwmcfa1
+
+	* t/accel-group-map.t: initial import of accel group and accel map test
+	accel has some issues, way more to come, and resolution of those as 
+	well.
+
+2003/12/04 23:23 (-0500) rwmcfa1
+
+	* t/calendar.t: initial import
+
+2003/12/04 21:35 (-0500) muppetman
+
+	* Gtk2.pm: bump version to 1.030 for next unstable devel series.
+	sync authors section with the AUTHORS file.
+
+	* AUTHORS: remove circular file reference and point readers to the
+	LICENSE file rather than including more boilerplate than content.
+
+2003/12/04 13:10 (-0500) rwmcfa1
+
+	* Makefile.PL: moved the --disable-apidoc thing to MakeHelper.pm, that
+	way everyone can use it.
 
 2003/12/04 09:44 (-0500) rwmcfa1
-
-	* : Merged from HEAD
-	
-	* Makefile.PL: --enable-faq added and worked out
 
 	* fetch_faq.pl, MANIFEST: initial import for fetch_faq.pl, needs 
 	testing
 
-2003/12/04 00:56 (-0500) rwmcfa1
+	* Makefile.PL: --enable-faq and --disable-apidoc added and worked out
 
-	* xs/GtkRadioButton.xs: broken signature fixed
+2003/12/04 00:51 (-0500) rwmcfa1
 
-2003/12/03 21:13 (-0500) muppetman
-
-	* Gtk2.pm: sync the AUTHORS section with the AUTHORS file.
-
-	* AUTHORS: doesn't need to point to itself.  use a pointer to LICENSE
-	instead of boilerplate longer than the file's contents.
-
-2003/12/03 19:16 (-0500) rwmcfa1
+	* : Merge of rel-1-02 doc and fixes back. (following 3 apply)
 
 	* xs/(bunch).xs: ... (list) comments corrected
 
 	* xs/GtkTreeDnd.xs: ^ and fixed bug in api of 
 	gtk_tree_drag_source_drag_data_get, selection_data is an out param.
 
-2003/12/03 17:37 (-0500) rwmcfa1
-
 	* xs/(bunch).xs: s/=(arg|signature)/=for $1/
 
-2003/12/02 00:46 (-0500) muppetman
+2003/12/02 13:58 (-0500) rwmcfa1
+
+	* : Merge of rel-1-02 doc and fixes back. (following 2 apply)
 
 	* xs/GdkEvent.xs, xs/GdkPixmap.xs, xs/GtkObject.xs: doc
-
-2003/12/01 23:25 (-0500) rwmcfa1
 
 	* xs/GdkDnd.xs xs/GdkProperty.xs, xs/GtkClipboard.xs, xs/GtkDnd.xs,
 	xs/GtkListStore.xs, xs/GtkSelection.xs, xs/GtkTextBuffer.xs,
 	xs/GtkTreeDnd.xs, xs/GtkTreeStore.xs, xs/GtkTreeView.xs,
 	xs/GtkTreeViewColumn.xs: api doc additions.
-
 
 2003/11/29 16:51 (-0500) muppetman
 
@@ -140,7 +2747,7 @@ sfcvs commit -m updated ChangeLog
 	through "%s" to be safe, and allow Gtk2::MessageDialog->new to take
 	printf-like arguments to be nice.
 
-2003/11/29 11:23 (-0500) rwmcfa1
+2003/11/29 12:14 (-0500) rwmcfa1
 
 	* MANIFEST: missing files added
 

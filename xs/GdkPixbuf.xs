@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.22.2.1 2004/01/15 03:51:50 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.30.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -31,6 +31,9 @@ gtk2perl_pixbuf_destroy_notify (guchar * pixels,
 }
 
 MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::Pixbuf	PREFIX = gdk_pixbuf_
+
+=for enum GdkPixbufError
+=cut
 
 =for enum GdkPixbufAlphaMode
 =cut
@@ -209,9 +212,18 @@ gdk_pixbuf_get_bits_per_sample (pixbuf)
 	GdkPixbuf *pixbuf
 
 ##  guchar *gdk_pixbuf_get_pixels (const GdkPixbuf *pixbuf) 
-guchar *
+SV *
 gdk_pixbuf_get_pixels (pixbuf)
 	GdkPixbuf *pixbuf
+    PREINIT:
+	guchar * pixels;
+    CODE:
+	pixels = gdk_pixbuf_get_pixels (pixbuf);
+	RETVAL = newSVpv (pixels,
+			  gdk_pixbuf_get_height (pixbuf)
+			  * gdk_pixbuf_get_rowstride (pixbuf));
+    OUTPUT:
+	RETVAL
 
 ##  int gdk_pixbuf_get_width (const GdkPixbuf *pixbuf) 
 int
@@ -254,6 +266,8 @@ gdk_pixbuf_new_subpixbuf (src_pixbuf, src_x, src_y, width, height)
 	int height
 
 ##  GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename, GError **error) 
+=for apidoc __gerror__
+=cut
 GdkPixbuf_noinc *
 gdk_pixbuf_new_from_file (class, filename)
 	GPerlFilename filename
@@ -265,6 +279,25 @@ gdk_pixbuf_new_from_file (class, filename)
 		gperl_croak_gerror (filename, error);
     OUTPUT:
 	RETVAL
+
+#if GTK_CHECK_VERSION(2,4,0)
+
+## GdkPixbuf *gdk_pixbuf_new_from_file_at_size (const char *filename, int width, int height, GError **error);
+=for apidoc __gerror__
+=cut
+GdkPixbuf_noinc *
+gdk_pixbuf_new_from_file_at_size (class, GPerlFilename filename, int width, int height)
+    PREINIT:
+        GError *error = NULL;
+    CODE:
+	RETVAL = gdk_pixbuf_new_from_file_at_size
+	                              (filename, width, height, &error);
+	if (!RETVAL)
+		gperl_croak_gerror (filename, error);
+    OUTPUT:
+	RETVAL
+
+#endif
 
 ###  GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample, int width, int height, int rowstride, GdkPixbufDestroyNotify destroy_fn, gpointer destroy_fn_data) 
 =for apidoc
@@ -372,7 +405,7 @@ gdk_pixbuf_new_from_xpm_data (class, ...)
 
 ## croaks on error
 ##  GdkPixbuf* gdk_pixbuf_new_from_inline (gint data_length, const guint8 *data, gboolean copy_pixels, GError **error) 
-=for apidoc
+=for apidoc __gerror__
 =for arg data (packed binary data) the format is special, see discussion
 =for arg copy_pixels whether I<$data> should be copied, defaults to true
 
@@ -414,7 +447,7 @@ gdk_pixbuf_new_from_inline (class, data, copy_pixels=TRUE)
 
 ### croaks on error
 ##  gboolean gdk_pixbuf_save (GdkPixbuf *pixbuf, const char *filename, const char *type, GError **error, ...) 
-=for apidoc
+=for apidoc __gerror__
 =for arg type name of file format (e.g. "jpeg", "png")
 =for arg ... list of key-value save options
 
@@ -587,7 +620,14 @@ gdk_pixbuf_composite_color_simple (src, dest_width, dest_height, interp_type, ov
 
 MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::PixbufAnimation	PREFIX = gdk_pixbuf_animation_
 
+BOOT:
+	/* types like GdkPixbufGifAnim are unknown to us. */
+	gperl_object_set_no_warn_unreg_subclass
+					(GDK_TYPE_PIXBUF_ANIMATION, TRUE);
+
 ##  GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file (const char *filename, GError **error) 
+=for apidoc __gerror__
+=cut
 GdkPixbufAnimation_noinc *
 gdk_pixbuf_animation_new_from_file (class, filename)
 	GPerlFilename filename
@@ -741,5 +781,6 @@ gdk_pixbuf_get_formats (class=NULL)
 		XPUSHs (sv_2mortal (newRV_noinc ((SV*) hv)));
 	}
 	g_slist_free (formats);
+	PERL_UNUSED_VAR (ax);
 
 #endif /* >= 2.2.0 */

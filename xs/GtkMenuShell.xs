@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuShell.xs,v 1.5 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuShell.xs,v 1.7.2.1 2004/03/17 02:47:14 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -65,6 +65,20 @@ gtk_menu_shell_activate_item (menu_shell, menu_item, force_deactivate)
 	GtkWidget    * menu_item
 	gboolean       force_deactivate
 
+#if GTK_CHECK_VERSION(2, 2, 0)
+
+void gtk_menu_shell_select_first (GtkMenuShell *menu_shell, gboolean search_sensitive)
+
+#endif /* >= 2.2.0 */
+
+#if GTK_CHECK_VERSION(2, 4, 0)
+
+void gtk_menu_shell_cancel (GtkMenuShell *menu_shell);
+
+#endif
+
 # __PRIVATE__
 ## void _gtk_menu_shell_select_first (GtkMenuShell *menu_shell, gboolean search_sensitive)
+## void _gtk_menu_shell_select_last (GtkMenuShell *menu_shell, gboolean search_sensitive)
 ## void _gtk_menu_shell_activate (GtkMenuShell *menu_shell)
+## gint _gtk_menu_shell_get_popup_delay (GtkMenuShell *menu_shell)

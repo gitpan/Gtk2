@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStock.xs,v 1.14.2.1 2003/12/04 00:21:16 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStock.xs,v 1.18 2004/02/25 20:42:38 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -85,6 +85,21 @@ SvGtkStockItem (SV * sv)
 
 MODULE = Gtk2::Stock	PACKAGE = Gtk2::Stock	PREFIX = gtk_stock_
 
+=head1 Gtk2::StockItem
+
+When a Gtk2::StockItem is returned from a function or required as a parameter a
+hash reference with the following key/value pairs will be required/returned.
+
+  {
+      stock_id => (string),
+      label => (string),
+      modifier => (Gtk2::Gdk::ModifierType),
+      keyval => (integer),
+      translation_domain => (string),
+  }
+
+=cut
+
 =for include build/stock_items.podi
 =cut
 
@@ -104,6 +119,9 @@ gtk_stock_add (class, ...)
 ###  void gtk_stock_add_static (const GtkStockItem *items, guint n_items) 
 
 ##  gboolean gtk_stock_lookup (const gchar *stock_id, GtkStockItem *item) 
+=for apidoc
+Returns a hash reference, a L<Gtk2::StockItem>.
+=cut
 SV *
 gtk_stock_lookup (class, stock_id)
 	const gchar *stock_id
@@ -133,6 +151,7 @@ gtk_stock_list_ids (class)
 		g_free (i->data);
 	}
 	g_slist_free (ids);
+	PERL_UNUSED_VAR (ax);
 
 ## Boxed type support
 ###  GtkStockItem *gtk_stock_item_copy (const GtkStockItem *item) 
