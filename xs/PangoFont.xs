@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,10 +16,17 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.17.2.2 2004/04/19 18:12:28 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.21 2004/07/12 18:54:34 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
+
+/* FIXME: should we ever bind PangoFontMap, move this to the corresponding .xs
+          file. */
+MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontMap
+
+BOOT:
+	gperl_object_set_no_warn_unreg_subclass (PANGO_TYPE_FONT_MAP, TRUE);
 
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango
 
@@ -268,6 +275,53 @@ pango_font_family_list_faces (family)
 		g_free (faces);
 	}
 
+
+const char * pango_font_family_get_name (PangoFontFamily * family)
+
+#if PANGO_CHECK_VERSION(1, 4, 0)
+
+gboolean pango_font_family_is_monospace (PangoFontFamily * family)
+
+#endif
+
+MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontFace	PREFIX = pango_font_face_
+
+#
+# PangoFontFace
+#
+
+BOOT:
+	gperl_object_set_no_warn_unreg_subclass (PANGO_TYPE_FONT_FACE, TRUE);
+
+ ## PangoFontDescription *pango_font_face_describe (PangoFontFace *face);
+PangoFontDescription_own * pango_font_face_describe (PangoFontFace *face);
+
+ ## G_CONST_RETURN char *pango_font_face_get_face_name (PangoFontFace *face);
+const char *pango_font_face_get_face_name (PangoFontFace *face);
+
+#if PANGO_CHECK_VERSION(1, 4, 0)
+
+ ## void pango_font_face_list_sizes (PangoFontFace  *face, int **sizes, int *n_sizes);
+=for apidoc
+=for signature @sizes = $face->list_sizes
+List the sizes available for a bitmapped font.  For scalable fonts, this will
+return an empty list.
+=cut
+void
+pango_font_face_list_sizes (PangoFontFace *face)
+    PREINIT:
+	int *sizes=NULL, n_sizes, i;
+    PPCODE:
+	pango_font_face_list_sizes (face, &sizes, &n_sizes);
+	if (n_sizes > 0) {
+		EXTEND (SP, n_sizes);
+		for (i = 0 ; i < n_sizes ; i++)
+			PUSHs (sv_2mortal (newSViv (sizes[i])));
+		g_free (sizes);
+	}
+
+#endif
+
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::Font	PREFIX = pango_font_
 
 ## PangoFontMetrics * pango_font_get_metrics (PangoFont *font, PangoLanguage *language)
@@ -281,8 +335,21 @@ PangoFontDescription *
 pango_font_describe (font)
 	PangoFont *font
 
+## void pango_font_get_glyph_extents (PangoFont *font, PangoGlyph glyph, PangoRectangle *ink_rect, PangoRectangle *logical_rect)
+void
+pango_font_get_glyph_extents (font, glyph)
+	PangoFont *font
+	PangoGlyph glyph
+    PREINIT:
+	PangoRectangle ink_rect;
+	PangoRectangle logical_rect;
+    PPCODE:
+	pango_font_get_glyph_extents (font, glyph, &ink_rect, &logical_rect);
+	EXTEND (sp, 2);
+	PUSHs (sv_2mortal (newSVPangoRectangle (&ink_rect)));
+	PUSHs (sv_2mortal (newSVPangoRectangle (&logical_rect)));
+
 ### no typemaps for this stuff.
 ### it looks like it would only be useful from C, though.
 ### PangoCoverage * pango_font_get_coverage (PangoFont *font, PangoLanguage *language)
 ### PangoEngineShape * pango_font_find_shaper (PangoFont *font, PangoLanguage *language, guint32 ch)
-### void pango_font_get_glyph_extents (PangoFont *font, PangoGlyph glyph, PangoRectangle *ink_rect, PangoRectangle *logical_rect)

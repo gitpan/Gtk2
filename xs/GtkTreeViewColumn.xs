@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.21.2.2 2004/06/04 17:57:00 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.25 2004/09/04 23:52:39 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -165,6 +165,18 @@ gtk_tree_view_column_set_attributes (tree_column, cell_renderer, ...)
 	set_attributes_from_arg_stack (tree_column, cell_renderer, 2);
 
 #### void gtk_tree_view_column_set_cell_data_func (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell_renderer, GtkTreeCellDataFunc func, gpointer func_data, GtkDestroyNotify destroy)
+=for apidoc
+=for arg func (subroutine)
+Install I<$func> as the callback to be used whenever I<$column> needs to set up
+I<$cell> to render a cell.  I<$func> should look like this:
+
+  sub cell_data_func {
+    my ($column, $cell, $model, $iter, $func_data) = @_;
+  }
+
+and should set whatever properties of I<$cell> are required for it to draw
+the data properly.  No return value is expected.
+=cut
 void
 gtk_tree_view_column_set_cell_data_func (tree_column, cell_renderer, func, data=NULL)
 	GtkTreeViewColumn *tree_column

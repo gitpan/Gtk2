@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.6.2.1 2004/03/17 02:47:13 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.7 2004/03/17 03:52:24 muppetman Exp $
 
 use warnings;
 use strict;

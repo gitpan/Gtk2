@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.26.2.2 2004/04/04 17:16:39 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.28 2004/04/03 20:20:38 kaffeetisch Exp $
 #
 
 #########################

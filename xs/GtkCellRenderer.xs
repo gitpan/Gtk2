@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellRenderer.xs,v 1.24.2.2 2004/06/04 17:57:00 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellRenderer.xs,v 1.28 2004/09/04 23:50:35 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -40,10 +40,6 @@ warn_deprecated (const char * old_and_busted,
 	}
 }
 
-#define newSVGdkRectangle_ornull(r)	\
-	((r) ? newSVGdkRectangle(r) : newSVsv (&PL_sv_undef))
-#define newSVGdkEvent_ornull(e)	\
-	((e) ? newSVGdkEvent(e) : newSVsv (&PL_sv_undef))
 #define newSVGChar_ornull(s)	\
 	((s) ? newSVGChar(s) : newSVsv (&PL_sv_undef))
 
@@ -274,9 +270,27 @@ gtk2perl_cell_renderer_start_editing (GtkCellRenderer      * cell,
 		SPAGAIN;
 
 		sv = POPs;
-		editable = SvOK (sv)
-		         ? GTK_CELL_EDITABLE (SvGObject (sv))
-		         : NULL;
+		if (SvOK (sv)) {
+			editable = SvGtkCellEditable (sv);
+			/* if the object returned here was newly created by
+			 * the called code, then the wrapper (pointed to by
+			 * sv) is the owner of the object.  if there are no
+			 * other references to the wrapper, the call to
+			 * FREETMPS below will actually result in finalization
+			 * of the GObject, which means we'll return a bad
+			 * pointer to our caller.  to prevent this situation,
+			 * we need to add a ref to the wrapper (that is, the
+			 * blessed sv stored in the GObject, not the reference
+			 * sv) to keep it alive across FREETMPS and thus
+			 * prevent premature destruction.
+			 */
+			if (G_OBJECT (editable)->ref_count == 1 &&
+			    SvREFCNT (SvRV (sv)) == 1) {
+				SvREFCNT_inc (SvRV (sv));
+			}
+		} else {
+			editable = NULL;
+		}
 
 		PUTBACK;
 		FREETMPS;

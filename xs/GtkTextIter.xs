@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextIter.xs,v 1.19.2.1 2004/03/17 02:47:14 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextIter.xs,v 1.20 2004/03/17 03:52:25 muppetman Exp $
  */
 
 #include "gtk2perl.h"

@@ -1,13 +1,17 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 7;
+use Gtk2::TestHelper tests => 12;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoContext.t,v 1.2 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoContext.t,v 1.6 2004/09/13 21:07:34 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Bla");
 
 my $context = $label -> create_pango_context();
 isa_ok($context, "Gtk2::Pango::Context");
+
+my @families = $context->list_families;
+ok (@families > 0, 'got a list of somethings');
+isa_ok ($families[0], 'Gtk2::Pango::FontFamily');
 
 my $font = Gtk2::Pango::FontDescription -> from_string("Sans 12");
 my $language = Gtk2 -> get_default_language();
@@ -25,7 +29,25 @@ isa_ok($context -> load_font($font), "Gtk2::Pango::Font");
 isa_ok($context -> load_fontset($font, $language), "Gtk2::Pango::Fontset");
 isa_ok($context -> get_metrics($font, $language), "Gtk2::Pango::FontMetrics");
 
+SKIP: {
+  skip("[sg]et_matrix are new in 1.6", 2)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 6, 0));
+
+  $context -> set_matrix(Gtk2::Pango::Matrix -> new());
+  isa_ok($context -> get_matrix(), "Gtk2::Pango::Matrix");
+
+  $context -> set_matrix(undef);
+  is($context -> get_matrix(), undef);
+}
+
+SKIP: {
+  skip("get_font_map is new in 1.6", 1)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 6, 0));
+
+  isa_ok($context -> get_font_map(), "Gtk2::Pango::FontMap");
+}
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2004 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

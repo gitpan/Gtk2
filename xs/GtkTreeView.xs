@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.26.2.4 2004/06/04 20:50:55 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.31 2004/07/17 16:26:18 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -450,9 +450,16 @@ gtk_tree_view_get_cursor (tree_view)
 =for apidoc
 =for signature path = $tree_view->get_path_at_pos ($x, $y)
 =for signature (path, column, cell_x, cell_y) = $tree_view->get_path_at_pos ($x, $y)
-In scalar context, returns the Gtk2::TreePath, in array context, adds the
-Gtk2::TreeViewColumn, and I<$x> and I<$y> translated to be relative to the
-cell.
+
+Finds the path at the point (I<$x>, I<$y>), relative to widget
+coordinates. That is, I<$x> and I<$y> are relative to an event's
+coordinates. I<$x> and I<$y> must come from an event on the I<$tree_view> only
+where C<$event-E<gt>window == $tree_view-E<gt>get_bin_window>. It is primarily
+for things like popup menus.  In scalar context, returns the Gtk2::TreePath, in
+array context, adds the Gtk2::TreeViewColumn, and I<$x> and I<$y> translated to
+be relative to the cell.  This function is only meaningful if I<$tree_view> is
+realized.
+
 =cut
 void
 gtk_tree_view_get_path_at_pos (tree_view, x, y)

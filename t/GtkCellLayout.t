@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   tests => 4,
   noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellLayout.t,v 1.2.2.2 2004/04/12 03:51:42 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellLayout.t,v 1.4 2004/04/19 18:18:42 kaffeetisch Exp $
 
 my $column = Gtk2::TreeViewColumn -> new();
 isa_ok($column, "Gtk2::CellLayout");

@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 20,
   at_least_version => [2, 2, 0, "GdkDisplay is new in 2.2"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.5.2.2 2004/04/25 11:26:32 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.7 2004/04/25 11:12:45 kaffeetisch Exp $
 
 my $display = Gtk2::Gdk::Display -> open($ENV{DISPLAY});
 isa_ok($display, "Gtk2::Gdk::Display");

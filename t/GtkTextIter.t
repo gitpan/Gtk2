@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 89, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextIter.t,v 1.8.2.1 2004/03/17 02:47:13 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextIter.t,v 1.11 2004/08/27 23:20:57 kaffeetisch Exp $
 
 my $model = Gtk2::TextBuffer->new;
 my $tag = $model->create_tag ("indent", indent => 5);
@@ -24,10 +24,21 @@ $iter->set_line_offset (10);
 is ($iter->get_line_offset, 10);
 $iter->set_line_index (10);
 is ($iter->get_line_index, 10);
+
+# prior to 2.4.8, these two functions were broken and did not work as
+# advertised.  see bug #150101 for details.  unfortunately, this test relied on
+# the wrong behavior.  lesson learned: don't test for broken results, but use
+# SKIP or TODO instead.
 $iter->set_visible_line_index (10);
-is ($iter->get_visible_line_index, 20);
 $iter->set_visible_line_offset (10);
-is ($iter->get_visible_line_offset, 30);
+
+if (not defined Gtk2 -> check_version(2, 4, 8)) {
+  is ($iter->get_visible_line_index, 10);
+  is ($iter->get_visible_line_offset, 10);
+} else {
+  is ($iter->get_visible_line_index, 30);
+  is ($iter->get_visible_line_offset, 30);
+}
 
 $iter->set_offset (10);
 is ($iter->get_offset, 10);

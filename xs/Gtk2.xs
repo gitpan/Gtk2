@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.39.2.6 2004/06/04 17:57:00 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.44 2004/08/01 16:15:54 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -340,6 +340,25 @@ gtk_init (class=NULL)
 	gperl_argv_free (pargv);
     OUTPUT:
 	RETVAL
+
+#if GTK_CHECK_VERSION(2, 4, 5)
+
+##  gboolean gtk_parse_args (int *argc, char ***argv) 
+gboolean
+gtk_parse_args (class=NULL)
+    PREINIT:
+	GPerlArgv *pargv;
+    CODE:
+	pargv = gperl_argv_new ();
+
+	RETVAL = gtk_parse_args (&pargv->argc, &pargv->argv);
+
+	gperl_argv_update (pargv);
+	gperl_argv_free (pargv);
+    OUTPUT:
+	RETVAL
+
+#endif
 
  ##void           gtk_disable_setlocale    (void);
 void gtk_disable_setlocale (class)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.33.2.6 2004/06/04 17:56:59 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.39 2004/06/04 20:44:59 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -837,11 +837,12 @@ is_hint (GdkEvent * eventmotion, guint newvalue=0)
     OUTPUT:
 	RETVAL
 
-## TODO/FIXME: how would this be set
 GdkDevice_ornull *
-device (GdkEvent * eventmotion)
+device (GdkEvent * eventmotion, GdkDevice_ornull * newvalue=NULL)
     CODE:
 	RETVAL = eventmotion->motion.device;
+	if (items == 2)
+		eventmotion->motion.device = newvalue;
     OUTPUT:
 	RETVAL
 
@@ -901,11 +902,12 @@ button (GdkEvent * eventbutton, guint newvalue=0)
     OUTPUT:
 	RETVAL
 
-## TODO/FIXME: how would this be set
 GdkDevice_ornull *
-device (GdkEvent * eventbutton)
+device (GdkEvent * eventbutton, GdkDevice_ornull * newvalue=NULL)
     CODE:
 	RETVAL = eventbutton->button.device;
+	if (items == 2)
+		eventbutton->button.device = newvalue;
     OUTPUT:
 	RETVAL
 
@@ -964,11 +966,12 @@ direction (GdkEvent * eventscroll, GdkScrollDirection newvalue=0)
     OUTPUT:
 	RETVAL
 
-## TODO/FIXME: how would this be set
 GdkDevice_ornull *
-device (GdkEvent * eventscroll)
+device (GdkEvent * eventscroll, GdkDevice_ornull * newvalue=NULL)
     CODE:
 	RETVAL = eventscroll->scroll.device;
+	if (items == 2)
+		eventscroll->scroll.device = newvalue;
     OUTPUT:
 	RETVAL
 
@@ -1376,11 +1379,12 @@ BOOT:
  #  GdkDevice *device;
  #};
 
-## TODO/FIXME: how do we set this
 GdkDevice_ornull *
-device (GdkEvent * eventproximity)
+device (GdkEvent * eventproximity, GdkDevice_ornull * newvalue=NULL)
     CODE:
 	RETVAL = eventproximity->motion.device;
+	if (items == 2)
+		eventproximity->motion.device = newvalue;
     OUTPUT:
 	RETVAL
 

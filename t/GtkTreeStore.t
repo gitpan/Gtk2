@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 41, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeStore.t,v 1.9.2.1 2004/03/12 05:39:21 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeStore.t,v 1.10 2004/03/12 17:47:05 muppetman Exp $
 
 ###############################################################################
 

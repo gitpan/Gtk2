@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.37.2.1 2004/06/04 17:57:00 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.41 2004/08/01 02:44:18 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -193,9 +193,18 @@ static gboolean
 iter_from_sv (GtkTreeIter * iter,
               SV * sv)
 {
-	if (sv && SvROK (sv) && SvTYPE (SvRV (sv)) == SVt_PVAV) {
+	/* we allow undef as the sentinel from the perl vfuncs to tell us
+	 * to return FALSE from the C vfuncs.  for anything else, it *must*
+	 * be an array reference or we croak with an informative message
+	 * (since that would be caused by a programming bug). */
+	if (sv && SvOK (sv)) {
 		SV ** svp;
-		AV * av = (AV*) SvRV (sv);
+		AV * av;
+		if (!SvROK (sv) || SvTYPE (SvRV (sv)) != SVt_PVAV)
+			croak ("expecting a reference to an ARRAY to describe "
+			       "a tree iter, not a %s",
+			       sv_reftype (SvRV (sv), 0));
+		av = (AV*) SvRV (sv);
 		if ((svp = av_fetch (av, 0, FALSE)))
 			iter->stamp = SvUV (*svp);
 
@@ -412,6 +421,45 @@ MODULE = Gtk2::TreeModel	PACKAGE = Gtk2::TreeModel
 =for flags GtkTreeModelFlags
 =cut
 
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+ # Three ways of getting the iter pointing to the location 3:2:5
+
+ # get the iterator from a string
+ $iter = $model->get_iter_from_string ("3:2:5");
+
+ # get the iterator from a path
+ $path = Gtk2::TreePath->new_from_string ("3:2:5");
+ $iter = $model->get_iter ($path);
+
+ # walk the tree to find the iterator
+ $iter = $model->iter_nth_child (undef, 3);
+ $iter = $model->iter_nth_child ($iter, 2);
+ $iter = $model->iter_nth_child ($iter, 5);
+
+ 
+ # getting and setting values
+
+ # assuming a model with these columns
+ use constant STRING_COLUMN => 0;
+ use constant INT_COLUMN => 1;
+
+ # set values
+ $model->set ($iter,
+	      STRING_COLUMN, $new_string_value,
+	      INT_COLUMN, $new_int_value);
+
+ # and get values
+ ($int, $str) = $model->get ($iter, INT_COLUMN, STRING_COLUMN);
+
+ # if you don't specify a list of column numbers,
+ # you get all of them.
+ @values = $model->get ($iter);
+
+=cut
+
 =for position DESCRIPTION
 
 =head1 DESCRIPTION
@@ -420,7 +468,49 @@ The Gtk2::TreeModel provides a generic tree interface for use by the
 Gtk2::TreeView widget.  It is an abstract interface, designed to be usable
 with any appropriate data structure.
 
-FIXME FIXME say more here
+The model is represented as a hierarchical tree of strongly-typed, columned
+data.  In other words, the model can be seen as a tree where every node has
+different values depending on which column is being queried.  The type of
+data found in a column is determined by using the GType system (i.e. package
+names like Glib::Int, Gtk2::Button, Glib::Scalar, etc).  The types are
+homogeneous per column across all nodes.  It is important to note that this
+interface only provides a way of examining a model and observing changes.
+The implementation of each individual model decides how and if changes are
+made.
+
+In order to make life simpler for programmers who do not need to write their
+own specialized model, two generic models are provided — the Gtk2::TreeStore
+and the Gtk2::ListStore.  To use these, the developer simply pushes data into
+these models as necessary.  These models provide the data structure as well
+as all appropriate tree interfaces.  As a result, implementing drag and drop,
+sorting, and storing data is trivial.  For the vast majority of trees and
+lists, these two models are sufficient.  For information on how to implement
+your own model in Perl, see L</CREATING A CUSTOM TREE MODEL>.
+
+Models are accessed on a node/column level of granularity.  One can query for
+the value of a model at a certain node and a certain column on that node.
+There are two structures used to reference a particular node in a model:
+the Gtk2::TreePath and the Gtk2::TreeIter (short for "iterator").  Most of
+the interface consists of operations on a Gtk2::TreeIter.
+
+A path is essentially a potential node.  It is a location on a model that
+may or may not actually correspond to a node on a specific model.  The
+Gtk2::TreePath object can be converted into either an array of unsigned
+integers or a string.  The string form is a list of numbers separated by a
+colon.  Each number refers to the offset at that level.  Thus, the path '0'
+refers to the root node and the path '2:4' refers to the fifth child of the
+third node.
+
+By contrast, a Gtk2::TreeIter is a reference to a specific node on a specific
+model.  To the user of a model, the iter is merely an opaque object.
+One can convert a path to an iterator by calling C<Gtk2::TreeModel::get_iter>.
+These iterators are the primary way of accessing a model and are similar to
+the iterators used by Gtk2::TextBuffer.  They are generally used only for a
+short time, and are valid only as long as the model is unchanged.  The model
+interface defines a set of operations using them for navigating the model.
+
+(The preceding description and most of the method descriptions have been
+adapted directly from the Gtk+ C API reference.)
 
 =cut
 
@@ -618,7 +708,7 @@ gtk_tree_path_get_depth (path)
 	GtkTreePath *path
 
 =for apidoc
-Returns a list of integers.
+Returns a list of integers describing the current indices of I<$path>.
 =cut
 void
 gtk_tree_path_get_indices (path)
@@ -638,23 +728,41 @@ gtk_tree_path_get_indices (path)
 ## GtkTreePath * gtk_tree_path_copy (GtkTreePath *path)
 ## void gtk_tree_path_free (GtkTreePath *path)
 
+=for apidoc
+Compares two paths.  If I<$a> appears before I<$b> in the three, returns -1.
+If I<$b> appears before I<$a>, returns 1.  If the nodes are equal, returns 0.
+=cut
 gint
 gtk_tree_path_compare (a, b)
 	GtkTreePath *a
 	GtkTreePath *b
 
+=for apidoc
+Moves I<$path> to point to the next node at the current depth.
+=cut
 void
 gtk_tree_path_next (path)
 	GtkTreePath *path
 
+=for apidoc
+Moves I<$path> to point to the previous node at the current depth, if it
+exists.  Returns true if there is a previous node and I<$path> was modified.
+=cut
 gboolean
 gtk_tree_path_prev (path)
 	GtkTreePath *path
 
+=for apidoc
+Moves I<$path> to point to its parent node; returns false if there is no
+parent.
+=cut
 gboolean
 gtk_tree_path_up (path)
 	GtkTreePath *path
 
+=for apidoc
+Moves I<$path> to point to the first child of the current path.
+=cut
 void
 gtk_tree_path_down (path)
 	GtkTreePath *path
@@ -726,7 +834,80 @@ gtk_tree_row_reference_valid (reference)
 
 #endif /* defined GTK_TYPE_TREE_ROW_REFERENCE */
 
-####MODULE = Gtk2::TreeModel	PACKAGE = Gtk2::TreeIter	PREFIX = gtk_tree_iter_
+MODULE = Gtk2::TreeModel	PACKAGE = Gtk2::TreeIter	PREFIX = gtk_tree_iter_
+
+=for see_also Gtk2::TreeModel
+=cut
+
+=head1 SYNOPSIS
+
+  package MyCustomListStore;
+
+  use Glib::Object::Subclass
+      Glib::Object::,
+      interfaces => [ Gtk2::TreeModel:: ],
+      ;
+
+  ...
+
+  sub set {
+      my $list = shift;
+      my $iter = shift; # a Gtk2::TreeIter
+
+      # this method needs access to the internal representation
+      # of the iter, as the model implementation sees it:
+      my $arrayref = $iter->to_arrayref ($list->{stamp});
+      ...
+  }
+
+
+=head1 DESCRIPTION
+
+The methods described here are only of use in custom Gtk2::TreeModel
+implementations; they are not safe to be used on generic iters or in
+application code.  See L<Gtk2::TreeModel/CREATING A CUSTOM TREE MODEL> for
+more information.
+
+=cut
+
+=for apidoc
+Convert a boxed Gtk2::TreeIter reference into the "internal" array reference
+representation used by custom Gtk2::TreeModel implementations.  This is
+necessary when you need to get to the data inside your iters in methods
+which are not the vfuncs of the Gtk2::TreeModelIface interface.  The stamp
+must match; this protects the binding code from potential memory faults
+when attempting to convert an iter that doesn't actually belong to your
+model.  See L<Gtk2::TreeModel/CREATING A CUSTOM TREE MODEL> for
+more information.
+=cut
+SV*
+to_arrayref (GtkTreeIter * iter, UV stamp)
+    CODE:
+	if (iter->stamp != stamp)
+		croak ("invalid iter -- stamp %d does not match requested %d",
+		       iter->stamp, stamp);
+        RETVAL = sv_from_iter (iter);
+    OUTPUT:
+        RETVAL
+
+=for apidoc
+Create a new Gtk2::TreeIter from the "internal" array reference representation
+used by custom Gtk2::TreeModel implementations.  This is the complement to
+Gtk2::TreeIter::to_arrayref(), and is used when you need to create and return
+a new iter from a method that is not one of the Gtk2::TreeModelIface
+interface vfuncs.  See L<Gtk2::TreeModel/CREATING A CUSTOM TREE MODEL> for
+more information.
+=cut
+GtkTreeIter_copy *
+new_from_arrayref (class, SV * sv_iter)
+    PREINIT:
+	GtkTreeIter iter = {0, };
+    CODE:
+	if (!iter_from_sv (&iter, sv_iter))
+		XSRETURN_UNDEF;
+	RETVAL = &iter;
+    OUTPUT:
+	RETVAL
 
 ## we get this from Glib::Boxed::copy
 ## GtkTreeIter * gtk_tree_iter_copy (GtkTreeIter * iter)
@@ -776,6 +957,9 @@ gtk_tree_model_get_column_type (tree_model, index_)
 	RETVAL
 
 ## gboolean gtk_tree_model_get_iter (GtkTreeModel *tree_model, GtkTreeIter *iter, GtkTreePath *path)
+=for
+Returns a new Gtk2::TreeIter corresponding to I<$path>.
+=cut
 GtkTreeIter_copy *
 gtk_tree_model_get_iter (tree_model, path)
 	GtkTreeModel *tree_model
@@ -794,6 +978,10 @@ gtk_tree_model_get_iter (tree_model, path)
 #####       plain old string?
 
 ## gboolean gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model, GtkTreeIter *iter, const gchar *path_string)
+=for apidoc
+Returns a new iter pointing to the node described by I<$path_string>, or
+undef if the path does not exist.
+=cut
 GtkTreeIter_copy *
 gtk_tree_model_get_iter_from_string (tree_model, path_string)
 	GtkTreeModel *tree_model
@@ -810,6 +998,11 @@ gtk_tree_model_get_iter_from_string (tree_model, path_string)
 #if GTK_CHECK_VERSION(2,2,0)
 
 ## gchar * gtk_tree_model_get_string_from_iter (GtkTreeModel *tree_model, GtkTreeIter *iter)
+=for apidoc
+Generates a string representation of the iter.  This string is a ':' separated
+list of numbers.  For example, "4:10:0:3" would be an acceptable return value
+for this string.
+=cut
 gchar_own *
 gtk_tree_model_get_string_from_iter (tree_model, iter)
 	GtkTreeModel *tree_model
@@ -818,6 +1011,10 @@ gtk_tree_model_get_string_from_iter (tree_model, iter)
 #endif /* 2.2.0 */
 
 ## gboolean gtk_tree_model_get_iter_first (GtkTreeModel *tree_model, GtkTreeIter *iter)
+=for apidoc
+Return a new iter pointing to the first node in the tree (the one at path
+"0"), or undef if the tree is empty.
+=cut
 GtkTreeIter_copy *
 gtk_tree_model_get_iter_first (tree_model)
 	GtkTreeModel *tree_model
@@ -833,6 +1030,9 @@ gtk_tree_model_get_iter_first (tree_model)
 ### gtk_tree_model_get_iter_root is deprecated
 
 ## GtkTreePath * gtk_tree_model_get_path (GtkTreeModel *tree_model, GtkTreeIter *iter)
+=for apidoc
+Return a new Gtk2::TreePath corresponding to I<$iter>.
+=cut
 GtkTreePath_own *
 gtk_tree_model_get_path (tree_model, iter)
 	GtkTreeModel *tree_model
@@ -898,6 +1098,11 @@ gtk_tree_model_get (tree_model, iter, ...)
 
 ##
 ## gboolean gtk_tree_model_iter_next (GtkTreeModel *tree_model, GtkTreeIter *iter)
+=for apidoc
+Return a new iter pointing to node following I<$iter> at the current level,
+or undef if there is no next node.  I<$iter> is unaltered.  (Note: this is
+different from the C version, which modifies the iter.)
+=cut
 GtkTreeIter_own *
 gtk_tree_model_iter_next (tree_model, iter)
 	GtkTreeModel *tree_model
@@ -916,6 +1121,11 @@ gtk_tree_model_iter_next (tree_model, iter)
 	RETVAL
 
 #### gboolean gtk_tree_model_iter_children (GtkTreeModel *tree_model, GtkTreeIter *iter, GtkTreeIter *parent)
+=for apidoc
+Returns undef if I<$parent> has no children, otherwise, returns a new iter
+to the first child of I<$parent>.  I<$parent> is unaltered.  If I<$parent>
+is undef, this is equivalent to C<Gtk2::TreeModel::get_iter_first>.
+=cut
 GtkTreeIter_copy *
 gtk_tree_model_iter_children (tree_model, parent)
 	GtkTreeModel *tree_model
@@ -930,18 +1140,29 @@ gtk_tree_model_iter_children (tree_model, parent)
 	RETVAL
 
 ## gboolean gtk_tree_model_iter_has_child (GtkTreeModel *tree_model, GtkTreeIter *iter)
+=for apidoc
+Returns true if I<$iter> has child nodes.
+=cut
 gboolean
 gtk_tree_model_iter_has_child (tree_model, iter)
 	GtkTreeModel *tree_model
 	GtkTreeIter *iter
 
 ## gint gtk_tree_model_iter_n_children (GtkTreeModel *tree_model, GtkTreeIter *iter)
+=for apidoc
+Returns the number of children I<$iter> has.  If I<$iter> is undef (or omitted)
+then returns the number of toplevel nodes.
+=cut
 gint
 gtk_tree_model_iter_n_children (tree_model, iter=NULL)
 	GtkTreeModel *tree_model
 	GtkTreeIter_ornull *iter
 
 ## gboolean gtk_tree_model_iter_nth_child (GtkTreeModel *tree_model, GtkTreeIter *iter, GtkTreeIter *parent, gint n)
+=for apidoc
+Returns an iter to the child of I<$parent> at index I<$n>, or undef if there
+is no such child.  I<$parent> is unaltered.
+=cut
 GtkTreeIter_copy *
 gtk_tree_model_iter_nth_child (tree_model, parent, n)
 	GtkTreeModel *tree_model
@@ -957,6 +1178,10 @@ gtk_tree_model_iter_nth_child (tree_model, parent, n)
 	RETVAL
 
 ## gboolean gtk_tree_model_iter_parent (GtkTreeModel *tree_model, GtkTreeIter *iter, GtkTreeIter *child)
+=for apidoc
+Returns a new iter pointing to I<$child>'s parent node, or undef if I<$child>
+doesn't have a parent.  I<$child> is unaltered.
+=cut
 GtkTreeIter_copy *
 gtk_tree_model_iter_parent (tree_model, child)
 	GtkTreeModel *tree_model
@@ -971,12 +1196,34 @@ gtk_tree_model_iter_parent (tree_model, child)
 	RETVAL
 
 ## void gtk_tree_model_ref_node (GtkTreeModel *tree_model, GtkTreeIter *iter)
+=for apidoc
+Lets the tree ref the node. This is an optional method for models to implement.
+To be more specific, models may ignore this call as it exists primarily for
+performance reasons.
+
+This function is primarily meant as a way for views to let caching model know
+when nodes are being displayed (and hence, whether or not to cache that node.)
+For example, a file-system based model would not want to keep the entire
+file-hierarchy in memory, just the sections that are currently being
+displayed by every current view.
+
+A model should be expected to be able to get an iter independent of its reffed
+state.
+=cut
 void
 gtk_tree_model_ref_node (tree_model, iter)
 	GtkTreeModel *tree_model
 	GtkTreeIter *iter
 
 ## void gtk_tree_model_unref_node (GtkTreeModel *tree_model, GtkTreeIter *iter)
+=for apidoc
+Lets the tree unref the node. This is an optional method for models to
+implement. To be more specific, models may ignore this call as it exists
+primarily for performance reasons.
+
+For more information on what this means, see C<Gtk2::TreeModel::ref_node>.
+Please note that nodes that are deleted are not unreffed.
+=cut
 void
 gtk_tree_model_unref_node (tree_model, iter)
 	GtkTreeModel *tree_model

@@ -1,12 +1,134 @@
-Overview of Changes in Gtk2 1.043
+Overview of Changes in Gtk2 1.060
+=================================
+
+ Since 1.04x (the previous stable series)
+ ----------------------------------------
+  * Require Glib 1.060.
+  * Support new stuff in Pango 1.6.
+  * Documentation and example code improvements.
+  * Code cleanup and various bugfixes.
+  * Even yet still more test suite improvements.
+  * Allow undef to various Gtk2::Toolbar methods where appropriate.
+  * Add important utility functions (with docs) for use by custom tree model
+    implementations: Gtk2::TreeIter::to_arrayref and
+    Gtk2::TreeIter::new_from_arrayref.
+  * Add bindings for more esoteric bits if API from GDK and GTK+.
+  * Thread support improvement.  A new module import option, -threads-init,
+    calls Gtk2::Gdk::Threads::init() for you.
+  * Allow the creation of anonymous marks.
+  * Allow easy access to the data of a SimpleList row when given a path.
+
+ Since 1.055
+ -----------
+  * Fix refcounting bugs in Gtk2::CellRenderer and Gtk2::ItemFactory.  [muppet]
+  * Documentation improvements.  [muppet, Ross, A. Pagaltzis]
+
+Overview of Changes in Gtk2 1.055
+=================================
+
+* Require Glib 1.055 for docgen updates.  [Ross]
+* Remove custom GType for PangoMatrix, since pango 1.6 (since 1.5.1) will
+  ship with its own.  [Torsten]
+* Adjust Gtk2::TextIter tests to account for bugfix in gtk+.  [Torsten]
+
+Overview of Changes in Gtk2 1.054
+=================================
+
+* Documentation updates for Gtk2::Toolbar, more accurately describing the
+  types of parameters.  [muppet]
+* Allow undef to various Gtk2::Toolbar methods where appropriate.
+  [Torsten, muppet]
+
+Overview of Changes in Gtk2 1.053
+=================================
+
+* Require Glib 1.053.
+* Add important utility functions (with docs) for use by custom tree model
+  implementations: Gtk2::TreeIter::to_arrayref and
+  Gtk2::TreeIter::new_from_arrayref.  [Zach Bean, muppet]
+* Bind and test late additions to gtk+ and pango:  [Torsten]
+  - Gtk2::Pango::Layout::get_ellipsize
+  - Gtk2::Pango::Layout::set_ellipsize
+  - Gtk2::parse_args
+
+Overview of Changes in Gtk2 1.052
+=================================
+
+* Require Glib 1.052.
+* Documentation fixes and improvements.  [Torsten, muppet]
+* Improvements and bugfixes in the cellrenderer examples.  [muppet, bug
+  report from Jens Wilke]
+* Minor bugfixes and warning suppression.  [muppet]
+* Gtk2::CodeGen improvements:  [Torsten]
+  - allow const modifier on boxed types.
+  - add newSV$classname\_ornull variant for boxed types.
+* Bind and test new API from Pango 1.5.x, including PangoMatrix.  [Torsten]
+
+Overview of Changes in Gtk2 1.051
 =================================
 
 * Code fixes and cleanup for C89 compatibility.  [Albert Chin, muppet]
-* Check for correct build dependency versions.  [Torsten]
-* Fix tests that were giving false positives.  [Torsten]
-* Allow creation of anonymous text marks.  [Marc Lehmann]
-* Documentation improvements.  [Torsten, Marc Lehmann]
-* Minor bugfixes.  [Torsten]
+* Thread support improvement  [Ross]
+  - New import option, -threads-init, calls Gtk2::Gdk::Threads::init()
+    for you.
+  - Updated the thread usage example.
+* Documentation improvements.  [muppet, adapted from the gtk+ C api ref.]
+* Bugfixes.  [Torsten]
+
+Overview of Changes in Gtk2 1.050
+=================================
+
+* New unstable development branch.
+
+* Require Glib 1.050.
+* Code cleanup in XS, tests, and examples.  [Torsten, muppet, Ross]
+* Even yet still more test suite improvements.  [Torsten the Test Master]
+* Documentation improvements.  [Torsten, muppet, Marc Lehmann]
+* Allow the creation of anonymous marks.  [Marc Lehmann]
+* ABI cleanup -- remove private functions from ABI by marking them as static.
+  This has the possibility of breaking ABI compatibility; it *shouldn't*,
+  because nobody should be using these private functions outside of the Gtk2
+  module, but you never know what's going to happen when dealing with win32's
+  braindead linker.  If there are any bugs you think are related to this,
+  please report them immediately to the gtk-perl-list and we'll fix them
+  asap.  [Torsten]
+* Newly bound functions and such [Torsten unless otherwise noted]:
+  - gtk+'s GC pool (the GtkGC functions)
+  - Gtk2::Gdk::text_property_to_text_list, text_property_to_utf8_list,
+    string_to_compound_text, utf8_to_compound_text,
+    text_property_to_text_list_for_display,
+    text_property_to_utf8_list_for_display,
+    string_to_compound_text_for_display, utf8_to_compound_text_for_display,
+    and utf8_to_string_target.
+  - Gtk2::Gdk::draw_indexed_image.
+  - Gtk2::Pango::Font::get_glyph_extents.
+  - Gtk2::Pango::Rectangle and functions that use it,
+    Gtk2::Pango::Layout::index_to_pos, get_cursor_pos, get_extents,
+    and get_pixel_extents.
+  - Gtk2::Pango::LayoutIter and functions that use it,
+    Gtk2::Pango::Layout::get_iter, Gtk2::Pango::LayoutIter::get_index,
+    at_last_line, next_char, next_cluster, next_run, next_line, 
+    get_char_extents, get_cluster_extents, get_run_extents, get_line_extents,
+    get_layout_extents, get_line_yrange, and get_baseline.
+  - Gtk2::Pango::Fontset.
+  - Gtk2::Gdk::Visual.
+  - Gtk2::Pango::Context::list_families, Gtk2::Pango::FontFamily::get_name,
+    is_monospace, list_faces, Gtk2::Pango::FontFace::describe, get_face_name,
+    and list_sizes.  [muppet]
+  - Gtk2::Gdk::Input.
+  - Gtk2::Gdk::init, init_check, and parse_args.
+  - Add and test the ability to change the device with
+    Gtk2::Gdk::Event::Motion::device, Gtk2::Gdk::Event::Button::device,
+    Gtk2::Gdk::Event::Scroll::device, and Gtk2::Gdk::Event::Proximity::device.
+  - Gtk2::Gdk::Pixmap::lookup, lookup_for_display, foreign_new, and
+    foreign_new_for_display.
+  - Gtk2::TreeSelection::get_user_data.
+  - Gtk2::Gdk::Keymap::get_entries_for_keyval and get_entries_for_keycode.
+* Rework GdkKeymap handling to allow the methods to be called
+  properly.  [Torsten]
+* Allow easy access to the data of a SimpleList row when given a
+  path.  [Nathan Kurz]
+
 
 Overview of Changes in Gtk2 1.042
 =================================

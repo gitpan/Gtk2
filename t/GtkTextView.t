@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 42;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextView.t,v 1.5.2.1 2004/03/17 02:47:13 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextView.t,v 1.7 2004/09/13 21:07:34 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 my $buffer = Gtk2::TextBuffer -> new();
@@ -116,7 +116,7 @@ isa_ok($view -> get_default_attributes(), "Gtk2::TextAttributes");
 
 SKIP: {
   skip("[sg]et_overwrite and [sg]et_accepts_tab are new in 2.4", 2)
-    unless Gtk2->CHECK_VERSION (2, 4, 0); # FIXME 2.4
+    unless Gtk2->CHECK_VERSION (2, 4, 0);
 
   $view -> set_overwrite(1);
   is($view -> get_overwrite(), 1);

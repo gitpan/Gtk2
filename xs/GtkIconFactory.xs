@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconFactory.xs,v 1.19.2.1 2004/03/17 02:47:14 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconFactory.xs,v 1.21 2004/04/20 13:49:50 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -29,7 +29,7 @@
 #undef newSVGtkIconSize
 #undef SvGtkIconSize
 
-SV *
+static SV *
 newSVGtkIconSize (GtkIconSize size)
 {
 	/* crap.  there is no try.  do, or do not. */
@@ -46,7 +46,7 @@ newSVGtkIconSize (GtkIconSize size)
 	return sv;
 }
 
-GtkIconSize
+static GtkIconSize
 SvGtkIconSize (SV * sv)
 {
 	GtkIconSize size;

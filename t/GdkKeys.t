@@ -1,8 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 15;
+use Gtk2::TestHelper tests => 42;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkKeys.t,v 1.3.2.1 2004/04/14 17:48:11 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkKeys.t,v 1.6 2004/05/11 17:41:13 kaffeetisch Exp $
+
+use Gtk2::Gdk::Keysyms;
 
 my $map = Gtk2::Gdk::Keymap -> get_default();
 isa_ok($map, "Gtk2::Gdk::Keymap");
@@ -15,15 +17,62 @@ SKIP: {
   isa_ok($map, "Gtk2::Gdk::Keymap");
 }
 
-my ($keyval, $group, $level, $mods) = $map -> translate_keyboard_state(10, [qw(shift-mask lock-mask)], 0);
+my @keys = $map -> get_entries_for_keyval($Gtk2::Gdk::Keysyms{ Escape });
+isa_ok($keys[0], "HASH");
+like($keys[0] -> { keycode }, qr/^\d+$/);
+like($keys[0] -> { group }, qr/^\d+$/);
+like($keys[0] -> { level }, qr/^\d+$/);
+
+@keys = Gtk2::Gdk::Keymap -> get_entries_for_keyval($Gtk2::Gdk::Keysyms{ Escape });
+isa_ok($keys[0], "HASH");
+like($keys[0] -> { keycode }, qr/^\d+$/);
+like($keys[0] -> { group }, qr/^\d+$/);
+like($keys[0] -> { level }, qr/^\d+$/);
+
+my ($keyval, $group, $level, $mods) = $map -> translate_keyboard_state($keys[0] -> { keycode }, [qw(shift-mask)], 0);
 like($keyval, qr/^\d+$/);
 like($group, qr/^\d+$/);
 like($level, qr/^\d+$/);
 isa_ok($mods, "Gtk2::Gdk::ModifierType");
 
-ok(defined($map -> get_direction()));
+SKIP: {
+  skip("translate_keyboard_state is broken", 4)
+    unless (Gtk2 -> CHECK_VERSION(2, 4, 1));
 
-use Gtk2::Gdk::Keysyms;
+  ($keyval, $group, $level, $mods) = Gtk2::Gdk::Keymap -> translate_keyboard_state($keys[0] -> { keycode }, [qw(shift-mask)], 0);
+  like($keyval, qr/^\d+$/);
+  like($group, qr/^\d+$/);
+  like($level, qr/^\d+$/);
+  isa_ok($mods, "Gtk2::Gdk::ModifierType");
+}
+
+my $key = {
+  keycode => $keys[0] -> { keycode },
+  group => $group,
+  level => $level
+};
+
+like($map -> lookup_key($key), qr/^\d+$/);
+like(Gtk2::Gdk::Keymap -> lookup_key($key), qr/^\d+$/);
+
+my @entries = $map -> get_entries_for_keycode($keys[0] -> { keycode });
+isa_ok($entries[0], "HASH");
+like($entries[0] -> { keyval }, qr/^\d+$/);
+isa_ok($entries[0] -> { key }, "HASH");
+like($entries[0] -> { key } -> { keycode }, qr/^\d+$/);
+like($entries[0] -> { key } -> { group }, qr/^\d+$/);
+like($entries[0] -> { key } -> { level }, qr/^\d+$/);
+
+@entries = Gtk2::Gdk::Keymap -> get_entries_for_keycode($keys[0] -> { keycode });
+isa_ok($entries[0], "HASH");
+like($entries[0] -> { keyval }, qr/^\d+$/);
+isa_ok($entries[0] -> { key }, "HASH");
+like($entries[0] -> { key } -> { keycode }, qr/^\d+$/);
+like($entries[0] -> { key } -> { group }, qr/^\d+$/);
+like($entries[0] -> { key } -> { level }, qr/^\d+$/);
+
+ok(defined($map -> get_direction()));
+ok(defined(Gtk2::Gdk::Keymap -> get_direction()));
 
 my $a = $Gtk2::Gdk::Keysyms{ a };
 my $A = $Gtk2::Gdk::Keysyms{ A };

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.17.2.1 2004/04/09 03:46:36 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.19 2004/04/19 19:20:51 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -61,7 +61,7 @@ newSVGdkGCValues (GdkGCValues * v)
 }
 
 void
-read_gcvalues_from_sv (SV * data, GdkGCValues * v, GdkGCValuesMask * m)
+SvGdkGCValues (SV * data, GdkGCValues * v, GdkGCValuesMask * m)
 {
 	HV * h;
 	SV ** s;
@@ -176,7 +176,7 @@ gdk_gc_new (class, GdkDrawable * drawable, SV * values=NULL)
 	if (values && SvOK (values)) {
 		GdkGCValuesMask m;
 		GdkGCValues v;
-		read_gcvalues_from_sv (values, &v, &m);
+		SvGdkGCValues (values, &v, &m);
 		RETVAL = gdk_gc_new_with_values (drawable, &v, m);
 	} else {
 		if (ix == 1)
@@ -208,7 +208,7 @@ gdk_gc_set_values (gc, values)
 	GdkGCValues v;
 	GdkGCValuesMask m;
     CODE:
-	read_gcvalues_from_sv (values, &v, &m);
+	SvGdkGCValues (values, &v, &m);
 	gdk_gc_set_values (gc, &v, m);
 
  ## void gdk_gc_set_foreground (GdkGC *gc, GdkColor *color)

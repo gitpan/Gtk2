@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the full
-# list)
+# Copyright (C) 2003-2004 by the gtk2-perl team (see the file AUTHORS for
+# the full list)
 # 
 # This library is free software; you can redistribute it and/or modify it under
 # the terms of the GNU Library General Public License as published by the Free
@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.62.2.6 2004/06/13 16:29:51 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.70 2004/09/13 21:07:06 kaffeetisch Exp $
 #
 
 package Gtk2;
@@ -31,19 +31,32 @@ use Glib;
 
 require DynaLoader;
 
-our $VERSION = '1.043';
+our $VERSION = '1.060';
 
 our @ISA = qw(DynaLoader);
 
 sub import {
 	my $class = shift;
+
+	# threads' init needs to be called before the main init and we don't
+	# want to force the order those options are passed to us so we need to
+	# cache the choices in booleans and (optionally) do them in the corect
+	# order afterwards
+	my $init = 0;
+	my $threads_init = 0;
+	
 	foreach (@_) {
 		if (/^-?init$/) {
-			$class->init;
+			$init = 1;
+		} elsif (/-?threads-init$/) {
+			$threads_init = 1;
 		} else {
 			$class->VERSION ($_);
 		}
 	}
+
+	Gtk2::Gdk::Threads->init if ($threads_init);
+	Gtk2->init if ($init);
 }
 
 # this is critical -- tell dynaloader to load the module so that its 
@@ -123,6 +136,32 @@ join gtk-perl-list@gnome.org at lists.gnome.org.
 
 Also have a look at the gtk2-perl website and sourceforge project page,
 http://gtk2-perl.sourceforge.net
+
+=head1 INITIALIZATION
+
+  use Gtk2 qw/-init/;
+  use Gtk2 qw/-init -threads-init/;
+
+=over
+
+=item -init
+
+Equivalent to Gtk2->init, called to initialize GLIB and GTK+. Just about every
+Gtk2-Perl script should do "use Gtk2 -init"; This initialization should take
+place before using any other Gtk2 functions in your GUI applications. It will
+initialize everything needed to operate the toolkit and parses some standard
+command line options. @ARGV is adjusted accordingly so your own code will never
+see those standard arguments.
+
+=item -threads-init
+
+Equivalent to Gtk2::Gdk::Threads->init, called to initialze/enable gdk's thread
+safety mechanisms so that gdk can be accessed from multiple threads when used
+in conjunction with Gtk2::Gdk::Threads->enter and Gtk2::Gdk::Threads->leave. If
+invoked as Gtk2::Gdk::Threads->init it should be done before Gtk2->init is
+called, if done by "use Gtk2 -init -threads-init" order does not matter.
+
+=back
 
 =head1 SEE ALSO
 

@@ -1,6 +1,6 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/README,v 1.40.2.5 2004/06/13 16:29:51 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/README,v 1.48 2004/09/13 21:07:06 kaffeetisch Exp $
 
-Gtk2 version 1.043
+Gtk2 version 1.060
 ==================
 
 Perl bindings to the 2.x series of the Gtk+ graphical user interface library.
@@ -61,7 +61,7 @@ DEPENDENCIES
 This module requires these other modules and libraries:
 
   perl >= 5.8.0
-  Glib >= 1.040 (perl module)
+  Glib >= 1.060 (perl module)
   GTK+ > 2.x (C library)
 
 In order to build it from source, you'll also need

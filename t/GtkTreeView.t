@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 126;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.11.2.2 2004/04/06 16:37:36 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.13 2004/04/06 16:46:57 kaffeetisch Exp $
 
 ###############################################################################
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.15 2004/03/01 07:18:13 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.17 2004/05/15 19:03:30 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -196,7 +196,40 @@ gdk_pixmap_colormap_create_from_xpm_d (class, drawable, colormap, transparent_co
 	if (mask)   XPUSHs (sv_2mortal (newSVGdkBitmap_noinc (mask)));
 
 
-# FIXME shouldn't we be able just to do lookup and foreign new in GdkDrawable?
-## ## GdkPixmap* gdk_pixmap_lookup (GdkNativeWindow anid)
-## ## GdkPixmap* gdk_pixmap_foreign_new_for_display (GdkDisplay *display, GdkNativeWindow anid)
-## ## GdkPixmap* gdk_pixmap_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
+## GdkPixmap* gdk_pixmap_lookup (GdkNativeWindow anid)
+GdkPixmap *
+gdk_pixmap_lookup (class, anid)
+	GdkNativeWindow anid
+    C_ARGS:
+	anid
+
+#if GTK_CHECK_VERSION(2, 2, 0)
+
+## GdkPixmap* gdk_pixmap_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
+GdkPixmap *
+gdk_pixmap_lookup_for_display (class, display, anid)
+	GdkDisplay *display
+	GdkNativeWindow anid
+    C_ARGS:
+	display, anid
+
+#endif
+
+## GdkPixmap* gdk_pixmap_foreign_new (GdkNativeWindow anid)
+GdkPixmap *
+gdk_pixmap_foreign_new (class, anid)
+	GdkNativeWindow anid
+    C_ARGS:
+	anid
+
+#if GTK_CHECK_VERSION(2, 2, 0)
+
+## GdkPixmap* gdk_pixmap_foreign_new_for_display (GdkDisplay *display, GdkNativeWindow anid)
+GdkPixmap *
+gdk_pixmap_foreign_new_for_display (class, display, anid)
+	GdkDisplay *display
+	GdkNativeWindow anid
+    C_ARGS:
+	display, anid
+
+#endif

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 23;
+use Gtk2::TestHelper tests => 50;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.6 2004/03/02 23:33:13 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.10 2004/09/13 21:07:34 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Bla");
 my $context = $label -> create_pango_context();
@@ -21,7 +21,7 @@ is($layout -> set_markup_with_accel("Bla _bla.", "_"), "b");
 
 SKIP: {
   skip("set_font_description is slightly borken currently", 0)
-    unless (Gtk2::Pango -> CHECK_VERSION(1, 3, 3));
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 4, 0));
 
   $layout -> set_font_description(undef);
 }
@@ -45,7 +45,7 @@ is($layout -> get_justify(), 1);
 
 SKIP: {
   skip("[sg]et_auto_dir are new in 1.3.5", 1)
-    unless (Gtk2::Pango -> CHECK_VERSION(1, 3, 5));
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 4, 0));
 
   $layout -> set_auto_dir(1);
   is($layout -> get_auto_dir(), 1);
@@ -74,28 +74,69 @@ is_deeply($attribute, {
   is_sentence_boundary => 0,
   is_sentence_start => 1,
   is_sentence_end => 0,
-  Gtk2::Pango -> CHECK_VERSION(1, 3, 0) ?
+  Gtk2::Pango -> CHECK_VERSION(1, 4, 0) ?
     (backspace_deletes_character => 1) :
     ()
 });
 
+foreach ($layout -> index_to_pos(23),
+         $layout -> get_cursor_pos(1),
+         $layout -> get_extents(),
+         $layout -> get_pixel_extents()) {
+  isa_ok($_, "HASH");
+}
+
+my $number = qr/^\d+$/;
+
 my ($index, $trailing) = $layout -> xy_to_index(5, 5);
-like($index, qr/^\d+$/);
-like($trailing, qr/^\d+$/);
+like($index, $number);
+like($trailing, $number);
 
 is_deeply([$layout -> move_cursor_visually(1, 0, 0, 1)], [1, 0]);
 
 my ($width, $height) = $layout -> get_size();
-like($width, qr/^\d+$/);
-like($height, qr/^\d+$/);
+like($width, $number);
+like($height, $number);
 
 ($width, $height) = $layout -> get_pixel_size();
-like($width, qr/^\d+$/);
-like($height, qr/^\d+$/);
+like($width, $number);
+like($height, $number);
 
-like($layout -> get_line_count(), qr/^\d+$/);
+like($layout -> get_line_count(), $number);
+
+my $iter = $layout -> get_iter();
+isa_ok($iter, "Gtk2::Pango::LayoutIter");
+
+foreach ($iter -> get_char_extents(),
+         $iter -> get_cluster_extents(),
+         $iter -> get_run_extents(),
+         $iter -> get_line_extents(),
+         $iter -> get_layout_extents()) {
+  isa_ok($_, "HASH");
+}
+
+my ($y0, $y1) = $iter -> get_line_yrange();
+like($y0, $number);
+like($y1, $number);
+
+ok($iter -> next_run());
+ok($iter -> next_char());
+ok($iter -> next_cluster());
+ok(!$iter -> next_line());
+ok($iter -> at_last_line());
+
+like($iter -> get_index(), $number);
+like($iter -> get_baseline(), $number);
+
+SKIP: {
+  skip("[sg]et_ellipsize are new in 1.6", 1)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 6, 0));
+
+  $layout -> set_ellipsize("end");
+  is($layout -> get_ellipsize(), "end");
+}
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2004 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -16,9 +16,53 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkKeys.xs,v 1.4.2.1 2004/04/14 17:48:11 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkKeys.xs,v 1.7 2004/06/13 15:39:48 muppetman Exp $
  */
 #include "gtk2perl.h"
+
+/* the _orclass type effectively allows a class name and silently maps it to
+   NULL.  used as the first argument this allows a method to be invoked in two
+   ways: as an object method and as a class static method. */
+typedef GdkKeymap GdkKeymap_orclass;
+#define SvGdkKeymap_orclass(sv) ((sv && SvOK (sv) && SvROK (sv)) ? SvGdkKeymap (sv) : NULL);
+
+static GdkKeymapKey *
+SvGdkKeymapKey (SV *sv)
+{
+	HV *hv;
+	SV **value;
+	GdkKeymapKey *key;
+
+	if (! (sv && SvOK (sv) && SvROK (sv) && SvTYPE (SvRV (sv)) == SVt_PVHV))
+		croak ("GdkKeymapKey must be a hash reference");
+
+	key = gperl_alloc_temp (sizeof (GdkKeymapKey));
+
+	hv = (HV *) SvRV (sv);
+
+	if ((value = hv_fetch (hv, "keycode", 7, 0)) && SvOK (*value))
+		key->keycode = SvUV (*value);
+	if ((value = hv_fetch (hv, "group", 5, 0)) && SvOK (*value))
+		key->group = SvIV (*value);
+	if ((value = hv_fetch (hv, "level", 5, 0)) && SvOK (*value))
+		key->level = SvIV (*value);
+
+	return key;
+}
+
+static SV *
+newSVGdkKeymapKey (GdkKeymapKey *key)
+{
+	HV *hv;
+
+	hv = newHV ();
+
+	hv_store (hv, "keycode", 7, newSVuv (key->keycode), 0);
+	hv_store (hv, "group", 5, newSViv (key->group), 0);
+	hv_store (hv, "level", 5, newSViv (key->level), 0);
+
+	return newRV_noinc ((SV *) hv);
+}
 
 MODULE = Gtk2::Gdk::Keys PACKAGE = Gtk2::Gdk::Keymap PREFIX = gdk_keymap_
 
@@ -42,10 +86,18 @@ gdk_keymap_get_for_display (class, display)
 
 #endif
 
-##guint
-##gdk_keymap_lookup_key (keymap, key)
-##	GdkKeymap          * keymap
-##	const GdkKeymapKey * key
+##  guint gdk_keymap_lookup_key (GdkKeymap * keymap, const GdkKeymapKey * key)
+guint
+gdk_keymap_lookup_key (keymap, key)
+	GdkKeymap_orclass * keymap
+	SV * key
+    PREINIT:
+	GdkKeymapKey * real_key = NULL;
+    CODE:
+	real_key = SvGdkKeymapKey (key);
+	RETVAL = gdk_keymap_lookup_key (keymap, real_key);
+    OUTPUT:
+	RETVAL
 
 ##  gboolean gdk_keymap_translate_keyboard_state (GdkKeymap *keymap, guint hardware_keycode, GdkModifierType state, gint group, guint *keyval, gint *effective_group, gint *level, GdkModifierType *consumed_modifiers) 
 =for apidoc
@@ -53,14 +105,14 @@ gdk_keymap_get_for_display (class, display)
 =cut
 void
 gdk_keymap_translate_keyboard_state (keymap, hardware_keycode, state, group)
-	GdkKeymap       * keymap
-	guint             hardware_keycode
-	GdkModifierType   state
-	gint              group
+	GdkKeymap_orclass * keymap
+	guint hardware_keycode
+	GdkModifierType state
+	gint group
     PREINIT:
-	guint           keyval;
-	gint            effective_group;
-	gint            level;
+	guint keyval;
+	gint effective_group;
+	gint level;
 	GdkModifierType consumed_modifiers;
     PPCODE:
 	if (!gdk_keymap_translate_keyboard_state (keymap, hardware_keycode, 
@@ -74,59 +126,68 @@ gdk_keymap_translate_keyboard_state (keymap, hardware_keycode, state, group)
 	PUSHs (sv_2mortal (newSViv (level)));
 	PUSHs (sv_2mortal (newSVGdkModifierType (consumed_modifiers)));
 
-##  gboolean gdk_keymap_get_entries_for_keyval (GdkKeymap *keymap, guint keyval, GdkKeymapKey **keys, gint *n_keys) 
-##=for apidoc
-##=for signature keys = $keymap->get_entries_for_keyval (keyval)
-##Returns keys, a list of Gtk2::GdkKeymapkey's.
-##
-##Obtains a list of keycode/group/level combinations that will generate keyval. Groups and levels are two kinds of keyboard mode; in general, the level determines whether the top or bottom symbol on a key is used, and the group determines whether the left or right symbol is used. On US keyboards, the shift key changes the keyboard level, and there are no groups. A group switch key might convert a keyboard between Hebrew to English modes, for example. GdkEventKey contains a group field that indicates the active keyboard group. The level is computed from the modifier mask.
-##=cut
-##void
-##gdk_keymap_get_entries_for_keyval (keymap, keyval)
-##	GdkKeymap    *  keymap
-##	guint           keyval
-##    PREINIT:
-##	GdkKeymapKey * keys;
-##	gint           n_keys;
-##	int            i;
-##    PPCODE:
-##	if (!gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys))
-##		XSRETURN_EMPTY;
-##	EXTEND (SP, n_keys);
-##	for ( i = 0; items = n_keys; n_keys--)
-##		PUSHs (sv_2mortal (newGdkKeymapKey (keys[i])));
-##	g_free (keys);
+=for apidoc
+=for signature keys = $keymap->get_entries_for_keyval (keyval)
+Returns a list of I<GdkKeymapKey>s.
 
+Obtains a list of keycode/group/level combinations that will generate
+I<$keyval>.  Groups and levels are two kinds of keyboard mode; in general, the
+level determines whether the top or bottom symbol on a key is used, and the
+group determines whether the left or right symbol is used.  On US keyboards,
+the shift key changes the keyboard level, and there are no groups.  A group
+switch key might convert a keyboard between Hebrew to English modes, for
+example.  Gtk2::Gdk::Event::Key contains a group field that indicates
+the active keyboard group.  The level is computed from the modifier
+mask.
+=cut
+##  gboolean gdk_keymap_get_entries_for_keyval (GdkKeymap *keymap, guint keyval, GdkKeymapKey **keys, gint *n_keys) 
+void
+gdk_keymap_get_entries_for_keyval (keymap, keyval)
+	GdkKeymap_orclass * keymap
+	guint keyval
+    PREINIT:
+	GdkKeymapKey * keys = NULL;
+	gint n_keys;
+	int i;
+    PPCODE:
+	if (!gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys))
+		XSRETURN_EMPTY;
+	EXTEND (SP, n_keys);
+	for (i = 0; i < n_keys; i++)
+		PUSHs (sv_2mortal (newSVGdkKeymapKey (&keys[i])));
+	g_free (keys);
+
+=for apidoc
+=for signature ({ key1, keyval1 }, { ... }) = $keymap->get_entries_for_keycode (hardware_keycode)
+Returns a list of hash references, each with two keys: "key" pointing to a
+I<GdkKeymapKey> and "keyval" pointing to the corresponding key value.
+=cut
 ##  gboolean gdk_keymap_get_entries_for_keycode (GdkKeymap *keymap, guint hardware_keycode, GdkKeymapKey **keys, guint **keyvals, gint *n_entries) 
-##=for apidoc
-##=for signature ({key1, keyval1 }, {...}) = $keymap->get_entires_for_keycode ($hardware_keycode)
-##=cut
-##void
-##gdk_keymap_get_entries_for_keycode (keymap, hardware_keycode)
-##	GdkKeymap * keymap
-##	guint       hardware_keycode
-##    PREINIT:
-##	GdkKeymapKey * keys;
-##	guint        * keyvals;
-##	gint           n_entries;
-##	int            i;
-##	HV           * hv;
-##    PPCODE:
-##	if (!gdk_keymap_get_entries_for_keycode (keymap, hardware_keycode, 
-##						 &keys, &keyvals, &n_entries))
-##		XSRETURN_EMPTY;
-##	EXTEND (SP, n_entries);
-##	for (i = 0; i < n_entries; i++)
-##	{
-##		hv = newHV ();
-##		hv_store (hv, "key", 3, newGdkKeymapKey (keys[i]), 0);
-##		hv_store (hv, "keyval", 6, newSViv (keyvals[i]), 0);
-##		XPUSHs (sv_2mortal (newRV_noinc ((SV*) hv)));
-##	}
+void
+gdk_keymap_get_entries_for_keycode (keymap, hardware_keycode)
+	GdkKeymap_orclass * keymap
+	guint hardware_keycode
+    PREINIT:
+	GdkKeymapKey * keys = NULL;
+	guint * keyvals = NULL;
+	gint n_entries;
+	int i;
+	HV * hv;
+    PPCODE:
+	if (!gdk_keymap_get_entries_for_keycode (keymap, hardware_keycode, 
+						 &keys, &keyvals, &n_entries))
+		XSRETURN_EMPTY;
+	EXTEND (SP, n_entries);
+	for (i = 0; i < n_entries; i++) {
+		hv = newHV ();
+		hv_store (hv, "key", 3, newSVGdkKeymapKey (&keys[i]), 0);
+		hv_store (hv, "keyval", 6, newSVuv (keyvals[i]), 0);
+		PUSHs (sv_2mortal (newRV_noinc ((SV*) hv)));
+	}
 	
 PangoDirection
 gdk_keymap_get_direction (keymap)
-	GdkKeymap *keymap
+	GdkKeymap_orclass *keymap
 
 
 MODULE = Gtk2::Gdk::Keys PACKAGE = Gtk2::Gdk PREFIX = gdk_

@@ -1,5 +1,5 @@
-# Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the full
-# list)
+# Copyright (C) 2003-2004 by the gtk2-perl team (see the file AUTHORS for the
+# full list)
 # 
 # This library is free software; you can redistribute it and/or modify it under
 # the terms of the GNU Library General Public License as published by the Free
@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.82.2.4 2004/05/29 14:25:50 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.92 2004/09/13 21:07:06 kaffeetisch Exp $
 #
 
 use 5.008;
@@ -32,7 +32,7 @@ use Cwd;
 our %build_reqs = (
 	'perl-ExtUtils-Depends'   => '0.2',
 	'perl-ExtUtils-PkgConfig' => '1.03',
-	'perl-Glib'               => '1.040',
+	'perl-Glib'               => '1.060',
 	'Gtk+'                    => '2.0.0',
 );
 
@@ -68,9 +68,9 @@ my %pkgcfg = ExtUtils::PkgConfig->find ('gtk+-2.0 >= '.$build_reqs{'Gtk+'});
 #
 my @gtk_version = split /\./, $pkgcfg{modversion};
 our @xs_files = ();
-our @xs_lists = select_files_by_version ("xs_files", @gtk_version);
+our @xs_lists = Glib::MakeHelper->select_files_by_version ("xs_files", @gtk_version);
 foreach my $filename (@xs_lists) {
-	my @names = read_source_list_file ($filename);
+	my @names = Glib::MakeHelper->read_source_list_file ($filename);
 	print "$filename lists ".scalar(@names)." xs files\n";
 	push @xs_files, @names;
 }
@@ -79,6 +79,12 @@ if ($target =~ /x11/) {
 	warn "congratulations, you're building on X11!\n";
 	push @xs_files, 'xs/GdkX11.xs';
 }
+
+#
+# retrieve pango's version
+#
+my %pkgcfg_pango = ExtUtils::PkgConfig->find ('pango');
+my @pango_version = split /\./, $pkgcfg_pango{modversion};
 
 #
 # create version macros for pango
@@ -162,11 +168,12 @@ if (grep /enable[-_]faq/i, @ARGV)
 #
 # all possible maps must be available at xsubpp time, as xsubpp processes
 # all code, even inside #ifdefs.
-my @maps = <maps-[0-9]\.[0-9]>;
-Gtk2::CodeGen->parse_maps ('gtk2perl', input => \@maps);
+Gtk2::CodeGen->parse_maps ('gtk2perl', input => [<maps-[0-9]\.[0-9]>,
+                                                 <maps_pango-[0-9]\.[0-9]>]);
 # but for enums.pod, we only want to document the stuff we can actually
 # query from this target library.
-our @used_maps = select_files_by_version ("maps", @gtk_version);
+our @used_maps = Glib::MakeHelper->select_files_by_version ("maps", @gtk_version);
+our @used_maps_pango = Glib::MakeHelper->select_files_by_version ("maps_pango", @pango_version);
 
 # one more command generates code to boot all the various extra XS modules.
 # we need this because we have lots of XS files without corresponding PMs to
@@ -195,7 +202,7 @@ $gtk2->add_xs (@xs_files);
 my $cwd = cwd();
 $gtk2->add_typemaps (map {File::Spec->catfile($cwd,$_)}
 		     'build/gtk2perl.typemap',
-                     'gdk.typemap', 'gtk.typemap',
+                     'gdk.typemap', 'gtk.typemap', 'pango.typemap'
 		     );
 
 $gtk2->install (qw(gtk2perl.h
@@ -218,7 +225,6 @@ WriteMakefile(
     DL_FUNCS      => { Gtk2 => [] },
     $gtk2->get_makefile_vars,
 );
-
 
 
 #
@@ -246,8 +252,8 @@ sub MY::postamble
 # rebuild the makefile if the file lists change
 Makefile : ".join(" ", @xs_lists)."
 
-\$(INST_LIB)/\$(FULLEXT)/enums.pod : \$(BLIB_DONE) @used_maps tools/podifyenums.pl
-	\$(PERLRUNINST) -M\$(NAME) tools/podifyenums.pl \$(NAME) @used_maps > \$@
+\$(INST_LIB)/\$(FULLEXT)/enums.pod : \$(BLIB_DONE) @used_maps @used_maps_pango tools/podifyenums.pl
+	\$(PERLRUNINST) -M\$(NAME) tools/podifyenums.pl \$(NAME) @used_maps @used_maps_pango > \$@
 
 build/stock_items.podi: \$(BLIB_DONE) tools/podifystockitems.pl
 	\$(PERLRUNINST) -M\$(NAME) tools/podifystockitems.pl > \$@
@@ -296,36 +302,4 @@ sub find_extra_libs {
 		}, @INC);
 
 	return $retstring;
-}
-
-sub read_source_list_file {
-	my $filename = shift;
-	my @list = ();
-	open IN, $filename or die "can't read $filename: $!\n";
-	while (<IN>) {
-		s/#.*$//;		# eat comments
-		s/^\s*//;		# trim leading space
-		s/\s*$//;		# trim trailing space
-		push @list, $_ if $_;	# keep non-blanks
-	}
-	close IN;
-	return @list;
-}
-
-sub select_files_by_version {
-	my ($stem, $major, $minor) = @_;
-
-	my $pattern = $stem."-[0-9]\.[0-9]";
-	my @files = ();
-	foreach (glob $pattern) {
-		if (/$stem-(\d)\.(\d)/) {
-			my $fmaj = $1;
-			my $fmin = $2;
-			push @files, $_
-				if  $fmaj <= $major
-				and $fmin <= $minor;
-		}
-	}
-
-	return @files;
 }

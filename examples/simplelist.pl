@@ -18,7 +18,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/simplelist.pl,v 1.10 2004/01/25 22:43:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/simplelist.pl,v 1.12 2004/03/28 22:52:29 rwmcfa1 Exp $
 #
 
 use strict;
@@ -157,10 +157,15 @@ $btn = Gtk2::Button->new_from_stock ('gtk-quit');
 $btn->signal_connect (clicked => sub  { Gtk2->main_quit; });
 $vbox->pack_end($btn, 0, 1, 0);
 
+$slist->signal_connect (row_activated => sub {
+		my ($slist, $path, $column) = @_;
+		my $row_ref = $slist->get_row_data_from_path ($path);
+		print 'act '.Dumper ($row_ref);	
+	});
+
 # just for shorthand
 my $dslist = $slist->{data};
 my $op_count = 0;
-
 
 my @pixbufs;
 foreach (qw/gtk-ok gtk-cancel gtk-quit gtk-apply gtk-clear 

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.21.2.5 2004/04/19 18:12:27 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.25 2004/04/19 18:18:42 kaffeetisch Exp $
 #
 
 #########################
@@ -200,6 +200,20 @@ sub unselect {
 sub set_data_array
 {
 	@{$_[0]->{data}} = @{$_[1]};
+}
+
+sub get_row_data_from_path
+{
+	my ($self, $path) = @_;
+
+	# $path->get_depth always 1 for SimpleList
+	# my $depth = $path->get_depth;
+
+	# array has only one member for SimpleList
+	my @indices = $path->get_indices;
+	my $index = $indices[0];
+
+	return $self->{data}->[$index];
 }
 
 ##################################
@@ -490,7 +504,11 @@ Gtk2::SimpleList - A simple interface to Gtk2's complex MVC list widget
   # Gtk2::SimpleList derives from Gtk2::TreeView, so all methods
   # on a treeview are available.
   $slist->set_rules_hint (TRUE);
-  $slist->signal_connect (row_activated => \&row_clicked);
+  $slist->signal_connect (row_activated => sub {
+          my ($sl, $path, $column) = @_;
+	  my $row_ref = $sl->get_row_data_from_path ($path);
+	  # $row_ref is now an array ref to the double-clicked row's data.
+      });
 
   # turn an existing TreeView into a SimpleList; useful for
   # Glade-generated interfaces.
@@ -609,6 +627,20 @@ data.
 =item @indices = $slist->get_selected_indices
 
 Return the indices of the selected rows in the ListStore.
+
+=item $slist->get_row_data_from_path ($path)
+
+=over
+
+=over
+
+=item * $path (Gtk2::TreePath) the path of the desired row 
+
+=back
+
+=back
+
+Returns an array ref with the data of the row indicated by $path.
 
 =item $slist->select ($index, ...);
 

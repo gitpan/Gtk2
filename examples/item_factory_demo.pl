@@ -19,7 +19,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/item_factory_demo.pl,v 1.2.8.1 2004/03/17 03:07:17 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/item_factory_demo.pl,v 1.3 2004/03/21 04:38:45 muppetman Exp $
 #
 
 # based strongly on a script by gavin brown posted on the gtk-perl mailling

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMessageDialog.t,v 1.9.2.1 2004/03/17 02:47:13 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMessageDialog.t,v 1.10 2004/03/17 03:52:24 muppetman Exp $
 
 my $dialog = Gtk2::MessageDialog -> new(undef,
                                         "destroy-with-parent",

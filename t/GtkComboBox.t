@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.6.2.2 2004/04/12 03:51:42 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.8 2004/04/19 18:18:42 kaffeetisch Exp $
 
 use Gtk2::TestHelper
 	tests => 10,

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellLayout.xs,v 1.3.2.1 2004/06/04 20:50:55 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellLayout.xs,v 1.4 2004/06/04 20:44:59 muppetman Exp $
  */
 
 #include "gtk2perl.h"

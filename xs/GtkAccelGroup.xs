@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.20.2.1 2004/03/21 01:26:58 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.21 2004/03/21 01:39:04 muppetman Exp $
  */
 
 #include "gtk2perl.h"

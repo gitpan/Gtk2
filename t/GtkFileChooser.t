@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooser.t,v 1.12.2.3 2004/03/24 00:26:42 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooser.t,v 1.15 2004/03/24 00:31:32 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkContainer.xs,v 1.15.2.1 2004/06/04 17:57:00 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkContainer.xs,v 1.17 2004/07/17 12:28:22 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -209,6 +209,7 @@ gtk_container_child_type (container)
 	 * that isn't registered with the bindings, so we have to look 
 	 * for one that we know about.  since Glib::Object is always
 	 * registered, this loop cannot be infinite. */
+	RETVAL = NULL;
 	while (gtype &&
 	       (NULL == (RETVAL = gperl_object_package_from_type (gtype))))
 		gtype = g_type_parent (gtype);

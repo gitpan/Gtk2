@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntryCompletion.xs,v 1.4.2.1 2004/06/04 20:50:55 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntryCompletion.xs,v 1.5 2004/06/04 20:45:00 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -61,6 +61,7 @@ gtk_entry_completion_set_match_func (GtkEntryCompletion *completion, SV * func, 
 	param_types[0] = GTK_TYPE_ENTRY_COMPLETION;
 	param_types[1] = G_TYPE_STRING;
 	param_types[2] = GTK_TYPE_TREE_ITER;
+
 	callback = gperl_callback_new (func, func_data, 3, param_types,
 	                               G_TYPE_BOOLEAN);
 	gtk_entry_completion_set_match_func

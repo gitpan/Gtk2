@@ -1,7 +1,7 @@
 /*
  * 
- * Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the full
- * list)
+ * Copyright (C) 2003-2004 by the gtk2-perl team (see the file AUTHORS for the
+ * full list)
  * 
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Library General Public License as published by
@@ -18,7 +18,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
  * 
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.26.2.1 2004/03/17 02:47:13 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.33 2004/08/29 13:02:38 kaffeetisch Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -27,12 +27,21 @@
 #include <gperl.h>
 #include <gtk/gtk.h>
 
+#include "gtk2perl-versions.h"
+
 /* custom GType for GdkRegion */
-#define GDK_TYPE_REGION (gtk2perl_gdk_region_get_type ())
-GType gtk2perl_gdk_region_get_type (void) G_GNUC_CONST;
+#ifndef GDK_TYPE_REGION
+# define GDK_TYPE_REGION (gtk2perl_gdk_region_get_type ())
+  GType gtk2perl_gdk_region_get_type (void) G_GNUC_CONST;
+#endif
+
+/* custom GType for PangoLayoutIter */
+#ifndef PANGO_TYPE_LAYOUT_ITER
+# define PANGO_TYPE_LAYOUT_ITER (gtk2perl_pango_layout_iter_get_type ())
+  GType gtk2perl_pango_layout_iter_get_type (void) G_GNUC_CONST;
+#endif
 
 #include "gtk2perl-autogen.h"
-#include "gtk2perl-versions.h"
 
 #ifdef GDK_WINDOWING_WIN32 /* no plug/socket on win32 despite patches exist for years. */
 # undef GTK_TYPE_PLUG
@@ -70,6 +79,12 @@ SV * newSVGdkBitmap (GdkBitmap * bitmap);
 SV * newSVGdkBitmap_noinc (GdkBitmap * bitmap);
 #define newSVGdkBitmap_ornull(b) (b ? newSVGdkBitmap (b) : Nullsv)
 
+/* exported for GtkGC */
+SV * newSVGdkGCValues (GdkGCValues * v);
+void SvGdkGCValues (SV * data, GdkGCValues * v, GdkGCValuesMask * m);
+
+/* exported for various other parts of pango */
+SV * newSVPangoRectangle (PangoRectangle * rectangle);
 
 /*
  * GdkAtom, an opaque pointer
@@ -132,9 +147,6 @@ SV * newSVGtkTargetList (GtkTargetList * list);
 #define newSVGtkTargetList_ornull(list)	((list) ? newSVGtkTargetList (list) : &PL_sv_undef)
 GtkTargetList * SvGtkTargetList (SV * sv);
 #define SvGtkTargetList_ornull(sv)	(((sv) && SvOK (sv)) ? SvGtkTargetList (sv) : NULL)
-
-SV * newSVGtkTargetEntry (GtkTargetEntry * entry);
-GtkTargetEntry * SvGtkTargetEntry (SV * sv);
 
 /*
  * exported so Gnome2 can reuse it in wrappers.  other modules might want to

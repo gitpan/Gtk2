@@ -16,31 +16,49 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.18.2.1 2004/04/19 18:12:28 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.21 2004/04/19 18:18:43 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Gdk	PACKAGE = Gtk2::Gdk	PREFIX = gdk_
 
-###  void gdk_init (gint *argc, gchar ***argv) 
-#void
-#gdk_init (argc, argv)
-#	gint *argc
-#	gchar ***argv
+##  void gdk_init (gint *argc, gchar ***argv) 
+gboolean
+gdk_init (class=NULL)
+    ALIAS:
+	Gtk2::Gdk::init_check = 1
+    PREINIT:
+	GPerlArgv *pargv;
+    CODE:
+	pargv = gperl_argv_new ();
 
-###  gboolean gdk_init_check (gint *argc, gchar ***argv) 
-#gboolean
-#gdk_init_check (argc, argv)
-#	gint *argc
-#	gchar ***argv
+	if (ix == 1) {
+		RETVAL = gdk_init_check (&pargv->argc, &pargv->argv);
+	} else {
+		gdk_init (&pargv->argc, &pargv->argv);
+		/* gdk_init() either succeeds or does not return. */
+		RETVAL = TRUE;
+	}
+
+	gperl_argv_update (pargv);
+	gperl_argv_free (pargv);
+    OUTPUT:
+	RETVAL
 
 #if GTK_CHECK_VERSION(2,2,0)
 
-###  void gdk_parse_args (gint *argc, gchar ***argv) 
-#void
-#gdk_parse_args (argc, argv)
-#	gint *argc
-#	gchar ***argv
+##  void gdk_parse_args (gint *argc, gchar ***argv) 
+void
+gdk_parse_args (class=NULL)
+    PREINIT:
+	GPerlArgv *pargv;
+    CODE:
+	pargv = gperl_argv_new ();
+
+	gdk_parse_args (&pargv->argc, &pargv->argv);
+
+	gperl_argv_update (pargv);
+	gperl_argv_free (pargv);
 
 const gchar *
 gdk_get_display_arg_name (class)

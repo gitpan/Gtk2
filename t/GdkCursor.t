@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 6;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkCursor.t,v 1.4.2.1 2004/03/17 02:47:13 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkCursor.t,v 1.5 2004/03/21 04:38:32 muppetman Exp $
 
 my $cursor = Gtk2::Gdk::Cursor -> new("watch");
 isa_ok($cursor, "Gtk2::Gdk::Cursor");

@@ -16,14 +16,15 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.35.2.3 2004/06/04 17:56:59 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.39 2004/06/04 20:44:59 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
 /* ------------------------------------------------------------------------- */
 
-SV *
+#if 0 /* not used at the moment */
+static SV *
 newSVGdkWindowAttr (GdkWindowAttr *attr)
 {
 	HV *object = newHV ();
@@ -48,12 +49,13 @@ newSVGdkWindowAttr (GdkWindowAttr *attr)
 	return sv_bless (newRV_noinc ((SV *) object),
 	                 gv_stashpv ("Gtk2::Gdk::Window::Attr", 1));
 }
+#endif
 
 #define GTK2PERL_WINDOW_ATTR_FETCH(member, key, type) \
 	member = hv_fetch (hv, key, strlen (key), FALSE); \
 	if (member) attr->member = type (*member);
 
-GdkWindowAttr *
+static GdkWindowAttr *
 SvGdkWindowAttrReal (SV *object, GdkWindowAttributesType *mask)
 {
 	HV *hv = (HV *) SvRV (object);
@@ -97,11 +99,13 @@ SvGdkWindowAttrReal (SV *object, GdkWindowAttributesType *mask)
 	return attr;
 }
 
-GdkWindowAttr *
+#if 0 /* not used at the moment */
+static GdkWindowAttr *
 SvGdkWindowAttr (SV *object)
 {
 	return SvGdkWindowAttrReal (object, NULL);
 }
+#endif
 
 /* ------------------------------------------------------------------------- */
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSelection.xs,v 1.14.2.2 2004/06/04 17:57:00 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSelection.xs,v 1.17 2004/06/04 20:45:00 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -127,12 +127,19 @@ gtk_tree_selection_set_select_function (selection, func, data=NULL)
 						callback,
 						(GDestroyNotify) gperl_callback_destroy);
 
-## FIXME this is a different user_data --- it's the user data that gets
-##       passed to the select function.  i don't understand why it is separate.
-### gpointer gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
-#gpointer
-#gtk_tree_selection_get_user_data (selection)
-#	GtkTreeSelection *selection
+## gpointer gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
+SV *
+gtk_tree_selection_get_user_data (selection)
+	GtkTreeSelection *selection
+    PREINIT:
+	GPerlCallback *callback = NULL;
+    CODE:
+	callback = (GPerlCallback *) gtk_tree_selection_get_user_data (selection);
+	RETVAL = callback && callback->data && SvOK (callback->data) ?
+	           callback->data :
+	           &PL_sv_undef;
+    OUTPUT:
+	RETVAL
 
 ## GtkTreeView* gtk_tree_selection_get_tree_view (GtkTreeSelection *selection)
 GtkTreeView*

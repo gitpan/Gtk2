@@ -18,7 +18,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/histogramplot.pl,v 1.10.2.1 2004/03/14 08:52:56 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/histogramplot.pl,v 1.11 2004/03/14 08:55:31 muppetman Exp $
 #
 
 # originally written in C by muppet in 2001 or 2002, i can't remember.

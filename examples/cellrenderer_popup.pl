@@ -9,7 +9,7 @@ to use this object, then go ahead, but remember the gpl.
 =cut
 
 #
-# Copyright (C) 2003 by muppet
+# Copyright (C) 2003-2004 by muppet
 # 
 # This library is free software; you can redistribute it and/or modify it under
 # the terms of the GNU Library General Public License as published by the Free
@@ -25,13 +25,15 @@ to use this object, then go ahead, but remember the gpl.
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_popup.pl,v 1.6.2.1 2004/03/24 02:01:33 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_popup.pl,v 1.9 2004/07/10 02:52:54 muppetman Exp $
 #
 
 # we require things from 1.04.
 use Gtk2 1.04, -init;
 
 package Mup::CellRendererPopup;
+
+use Glib qw(TRUE FALSE);
 
 use Glib::Object::Subclass
 	Gtk2::CellRenderer::,
@@ -45,10 +47,10 @@ use Glib::Object::Subclass
 	properties => [
 		Glib::ParamSpec->boolean ('show_box', 'Show Box',
 		                          'If true, draw an option menu-looking background on the cell',
-					  1, ['readable', 'writable']),
+					  TRUE, ['readable', 'writable']),
 		Glib::ParamSpec->boolean ('editable', 'Editable',
 		                          'Can i change that?',
-					  0, ['readable', 'writable']),
+					  FALSE, ['readable', 'writable']),
 		Glib::ParamSpec->int ('index', 'Index',
 		                      'Index of selected list item',
 				      0, 65535, 0, [qw/readable writable/]),
@@ -68,7 +70,7 @@ use constant arrow_width => 15;
 
 sub INIT_INSTANCE {
 	my $self = shift;
-	$self->{show_box} = 1;
+	$self->{show_box} = TRUE;
 }
 
 sub calc_size {
@@ -139,10 +141,22 @@ sub RENDER {
 sub menu_pos_func {
 	my ($menu, $x, $y, $data) = @_;
 	my ($treeview, $cell_area) = @$data;
+	# we need to figure out where the cell is in window coordinates,
+	# so we can put the menu near it.  tree_to_widget_coords() maps
+	# the cell_area's x and y to widget coords, but this is in the
+	# entire treeview's coordinate space; if it's inside a scrolled
+	# window, then only part of it is visible.  thus, we need to add
+	# the offset of the visible portion of the treeview.  we want the
+	# menu to start xpad from the left of the cell (just like the 
+	# button graphic), and we'll start by centering it vertically.
+	# got all that?
 	my ($wx, $wy) = $treeview->get_bin_window->get_origin;
-        my ($tx, $ty) = $treeview->tree_to_widget_coords($cell_area->x, $cell_area->y);
-	$x = $wx + $tx + xpad;
-	$y = $wy + $ty + $cell_area->height / 2 - 2;
+	my ($tx, $ty) = $treeview->tree_to_widget_coords($cell_area->x, $cell_area->y);
+	my $visible = $treeview->get_visible_rect;
+
+	$x = $wx + $visible->x + $tx + xpad;
+	$y = $wy + $visible->y + $ty + $cell_area->height / 2 - 2;
+
 	# center the menu vertically around the selected item.
 	# this is inspired heavily by GtkOptionMenu.
 	my $active = $menu->get_active;
@@ -208,16 +222,18 @@ sub START_EDITING {
 # driver code
 package main;
 
+use Glib qw(FALSE TRUE);
+
 $window = Gtk2::Window->new;
 $window->set_title ('cell renderer test');
-$window->signal_connect (delete_event => sub { Gtk2->main_quit; 0; });
+$window->signal_connect (delete_event => sub { Gtk2->main_quit; FALSE; });
 
 $vbox = Gtk2::VBox->new;
 $window->add ($vbox);
 
 $label = Gtk2::Label->new;
 $label->set_markup ('<big>F-Words</big>');
-$vbox->pack_start ($label, 0, 0, 0);
+$vbox->pack_start ($label, FALSE, FALSE, 0);
 
 # create and load the model
 $model = Gtk2::ListStore->new ('Glib::String', 'Glib::Scalar', 'Glib::Int');
@@ -238,15 +254,15 @@ foreach ([ 'foo',        [qw/foo bar baz/]],
 
 # now a view
 $treeview = Gtk2::TreeView->new ($model);
-$treeview->set_rules_hint (1);
-$treeview->set_reorderable (1);
+$treeview->set_rules_hint (TRUE);
+$treeview->set_reorderable (TRUE);
 
 
 #
 # regular editable text column for column 0, the string
 #
 $renderer = Gtk2::CellRendererText->new;
-$renderer->set (editable => 1);;
+$renderer->set (editable => TRUE);;
 $column = Gtk2::TreeViewColumn->new_with_attributes ('something', $renderer,
                                                      text => 0);
 # this commits changes from the user's editing to the model.  compare and
@@ -300,7 +316,23 @@ $renderer->signal_connect (edited => sub {
 $treeview->append_column ($column);
 
 
-$vbox->pack_start ($treeview, 1, 1, 0);
+my $scroll = Gtk2::ScrolledWindow->new;
+$scroll->set_policy ('never', 'automatic');
+$scroll->add ($treeview);
+$vbox->pack_start ($scroll, TRUE, TRUE, 0);
+
+# since we have a scroller, we need to set some reasonable initial size.
+# i'll set one that should have the window scroll a bit, to make sure we
+# can easily test the popup behavior when the treeview is scrolled.
+$window->set_default_size (-1, 150);
+
+my $check = Gtk2::CheckButton->new ('_show boxes');
+$check->set_active ($renderer->get ('show-box'));
+$check->signal_connect (toggled => sub {
+		$renderer->set (show_box => $check->get_active);
+		$treeview->queue_draw;
+});
+$vbox->pack_start ($check, FALSE, FALSE, 0);
 
 $window->show_all;
 

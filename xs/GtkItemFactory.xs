@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.17.2.2 2004/06/04 20:50:55 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.20 2004/09/02 01:17:52 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -189,6 +189,7 @@ gtk2perl_item_factory_create_item_helper (GtkItemFactory *ifactory,
 	GtkWidget *widget = NULL;
 
 	SV *callback_sv = NULL, *tmp_defsv;
+	SV * real_data = callback_data ? gperl_sv_copy (callback_data) : NULL;
 
 	entry = SvGtkItemFactoryEntry (entry_ref, &callback_sv);
 
@@ -203,7 +204,7 @@ gtk2perl_item_factory_create_item_helper (GtkItemFactory *ifactory,
 	sv_setsv (DEFSV, tmp_defsv);
 
 	/* create the item in the normal manner now */
-	gtk_item_factory_create_item (ifactory, entry, callback_data, 1);
+	gtk_item_factory_create_item (ifactory, entry, real_data, 1);
 	
 	/* get the widget that was created by create_item (this is why
 	 * we needed clean_path) */
@@ -214,7 +215,14 @@ gtk2perl_item_factory_create_item_helper (GtkItemFactory *ifactory,
 		                        "_gtk2perl_item_factory_callback_sv",
 		                        gperl_sv_copy (callback_sv),
 		                        (GtkDestroyNotify) gperl_sv_free);
+		if (real_data)
+			g_object_set_data_full (G_OBJECT (widget),
+			                        "_gtk2perl_item_factory_callback_data",
+			                        real_data,
+			                        (GtkDestroyNotify) gperl_sv_free);
 	} else {
+		if (real_data)
+			gperl_sv_free (real_data);
 		croak("ItemFactory couldn't retrieve widget it just created");
 	}
 }

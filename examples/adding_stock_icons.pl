@@ -6,7 +6,7 @@
 # 
 # -rm
 # 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/adding_stock_icons.pl,v 1.1.6.1 2004/03/14 08:52:56 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/adding_stock_icons.pl,v 1.2 2004/03/14 08:55:31 muppetman Exp $
 #
 
 use strict;

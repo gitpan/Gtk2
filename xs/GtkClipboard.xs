@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.16.2.3 2004/06/04 20:50:55 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.18 2004/06/04 20:45:00 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -244,9 +244,11 @@ gtk_clipboard_set_with_owner (clipboard, get_func, clear_func, owner, ...)
     	get_param_types[2] = G_TYPE_UINT;
 	/* since we're on the _owner one */
     	get_param_types[3] = G_TYPE_OBJECT;
+
     	clear_param_types[0] = GTK_TYPE_CLIPBOARD;
 	/* since we're on the _owner one */
     	clear_param_types[1] = G_TYPE_OBJECT;
+
 	GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (4, targets, n_targets);
 	/* WARNING: since we're piggybacking on the same callback for
 	 *    the _with_data and _with_owner forms, the owner arg
@@ -373,6 +375,7 @@ void gtk_clipboard_request_targets (GtkClipboard *clipboard, SV * callback, SV *
     CODE:
 	param_types[0] = GTK_TYPE_CLIPBOARD;
 	param_types[1] = GPERL_TYPE_SV;
+
 	real_callback = gperl_callback_new (callback, user_data,
 	                                    2, param_types, G_TYPE_NONE);
 	g_object_set_qdata_full (G_OBJECT (clipboard),

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,17 +16,9 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoContext.xs,v 1.8 2004/01/31 15:23:20 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoContext.xs,v 1.13 2004/09/13 21:07:35 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
-
-/* FIXME: this is just a temporary place for the BOOT thingy.  Once
- *        PangoFontset is bound, move it there. */
-
-MODULE = Gtk2::Pango::Context	PACKAGE = Gtk2::Pango::Fontset
-
-BOOT:
-	gperl_object_set_no_warn_unreg_subclass (PANGO_TYPE_FONTSET, TRUE);
 
 MODULE = Gtk2::Pango::Context	PACKAGE = Gtk2::Pango::Context	PREFIX = pango_context_
 
@@ -40,13 +32,34 @@ MODULE = Gtk2::Pango::Context	PACKAGE = Gtk2::Pango::Context	PREFIX = pango_cont
  ## same thing goes for pango_context_set_font_map.
 ##  void pango_context_set_font_map (PangoContext *context, PangoFontMap *font_map) 
 
-## FIXME
+#if PANGO_CHECK_VERSION (1, 6, 0)
+
+##  PangoFontMap *pango_context_get_font_map (PangoContext *context)
+PangoFontMap *
+pango_context_get_font_map (context)
+	PangoContext *context
+
+#endif
+
 ###  void pango_context_list_families (PangoContext *context, PangoFontFamily ***families, int *n_families) 
-#void
-#pango_context_list_families (context, families, n_families)
-#	PangoContext *context
-#	PangoFontFamily ***families
-#	int *n_families
+=for apidoc
+=for signature @families = $context->list_families
+=cut
+void
+pango_context_list_families (context)
+	PangoContext *context
+    PREINIT:
+	PangoFontFamily **families = NULL;
+	int n_families;
+    PPCODE:
+	pango_context_list_families (context, &families, &n_families);
+	if (n_families > 0) {
+		int i;
+		EXTEND (SP, n_families);
+		for (i = 0 ; i < n_families ; i++)
+			PUSHs (sv_2mortal (newSVPangoFontFamily (families[i])));
+		g_free (families);
+	}
 
 ##  PangoFont * pango_context_load_font (PangoContext *context, const PangoFontDescription *desc) 
 ### may return NULL....
@@ -125,4 +138,18 @@ pango_context_get_base_dir (context)
 #	int length
 #	PangoAttrList *attrs
 #	PangoAttrIterator *cached_iter
-#
+
+#if PANGO_CHECK_VERSION (1, 6, 0)
+
+##  PangoMatrix * pango_context_get_matrix (PangoContext *context)
+const PangoMatrix_ornull *
+pango_context_get_matrix (context)
+	PangoContext *context
+
+##  void pango_context_set_matrix (PangoContext *context, PangoMatrix *matrix)
+void
+pango_context_set_matrix (context, matrix)
+	PangoContext *context
+	PangoMatrix_ornull *matrix
+
+#endif

@@ -17,7 +17,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/simple_menu.pl,v 1.3 2004/02/03 00:26:20 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/simple_menu.pl,v 1.4 2004/05/31 21:14:55 kaffeetisch Exp $
 #
 # r.m.
 # 
@@ -157,6 +157,7 @@ my $menu = Gtk2::SimpleMenu->new(
 $menu->get_widget('/Tools/Radios/Radio 2')->set_active(1);
 
 my $win = Gtk2::Window->new;
+$win->signal_connect(delete_event => sub { exit });
 $win->add($menu->{widget});
 $win->add_accel_group($menu->{accel_group});
 $win->show_all;

@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeSelection.t,v 1.5 2004/02/27 05:31:48 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeSelection.t,v 1.6 2004/04/03 19:51:57 kaffeetisch Exp $
 
 ###############################################################################
 
-use Gtk2::TestHelper tests => 26, noinit => 1;
+use Gtk2::TestHelper tests => 29, noinit => 1;
 
 ###############################################################################
 
@@ -105,6 +105,8 @@ SKIP: {
 
 $selection -> unselect_all();
 
+is($selection -> get_user_data(), undef);
+
 $selection -> set_select_function(sub {
 	my ($selection, $model, $path, $selected) = @_;
 
@@ -114,11 +116,13 @@ $selection -> set_select_function(sub {
 
 	return 0;
 });
+is($selection -> get_user_data(), undef);
 
 $selection -> select_path(Gtk2::TreePath -> new_from_string(1));
 is($selection -> count_selected_rows(), 0);
 
-$selection -> set_select_function(sub { return 1; });
+$selection -> set_select_function(sub { return 1; }, "bla");
+is($selection -> get_user_data(), "bla");
 
 ###############################################################################
 

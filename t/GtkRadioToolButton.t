@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   tests => 8,
   noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRadioToolButton.t,v 1.2.2.1 2004/03/17 02:47:13 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRadioToolButton.t,v 1.3 2004/03/17 03:52:24 muppetman Exp $
 
 my $item = Gtk2::RadioToolButton -> new();
 isa_ok($item, "Gtk2::RadioToolButton");

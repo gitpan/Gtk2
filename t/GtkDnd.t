@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 5;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDnd.t,v 1.5.2.2 2004/04/25 11:26:32 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDnd.t,v 1.7 2004/04/25 11:12:45 kaffeetisch Exp $
 
 my $button = Gtk2::Button -> new("Bla");
 my $window = Gtk2::Window -> new();
