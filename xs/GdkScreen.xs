@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkScreen.xs,v 1.4 2003/07/16 14:46:29 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkScreen.xs,v 1.5 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -171,6 +171,9 @@ GdkScreen_ornull *
 gdk_screen_get_default (class)
 	SV * class
     C_ARGS:
+	/* void */
+    CLEANUP:
+	UNUSED(class);
 	
 
 ##  gboolean gdk_screen_get_setting (GdkScreen *screen, const gchar *name, GValue *value) 

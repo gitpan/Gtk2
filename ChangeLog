@@ -1,3 +1,87 @@
+2003/09/19 00:53 muppetman
+
+	* Gtk2.pm, README, META.yml, debian/control, debian/changelog:
+	updated for the 1.00rc2 release.
+
+	* Makefile.PL: updated requirements
+
+2003/09/17 10:44 rwmcfa1
+
+	* Makefile.PL: ExtUtils::PkgConfig can now deal with version 
+	requirements using pkg-config's interface, make use of it.
+
+2003/09/16 23:50 rwmcfa1
+
+	* Makefile.PL, perl-*spec.in: somewhat automated versioning system 
+	implemented for depenancy modules
+
+2003/09/16 15:00 muppetman
+
+	* Makefile.PL: don't do any of the hand-coded install stuff on
+	windows --- there's no sane place to install, and nmake barfs on
+	the generated makefile code.
+
+	* xs/GtkDialog.xs: unused variables
+
+	* xs/GdkGC.xs, xs/GdkTypes.xs, xs/GtkCurve.xs, xs/GtkTreeView.xs:
+	casts to hush pedantic compilers
+
+2003/09/15 22:26 rwmcfa1
+
+	* Makefile.PL: spec file dependancies improved
+
+	* xs/GdkPixbuf.xs: fixed ref count bug.
+
+2003/09/15 16:02 muppetman
+
+	* Gtk2.pm: remove Gtk2::Dialog::Responses, add a bunch of missing
+	L<links>
+
+	* Makefile.PL, gtk-demo/changedisplay.pl, xs/GtkDialog.xs: use
+	gperl_signal_set_marshaller_for() to set a custom marshaller for
+	GtkDialog's response signal, so we can get the enum string values
+	for the response id in the response handler instead of negative
+	numbers.  removes the need for Gtk2::Dialog::Responses, so that
+	ugly wart is now gone as well.  Gtk2 now requires Glib 1.00rc2.
+
+	* MANIFEST, pm/Responses.pm (deleted): delete Responses.pm.
+
+2003/09/15 14:02 muppetman
+
+	the ones that got away...
+	* xs/GtkItemFactory.xs: remove unused private function
+	* xs/GtkNotebook.xs, xs/GtkTreeStore.xs: remove unused variable
+	* xs/GtkToolbar.xs: initialize the uninitialized
+
+2003/09/14 15:44 rwmcfa1
+
+	* xs/(most everything): quiet warnings from -Wall, and/or add void
+	comments
+
+	* xs/GdkDisplay.xs: added const qualifier to gchar * return value
+
+	* xs/GdkDnd.xs: copy-and-paste bug fixed, get_protocol(_for_display)
+
+	* xs/GdkPixbuf.xs: formatting cleanup
+
+	* xs/GdkWindow.xs: quited warning about invalid paramter type
+
+	* xs/GtkIconFactory.xs: non-void paramter with PPCODE, fixed
+
+	* xs/GtkTearoffMenuItem.xs: teamoff -> tearoff, big bug
+
+	* xs/GtkTreeModel.xs: looking for -1 list terminator incorrectly, 
+	bug-fix
+
+2003/09/14 01:31 muppetman
+
+	* maps: remove some deprecated types
+	* xs/GtkIconFactory.xs: implement gtk_icon_set_render_icon
+
+2003/09/14 01:09 muppetman
+
+	* xs/GtkTextIter.xs: implement gtk_text_iter_get_tags()
+
 2003/09/11 23:51 muppetman
 
 	* ChangeLog, Gtk2.pm, MANIFEST, META.yml, README, debian/changelog,

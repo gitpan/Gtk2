@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.4 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.5 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "../gtk2perl.h"
@@ -34,3 +34,6 @@ gtk_message_dialog_new (class, parent, flags, type, buttons, message)
 	char * message
     C_ARGS:
 	parent, flags, type, buttons, message
+    CLEANUP:
+	UNUSED(class);
+

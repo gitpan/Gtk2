@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSpinButton.xs,v 1.4 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSpinButton.xs,v 1.5 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -32,6 +32,8 @@ gtk_spin_button_new (class, adjustment, climb_rate, digits)
 	guint           digits
     C_ARGS:
 	adjustment, climb_rate, digits
+    CLEANUP:
+	UNUSED(class);
 
 ##GtkWidget * gtk_spin_button_new_with_range (gdouble min, gdouble max, gdouble step)
 GtkWidget *
@@ -42,6 +44,8 @@ gtk_spin_button_new_with_range (class, min, max, step)
 	gdouble   step
     C_ARGS:
 	min, max, step
+    CLEANUP:
+	UNUSED(class);
 
  ## void gtk_spin_button_configure (GtkSpinButton *spin_button, GtkAdjustment *adjustment, gdouble climb_rate, guint digits)
 void

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbufLoader.xs,v 1.4 2003/08/18 07:59:59 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbufLoader.xs,v 1.5 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -27,7 +27,9 @@ GdkPixbufLoader_noinc *
 gdk_pixbuf_loader_new (class)
 	SV * class
     C_ARGS:
-	
+	/* void */
+    CLEANUP:
+	UNUSED(class);
 
 ##  GdkPixbufLoader * gdk_pixbuf_loader_new_with_type (const char *image_type, GError **error) 
 GdkPixbufLoader_noinc *

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStyle.xs,v 1.7 2003/08/20 06:30:05 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStyle.xs,v 1.8 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -133,6 +133,9 @@ GtkStyle_noinc*
 gtk_style_new (class)
 	SV * class
     C_ARGS:
+	/* void */
+    CLEANUP:
+	UNUSED(class);
 
 
  ## GtkStyle* gtk_style_copy (GtkStyle *style)
@@ -264,6 +267,8 @@ gtk_paint_polygon (style, window, state_type, shadow_type, area, widget, detail,
 	GdkPoint *points;
 	gint npoints, i;
     CODE:
+	UNUSED(x1);
+	UNUSED(y1);
 #define first 8
 	npoints = (items - first) / 2;
 	points = g_new (GdkPoint, npoints);

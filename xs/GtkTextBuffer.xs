@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.11 2003/08/20 02:52:40 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.12 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -31,6 +31,8 @@ gtk_text_buffer_new (class, tagtable=NULL)
 	GtkTextTagTable_ornull * tagtable
     C_ARGS:
 	tagtable
+    CLEANUP:
+	UNUSED(class);
 
 gint
 gtk_text_buffer_get_line_count (buffer)

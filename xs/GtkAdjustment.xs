@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAdjustment.xs,v 1.5 2003/06/16 22:22:57 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAdjustment.xs,v 1.6 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -32,6 +32,7 @@ value (GtkAdjustment *adjustment, gdouble newval = 0)
 	page_increment = 4
 	page_size      = 5
     CODE:
+	RETVAL = 0.0;
 	switch (ix) {
 	    case 0:
 		RETVAL = adjustment->value;
@@ -73,6 +74,8 @@ gtk_adjustment_new (class, value, lower, upper, step_increment, page_increment, 
 	gdouble   page_size
     C_ARGS:
 	value, lower, upper, step_increment, page_increment, page_size
+    CLEANUP:
+	UNUSED(class);
 
 void
 gtk_adjustment_changed (adjustment)

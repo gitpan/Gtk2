@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeStore.xs,v 1.8 2003/09/07 19:56:54 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeStore.xs,v 1.10 2003/09/15 18:03:17 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -39,6 +39,7 @@ gtk_tree_store_new (class, ...)
     PREINIT:
 	GArray * typearray;
     CODE:
+	UNUSED(class);
 	GTK2PERL_STACK_ITEMS_TO_GTYPE_ARRAY (typearray, 1, items-1);
 	RETVAL = gtk_tree_store_newv (typearray->len, (GType*)(typearray->data));
 	g_array_free (typearray, TRUE);
@@ -77,7 +78,6 @@ gtk_tree_store_set (tree_store, iter, ...)
 	ncols = gtk_tree_model_get_n_columns (GTK_TREE_MODEL (tree_store));
 	for (i = 2 ; i < items ; i+= 2) {
 		gint column;
-		SV * sv;
 		GValue gvalue = {0, };
 		if (!looks_like_number (ST (i)))
 			croak ("Usage: $treestore->set ($iter, column1, value1, column2, value2, ...)\n"

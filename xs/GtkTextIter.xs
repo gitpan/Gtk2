@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextIter.xs,v 1.8 2003/08/18 16:22:03 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextIter.xs,v 1.9 2003/09/14 05:10:00 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -127,8 +127,17 @@ gtk_text_iter_has_tag (iter, tag)
 	GtkTextIter *iter
 	GtkTextTag *tag
 
-# FIXME needs list handling
 ### GSList* gtk_text_iter_get_tags (const GtkTextIter *iter)
+void
+gtk_text_iter_get_tags (GtkTextIter *iter)
+    PREINIT:
+	GSList* slist, *i;
+    PPCODE:
+	slist = gtk_text_iter_get_tags (iter);
+	for (i = slist ; i != NULL ; i = i->next)
+		XPUSHs (sv_2mortal (newSVGtkTextTag (i->data)));
+	g_slist_free (slist);
+	
 
 ## gboolean gtk_text_iter_editable (const GtkTextIter *iter, gboolean default_setting)
 gboolean

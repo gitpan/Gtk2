@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileSelection.xs,v 1.8 2003/07/24 20:39:30 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileSelection.xs,v 1.9 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -37,6 +37,7 @@ member_widget (fs)
 	Gtk2::FileSelection::main_vbox       = 6
 	Gtk2::FileSelection::help_button     = 7
     CODE:
+	RETVAL = NULL;
 	switch (ix) {
 		case 0: RETVAL = fs->ok_button;       break;
 		case 1: RETVAL = fs->cancel_button;   break;
@@ -57,6 +58,8 @@ gtk_file_selection_new (class, title)
 	const gchar * title
     C_ARGS:
 	title
+    CLEANUP:
+	UNUSED(class);
 
 ## void gtk_file_selection_set_filename (GtkFileSelection *filesel, const gchar *filename)
 void

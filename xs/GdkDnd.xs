@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDnd.xs,v 1.2 2003/05/28 01:04:57 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDnd.xs,v 1.3 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -36,6 +36,8 @@ members (dc)
 	Gtk2::Gdk::DragContext::action = 8
 	Gtk2::Gdk::DragContext::start_time = 9
     CODE:
+	UNUSED(ix);
+	RETVAL = NULL;
 	switch (ix) {
 	    case 1: RETVAL = newSVGdkDragProtocol (dc->protocol); break;
 	    case 2: RETVAL = newSViv (dc->is_source); break;
@@ -64,6 +66,9 @@ GdkDragContext_noinc *
 gdk_drag_context_new (class)
 	SV *class
     C_ARGS:
+	/* void */
+    CLEANUP:
+	UNUSED(class);
 	
  # deprecated
 ##  void gdk_drag_context_ref (GdkDragContext *context) 
@@ -106,6 +111,7 @@ gdk_drag_begin (class, window, ...)
 	GList *targets = NULL;
 	int i;
     CODE:
+	UNUSED(class);
 	for (i = items - 1 ; i >= 2 ; i--)
 		targets = g_list_prepend (targets,
 		                        GUINT_TO_POINTER (SvGdkAtom (ST (i))));
@@ -127,7 +133,8 @@ gdk_drag_get_protocol_for_display (class, display, xid)
 	GdkDragProtocol protocol;
 	guint32 ret;
     PPCODE:
-	ret = gdk_drag_get_protocol (xid, &protocol);
+	UNUSED(class);
+	ret = gdk_drag_get_protocol_for_display (display, xid, &protocol);
 	XPUSHs (sv_2mortal (newSVuv (ret)));
 	XPUSHs (sv_2mortal (newSVGdkDragProtocol (protocol)));
 
@@ -160,6 +167,7 @@ gdk_drag_get_protocol (class, xid)
 	GdkDragProtocol protocol;
 	guint32 ret;
     PPCODE:
+	UNUSED(class);
 	ret = gdk_drag_get_protocol (xid, &protocol);
 	XPUSHs (sv_2mortal (newSVuv (ret)));
 	XPUSHs (sv_2mortal (newSVGdkDragProtocol (protocol)));

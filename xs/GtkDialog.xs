@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.7 2003/06/02 16:26:27 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.10 2003/09/16 19:09:40 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -39,8 +39,91 @@ sv_to_response_id (SV * sv)
 	return n;
 }
 
+static SV *
+response_id_to_sv (gint response)
+{
+	return gperl_convert_back_enum_pass_unknown (GTK_TYPE_RESPONSE_TYPE,
+	                                             response);
+}
+
+/*
+GtkDialog's response event is defined in Gtk as having a signal parameter
+of type G_TYPE_INT, but GtkResponseType values are passed through it.
+
+this custom marshaller allows us to catch and convert enum codes like those
+returned by $dialog->run , instead of requiring the callback to deal with
+the raw negative numeric values for the predefined constants.
+*/
+static void
+gtk2perl_dialog_response_marshal (GClosure * closure,
+                                  GValue * return_value,
+                                  guint n_param_values,
+                                  const GValue * param_values,
+                                  gpointer invocation_hint,
+                                  gpointer marshal_data)
+{
+	GPerlClosure *pc = (GPerlClosure *)closure;
+	SV * data;
+	SV * instance;
+#ifndef PERL_IMPLICIT_CONTEXT
+	dSP;
+#else
+	SV **SP;
+
+	/* make sure we're executed by the same interpreter that created
+	 * the closure object. */
+	PERL_SET_CONTEXT (marshal_data);
+
+	SPAGAIN;
+#endif
+
+	ENTER;
+	SAVETMPS;
+
+	PUSHMARK (SP);
+
+	if (GPERL_CLOSURE_SWAP_DATA (pc)) {
+		/* swap instance and data */
+		data     = gperl_sv_from_value (param_values);
+		instance = pc->data;
+	} else {
+		/* normal */
+		instance = gperl_sv_from_value (param_values);
+		data     = pc->data;
+	}
+
+	EXTEND (SP, 2);
+	/* the instance is always the first item in @_ */
+	PUSHs (instance);
+
+	/* the second parameter for this signal is defined as an int
+	 * but is actually a response code, and can have GtkResponseType
+	 * values. */
+	PUSHs (sv_2mortal (response_id_to_sv
+				(g_value_get_int (param_values + 1))));
+
+	if (data)
+		XPUSHs (data);
+	PUTBACK;
+
+	call_sv (pc->callback, G_DISCARD | G_EVAL);
+
+	if (SvTRUE (ERRSV))
+		gperl_run_exception_handlers ();
+
+	/*
+	 * clean up 
+	 */
+
+	FREETMPS;
+	LEAVE;
+}
+
 MODULE = Gtk2::Dialog	PACKAGE = Gtk2::Dialog	PREFIX = gtk_dialog_
 
+BOOT:
+	gperl_signal_set_marshaller_for (GTK_TYPE_DIALOG, "response",
+	                                 gtk2perl_dialog_response_marshal);
 
 GtkWidget *
 gtk_dialog_widgets (dialog)
@@ -49,6 +132,7 @@ gtk_dialog_widgets (dialog)
 	Gtk2::Dialog::vbox = 0
 	Gtk2::Dialog::action_area = 1
     CODE:
+	RETVAL = NULL;
 	switch(ix)
 	{
 	case(0): RETVAL = dialog->vbox; 	break;
@@ -79,6 +163,8 @@ gtk_dialog_new (class, ...)
 	GtkWindow * parent;
 	int flags;
     CODE:
+	UNUSED(class);
+	UNUSED(ix);
 	if (items == 1) {
 		/* the easy way out... */
 		dialog = gtk_dialog_new ();
@@ -197,11 +283,7 @@ gtk_dialog_response (dialog, response_id)
 SV *
 gtk_dialog_run (dialog)
 	GtkDialog * dialog
-    PREINIT:
-	gint ret;
     CODE:
-	ret = gtk_dialog_run (dialog);
-	RETVAL = gperl_convert_back_enum_pass_unknown
-					(GTK_TYPE_RESPONSE_TYPE, ret);
+	RETVAL = response_id_to_sv (gtk_dialog_run (dialog));
     OUTPUT:
 	RETVAL

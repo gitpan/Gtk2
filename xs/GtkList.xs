@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkList.xs,v 1.3 2003/08/18 16:22:42 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkList.xs,v 1.4 2003/09/14 20:07:43 rwmcfa1 Exp $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you
@@ -35,6 +35,9 @@ GtkWidget *
 gtk_list_new (class)
 	SV * class
     C_ARGS:
+	/* void */
+    CLEANUP:
+	UNUSED(class);
 
 ## parameter order flipped on this function so the item
 ## list soaks up the rest of the arg stack
@@ -47,6 +50,7 @@ gtk_list_insert_items (list, position, list_item, ...)
     PREINIT:
 	GList * list_items = NULL;
     CODE:
+	UNUSED(list_item);
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));
@@ -64,6 +68,7 @@ gtk_list_append_items (list, list_item, ...)
     PREINIT:
 	GList * list_items = NULL;
     CODE:
+	UNUSED(list_item);
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));
@@ -81,6 +86,7 @@ gtk_list_prepend_items (list, list_item, ...)
     PREINIT:
 	GList * list_items = NULL;
     CODE:
+	UNUSED(list_item);
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));
@@ -98,6 +104,7 @@ gtk_list_remove_items (list, list_item, ...)
     PREINIT:
 	GList * list_items = NULL;
     CODE:
+	UNUSED(list_item);
 	for( items--; items > 0; items-- )
 		list_items = g_list_prepend(list_items, 
 					SvGtkListItem(ST(items)));

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.15 2003/08/22 02:16:51 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.16 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -50,6 +50,8 @@ gtk_tree_path_new (class, path=NULL)
     ALIAS:
 	new_from_string = 1
     CODE:
+	UNUSED(class);
+	UNUSED(ix);
 	if (path)
 		RETVAL = gtk_tree_path_new_from_string (path);
 	else
@@ -75,17 +77,19 @@ gtk_tree_path_new_from_indices (class, first_index, ...)
 	gint i;
 	GtkTreePath *path;
     CODE:
+	UNUSED(class);
+	UNUSED(first_index);
 	path = gtk_tree_path_new ();
 
 	for (i = 1 ; i < items ; i++) {
 		gint index = SvIV (ST (i));
-		if (i < 0)
+		if (index < 0)
 			croak ("Gtk2::TreePath->new_from_indices takes index"
 			       " values from the argument stack and therefore"
 			       " does not use a -1 terminator value like its"
 			       " C counterpart; negative index values are"
 			       " not allowed");
-		gtk_tree_path_append_index (path, SvIV (ST (i)));
+		gtk_tree_path_append_index (path, index);
 	}
 
 	RETVAL = path;
@@ -100,6 +104,9 @@ GtkTreePath *
 gtk_tree_path_new_first (class)
 	SV * class
     C_ARGS:
+	/* void */
+    CLEANUP:
+	UNUSED(class);
 
 
 ## gtk_tree_path_new_root is deprecated in 2.2.0
@@ -187,6 +194,8 @@ GtkTreeRowReference_own_ornull*
 gtk_tree_row_reference_new (SV * class, GtkTreeModel *model, GtkTreePath *path)
     C_ARGS:
 	model, path
+    CLEANUP:
+	UNUSED(class);
 
   ## mmmm, the docs say "you do not need to use this function"
 ##GtkTreeRowReference* gtk_tree_row_reference_new_proxy (GObject *proxy, GtkTreeModel *model, GtkTreePath *path);

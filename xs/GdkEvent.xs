@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.9 2003/08/18 16:23:03 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.10 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -167,6 +167,8 @@ gdk_events_pending (class)
 	SV * class
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 
  ## GdkEvent* gdk_event_get (void)
  ## GdkEvent* gdk_event_peek (void)
@@ -180,6 +182,9 @@ gdk_event_get (class)
 	peek = 1
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
+	UNUSED(ix);
 
  ## GdkEvent* gdk_event_get_graphics_expose (GdkWindow *window)
 #GdkEvent_ornull *
@@ -195,6 +200,8 @@ gdk_event_put (class, event)
 	GdkEvent *event
     C_ARGS:
 	event
+    CLEANUP:
+	UNUSED(class);
 
 #if GTK_CHECK_VERSION(2,2,0)
 
@@ -206,6 +213,8 @@ gdk_event_new (class, type)
 	GdkEventType type
     C_ARGS:
 	type
+    CLEANUP:
+	UNUSED(class);
 
 #endif
 
@@ -224,6 +233,8 @@ gdk_event_get_time (event)
     ALIAS:
 	Gtk2::Gdk::Event::get_time = 0
 	Gtk2::Gdk::Event::time = 1
+    CLEANUP:
+	UNUSED(ix);
 
  ## gboolean gdk_event_get_state (GdkEvent *event, GdkModifierType *state)
 GdkModifierType
@@ -233,6 +244,7 @@ state (event)
 	Gtk2::Gdk::Event::get_state = 0
 	Gtk2::Gdk::Event::state = 1
     CODE:
+	UNUSED(ix);
 	if (!gdk_event_get_state (event, &RETVAL))
 		XSRETURN_UNDEF;
     OUTPUT:
@@ -354,6 +366,7 @@ DESTROY (sv)
 	Gtk2::Gdk::Event::WindowState::DESTROY = 16
 	Gtk2::Gdk::Event::DND::DESTROY         = 17
     CODE:
+	UNUSED(ix);
 	default_wrapper_class->destroy (sv);
 
 
@@ -863,12 +876,16 @@ gdk_set_show_events (class, show_events)
 	gboolean show_events
     C_ARGS:
 	show_events
+    CLEANUP:
+	UNUSED(class);
 
 gboolean
 gdk_get_show_events (class)
 	SV * class
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 
  # FIXME needs a callback
  ## void gdk_add_client_message_filter (GdkAtom message_type, GdkFilterFunc func, gpointer data)
@@ -886,6 +903,7 @@ gdk_setting_get (class, name)
     PREINIT:
 	GValue value = {0,};
     CODE:
+	UNUSED(class);
 	g_value_init (&value, G_TYPE_INT);
 	if (!gdk_setting_get (name, &value))
 		XSRETURN_UNDEF;

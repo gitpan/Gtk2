@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.4 2003/08/18 16:22:32 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.5 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -33,6 +33,9 @@ GtkWidget*
 gtk_entry_new (class)
 	SV * class
     C_ARGS:
+	/* void */
+    CLEANUP:
+	UNUSED(class);
 
 ##GtkWidget* gtk_entry_new_with_max_length (gint max)
 GtkWidget *
@@ -41,6 +44,8 @@ gtk_entry_new_with_max_length (class, max)
 	gint   max
     C_ARGS:
 	max
+    CLEANUP:
+	UNUSED(class);
 
 void
 gtk_entry_set_visibility (entry, visible)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVButtonBox.xs,v 1.5 2003/08/18 16:22:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVButtonBox.xs,v 1.6 2003/09/14 20:07:44 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -28,27 +28,38 @@ GtkWidget *
 gtk_vbutton_box_new (SV * class)
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 
 ## void gtk_vbutton_box_set_spacing_default (gint spacing)
 void
 gtk_vbutton_box_set_spacing_default (SV * class, gint spacing)
     C_ARGS:
 	spacing
+    CLEANUP:
+	UNUSED(class);
 
 ## GtkButtonBoxStyle gtk_vbutton_box_get_layout_default (void)
 GtkButtonBoxStyle
 gtk_vbutton_box_get_layout_default (SV * class)
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 
 ## void gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout)
 void
 gtk_vbutton_box_set_layout_default (SV * class, GtkButtonBoxStyle layout)
     C_ARGS:
 	layout
+    CLEANUP:
+	UNUSED(class);
 
 ##gint gtk_vbutton_box_get_spacing_default (void)
 gint
 gtk_vbutton_box_get_spacing_default (SV * class)
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
+

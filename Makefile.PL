@@ -1,30 +1,40 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.32 2003/09/12 03:52:29 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.38 2003/09/19 05:08:41 muppetman Exp $
 #
 
 use 5.008;
 use ExtUtils::MakeMaker;
 use File::Spec;
-use Config;
 use Cwd;
 
-# minimum required version of Glib with which we can work.
-my $req_glib_ver = '1.00rc1';
+# minimum required version of dependancies we need to build
+our %build_reqs = (
+	'perl-ExtUtils-Depends'   => '0.1',
+	'perl-ExtUtils-PkgConfig' => '1.00',
+	'perl-Glib'               => '1.00rc2',
+	'Gtk+'                    => '2.0.0',
+);
+
+# minimum required version of dependancies we need to run
+our %runtime_reqs = (
+	'Gtk+'	=> undef,
+);
 
 # Writing a fake Makefile ensures that CPAN will pick up the correct
 # dependencies and install them.
 unless (eval "use ExtUtils::Depends;"
-           . "use Glib::PkgConfig;"
+           . "use ExtUtils::PkgConfig;"
            # just seeing if Glib is available isn't enough, make sure
            # it's recent enough, too 
-           . "use Glib '$req_glib_ver';"
+           . "use Glib '$build_reqs{'perl-Glib'}';"
            . "1") {
    warn "$@\n";
    WriteMakefile(
          PREREQ_FATAL => 1,
          PREREQ_PM    => {
-            Glib::              => $req_glib_ver, # keep this in sync
-            ExtUtils::Depends:: => 0.1,
+            Glib::                => $build_reqs{'perl-Glib'},
+            ExtUtils::Depends::   => $build_reqs{'perl-ExtUtils-Depends'},
+            ExtUtils::PkgConfig:: => $build_reqs{'perl-ExtUtils-PkgConfig'},
          },
    );
    exit 1; # not reached
@@ -33,7 +43,10 @@ unless (eval "use ExtUtils::Depends;"
 require 'CodeGen.pm'; # other modules can just 'use Gtk2::CodeGen;' -- we
                       # can't because it's not installed yet.
 
-my %pkgcfg = Glib::PkgConfig->find ('gtk+-2.0');
+my %pkgcfg = ExtUtils::PkgConfig->find ('gtk+-2.0 >= '.$build_reqs{'Gtk+'});
+
+# we know what version we're going to be built against now
+$runtime_reqs{'Gtk+'} = $pkgcfg{modversion};
 
 mkdir 'build', 0777;
 
@@ -57,7 +70,7 @@ Gtk2::CodeGen->write_boot;
 
 # this one turns the long list of #defines in gdkkeysyms.h into a large
 # hash of key names and values, %Gtk2::Gdk::Keysyms.
-system "$Config{perlpath} genkeysyms.pl >\"build/Keysyms.pm\""; # the "" are essential for command.com
+system "$^X genkeysyms.pl >\"build/Keysyms.pm\""; # the "" are essential for command.com
 
 #
 # since we've started down the dark path of breaking from standard 
@@ -70,7 +83,6 @@ my %pm_files = (
 	'CodeGen.pm'       => '$(INST_LIBDIR)/Gtk2/CodeGen.pm',
 	'pm/Helper.pm'     => '$(INST_LIBDIR)/Gtk2/Helper.pm',
 	'pm/Pango.pm'      => '$(INST_LIBDIR)/Gtk2/Pango.pm',
-	'pm/Responses.pm'  => '$(INST_LIBDIR)/Gtk2/Dialog/Responses.pm',
 	'pm/SimpleList.pm' => '$(INST_LIBDIR)/Gtk2/SimpleList.pm',
 	'pm/SimpleMenu.pm' => '$(INST_LIBDIR)/Gtk2/SimpleMenu.pm',
 	'api.pod'          => '$(INST_LIBDIR)/Gtk2/api.pod',
@@ -82,7 +94,6 @@ my %pod_files = (
 	'CodeGen.pm'       => '$(INST_MAN3DIR)/Gtk2::CodeGen.$(MAN3EXT)',
 	'pm/Helper.pm'     => '$(INST_MAN3DIR)/Gtk2::Helper.$(MAN3EXT)',
 	'pm/Pango.pm'      => '$(INST_MAN3DIR)/Gtk2::Pango.$(MAN3EXT)',
-	'pm/Responses.pm'  => '$(INST_MAN3DIR)/Gtk2::Dialog::Responses.$(MAN3EXT)',
 	'pm/SimpleList.pm' => '$(INST_MAN3DIR)/Gtk2::SimpleList.$(MAN3EXT)',
 	'pm/SimpleMenu.pm' => '$(INST_MAN3DIR)/Gtk2::SimpleMenu.$(MAN3EXT)',
 	'api.pod'          => '$(INST_MAN3DIR)/Gtk2::api.$(MAN3EXT)',
@@ -124,7 +135,9 @@ WriteMakefile(
     # PREREQ see beginning of file
     PREREQ_FATAL => 1,
     PREREQ_PM    => {
-        Glib::  => $req_glib_ver, # keep this in sync
+        Glib::                => $build_reqs{'perl-Glib'},
+        ExtUtils::Depends::   => $build_reqs{'perl-ExtUtils-Depends'},
+        ExtUtils::PkgConfig:: => $build_reqs{'perl-ExtUtils-PkgConfig'},
     },
     FUNCLIST      => \@exports,
     DL_FUNCS      => { Gtk2 => [] },
@@ -147,13 +160,32 @@ sub const_cccmd {
 
 sub postamble
 {
+	# don't do any of this hand-coded install stuff on windows.
+	return '' if $^O eq 'MSWin32';
+
 	my @dirs = qw{rpms rpms/BUILD rpms/RPMS rpms/SOURCES
 		      rpms/SPECS rpms/SRPMS};
 	my $cwd = getcwd();
 
+	my %subs = (
+		'VERSION' => '$(VERSION)',
+		'SOURCE' => '$(DISTNAME)-$(VERSION).tar.gz',
+		'GTK_RUN' => $runtime_reqs{'Gtk+'},
+		'GTK' => $build_reqs{'Gtk+'},
+		'PERL_EXTUTILS_DEPENDS' => 
+			$build_reqs{'perl-ExtUtils-Depends'},
+		'PERL_EXTUTILS_PKGCONFIG' => 
+			$build_reqs{'perl-ExtUtils-PkgConfig'},
+		'PERL_GLIB' => $build_reqs{'perl-Glib'},
+	);
+	
+	my $substitute = '$(PERL) -npe \''.join('; ', map {
+			"s/\\\@$_\\\@/$subs{$_}/g";
+		} keys %subs).'\'';
+
 	"
 realclean ::
-	-rm -Rf build
+	-\$(RM_RF) build perl-\$(DISTNAME).spec
 
 # the tmp-xxx stuff is just so that only the pl files get installed
 install-\%: %
@@ -166,8 +198,10 @@ install-\%: %
 rpms/:
 	-mkdir @dirs
 
-perl-\$(DISTNAME).spec: perl-\$(DISTNAME).spec.in
-	sed -e \"s/\@VERSION\@/\$(VERSION)/g\" -e \"s/\@SOURCE\@/\$(DISTNAME)-\$(VERSION).tar.gz/g\" \$< > \$@
+SUBSTITUTE=$substitute
+
+perl-\$(DISTNAME).spec: perl-\$(DISTNAME).spec.in \$(VERSION_FROM) Makefile
+	\$(SUBSTITUTE) \$+ > \$@
 
 dist-rpms: Makefile dist perl-\$(DISTNAME).spec rpms/
 	cp \$(DISTNAME)-\$(VERSION).tar.gz rpms/SOURCES/

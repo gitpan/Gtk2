@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioMenuItem.xs,v 1.6 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioMenuItem.xs,v 1.7 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -36,6 +36,7 @@ gtk_radio_menu_item_news (class, member_or_listref=NULL, label=NULL)
 	GSList           * group = NULL;
 	GtkRadioMenuItem * member = NULL;
     CODE:
+	UNUSED(class);
 	if( member_or_listref && member_or_listref != &PL_sv_undef
 	    && SvROK (member_or_listref) 
 	    && SvRV (member_or_listref) != &PL_sv_undef )

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplayManager.xs,v 1.1 2003/08/14 04:14:16 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplayManager.xs,v 1.2 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -35,6 +35,8 @@ GdkDisplayManager *
 gdk_display_manager_get (SV * class)
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 
 ##  GdkDisplay * gdk_display_manager_get_default_display (GdkDisplayManager *display_manager) 
 GdkDisplay *

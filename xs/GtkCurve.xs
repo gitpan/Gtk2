@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.7 2003/07/25 03:42:38 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.9 2003/09/16 19:09:44 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -28,6 +28,9 @@ GtkWidget *
 gtk_curve_new (class)
 	SV * class
     C_ARGS:
+	/* void */
+    CLEANUP:
+	UNUSED(class);
 
 ## void gtk_curve_reset (GtkCurve *curve)
 void
@@ -82,7 +85,7 @@ gtk_curve_set_vector (curve, ...)
 	veclen = --items;
 	vector = g_new(gfloat, veclen);
 	for( ; items > 0; items-- )
-		vector[items-1] = SvNV(ST(items));
+		vector[items-1] = (gfloat) SvNV(ST(items));
 	gtk_curve_set_vector(curve, veclen, vector);
 	g_free(vector);
 

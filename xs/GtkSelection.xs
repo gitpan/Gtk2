@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.4 2003/09/02 00:07:21 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.5 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -124,6 +124,7 @@ gtk_target_list_new (SV * class, ...)
 	GtkTargetEntry *targets;
 	guint ntargets;
     CODE:
+	UNUSED(class);
 	STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (1, targets, ntargets);
 	RETVAL = gtk_target_list_new (targets, ntargets);
     OUTPUT:
@@ -151,6 +152,7 @@ gtk_target_list_add_table (GtkTargetList * list, GtkTargetEntry * target, ...)
 	GtkTargetEntry *targets;
 	guint ntargets;
     CODE:
+	UNUSED(target);
 	STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (1, targets, ntargets);
 	gtk_target_list_add_table (list, targets, ntargets);
     CLEANUP:
@@ -185,6 +187,8 @@ gtk_selection_owner_set (class, widget, selection, time_)
 	guint32 time_
     C_ARGS:
 	widget, selection, time_
+    CLEANUP:
+	UNUSED(class);
 
 #if GTK_CHECK_VERSION(2,2,0)
 
@@ -198,6 +202,8 @@ gtk_selection_owner_set_for_display (class, display, widget, selection, time_)
 	guint32 time_
     C_ARGS:
     	display, widget, selection, time_
+    CLEANUP:
+	UNUSED(class);
 
 #endif /* >= 2.2.0 */
 
@@ -221,6 +227,7 @@ gtk_selection_add_targets (widget, selection, target, ...)
 	GtkTargetEntry *targets;
 	guint ntargets;
     CODE:
+	UNUSED(target);
 	STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (2, targets, ntargets);
 	gtk_selection_add_targets (widget, selection, targets, ntargets);
 	g_free (targets);
@@ -253,6 +260,7 @@ members (d)
 	Gtk2::SelectionData::length    = 6
 	Gtk2::SelectionData::display   = 7
     CODE:
+	RETVAL = NULL;
 	switch (ix) {
 	    case 1: RETVAL = newSVGdkAtom (d->selection); break;
 	    case 2: RETVAL = newSVGdkAtom (d->target); break;

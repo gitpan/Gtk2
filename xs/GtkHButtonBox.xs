@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkHButtonBox.xs,v 1.5 2003/08/18 16:22:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkHButtonBox.xs,v 1.6 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -29,6 +29,8 @@ gtk_hbutton_box_new (class)
 	SV * class
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 
 ## GtkButtonBoxStyle gtk_hbutton_box_get_layout_default (void)
 GtkButtonBoxStyle
@@ -36,6 +38,8 @@ gtk_hbutton_box_get_layout_default (class)
 	SV * class
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 
 ## void gtk_hbutton_box_set_spacing_default (gint spacing)
 void
@@ -44,6 +48,8 @@ gtk_hbutton_box_set_spacing_default (class, spacing)
 	gint spacing
     C_ARGS:
 	spacing
+    CLEANUP:
+	UNUSED(class);
 
 ## void gtk_hbutton_box_set_layout_default (GtkButtonBoxStyle layout)
 void
@@ -52,6 +58,8 @@ gtk_hbutton_box_set_layout_default (class, layout)
 	GtkButtonBoxStyle layout
     C_ARGS:
 	layout
+    CLEANUP:
+	UNUSED(class);
 
 ##gint gtk_hbutton_box_get_spacing_default (void)
 gint
@@ -59,4 +67,6 @@ gtk_hbutton_box_get_spacing_default (class)
 	SV * class
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 

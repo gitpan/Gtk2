@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.7 2003/08/20 08:22:09 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.8 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -49,6 +49,8 @@ gtk_accel_group_new (class)
 	SV * class
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 
 ## void gtk_accel_group_lock (GtkAccelGroup *accel_group)
 void
@@ -171,6 +173,7 @@ gtk_accelerator_parse (class, accelerator)
 	guint           accelerator_key;
 	GdkModifierType accelerator_mods;
     PPCODE:
+	UNUSED(class);
 	gtk_accelerator_parse (accelerator, &accelerator_key, 
 	                       &accelerator_mods);
 	XPUSHs (sv_2mortal (newSVuv (accelerator_key)));
@@ -184,6 +187,8 @@ gtk_accelerator_name (class, accelerator_key, accelerator_mods)
 	GdkModifierType   accelerator_mods
     C_ARGS:
 	accelerator_key, accelerator_mods
+    CLEANUP:
+	UNUSED(class);
 
 
 ## void gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
@@ -194,6 +199,8 @@ gtk_accelerator_set_default_mod_mask (class, default_mod_mask)
 	GdkModifierType default_mod_mask
     C_ARGS:
 	default_mod_mask
+    CLEANUP:
+	UNUSED(class);
 
 ## guint gtk_accelerator_get_default_mod_mask (void)
 ## call as Gtk2::Accelerator->get_default_mod_mask
@@ -202,6 +209,8 @@ gtk_accelerator_get_default_mod_mask (class)
 	SV * class
     C_ARGS:
 	/* void */
+    CLEANUP:
+	UNUSED(class);
 
  # no private functions
 ## void _gtk_accel_group_attach (GtkAccelGroup *accel_group, GObject *object)

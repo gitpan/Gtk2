@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.7 2003/08/18 16:22:03 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.8 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -64,6 +64,8 @@ gdk_bitmap_create_from_data (class, drawable, data, width, height)
 	gint height
     C_ARGS:
 	drawable, data, width, height
+    CLEANUP:
+	UNUSED(class);
 
 MODULE = Gtk2::Gdk::Pixmap	PACKAGE = Gtk2::Gdk::Pixmap	PREFIX = gdk_pixmap_
 
@@ -76,6 +78,8 @@ gdk_pixmap_new (class, drawable, width, height, depth)
 	gint depth
     C_ARGS:
 	drawable, width, height, depth
+    CLEANUP:
+	UNUSED(class);
 
  ## GdkPixmap* gdk_pixmap_create_from_data (GdkDrawable *drawable, const gchar *data, gint width, gint height, gint depth, GdkColor *fg, GdkColor *bg)
 ### intentionally switched to char instead of gchar
@@ -91,6 +95,8 @@ gdk_pixmap_create_from_data (class, drawable, data, width, height, depth, fg, bg
 	GdkColor *bg
     C_ARGS:
 	drawable, data, width, height, depth, fg, bg
+    CLEANUP:
+	UNUSED(class);
 
  ## GdkPixmap* gdk_pixmap_create_from_xpm (GdkDrawable *drawable, GdkBitmap **mask, GdkColor *transparent_color, const gchar *filename)
 void
@@ -103,6 +109,7 @@ gdk_pixmap_create_from_xpm (class, drawable, transparent_color, filename)
 	GdkPixmap * pixmap;
 	GdkBitmap * mask;
     PPCODE:
+	UNUSED(class);
 	pixmap = gdk_pixmap_create_from_xpm (drawable, &mask,
 					     transparent_color, filename);
 	EXTEND (SP, 2);
@@ -121,6 +128,7 @@ gdk_pixmap_colormap_create_from_xpm (class, drawable, colormap, transparent_colo
 	GdkPixmap * pixmap;
 	GdkBitmap * mask;
     PPCODE:
+	UNUSED(class);
 	pixmap = gdk_pixmap_colormap_create_from_xpm (drawable, colormap,
 					&mask, transparent_color, filename);
 	EXTEND (SP, 2);
@@ -140,6 +148,8 @@ gdk_pixmap_create_from_xpm_d (class, drawable, transparent_color, data, ...)
 	char ** lines;
 	int i;
     PPCODE:
+	UNUSED(class);
+	UNUSED(data);
 	lines = g_new (char*, items - 3);
 	for (i = 3 ; i < items ; i++)
 		lines[i-3] = SvPV_nolen (ST (i));
@@ -165,6 +175,8 @@ gdk_pixmap_colormap_create_from_xpm_d (class, drawable, colormap, transparent_co
 	char ** lines;
 	int i;
     PPCODE:
+	UNUSED(class);
+	UNUSED(data);
 	lines = g_new (char*, items - 4);
 	for (i = 4 ; i < items ; i++)
 		lines[i-4] = SvPV_nolen (ST (i));

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.3 2003/08/18 21:27:19 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.4 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -37,8 +37,10 @@ GdkDisplay_ornull *
 gdk_display_open (SV * class, const gchar * display_name)
     C_ARGS:
 	display_name
+    CLEANUP:
+	UNUSED(class);
 
-gchar * gdk_display_get_name (GdkDisplay * display)
+const gchar * gdk_display_get_name (GdkDisplay * display)
 
 gint gdk_display_get_n_screens (GdkDisplay *display) 
 
@@ -93,6 +95,8 @@ GdkDisplay_ornull *
 gdk_display_get_default (SV * class)
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 
 ##  GdkDevice *gdk_display_get_core_pointer (GdkDisplay *display) 
 GdkDevice *

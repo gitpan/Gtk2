@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.9 2003/08/27 22:42:46 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.10 2003/09/14 20:07:44 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -86,6 +86,8 @@ gtk_tree_view_column_new (class)
 	SV * class
     C_ARGS:
 	/*void*/
+    CLEANUP:
+	UNUSED(class);
 
 GtkTreeViewColumn *
 gtk_tree_view_column_new_with_attributes (class, title, cell, ...)
@@ -93,6 +95,7 @@ gtk_tree_view_column_new_with_attributes (class, title, cell, ...)
 	const gchar * title
 	GtkCellRenderer * cell
     CODE:
+	UNUSED(class);
 	if (!check_stack_for_attributes (3))
 		croak ("Usage: Gtk2::TreeViewColumn->new_with_attributes (TITLE, CELLRENDERER, ATTR1, COL1, ATTR2, COL2, ...)");
 	RETVAL = gtk_tree_view_column_new ();

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFrame.xs,v 1.5 2003/05/22 14:23:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFrame.xs,v 1.6 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -28,6 +28,7 @@ gtk_frame_new (class, label=NULL)
 	SV * class
 	SV * label
     CODE:
+	UNUSED(class);
 	RETVAL = gtk_frame_new ((!label || label == &PL_sv_undef)
 	                         ? NULL : SvGChar (label));
     OUTPUT:

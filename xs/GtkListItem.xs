@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListItem.xs,v 1.4 2003/07/05 07:12:04 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListItem.xs,v 1.5 2003/09/14 20:07:43 rwmcfa1 Exp $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you
@@ -37,6 +37,7 @@ gtk_list_item_new (class, label=NULL)
 	SV    * class
 	gchar * label
     CODE:
+	UNUSED(class);
 	if( label )
 		RETVAL = gtk_list_item_new_with_label(label);
 	else

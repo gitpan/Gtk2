@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStock.xs,v 1.8 2003/08/18 16:22:42 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStock.xs,v 1.9 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -92,6 +92,7 @@ gtk_stock_add (class, ...)
     PREINIT:
 	int i;
     CODE:
+	UNUSED(class);
 	for (i = 1 ; i < items ; i++)
 		gtk_stock_add (SvGtkStockItem (ST (i)), 1);
 
@@ -107,6 +108,7 @@ gtk_stock_lookup (class, stock_id)
 	GtkStockItem item;
 	HV * hv;
     CODE:
+	UNUSED(class);
 	if (! gtk_stock_lookup (stock_id, &item))
 		XSRETURN_UNDEF;
 	hv = stock_item_to_hv (&item);
@@ -121,6 +123,7 @@ gtk_stock_list_ids (class)
     PREINIT:
 	GSList * ids, * i;
     PPCODE:
+	UNUSED(class);
 	ids = gtk_stock_list_ids ();
 	for (i = ids ; i != NULL ; i = i->next) {
 		XPUSHs (sv_2mortal (newSVpv ((char*)(i->data), 0)));

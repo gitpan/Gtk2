@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCursor.xs,v 1.4 2003/05/22 14:23:22 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCursor.xs,v 1.5 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -33,6 +33,8 @@ gdk_cursor_new_for_display (class, display, cursor_type)
 	GdkCursorType cursor_type
     C_ARGS:
 	display, cursor_type
+    CLEANUP:
+	UNUSED(class);
 
 ## GdkDisplay* gdk_cursor_get_display (GdkCursor *cursor)
 GdkDisplay*
@@ -48,6 +50,8 @@ gdk_cursor_new (class, cursor_type)
 	GdkCursorType cursor_type
     C_ARGS:
 	cursor_type
+    CLEANUP:
+	UNUSED(class);
 
  ## GdkCursor* gdk_cursor_new_from_pixmap (GdkPixmap *source, GdkPixmap *mask, GdkColor *fg, GdkColor *bg, gint x, gint y)
 GdkCursor_own*
@@ -61,4 +65,6 @@ gdk_cursor_new_from_pixmap (class, source, mask, fg, bg, x, y)
 	gint y
     C_ARGS:
 	source, mask, fg, bg, x, y
+    CLEANUP:
+	UNUSED(class);
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.8 2003/08/18 16:22:03 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.10 2003/09/15 18:03:06 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -59,40 +59,6 @@ gtk2perl_item_factory_item_activate (gpointer    nothing,
 	LEAVE;
 }
 
-/* we unfortunately have to fake out the type0 callback stuff */
-static void
-gtk2perl_item_factory_item_activate_type0 (gpointer    nothing,
-				           guint       callback_action,
-				           GtkWidget * widget)
-{
-	SV * callback_sv;
-	SV * callback_data;
-
-	dSP; 
-
-	callback_sv = (SV*)g_object_get_data (
-				G_OBJECT (widget), "_callback_sv");
-	callback_data = (SV*)g_object_get_data (
-				G_OBJECT (widget), "_callback_data");
-
-	ENTER;
-	SAVETMPS;
-
-	PUSHMARK (SP);
-	EXTEND (SP, 3);
-	PUSHs (sv_2mortal (newSVsv (callback_data
-	                            ? callback_data
-	                            : &PL_sv_undef)));
-	PUSHs (sv_2mortal (newSViv (callback_action)));
-	PUSHs (sv_2mortal (newSVGtkWidget (widget)));
-	PUTBACK;
-
-	call_sv (callback_sv, G_DISCARD);
-
-	FREETMPS;
-	LEAVE;
-}
-
 
 MODULE = Gtk2::ItemFactory	PACKAGE = Gtk2::ItemFactory	PREFIX = gtk_item_factory_
 
@@ -107,6 +73,7 @@ gtk_item_factory_new (class, container_type_package, path, accel_group)
     PREINIT:
 	GType container_type;
     CODE:
+	UNUSED(class);
 	container_type = gperl_type_from_package (container_type_package);
 	RETVAL = gtk_item_factory_new (container_type, path, accel_group);
     OUTPUT:
@@ -121,6 +88,8 @@ gtk_item_factory_from_widget (class, widget)
 	GtkWidget *widget
     C_ARGS:
 	widget
+    CLEANUP:
+	UNUSED(class);
 
 const gchar*
 gtk_item_factory_path_from_widget (class, widget)
@@ -128,6 +97,8 @@ gtk_item_factory_path_from_widget (class, widget)
 	GtkWidget *widget
     C_ARGS:
 	widget
+    CLEANUP:
+	UNUSED(class);
 
 GtkWidget_ornull*
 gtk_item_factory_get_item (ifactory, path)

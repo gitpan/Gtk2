@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.7 2003/08/18 08:00:05 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.9 2003/09/16 19:09:44 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -42,6 +42,8 @@ gdk_gc_new (class, drawable)
 	GdkDrawable * drawable
     C_ARGS:
 	drawable
+    CLEANUP:
+	UNUSED(class);
 
 # FIXME need GdkGCValues
  ##GdkGC * gdk_gc_new_with_values (GdkDrawable * drawable, GdkGCValues * values);
@@ -174,7 +176,7 @@ gdk_gc_set_dashes (gc, dash_offset, ...)
 	dash_list = g_new(gint8, n);
 	g_printerr("n: %d\n", n);
 	for( ; items > 1; items-- )
-		dash_list[items-2] = SvIV(ST(items));
+		dash_list[items-2] = (gint8) SvIV(ST(items));
 	gdk_gc_set_dashes(gc, dash_offset, dash_list, n);
 	g_free(dash_list);
 

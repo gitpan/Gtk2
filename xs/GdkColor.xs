@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.6 2003/08/18 07:59:54 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.7 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -47,6 +47,9 @@ GdkColormap*
 gdk_colormap_get_system (class)
 	SV * class
     C_ARGS:
+	/* void */
+    CLEANUP:
+	UNUSED(class);
 
 
  ## deprecated
@@ -144,6 +147,7 @@ gdk_color_new (class, red, green, blue)
     PREINIT:
 	GdkColor c;
     CODE:
+	UNUSED(class);
 	c.red = red;
 	c.green = green;
 	c.blue = blue;
@@ -163,6 +167,7 @@ gdk_color_parse (class, spec)
     PREINIT:
 	GdkColor c;
     CODE:
+	UNUSED(class);
 	RETVAL = gdk_color_copy (&c);
 	if (!gdk_color_parse (spec, RETVAL)) {
 		gdk_color_free (RETVAL);

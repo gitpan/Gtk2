@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.12 2003/09/07 19:56:54 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.14 2003/09/16 19:09:44 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -150,6 +150,7 @@ gtk_tree_view_new (class, model=NULL)
 	SV * class
 	GtkTreeModel * model
     CODE:
+	UNUSED(class);
 	if (model)
 		RETVAL = gtk_tree_view_new_with_model (model);
 	else
@@ -163,6 +164,8 @@ gtk_tree_view_new_with_model (class, model)
 	GtkTreeModel * model
     C_ARGS:
 	model
+    CLEANUP:
+	UNUSED(class);
 
 GtkTreeModel_ornull *
 gtk_tree_view_get_model (tree_view)
@@ -288,7 +291,7 @@ gtk_tree_view_get_columns (tree_view)
 	columns = gtk_tree_view_get_columns (tree_view);
 	if (!columns)
 		XSRETURN_EMPTY;
-	EXTEND (SP, g_list_length (columns));
+	EXTEND (SP, (int) g_list_length (columns));
 	for (i = columns ; i ; i = i->next)
 		PUSHs (sv_2mortal (newSVGtkTreeViewColumn (GTK_TREE_VIEW_COLUMN (i->data))));
 	g_list_free (columns);

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkButton.xs,v 1.5 2003/05/22 14:23:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkButton.xs,v 1.6 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -32,6 +32,7 @@ gtk_button_news (class, label=NULL)
 	Gtk2::Button::new_with_mnemonic = 1
 	Gtk2::Button::new_with_label = 2
     CODE:
+	UNUSED(class);
 	if (label) {
 		if (ix == 2)
 			RETVAL = gtk_button_new_with_label (label);
@@ -48,6 +49,8 @@ gtk_button_new_from_stock (class, stock_id)
 	const gchar * stock_id
     C_ARGS:
 	stock_id
+    CLEANUP:
+	UNUSED(class);
 
 void
 gtk_button_pressed (button)

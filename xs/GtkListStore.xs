@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListStore.xs,v 1.11 2003/09/07 19:56:54 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListStore.xs,v 1.12 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -42,6 +42,7 @@ gtk_list_store_new (class, ...)
     PREINIT:
 	GArray * typearray;
     CODE:
+	UNUSED(class);
 	GTK2PERL_STACK_ITEMS_TO_GTYPE_ARRAY (typearray, 1, items-1);
 	RETVAL = gtk_list_store_newv (typearray->len, (GType*)typearray->data);
 	g_array_free (typearray, TRUE);

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFontSelection.xs,v 1.5 2003/07/05 07:12:04 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFontSelection.xs,v 1.6 2003/09/14 20:07:43 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -28,6 +28,9 @@ GtkWidget *
 gtk_font_selection_new (class)
 	SV * class
     C_ARGS:
+	/* void */
+    CLEANUP:
+	UNUSED(class);
 
 ## gchar* gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
 gchar_own *
@@ -65,6 +68,8 @@ gtk_font_selection_dialog_new (class, title)
 	const gchar * title
     C_ARGS:
 	title
+    CLEANUP:
+	UNUSED(class);
 
 GtkWidget *
 members_get (fsd)
