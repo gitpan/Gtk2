@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.11 2004/04/19 19:20:51 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.12 2004/09/19 21:47:11 kaffeetisch Exp $
  */
  #include "gtk2perl.h"
 
@@ -36,7 +36,7 @@ SvImageDataPointer (SV * sv)
 	if (SvIOK (sv))
 		return INT2PTR (guchar*, SvUV (sv));
 	else if (SvPOK (sv))
-		return SvPV_nolen (sv);
+		return (guchar *) SvPV_nolen (sv);
 	else
 		croak ("expecting either a string containing pixel data or "
 		       "an integer pointing to the underlying C image data "

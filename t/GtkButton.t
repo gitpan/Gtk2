@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkButton.t,v 1.8 2004/03/21 04:38:32 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkButton.t,v 1.9 2004/09/22 20:20:16 muppetman Exp $
 #
 
 #########################
@@ -67,7 +67,7 @@ SKIP: {
 
 	# avoid precision issues, only compare one decimal place.
 	is_deeply([map {sprintf '%.1f', $_} $button_stock->get_alignment()],
-	          ['0.7', '0.3']);
+	          [0.7, 0.3]);
 }
 
 ok( my $button3 = Gtk2::Button->new('gtk-quit') );

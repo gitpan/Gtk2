@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.18 2004/06/04 20:45:00 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.19 2004/09/19 21:47:11 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -37,14 +37,14 @@ stem ## _quark (void) 							\
 	return q;							\
 }
 
-DEFINE_QUARK (clipboard_received);
-DEFINE_QUARK (clipboard_text_received);
+DEFINE_QUARK (clipboard_received)
+DEFINE_QUARK (clipboard_text_received)
 #if GTK_CHECK_VERSION (2, 4, 0)
-DEFINE_QUARK (clipboard_targets_received);
+DEFINE_QUARK (clipboard_targets_received)
 #endif
-DEFINE_QUARK (clipboard_get);
-DEFINE_QUARK (clipboard_clear);
-DEFINE_QUARK (clipboard_user_data);
+DEFINE_QUARK (clipboard_get)
+DEFINE_QUARK (clipboard_clear)
+DEFINE_QUARK (clipboard_user_data)
 
 static void 
 gtk2perl_clipboard_received_func (GtkClipboard *clipboard,

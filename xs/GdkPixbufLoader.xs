@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbufLoader.xs,v 1.10 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbufLoader.xs,v 1.11 2004/09/19 21:47:11 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -82,7 +82,7 @@ gdk_pixbuf_loader_write (loader, buf)
     PREINIT:
 	GError * error = NULL;
         STRLEN length;
-        const guchar *data = SvPVbyte (buf, length);
+        const guchar *data = (const guchar *) SvPVbyte (buf, length);
     CODE:
 	RETVAL = gdk_pixbuf_loader_write (loader, data, length, &error);
 	if (!RETVAL)

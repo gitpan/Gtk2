@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.20 2004/07/17 12:28:15 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.21 2004/09/19 21:47:11 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -52,7 +52,7 @@
 	EXTEND (sp, 3);					\
 	PUSHs (sv_2mortal (newSVGdkAtom (encoding)));	\
 	PUSHs (sv_2mortal (newSViv (format)));		\
-	PUSHs (sv_2mortal (newSVpv (ctext, length)));
+	PUSHs (sv_2mortal (newSVpv ((gchar *) ctext, length)));
 
 /* ------------------------------------------------------------------------- */
 

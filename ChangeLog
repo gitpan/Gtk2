@@ -1,3 +1,56 @@
+2004/09/27 09:35 (-0400) muppetman
+
+	* README, NEWS, Gtk2.pm: stable release 1.061
+
+2004/09/25 17:07 (+0200) kaffeetisch
+
+	* xs/GtkTreeModel.xs: Remove the unused PUSH_INSTANCE macro.
+	Replace a strange unicode character in the POD with its ASCII
+	representation.  Fix a small copy-n-paste bug in the POD.
+
+2004/09/21 20:06 (-0400) muppetman
+
+	Fix issues related to utf-8 and locales.  Thanks to ender for
+	pointing these out in irc.
+
+	* t/GtkButton.t: in some locales the decimal is ",", not "."; this can
+	cause problems because '0.7' != '0,7', etc.  To avoid such problems,
+	don't use hardcoded strings for comparison of floats.
+
+	* xs/GtkStock.xs: use newSVGChar() instead of newSVpv() for gchar*
+	strings.
+
+	* tools/podifystockitems.pl: set STDOUT's binmode properly for writing
+	utf8 characters, to avoid "Wide character in print" warnings.
+
+2004/09/19 23:35 (+0200) kaffeetisch
+
+	* CodeGen.pm, Makefile.PL: Use capitals at the start of everything
+	that is printed, to unify Makefile.PL output.
+
+	* maps-2.0: Comment out the GtkIdentifier entry -- it's never been
+	used and caused a warning.
+
+	* xs/GdkEvent.xs (gdk_event_unwrap): Use
+	gperl_format_variable_for_output when croaking.
+
+	* xs/GdkPixbuf.xs, xs/GdkPixbufLoader.xs, xs/GdkProperty.xs,
+	xs/GdkRgb.xs, xs/GdkSelection.xs: Add some casts to avoid compiler
+	warnings and to be on the safe side.
+
+	* xs/GtkClipboard.xs: Remove unneeded semicolons from the
+	DEFINE_QUARK calls.
+
+	* xs/GtkTreeModel.xs (to_arrayref): Use IV instead of UV.
+
+	Fixes for win32 build issues discovered by Arnold Putz:
+
+	* Gtk2.exports: Remove SvPangoRectangle since it has been
+	commented out.
+
+	* xs/GdkKeys.xs: Remove the semicolon from the end of a macro
+	definition.
+
 2004/09/13 23:01 (+0200) kaffeetisch
 
 	* t/GtkTextView.t, t/PangoContext.t, t/PangoLayout.t,

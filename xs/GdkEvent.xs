@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.39 2004/06/04 20:44:59 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.40 2004/09/19 21:47:11 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -261,7 +261,9 @@ gdk_event_unwrap (GType gtype, const char * package, SV * sv)
 	package = gdk_event_get_package (gtype, event);
 
 	if (!sv_derived_from (sv, package))
-		croak ("variable is not of type %s", package);
+		croak ("%s is not of type %s",
+		       gperl_format_variable_for_output (sv),
+		       package);
 
 	return event;
 }

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkSelection.xs,v 1.10 2004/02/26 00:57:54 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkSelection.xs,v 1.11 2004/09/19 21:47:11 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -138,7 +138,7 @@ gdk_selection_property_get (class, requestor)
 	                                 &prop_type, &prop_format))
 		XSRETURN_EMPTY;
 	EXTEND (SP, 3);
-	PUSHs (sv_2mortal (newSVpv (data, 0)));
+	PUSHs (sv_2mortal (newSVpv ((gchar *) data, 0)));
 	PUSHs (sv_2mortal (newSVGdkAtom (prop_type)));
 	PUSHs (sv_2mortal (newSViv (prop_format)));
 	g_free (data);

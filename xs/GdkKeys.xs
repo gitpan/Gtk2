@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkKeys.xs,v 1.7 2004/06/13 15:39:48 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkKeys.xs,v 1.8 2004/09/19 21:47:11 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -24,7 +24,7 @@
    NULL.  used as the first argument this allows a method to be invoked in two
    ways: as an object method and as a class static method. */
 typedef GdkKeymap GdkKeymap_orclass;
-#define SvGdkKeymap_orclass(sv) ((sv && SvOK (sv) && SvROK (sv)) ? SvGdkKeymap (sv) : NULL);
+#define SvGdkKeymap_orclass(sv) ((sv && SvOK (sv) && SvROK (sv)) ? SvGdkKeymap (sv) : NULL)
 
 static GdkKeymapKey *
 SvGdkKeymapKey (SV *sv)
