@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolbar.xs,v 1.8 2003/09/15 18:03:27 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolbar.xs,v 1.10 2003/10/01 15:25:01 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -195,15 +195,15 @@ gtk_toolbar_append_item (toolbar, text, tooltip_text, tooltip_private_text, icon
 	SV         * user_data
     CODE:
 	RETVAL = gtk2perl_toolbar_insert_internal (toolbar,
-	                                           NULL, // type
-	                                           NULL, // widget
+	                                           NULL, /* type */
+	                                           NULL, /* widget */
 	                                           text,
 	                                           tooltip_text,
 	                                           tooltip_private_text,
 	                                           icon,
 	                                           callback,
 	                                           user_data,
-	                                           NULL, // position
+	                                           NULL, /* position */
 	                                           ITEM,
 	                                           APPEND);
     OUTPUT:
@@ -221,15 +221,15 @@ gtk_toolbar_prepend_item (toolbar, text, tooltip_text, tooltip_private_text, ico
 	SV         * user_data
     CODE:
 	RETVAL = gtk2perl_toolbar_insert_internal (toolbar,
-	                                           NULL, // type
-	                                           NULL, // widget
+	                                           NULL, /* type */
+	                                           NULL, /* widget */
 	                                           text,
 	                                           tooltip_text,
 	                                           tooltip_private_text,
 	                                           icon,
 	                                           callback,
 	                                           user_data,
-	                                           NULL, // position
+	                                           NULL, /* position */
 	                                           ITEM,
 	                                           PREPEND);
     OUTPUT:
@@ -248,8 +248,8 @@ gtk_toolbar_insert_item (toolbar, text, tooltip_text, tooltip_private_text, icon
 	SV            * position
     CODE:
 	RETVAL = gtk2perl_toolbar_insert_internal (toolbar,
-	                                           NULL, //type,
-	                                           NULL, //widget,
+	                                           NULL, /* type, */
+	                                           NULL, /* widget, */
 	                                           text,
 	                                           tooltip_text,
 	                                           tooltip_private_text,
@@ -275,12 +275,12 @@ gtk_toolbar_insert_stock (toolbar, stock_id, tooltip_text, tooltip_private_text,
 	SV            * position
     CODE:
 	RETVAL = gtk2perl_toolbar_insert_internal (toolbar,
-	                                           NULL, //type,
-	                                           NULL, //widget,
+	                                           NULL, /* type, */
+	                                           NULL, /* widget, */
 	                                           stock_id,
 	                                           tooltip_text,
 	                                           tooltip_private_text,
-	                                           NULL, //icon,
+	                                           NULL, /* icon, */
 	                                           callback,
 	                                           user_data,
 	                                           position,
@@ -312,7 +312,7 @@ gtk_toolbar_prepend_element (toolbar, type, widget, text, tooltip_text, tooltip_
 	                                           icon,
 	                                           callback,
 	                                           user_data,
-	                                           NULL, //position,
+	                                           NULL, /* position, */
 	                                           ELEMENT,
 	                                           PREPEND);
     OUTPUT:
@@ -369,7 +369,7 @@ gtk_toolbar_append_element (toolbar, type, widget, text, tooltip_text, tooltip_p
 	                                           icon,
 	                                           callback,
 	                                           user_data,
-	                                           NULL, //position,
+	                                           NULL, /* position, */
 	                                           ELEMENT,
 	                                           APPEND);
     OUTPUT:
@@ -384,15 +384,15 @@ gtk_toolbar_prepend_widget (toolbar, widget, tooltip_text, tooltip_private_text)
 	SV         * tooltip_private_text
     CODE:
 	gtk2perl_toolbar_insert_internal (toolbar,
-	                                  NULL, // type,
+	                                  NULL, /* type, */
 	                                  widget,
-	                                  NULL, // text,
+	                                  NULL, /* text, */
 	                                  tooltip_text,
 	                                  tooltip_private_text,
-	                                  NULL, // icon,
-	                                  NULL, // callback,
-	                                  NULL, // user_data,
-	                                  NULL, // position,
+	                                  NULL, /* icon, */
+	                                  NULL, /* callback, */
+	                                  NULL, /* user_data, */
+	                                  NULL, /* position, */
 	                                  WIDGET,
 	                                  PREPEND);
 
@@ -406,14 +406,14 @@ gtk_toolbar_insert_widget (toolbar, widget, tooltip_text, tooltip_private_text, 
 	SV         * position
     CODE:
 	gtk2perl_toolbar_insert_internal (toolbar,
-	                                  NULL, // type,
+	                                  NULL, /* type, */
 	                                  widget,
-	                                  NULL, // text,
+	                                  NULL, /* text, */
 	                                  tooltip_text,
 	                                  tooltip_private_text,
-	                                  NULL, // icon,
-	                                  NULL, // callback,
-	                                  NULL, // user_data,
+	                                  NULL, /* icon, */
+	                                  NULL, /* callback, */
+	                                  NULL, /* user_data, */
 	                                  position,
 	                                  WIDGET,
 	                                  INSERT);
@@ -427,15 +427,15 @@ gtk_toolbar_append_widget (toolbar, widget, tooltip_text, tooltip_private_text)
 	SV         * tooltip_private_text
     CODE:
 	gtk2perl_toolbar_insert_internal (toolbar,
-	                                  NULL, // type,
+	                                  NULL, /* type, */
 	                                  widget,
-	                                  NULL, // text,
+	                                  NULL, /* text, */
 	                                  tooltip_text,
 	                                  tooltip_private_text,
-	                                  NULL, // icon,
-	                                  NULL, // callback,
-	                                  NULL, // user_data,
-	                                  NULL, // position,
+	                                  NULL, /* icon, */
+	                                  NULL, /* callback, */
+	                                  NULL, /* user_data, */
+	                                  NULL, /* position, */
 	                                  WIDGET,
 	                                  APPEND);
 

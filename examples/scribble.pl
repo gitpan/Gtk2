@@ -1,26 +1,28 @@
 #!/usr/bin/perl -w
-#
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/scribble.pl,v 1.6 2003/06/26 17:50:18 muppetman Exp $
-#
 
-
+#
 # GTK - The GIMP Toolkit
 # Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
 #
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Library General Public
-# License as published by the Free Software Foundation; either
-# version 2 of the License, or (at your option) any later version.
+# Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the full
+# list)
+# 
+# This library is free software; you can redistribute it and/or modify it under
+# the terms of the GNU Library General Public License as published by the Free
+# Software Foundation; either version 2.1 of the License, or (at your option)
+# any later version.
+# 
+# This library is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License for
+# more details.
+# 
+# You should have received a copy of the GNU Library General Public License
+# along with this library; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Library General Public License for more details.
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/scribble.pl,v 1.7 2003/09/22 00:04:23 rwmcfa1 Exp $
 #
-# You should have received a copy of the GNU Library General Public
-# License along with this library; if not, write to the
-# Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-# Boston, MA 02111-1307, USA.
 
 # this was originally gtk-2.2.0/examples/scribble-simple/scribble-simple.c
 # ported to gtk2-perl by muppet

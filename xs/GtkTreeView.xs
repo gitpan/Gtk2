@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.14 2003/09/16 19:09:44 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.16 2003/10/01 15:25:01 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -141,7 +141,7 @@ gtk2perl_tree_view_destroy_count_func (GtkTreeView * tree_view,
 MODULE = Gtk2::TreeView	PACKAGE = Gtk2::TreeView	PREFIX = gtk_tree_view_
 
 BOOT:
-	//gperl_set_isa ("Gtk2::TreeView", "Gtk2::Atk::ImplementorIface");
+	/* gperl_set_isa ("Gtk2::TreeView", "Gtk2::Atk::ImplementorIface"); */
 
 ### FIXME what about constructor consolidations?:
 

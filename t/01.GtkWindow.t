@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.9 2003/09/11 15:01:31 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.12 2003/09/24 18:18:21 muppetman Exp $
 #
 
 use strict;
@@ -17,7 +17,7 @@ use Test::More;
 
 if( Gtk2->init_check )
 {
-	plan tests => 85;
+	plan tests => 87;
 }
 else
 {
@@ -219,9 +219,16 @@ Glib::Idle->add(sub {
 
 		$win->move(100, 100);
 
+		# these are widget methods and not window, but they need 
+		# testing and this seemed like a good place to do it
+		my $tmp = $win->intersect(Gtk2::Gdk::Rectangle->new(0, 0, 10, 10));
+		isa_ok( $tmp, 'Gtk2::Gdk::Rectangle' );
+		$tmp = $win->intersect(Gtk2::Gdk::Rectangle->new(-10, -10, 1, 1));
+		ok( !$tmp );
+		
 		$win->resize(480,600);
 
-		# window managers don't horor our size request exactly,
+		# window managers don't honor our size request exactly,
 		# or at least we aren't guaranteed they will
 		ok( $win->get_size );
 		ok( $win->get_frame_dimensions );
@@ -242,3 +249,22 @@ ok(1);
 
 Gtk2->main;
 ok(1);
+
+__END__
+
+Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+full list)
+
+This library is free software; you can redistribute it and/or modify it under
+the terms of the GNU Library General Public License as published by the Free
+Software Foundation; either version 2.1 of the License, or (at your option) any
+later version.
+
+This library is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU Library General Public License for more
+details.
+
+You should have received a copy of the GNU Library General Public License along
+with this library; if not, write to the Free Software Foundation, Inc., 59
+Temple Place - Suite 330, Boston, MA  02111-1307  USA.

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.9 2003/09/03 23:23:32 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.14 2003/10/03 17:21:28 muppetman Exp $
 #
 
 #########################
@@ -10,7 +10,7 @@ use Carp;
 use Gtk2;
 use base 'Gtk2::TreeView';
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 =cut
 
@@ -62,15 +62,38 @@ sub text_cell_edited {
 }
 
 sub new {
+	croak "Usage: $_[0]\->new (title => type, ...)\n"
+	    . " expecting a list of column title and type name pairs.\n"
+	    . " can't create a SimpleList with no columns"
+		unless @_ >= 3; # class, key1, val1
+	return shift->new_from_treeview (Gtk2::TreeView->new (), @_);
+}
+
+sub new_from_treeview {
 	my $class = shift;
+	my $view = shift;
+	croak "treeview is not a Gtk2::TreeView"
+		unless defined ($view)
+		   and UNIVERSAL::isa ($view, 'Gtk2::TreeView');
+	croak "Usage: $class\->new_from_treeview (treeview, title => type, ...)\n"
+	    . " expecting a treeview reference and list of column title and type name pairs.\n"
+	    . " can't create a SimpleList with no columns"
+		unless @_ >= 2; # key1, val1
 	my @column_info = ();
 	for (my $i = 0; $i < @_ ; $i+=2) {
+		my $typekey = $_[$i+1];
 		croak "expecting pairs of title=>type"
-			unless $_[$i+1];
-		my $type = $column_types{$_[$i+1]}{type};
-		croak "unknown column type $_[$i+1], use one of "
+			unless $typekey;
+		croak "unknown column type $typekey, use one of "
 		    . join(", ", keys %column_types)
-			unless defined $type;
+			unless exists $column_types{$typekey};
+		my $type = $column_types{$typekey}{type};
+		if (not defined $type) {
+			$type = 'Glib::String';
+			carp "column type $typekey has no type field; did you"
+			   . " create a custom column type incorrectly?\n"
+			   . "limping along with $type";
+		}
 		push @column_info, {
 			title => $_[$i],
 			type => $type,
@@ -79,7 +102,9 @@ sub new {
 		};
 	}
 	my $model = Gtk2::ListStore->new (map { $_->{type} } @column_info);
-	my $view = Gtk2::TreeView->new ($model);
+	# just in case, 'cause i'm paranoid like that.
+	map { $view->remove_column ($_) } $view->get_columns;
+	$view->set_model ($model);
 	for (my $i = 0; $i < @column_info ; $i++) {
 		if( 'CODE' eq ref $column_info[$i]{attr} )
 		{
@@ -310,13 +335,18 @@ sub FETCHSIZE {
 }
 
 sub PUSH { 
-	my $iter = $_[0]->{model}->append;
-	my @row;
-	tie @row, 'Gtk2::SimpleList::TiedRow', $_[0]->{model}, $iter;
-	if ('ARRAY' eq ref $_[1]) {
-		@row = @{$_[1]};
-	} else {
-		$row[0] = $_[1];
+	my $model = shift()->{model};
+	my $iter;
+	foreach (@_)
+	{
+		$iter = $model->append;
+		my @row;
+		tie @row, 'Gtk2::SimpleList::TiedRow', $model, $iter;
+		if ('ARRAY' eq ref $_) {
+			@row = @$_;
+		} else {
+			$row[0] = $_;
+		}
 	}
 	return 1;
 }
@@ -335,13 +365,18 @@ sub SHIFT {
 }
 
 sub UNSHIFT { 
-	my $iter = $_[0]->{model}->prepend;
-	my @row;
-	tie @row, 'Gtk2::SimpleList::TiedRow', $_[0]->{model}, $iter;
-	if ('ARRAY' eq ref $_[1]) {
-		@row = @{$_[1]};
-	} else {
-		$row[0] = $_[1];
+	my $model = shift()->{model};
+	my $iter;
+	foreach (@_)
+	{
+		$iter = $model->prepend;
+		my @row;
+		tie @row, 'Gtk2::SimpleList::TiedRow', $model, $iter;
+		if ('ARRAY' eq ref $_) {
+			@row = @$_;
+		} else {
+			$row[0] = $_;
+		}
 	}
 	return 1;
 }
@@ -436,6 +471,15 @@ Gtk2::SimpleList - A simple interface to Gtk2's complex MVC list widget
   $slist->set_rules_hint (TRUE);
   $slist->signal_connect (row_activated => \&row_clicked);
 
+  # turn an existing TreeView into a SimpleList; useful for
+  # Glade-generated interfaces.
+  $simplelist = Gtk2::SimpleList->new_from_treeview (
+                    $glade->get_widget ('treeview'),
+                    'Text Field'    => 'text',
+                    'Int Field'     => 'int',
+                    'Double Field'  => 'double',
+                 );
+
 =head1 ABSTRACT
 
 SimpleList is a simple interface to the powerful but complex Gtk2::TreeView
@@ -486,6 +530,14 @@ they are turned on. The parameter ctype is the type of the column, one of:
 
 or the name of a custom type you add with C<add_column_type>.
 These should be provided in pairs according to the desired columns for you list.
+
+=item $slist = Gtk2::SimpleList->new_from_treeview (treeview, cname, ctype, ...)
+
+Like C<< Gtk2::SimpleList->new() >>, but turns an existing Gtk2::TreeView into
+a Gtk2::SimpleList.  This is intended mostly for use with stuff like Glade,
+where the widget is created for you.  This will create and attach a new model
+and remove any existing columns from I<treeview>.  Returns I<treeview>,
+re-blessed as a Gtk2::SimpleList.
 
 =item $slist->set_data_array (arrayref)
 
@@ -634,7 +686,7 @@ Copyright 2003 by the Gtk2-Perl team.
 
 This library is free software; you can redistribute it and/or modify it under
 the terms of the GNU Library General Public License as published by the Free
-Software Foundation; either version 2 of the License, or (at your option) any
+Software Foundation; either version 2.1 of the License, or (at your option) any
 later version.
 
 This library is distributed in the hope that it will be useful, but WITHOUT ANY

@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,10 +16,17 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.9 2003/09/16 02:35:36 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.11 2003/10/03 19:23:37 muppetman Exp $
  */
 
 #include "gtk2perl.h"
+
+static void
+gtk2perl_pixbuf_destroy_notify (guchar * pixels,
+                                gpointer data)
+{
+	gperl_sv_free ((SV*)data);
+}
 
 MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::Pixbuf	PREFIX = gdk_pixbuf_
 
@@ -167,20 +174,30 @@ gdk_pixbuf_new_from_file (class, filename)
     OUTPUT:
 	RETVAL
 
-### FIXME need a callback here, or just install a SvREFCNT_dec?
 ###  GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample, int width, int height, int rowstride, GdkPixbufDestroyNotify destroy_fn, gpointer destroy_fn_data) 
-##GdkPixbuf_noinc *
-##gdk_pixbuf_new_from_data (class, data, colorspace, has_alpha, bits_per_sample, width, height, rowstride, destroy_fn, destroy_fn_data)
-##	SV * class
-##	const guchar *data
-##	GdkColorspace colorspace
-##	gboolean has_alpha
-##	int bits_per_sample
-##	int width
-##	int height
-##	int rowstride
-##	GdkPixbufDestroyNotify destroy_fn
-##	gpointer destroy_fn_data
+GdkPixbuf_noinc *
+gdk_pixbuf_new_from_data (class, data, colorspace, has_alpha, bits_per_sample, width, height, rowstride)
+	SV * data
+	GdkColorspace colorspace
+	gboolean has_alpha
+	int bits_per_sample
+	int width
+	int height
+	int rowstride
+    PREINIT:
+	SV * real_data;
+    CODE:
+	if (!SvTRUE (data) || !SvPOK (data))
+		croak ("expecting a packed string for pixel data");
+	real_data = gperl_sv_copy (data);
+	RETVAL = gdk_pixbuf_new_from_data (SvPV_nolen (real_data),
+	                                   colorspace, has_alpha,
+					   bits_per_sample,
+					   width, height, rowstride,
+					   gtk2perl_pixbuf_destroy_notify,
+					   real_data);
+    OUTPUT:
+	RETVAL
 
 ##  GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data) 
 GdkPixbuf_noinc *

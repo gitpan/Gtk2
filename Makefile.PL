@@ -1,5 +1,21 @@
+# Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the full
+# list)
+# 
+# This library is free software; you can redistribute it and/or modify it under
+# the terms of the GNU Library General Public License as published by the Free
+# Software Foundation; either version 2.1 of the License, or (at your option)
+# any later version.
+# 
+# This library is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License for
+# more details.
+# 
+# You should have received a copy of the GNU Library General Public License
+# along with this library; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.38 2003/09/19 05:08:41 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.41 2003/10/10 03:36:35 muppetman Exp $
 #
 
 use 5.008;
@@ -11,7 +27,7 @@ use Cwd;
 our %build_reqs = (
 	'perl-ExtUtils-Depends'   => '0.1',
 	'perl-ExtUtils-PkgConfig' => '1.00',
-	'perl-Glib'               => '1.00rc2',
+	'perl-Glib'               => '1.00',
 	'Gtk+'                    => '2.0.0',
 );
 
@@ -201,7 +217,7 @@ rpms/:
 SUBSTITUTE=$substitute
 
 perl-\$(DISTNAME).spec: perl-\$(DISTNAME).spec.in \$(VERSION_FROM) Makefile
-	\$(SUBSTITUTE) \$+ > \$@
+	\$(SUBSTITUTE) \$< > \$@
 
 dist-rpms: Makefile dist perl-\$(DISTNAME).spec rpms/
 	cp \$(DISTNAME)-\$(VERSION).tar.gz rpms/SOURCES/

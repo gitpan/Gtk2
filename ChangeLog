@@ -1,3 +1,123 @@
+2003/10/10 00:13 muppetman
+
+	* Gtk2.pm, README, META.yml, debian/changelog: 1.00
+
+2003/10/03 16:13 muppetman
+
+	* Gtk2.pm, README, META.yml, debian/changelog: 1.00rc4
+
+2003/10/03 15:19 muppetman
+
+	* xs/GdkPixbuf.xs, api.pod: implemented new_from_data.  it doesn't take
+	a destroy notify function, as that's automatic.
+
+2003/10/03 13:27 muppetman
+
+	* xs/GdkEvent.xs: some of the event functions return new events that
+	are owned by the calling code.  use _own and _own_ornull variants as
+	necessary to prevent memory leaks.
+
+2003/10/03 13:19 muppetman
+
+	* pm/SimpleList.pm, t/19.GtkSimpleList.t: argument checks in the new
+	and new_from_treeview constructors.  new_from_treeview no longer
+	allows you to pass undef for the treeview, new creates one.
+
+2003/10/01 11:20 rwmcfa1
+
+	* Glib/GBoxed.xs, Glib/GLog.xs, Glib/GObject.xs, Glib/GSignal.xs,
+        Glib/GType.xs, Glib/gperl.h, Gtk2/xs/GtkAccelGroup.xs,
+        Gtk2/xs/GtkIconFactory.xs, Gtk2/xs/GtkListStore.xs,
+        Gtk2/xs/GtkObject.xs, Gtk2/xs/GtkToolbar.xs, Gtk2/xs/GtkTreeView.xs,
+        Gtk2/xs/GtkWidget.xs: // comments -> /*
+
+2003/09/30 20:19 rwmcfa1
+
+	* pm/SimpleList.pm: fixed bugs with push and unshift not taking arrays
+	for pushing, only first element was getting pushed. pointed out by
+	Bjarne Steinsbø
+
+	* examples/simplelist.pl: example of push/unshift array of arrays
+	
+	* t/19.GtkSimpleList.t: tests of push/unshift array of arrays
+
+	* xs/GtkClipboard.xs: removed an unused function destroy_data, quited 
+	some warnings in the same style as currently done.
+
+2003/09/28 20:19 rwmcfa1
+
+	* xs/GdkWindow.xs: bugs found in _for_display functions, not accepting 
+	class arguments.
+
+2003/09/26 16:42 muppetman
+
+	* pm/SimpleList.pm: be defensive and use exists() to check whether
+	keys already exist in %column_types; this fixes a bug reported by
+	Jaap Karssenberg, where supply a bad column type would tell you that
+	column type was invalid, but include that bad name in the list of
+	valid keys (because of autovivification).  (a lot of explaining for
+	a simple bug.)
+
+2003/09/26 26:25 rwmcfa1
+
+	* xs/GtkTextView.xs: new_with_buffer had class param but no spec for it
+	this was not a bug, but now it's like everything else thoughout the 
+	whole of Gtk2.
+
+2003/09/26 03:45 muppetman
+
+	* Gtk2.pm, README, META.yml, debian/changelog: prep for 1.00rc3 release
+
+	* pm/SimpleList.pm: Gtk2::SimpleList->new_from_treeview allows an
+	existing Gtk2::TreeView to be turned into a SimpleList.  intended
+	for Glade users.
+
+	* xs/GtkClipboard.xs, api.pod: several nasty bugs mean that this
+	module couldn't have worked as it was.  added class parameter to get
+	and get_for_display.  implemented set_with_data and set_with_owner.
+	made the others actually work.
+
+	* gtk2perl.h, xs/GtkSelection.xs: moved the macro to gtk2perl.h as
+	GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY so clipboard could use it.
+
+	* t/27.GtkClipboard.t, MANIFEST: new test.
+
+	 * xs/GtkStyle.xs: somehow we had implemented the deprecated
+	 gtk_draw_flat_box instead of gtk_paint_flat_box.
+
+2003/09/24 14:15 muppetman
+
+	* api.pod, xs.GtkWidget.xs, t/01.GtkWidget.xs: simplify
+	gtk_widget_intersect to return either a rectangle or undef.
+
+2003/09/24 11:39 rwmcfa1
+
+	* xs/GtkWidget.xs: implemented several missing functions
+ 
+        * t/01.GtkWindow.t: test a couple of the above
+
+	* api.pod: document where the api of the above changes differes from 
+	their c couterparts
+
+2003/09/21 20:19 rwmcfa1
+
+	* Makefile.PL: fixed bug in specfile generation
+
+2003/09/21 19:58 rwmcfa1
+
+	* (lots of files): license updates/additions
+
+2003/09/21 11:18 muppetman
+
+	* AUTHORS: torsten's officially on the team now.
+
+2003/09/18 23:10 muppetman
+
+	* pm/SimpleList.pm: added new_from_widget(), which allows glade users
+	to use SimpleLists.  this basically just re-blesses the treeview that
+	comes in, which means it won't work if we ever change SimpleList to be
+	a proper Glib::Object subclass.
+
 2003/09/19 00:53 muppetman
 
 	* Gtk2.pm, README, META.yml, debian/control, debian/changelog:

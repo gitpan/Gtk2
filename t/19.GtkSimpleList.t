@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/19.GtkSimpleList.t,v 1.7 2003/09/11 15:01:32 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/19.GtkSimpleList.t,v 1.10 2003/10/03 17:21:28 muppetman Exp $
 #
 
 use strict;
@@ -15,7 +15,7 @@ use Test::More;
 
 if( Gtk2->init_check )
 {
-	plan tests => 27;
+	plan tests => 36;
 	require_ok( 'Gtk2::SimpleList' );
 }
 else
@@ -230,6 +230,21 @@ Glib::Idle->add( sub
 
 		@{$list->{data}} = ();
 		ok( scalar(@$ldata) == 0 );
+		
+		push @{$list->{data}}, (
+			[ 'pushed', 1, 0.1, undef ],
+			[ 'pushed', 1, 0.1, undef ],
+			[ 'pushed', 1, 0.1, undef ],
+			[ 'pushed', 1, 0.1, undef ],
+		);
+		unshift @{$list->{data}}, (
+			[ 'unshifted', 1, 0.1, undef ],
+			[ 'unshifted', 1, 0.1, undef ],
+			[ 'unshifted', 1, 0.1, undef ],
+			[ 'unshifted', 1, 0.1, undef ],
+		);
+
+		is( scalar(@{$list->{data}}), 8 );
 
 		Gtk2->main_quit;
 		return 0;
@@ -241,3 +256,50 @@ $win->show_all;
 
 Gtk2->main;
 ok(1);
+
+# each of these should result in exceptions.
+eval { Gtk2::SimpleList->new; };
+ok( $@ =~ m/no columns/i, 'no args' );
+
+eval { Gtk2::SimpleList->new ('foo'); };
+ok( $@ =~ m/no columns/i, 'odd number of params' );
+
+eval { Gtk2::SimpleList->new ('foo' => 'bar'); };
+ok( $@ =~ m/unknown column type/i, 'bad column type' );
+
+eval { Gtk2::SimpleList->new_from_treeview; };
+ok( $@ =~ m/not a Gtk2::TreeView/i, 'no args triggers invalid treeview first' );
+
+eval { Gtk2::SimpleList->new_from_treeview ('foo'); };
+ok( $@ =~ m/not a Gtk2::TreeView/i, 'invalid treeview reference' );
+
+my $tv = Gtk2::TreeView->new;
+eval { Gtk2::SimpleList->new_from_treeview ($tv, 'bar'); };
+ok( $@ =~ m/no columns/i, 'odd number of params' );
+
+eval { Gtk2::SimpleList->new_from_treeview ($tv, 'bar', 'baz'); };
+ok( $@ =~ m/unknown column type/i, 'unknown column type' );
+
+eval { Gtk2::SimpleList->new_from_treeview ($tv, 'bar', 'text', 'baz'); };
+ok( $@ =~ m/expecting pairs/i, 'odd number of params beyond the required first' );
+
+$tv = undef;
+
+__END__
+
+Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+full list)
+
+This library is free software; you can redistribute it and/or modify it under
+the terms of the GNU Library General Public License as published by the Free
+Software Foundation; either version 2.1 of the License, or (at your option) any
+later version.
+
+This library is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU Library General Public License for more
+details.
+
+You should have received a copy of the GNU Library General Public License along
+with this library; if not, write to the Free Software Foundation, Inc., 59
+Temple Place - Suite 330, Boston, MA  02111-1307  USA.

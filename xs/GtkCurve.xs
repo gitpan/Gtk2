@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.9 2003/09/16 19:09:44 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.11 2003/09/26 12:28:31 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -67,6 +67,7 @@ gtk_curve_get_vector (curve, veclen=32)
 	vector = g_new(gfloat, veclen);
 	gtk_curve_get_vector(curve, veclen, vector);
 	EXTEND(SP, veclen);
+	/* TODO: precision issues ?? */
 	for( i = 0; i < veclen; i++ )
 		PUSHs(sv_2mortal(newSVnv(vector[i])));
 	g_free(vector);

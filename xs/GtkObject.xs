@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,13 +16,13 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkObject.xs,v 1.6 2003/06/17 22:34:43 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkObject.xs,v 1.8 2003/10/01 15:25:01 rwmcfa1 Exp $
  */
 
 #include "../gtk2perl.h"
 #include "../ppport.h"
 
-//#define NOISY
+/* #define NOISY */
 
 #ifdef NOISY
 static void
@@ -149,7 +149,6 @@ new (class, object_class, ...)
 
 	RETVAL = g_object_newv (object_type, n_params, params);	
 
-    //cleanup: /* C label, not the XS keyword */
 	if (n_params) {
 		int i;
 		for (i = 0 ; i < n_params ; i++)

@@ -1,22 +1,24 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * 
+ * Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the full
+ * list)
+ * 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Library General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or (at your
+ * option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public
+ * License for more details.
+ * 
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation,
+ * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
+ * 
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
- * Boston, MA  02111-1307  USA.
- *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.15 2003/09/05 02:20:19 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.17 2003/09/26 07:56:01 muppetman Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -82,6 +84,15 @@ SV * newSVGtkTargetEntry (GtkTargetEntry * target_entry);
 GtkTargetEntry * SvGtkTargetEntry (SV * sv);
 void gtk2perl_read_gtk_target_entry (SV * sv, GtkTargetEntry * entry);
 
+#define GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY(first, targets, ntargets) \
+	{							\
+	guint i;						\
+	ntargets = items - first;				\
+	targets = g_new0 (GtkTargetEntry, ntargets);		\
+	for (i = 0 ; i < ntargets ; i++)			\
+		gtk2perl_read_gtk_target_entry (ST (i + first),	\
+		                                targets + i);	\
+	}
 
 /* 
  * get a list of GTypes from the xsub argument stack

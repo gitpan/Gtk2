@@ -285,6 +285,12 @@ to tab_label that's not a GtkWidget and wrap a Gtk2::Label around it for you.
 
 Note that the _menu versions of these functions do I<not> do this.
 
+=item Gtk2::Widget::intersect
+
+The intersection parameter is omitted; the method instead returns a new
+Gtk2::Gdk::Rectangle representing the intersection, or undef if the area
+and the widget don't intersect.
+
 =item Gtk2::Widget::path
 
 =item Gtk2::Widget::class_path
@@ -341,6 +347,35 @@ list of index values; in fact, it will croak on negative numbers with a
 friendly reminder.  Although this function was introduced into gtk+ in
 2.2.0, it is available in gtk2-perl with gtk+ 2.0.x.
 
+=item Gtk2::Clipboard::set_with_data
+
+=item Gtk2::Clipboard::set_with_owner
+
+In C, these functions take an array of GtkTargetEntries and the number of
+elements in that array as the second and third parameters.  In Perl, the
+number of target entries is implied by the number of items on the stack,
+and the target entries are supplied as a list at the end of the parameter
+list:
+
+ $clipboard->set_with_data (\&get_func, \&clear_func, $user_data,
+                            @target_entries);
+ $clipboard->set_with_owner (\&get_func, \&clear_func, $owner,
+                             @target_entries);
+
+=item Gtk2::Gdk::Pixbuf::new_from_data
+
+In C this function allows you to wrap a GdkPixbuf structure around existing
+pixel data.  In Perl, we have to use C<pack> to generate a scalar containing
+the pixel data, and pass that scalar to C<new_from_data>, which copies the
+scalar to keep it around.  It also manages the memory automagically, so there's
+no need for the destroy notifier function.  This all means that if you change
+your copy of the data scalar later, the pixbuf will not reflect that, but
+because of the way perl manages string data and scalars, it would be pretty
+fragile to do that in the first place.  If you need to modify a pixbuf's data
+after it has been created, you can create new pixbufs for the changed regions
+and use C<< $pixbuf->composite >>, or try a different approach (possibly use a
+server-side pixmap and gdk drawing primitives, or something like libart).
+
 =back
 
 =head1 SEE ALSO
@@ -354,6 +389,25 @@ There should be a similar document for Glib --- link to it here when it exists.
 =head1 AUTHOR
 
 muppet E<lt>scott at asofyet dot orgE<gt>
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+full list)
+
+This library is free software; you can redistribute it and/or modify it under
+the terms of the GNU Library General Public License as published by the Free
+Software Foundation; either version 2.1 of the License, or (at your option) any
+later version.
+
+This library is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU Library General Public License for more
+details.
+
+You should have received a copy of the GNU Library General Public License along
+with this library; if not, write to the Free Software Foundation, Inc., 59
+Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 
 =cut
 
