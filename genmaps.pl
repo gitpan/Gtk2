@@ -18,7 +18,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Attic/genmaps.pl,v 1.4 2003/09/22 00:04:12 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/genmaps.pl,v 1.4 2003/09/22 00:04:12 rwmcfa1 Exp $
 #
 
 

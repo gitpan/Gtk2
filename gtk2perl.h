@@ -18,7 +18,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
  * 
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.19 2003/11/21 06:31:49 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.19.2.1 2004/01/09 04:38:20 muppetman Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -137,5 +137,17 @@ void gtk2perl_menu_position_func (GtkMenu       * menu,
                                   gboolean      * push_in,
                                   GPerlCallback * callback);
 
+
+#if ! GTK_CHECK_VERSION (2, 3, 0)
+ /* in versions prior to 2.3.0, GtkTreeSearchFlags was declared such that
+  * glib-mkenums interpreted and registered it as a GEnum type.  sometime
+  * before 2.3.0, this was corrected, and the type is registered as a GFlags.
+  * The maps file has GFlags (since that's correct), but we have to mangle
+  * things somewhat for the bindings to work properly with older libraries. */
+# undef SvGtkTextSearchFlags
+# undef newSVGtkTextSearchFlags
+# define SvGtkTextSearchFlags(sv)	(gperl_convert_enum (GTK_TYPE_TEXT_SEARCH_FLAGS, sv))
+# define newSVGtkTextSearchFlags(val)	(gperl_convert_back_enum (GTK_TYPE_TEXT_SEARCH_FLAGS, val))
+#endif
 
 #endif /* _GTK2PERL_H_ */

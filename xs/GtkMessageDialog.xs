@@ -16,16 +16,16 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.8 2003/11/29 17:23:10 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.8.2.1 2004/01/15 03:51:57 muppetman Exp $
  */
 
-#include "../gtk2perl.h"
-#include "../ppport.h"
+#include "gtk2perl.h"
+#include "ppport.h"
 
 MODULE = Gtk2::MessageDialog	PACKAGE = Gtk2::MessageDialog	PREFIX = gtk_message_dialog_
 
 =for apidoc
-=for args format a printf format specifier
+=for args format a printf format specifier.  may be undef.
 =for args ... arguments for I<$format>
 Create a new Gtk2::Dialog with a simple message.  It will also include an
 icon, as determined by I<$type>.  If you need buttons not available through
@@ -37,14 +37,26 @@ gtk_message_dialog_new (class, parent, flags, type, buttons, format, ...)
 	GtkDialogFlags flags
 	GtkMessageType type
 	GtkButtonsType buttons
-	guchar * format
-    PREINIT:
-	SV * message;
+	SV * format
     CODE:
-	message = newSV (0);
-	sv_vsetpvfn (message, format, SvLEN (ST (5)),
-	             NULL, &(ST (6)), items - 6, Null(bool*));
-	RETVAL = gtk_message_dialog_new (parent, flags, type, buttons,
-	                                 "%s", SvGChar (message));
+	if (format && SvOK (format)) {
+		/* text passed to GTK+ must be UTF-8.  force it. */
+		STRLEN patlen;
+		gchar * pat;
+		SV * message = newSV (0);
+		SvUTF8_on (message);
+		sv_utf8_upgrade (format);
+		pat = SvPV (format, patlen);
+		sv_vsetpvfn (message, pat, patlen,
+		             NULL, &(ST (6)), items - 6, Null(bool*));
+		/* the double-indirection is necessary to avoid % chars in the
+		 * message string being misinterpreted. */
+		RETVAL = gtk_message_dialog_new (parent, flags, type, buttons,
+	                                         "%s", SvPV_nolen (message));
+	} else
+		RETVAL = gtk_message_dialog_new (parent, flags, type,
+		                                 buttons, NULL);
+		/* -Wall warns about the NULL format string here, but
+		 * gtk_message_dialog_new() explicitly allows it. */
     OUTPUT:
 	RETVAL

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.22 2003/11/29 16:28:00 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.22.2.1 2004/01/15 03:51:50 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -400,7 +400,7 @@ gdk_pixbuf_new_from_inline (class, data, copy_pixels=TRUE)
 	gboolean copy_pixels
     PREINIT:
 	GError * error = NULL;
-	gint data_length;
+	STRLEN data_length;
 	const guchar * raw_data;
     CODE:
 	raw_data = SvPV (data, data_length);

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.11.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.11.2.2 2004/01/15 03:51:50 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -41,7 +41,7 @@ gtk2perl_editable_insert_text_marshal (GClosure * closure,
                                        gpointer invocation_hint,
                                        gpointer marshal_data)
 {
-	int len;
+	STRLEN len;
 	gint * position_p;
 	SV * string, * position;
 	dGPERL_CLOSURE_MARSHAL_ARGS;

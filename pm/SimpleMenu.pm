@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleMenu.pm,v 1.3 2003/09/22 00:04:24 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleMenu.pm,v 1.3.4.1 2004/01/07 21:18:40 muppetman Exp $
 #
 
 package Gtk2::SimpleMenu;
@@ -8,7 +8,8 @@ use strict;
 use warnings;
 use Carp;
 use Gtk2;
-use base 'Gtk2::ItemFactory';
+
+our @ISA = qw(Gtk2::ItemFactory);
 
 our $VERSION = 0.50;
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.20.2.1 2003/12/03 22:40:47 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gtk2.xs,v 1.20.2.2 2004/01/15 03:51:50 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -87,7 +87,7 @@ install_key_snooper (SV * func, SV * data)
 			                           gperl_callback_destroy);
 	callback = gperl_callback_new (func, data, 2, param_types, G_TYPE_INT);
 	id = gtk_key_snooper_install (gtk2perl_key_snoop_func, callback);
-	g_hash_table_insert (key_snoopers, (gpointer) id, callback);
+	g_hash_table_insert (key_snoopers, GUINT_TO_POINTER (id), callback);
 	return id;
 }
 
@@ -96,7 +96,7 @@ remove_key_snooper (guint id)
 {
 	g_return_if_fail (key_snoopers != NULL);
 	gtk_key_snooper_remove (id);
-	g_hash_table_remove (key_snoopers, (gpointer) id);
+	g_hash_table_remove (key_snoopers, GUINT_TO_POINTER (id));
 }
 
 MODULE = Gtk2		PACKAGE = Gtk2		PREFIX = gtk_

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.14 2003/10/03 17:21:28 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.14.4.1 2004/01/07 21:18:40 muppetman Exp $
 #
 
 #########################
@@ -8,7 +8,8 @@ package Gtk2::SimpleList;
 use strict;
 use Carp;
 use Gtk2;
-use base 'Gtk2::TreeView';
+
+our @ISA = qw(Gtk2::TreeView);
 
 our $VERSION = '0.14';
 
