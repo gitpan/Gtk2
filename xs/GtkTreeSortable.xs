@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.4 2003/06/02 02:53:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.5 2003/07/18 16:57:41 muppetman Exp $
  */
 
 #include "gtk2perl.h"

@@ -16,12 +16,14 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPlug.xs,v 1.4 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPlug.xs,v 1.5 2003/07/24 00:58:38 pcg Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Plug	PACKAGE = Gtk2::Plug	PREFIX = gtk_plug_
+
+#ifndef GDK_WINDOWING_WIN32 /* no plug/socket on win32 despite patches exist for years. */
 
 ## void gtk_plug_construct (GtkPlug *plug, GdkNativeWindow socket_id)
 void
@@ -73,3 +75,4 @@ gtk_plug_get_id (plug)
 #	GtkPlug   * plug
 #	GtkSocket * socket
 
+#endif

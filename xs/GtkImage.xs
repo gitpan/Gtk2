@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkImage.xs,v 1.6 2003/05/22 14:23:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkImage.xs,v 1.7 2003/07/24 01:52:08 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -138,9 +138,9 @@ void gtk_image_get_pixmap (GtkImage *image, OUTLIST GdkPixmap * pixmap, OUTLIST 
  ##	GdkBitmap **mask
 
  ## GdkPixbuf* gtk_image_get_pixbuf (GtkImage *image)
- ##GdkPixbuf*
- ##gtk_image_get_pixbuf (image)
- ##	GtkImage *image
+GdkPixbuf*
+gtk_image_get_pixbuf (image)
+	GtkImage *image
 
 void
 gtk_image_get_stock (image)

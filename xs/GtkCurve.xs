@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.6 2003/05/22 14:23:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.7 2003/07/25 03:42:38 pcg Exp $
  */
 
 #include "gtk2perl.h"
@@ -59,8 +59,8 @@ gtk_curve_get_vector (curve, veclen=32)
 	gfloat * vector;
     PPCODE:
 	if( veclen < 1 )
-		croak("ERROR: gtk_curve_get_vector: veclen must be greater "
-		      "zero");
+		croak("ERROR: Gtk2::Curve->get_vector: veclen must be greater "
+		      "than zero");
 	vector = g_new(gfloat, veclen);
 	gtk_curve_get_vector(curve, veclen, vector);
 	EXTEND(SP, veclen);
@@ -76,6 +76,9 @@ gtk_curve_set_vector (curve, ...)
 	int      veclen;
 	gfloat * vector;
     CODE:
+        if (items <= 1)
+        	croak ("ERROR: Gtk2::Curve->set_vector must be called with at "
+                       "least one value");
 	veclen = --items;
 	vector = g_new(gfloat, veclen);
 	for( ; items > 0; items-- )

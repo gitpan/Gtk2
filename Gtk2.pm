@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.20 2003/07/07 00:15:25 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.25 2003/08/01 16:52:55 muppetman Exp $
 #
 
 package Gtk2;
@@ -14,7 +14,7 @@ use Glib;
 
 require DynaLoader;
 
-our $VERSION = '0.90';
+our $VERSION = '0.92';
 
 our @ISA = qw(DynaLoader);
 
@@ -39,15 +39,48 @@ package Gtk2::ItemFactory;
 
 sub create_item {
 	my ($factory, $entry, $callback_data) = @_;
-	my ($path, $accelerator, $callback, $action, $type, $extra, $cleanpath);
+	my ($path, $accelerator, $callback, $callback_action, $item_type, 
+	    $extra_data, $cleanpath);
 
 	if ('ARRAY' eq ref $entry) {
-		($path, $accelerator, $callback, $action, $type, $extra) 
-			= @$entry;
+		($path, $accelerator, $callback, $callback_action, 
+		 $item_type, $extra_data) = @$entry;
 	} elsif ('HASH' eq ref $entry) {
-		($path, $accelerator, $callback, $action, $type, $extra)
-			= @$entry{qw(path accelerator callback callback_action
-			             item_type extra_data)};
+		foreach (keys %$entry)
+		{
+			if( $_ eq 'path' )
+			{
+				$path = $entry->{path};
+			}
+			elsif( $_ eq 'accelerator' )
+			{
+				$accelerator = $entry->{accelerator};
+			}
+			elsif( $_ eq 'callback' )
+			{
+				$callback = $entry->{callback};
+			}
+			elsif( $_ eq 'callback_action' )
+			{
+				$callback_action = $entry->{callback_action};
+			}
+			elsif( $_ eq 'item_type' )
+			{
+				$item_type = $entry->{item_type};
+			}
+			elsif( $_ eq 'extra_data' )
+			{
+				$extra_data = $entry->{extra_data};
+			}
+			else
+			{
+				use Carp;
+				carp("Gtk Item Factory Entry; unknown key ($_) "
+				   . "ignored, legal keys are: path, "
+				   . "accelerator, accel, callback, "
+				   . "callback_action, item_type, extra_data");
+			}
+		}
 	} else {
 		use Carp;
 		croak "badly formed Gtk Item Factory Entry; use either list for for hash form:\n"
@@ -72,8 +105,8 @@ sub create_item {
 
 	# the rest of the work happens in XS
 	$factory->_create_item ($path, $accelerator || '',
-				$action || 0, $type || '', $extra,
-	                        $cleanpath,
+				$callback_action || 0, $item_type || '', 
+				$extra_data, $cleanpath,
 	                        $callback||undef, $callback_data||undef);
 }
 
@@ -146,10 +179,16 @@ FIXME we have no other documentation, but we probably need it.
 
 =head1 SEE ALSO
 
-perl(1), Glib(1).
+perl(1), Glib(3pm).
+
+Gtk2::api(3pm) describes how to map the C API into perl, and some of the
+important differences in the perl bindings.
 
 The Gtk2::Helper module contains stuff that makes writing Gtk2 programs
 a little easier.
+
+Gtk2::SimpleList makes the GtkListStore and GtkTreeModel a I<lot>
+easier to use.
 
 Gtk2 also provides code to make it relatively painless to create perl
 wrappers for other GLib/Gtk-based libraries.  See Gtk2::CodeGen, 

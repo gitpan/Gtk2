@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileSelection.xs,v 1.6 2003/05/22 14:23:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileSelection.xs,v 1.8 2003/07/24 20:39:30 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -63,6 +63,12 @@ void
 gtk_file_selection_set_filename (filesel, filename)
 	GtkFileSelection * filesel
 	const gchar      * filename
+    PREINIT:
+	gchar * opsysname;
+    CODE:
+	opsysname = g_filename_from_utf8 (filename, -1, NULL, NULL, NULL);
+	gtk_file_selection_set_filename (filesel, opsysname);
+	g_free (opsysname);
 
 ## void gtk_file_selection_complete (GtkFileSelection *filesel, const gchar *pattern)
 void
@@ -91,27 +97,25 @@ gboolean
 gtk_file_selection_get_select_multiple (filesel)
 	GtkFileSelection * filesel
 
-# G_CONST_RETURN
-const gchar *
+gchar_own *
 gtk_file_selection_get_filename (filesel)
 	GtkFileSelection * filesel
+    CODE:
+	RETVAL = g_filename_to_utf8 (gtk_file_selection_get_filename (filesel),
+	                             -1, NULL, NULL, NULL);
+    OUTPUT:
+	RETVAL
 
-## TODO: what about the utf8'ieness of all of this
 void
 gtk_file_selection_get_selections (filesel)
 	GtkFileSelection * filesel
     PREINIT:
 	int      i;
 	gchar ** rets;
-	gchar *  curr;
     PPCODE:
 	rets = gtk_file_selection_get_selections(filesel);
-	for( i = 0, curr = rets[0]; curr != NULL; i++ )
-	{
-		curr = rets[i];
-		XPUSHs(sv_2mortal(newSVpv(
-			g_filename_to_utf8(curr, -1, NULL, NULL, NULL), 
-			PL_na)));
-	}
+	for (i = 0; rets[i] != NULL; i++)
+		XPUSHs (sv_2mortal (newSVGChar (
+			g_filename_to_utf8 (rets[i], -1, NULL, NULL, NULL))));
 	g_strfreev(rets);
 

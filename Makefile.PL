@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.14 2003/06/27 21:18:08 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.19 2003/08/01 16:52:55 muppetman Exp $
 #
 
 use 5.008;
@@ -8,7 +8,7 @@ use ExtUtils::MakeMaker;
 use Cwd;
 
 # minimum required version of Glib with which we can work.
-my $req_glib_ver = 0.26;
+my $req_glib_ver = 0.92;
 
 # Writing a fake Makefile ensures that CPAN will pick up the correct
 # dependencies and install them.
@@ -64,6 +64,8 @@ my %pm_files = (
 	'CodeGen.pm'       => '$(INST_LIBDIR)/Gtk2/CodeGen.pm',
 	'pm/Helper.pm'     => '$(INST_LIBDIR)/Gtk2/Helper.pm',
 	'pm/Pango.pm'      => '$(INST_LIBDIR)/Gtk2/Pango.pm',
+	'pm/SimpleList.pm' => '$(INST_LIBDIR)/Gtk2/SimpleList.pm',
+	'api.pod'          => '$(INST_LIBDIR)/Gtk2/api.pod',
 );
 my %pod_files = (
 	'Gtk2.pm'          => '$(INST_MAN3DIR)/Gtk2.3pm',
@@ -71,6 +73,7 @@ my %pod_files = (
 	'CodeGen.pm'       => '$(INST_MAN3DIR)/Gtk2::CodeGen.3pm',
 	'pm/Helper.pm'     => '$(INST_MAN3DIR)/Gtk2::Helper.3pm',
 	'pm/Pango.pm'      => '$(INST_MAN3DIR)/Gtk2::Pango.3pm',
+	'pm/SimpleList.pm' => '$(INST_MAN3DIR)/Gtk2::SimpleList.pm',
 	'api.pod'          => '$(INST_MAN3DIR)/Gtk2::api.3pm',
 );
 

@@ -17,7 +17,7 @@ package Gtk2::CodeGen;
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
 # Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/CodeGen.pm,v 1.5 2003/07/08 18:58:17 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/CodeGen.pm,v 1.7 2003/08/01 00:01:32 muppetman Exp $
 
 use strict;
 use warnings;
@@ -265,11 +265,11 @@ sub parse_maps {
 		my ($typemacro, $classname, $base, $package) = split;
 		next unless defined $package;
 		if ($base eq 'GEnum') {
-			gen_enum_stuff ($typemacro, $classname);
+			gen_enum_stuff ($typemacro, $classname, $package);
 			$seen{$base}++;
 		
 		} elsif ($base eq 'GFlags') {
-			gen_flags_stuff ($typemacro, $classname);
+			gen_flags_stuff ($typemacro, $classname, $package);
 			$seen{$base}++;
 		
 		} elsif ($base eq 'GBoxed') {
@@ -342,7 +342,7 @@ sub parse_maps {
 #
 
 sub gen_enum_stuff {
-	my ($typemacro, $classname) = @_;
+	my ($typemacro, $classname, $package) = @_;
 	push @header, "#ifdef $typemacro
   /* GEnum $classname */
 # define Sv$classname(sv)	(gperl_convert_enum ($typemacro, sv))
@@ -356,10 +356,14 @@ sub gen_enum_stuff {
 	push @output, "T_$typemacro
 	\$arg = newSV$classname(\$var);
 ";
+	push @boot, "#ifdef $typemacro
+gperl_register_fundamental ($typemacro, \"$package\");
+#endif /* $typemacro */"
+		unless $package eq '-';
 }
 
 sub gen_flags_stuff {
-	my ($typemacro, $classname) = @_;
+	my ($typemacro, $classname, $package) = @_;
 	push @header, "#ifdef $typemacro
   /* GFlags $classname */
 # define Sv$classname(sv)	(gperl_convert_flags ($typemacro, sv))
@@ -373,6 +377,10 @@ sub gen_flags_stuff {
 	push @output, "T_$typemacro
 	\$arg = newSV$classname(\$var);
 ";
+	push @boot, "#ifdef $typemacro
+gperl_register_fundamental ($typemacro, \"$package\");
+#endif /* $typemacro */"
+		unless $package eq '-';
 }
 
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.11 2003/06/17 22:34:44 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.12 2003/07/24 00:58:32 pcg Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -25,6 +25,11 @@
 #include <gperl.h>
 #include <gtk/gtk.h>
 #include "gtk2perl-autogen.h"
+
+#ifdef GDK_WINDOWING_WIN32 /* no plug/socket on win32 despite patches exist for years. */
+# undef GTK_TYPE_PLUG
+# undef GTK_TYPE_SOCKET
+#endif
 
 /**
  * gtk2perl_new_gtkobject:

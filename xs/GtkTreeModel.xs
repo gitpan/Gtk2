@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.10 2003/07/16 14:04:08 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.13 2003/07/26 17:05:38 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -352,7 +352,7 @@ gtk_tree_model_iter_next (tree_model, iter)
 GtkTreeIter_copy *
 gtk_tree_model_iter_children (tree_model, parent)
 	GtkTreeModel *tree_model
-	GtkTreeIter *parent
+	GtkTreeIter_ornull *parent
     PREINIT:
 	GtkTreeIter iter;
     CODE:
@@ -370,7 +370,7 @@ gtk_tree_model_iter_has_child (tree_model, iter)
 
 ## gint gtk_tree_model_iter_n_children (GtkTreeModel *tree_model, GtkTreeIter *iter)
 gint
-gtk_tree_model_iter_n_children (tree_model, iter)
+gtk_tree_model_iter_n_children (tree_model, iter=NULL)
 	GtkTreeModel *tree_model
 	GtkTreeIter_ornull *iter
 
@@ -378,7 +378,7 @@ gtk_tree_model_iter_n_children (tree_model, iter)
 GtkTreeIter_copy *
 gtk_tree_model_iter_nth_child (tree_model, parent, n)
 	GtkTreeModel *tree_model
-	GtkTreeIter *parent
+	GtkTreeIter_ornull *parent
 	gint n
     PREINIT:
 	GtkTreeIter iter;
@@ -424,12 +424,28 @@ gtk_tree_model_get (tree_model, iter, ...)
     PREINIT:
 	int i;
     PPCODE:
-	for (i = 2 ; i < items ; i++) {
-		GValue gvalue = {0, };
-		gtk_tree_model_get_value (tree_model, iter, 
-		                          SvIV (ST (i)), &gvalue);
-		XPUSHs (sv_2mortal (gperl_sv_from_value (&gvalue)));
-		g_value_unset (&gvalue);
+	/* if column id's were passed, just return those columns */
+	if( items > 2 )
+	{
+		for (i = 2 ; i < items ; i++) {
+			GValue gvalue = {0, };
+			gtk_tree_model_get_value (tree_model, iter, 
+			                          SvIV (ST (i)), &gvalue);
+			XPUSHs (sv_2mortal (gperl_sv_from_value (&gvalue)));
+			g_value_unset (&gvalue);
+		}
+	}
+	else
+	{
+		/* otherwise return all of the columns */
+		for( i = 0; i < gtk_tree_model_get_n_columns(tree_model); i++ )
+		{
+			GValue gvalue = {0, };
+			gtk_tree_model_get_value (tree_model, iter, 
+			                          i, &gvalue);
+			XPUSHs (sv_2mortal (gperl_sv_from_value (&gvalue)));
+			g_value_unset (&gvalue);
+		}
 	}
 
  ## va_list means nothing to a perl developer, it's a c-specific thing.

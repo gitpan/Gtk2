@@ -1,3 +1,108 @@
+2003/08/01 12:45 muppetman
+
+	* MANIFEST, Gtk2.pm, README, Makefile.PL: updated for 0.92 release
+
+2003/07/31 20:00 muppetman
+
+	* Gtk2.pm: mention Gtk2::api and Gtk2::SimpleList manpages
+
+	* Makefile.PL: install api.pod so perldoc can find it.
+
+	* examples/simplelist.pl, pm/SimpleList.pm, t/19.GtkSimpleList.t: add
+	simple interfaces to editable text cells and index-based selection
+	handling; modify and clarify other pod.
+
+	* xs/GtkTextView.xs: fixed get_iter_at_location to work correctly.
+
+	* gtk-demo/textview.pl: clean up some flotsam and jetsam
+
+	* CodeGen.pm: register GEnum and GFlags types with the bindings,
+	so they can be used as column types
+
+2003/07/29 22:06 rwmcfa1
+
+	* pm/SimpleList.pm: first pass at pod documentation done, small version
+	bump, the on load warning has been removed.
+
+	* examples/simplelist.pl, t/19.GtkSimpleList.t: added examples/tests
+	for a more complex custom column type, sum_of_array, it better shows
+	the power of the custom column system.
+
+2003/07/29 14:52 rwmcfa1
+
+	* pm/SimpleList.pm: added code to allow users (well programmers anyway) 
+	to define their own column types, scalar impelements this in a simple
+	example. this is very powerful and very cool, check it out.
+
+	* t/19.GtkSimpleList.t, examples/simplelist.pl: make use of and
+	exemplify the cool new custom column types interface. also get pixbuf's
+	from a more relable source. both scalars and pixbuf's are more fully
+	demonstraighted/tested.
+
+
+2003/07/25 10:21 rwmcfa1
+
+	* pm/SimpleList.pm, t/19.GtkSimpleList.t: initial versions, lots of 
+	known bugs, submitted for testing, approval and suggests.
+
+2003/07/25 10:21 muppetman
+
+	* Gtk2.pm, README: bump version to 0.91
+
+2003/07/25 03:41 pcg
+
+	* xs/GtkCurve.xs: avoid calling set_vector with zero veclen
+        to avoid segfault.
+
+2003/07/24 16:37 muppetman
+
+	* xs/GtkFileSelection.xs: add g_filename_(from|to)_utf8 to 
+	gtk_file_selection_(get|set)_filename.
+
+2003/07/24 09:40 rwmcfa1
+
+	* t/01.GtkWindow.t: we aren't assured that a window will be the exact
+	size that we ask it to be, so setting and testing that it is isn't a 
+	good thing.
+
+2003/07/24 08:31 muppetman
+
+	* xs/GtkFileSelection.xs: get_selections was broken; simplified the
+	loop and used newSVGChar instead of newSVpv.
+
+2003/07/24 00:56 pcg
+
+	* gtk2perl.h, xs/GtkPlug.xs, xs/GtkSocket.xs: don't build these
+        for the win32 backend. It defines the macros, but doesn't actually
+        provide them.
+        * xs/GtkRadioButton.xs: remove extra aliases (saves memory and
+        avoids extra symbols).
+
+2003/07/23 16:46 muppetman
+
+	* README, Makefile.PL: update required versionf of Gtk2 and Glib to
+	ensure that the gchar_own typemap (introduced in 0.90) is available.
+
+	* xs/GtkImage.xs: get_pixbuf
+
+2003/07/22 17:31 rwmcfa1
+
+	* xs/Gtk2.pm: much discussed immproved handling of the create_item via
+	hash handling, now complains on bad keys. thanks to Joe Smith and Brett 
+	Kosinski for their input.
+
+2003/07/22 16:41 muppetman
+
+	* xs/GtkTreeModel.xs: more _ornulls
+
+	* AUTHORS: add thierry, who should've been in a couple weeks ago
+
+2003/07/21 07:36 rwmcfa1
+
+	* xs/GtkTreeModel.xs: Gtk2::TreeModel->get now returns an array of all
+	of the columns when no column id's are passed, documented in api.pod,
+	shouldn't affect anything normal documented api
+
 2003/07/18 12:00 muppetman
 
 	* xs/GtkTreeSortable.xs: implemented the missing sort callbacks.
@@ -48,8 +153,8 @@
 	* xs/Gtk2.xs: implemented first pass at init_add, quit_add, and 
 	quit_add_remove.
 
-	* xs/GtkWindow.xs: title defaults to NULL is set_title. get_icon is 
-	allowed (and does) reuturn NULL when there are no icons associated with
+	* xs/GtkWindow.xs: title defaults to NULL in set_title. get_icon is 
+	allowed (and does) return NULL when there are no icons associated with
 	the window, api doc doesn't mention this. window_list_toplevels 
 	implemented
 
