@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconFactory.xs,v 1.4 2003/07/11 17:25:45 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconFactory.xs,v 1.5 2003/08/05 17:35:43 rwmcfa1 Exp $
  */
 #include "gtk2perl.h"
 
@@ -50,7 +50,7 @@ GtkIconSize
 SvGtkIconSize (SV * sv)
 {
 	GtkIconSize size;
-	if (gperl_try_convert_enum (GTK_TYPE_ICON_SIZE, sv, &size))
+	if (gperl_try_convert_enum (GTK_TYPE_ICON_SIZE, sv, (gint*)&size))
 		return size;
 	/* fall back... */
 	return gtk_icon_size_from_name (SvPV_nolen (sv));

@@ -16,18 +16,53 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCalendar.xs,v 1.3 2003/05/22 14:23:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCalendar.xs,v 1.4 2003/08/29 03:17:26 muppetman Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Calendar	PACKAGE = Gtk2::Calendar	PREFIX = gtk_calendar_
 
+void
+members (cal)
+	GtkCalendar* cal
+    ALIAS:
+	num_marked_dates  = 0
+	marked_date       = 1
+	year              = 2
+	month             = 3
+	selected_day      = 4
+    PPCODE:
+	switch (ix) {
+	    case 0:
+		PUSHs (sv_2mortal (newSViv (cal->num_marked_dates)));
+		break;
+ 	    case 1:
+		{
+		int i;
+		EXTEND (SP, 31);
+		for (i = 0; i < 31; i++) {
+			PUSHs (sv_2mortal (newSViv (cal->marked_date[i])));
+		}
+		}
+		break;
+	    case 2:
+		PUSHs (sv_2mortal (newSViv (cal->year)));
+		break;
+	    case 3:
+		PUSHs (sv_2mortal (newSViv (cal->month)));
+		break;
+	    case 4:
+		PUSHs (sv_2mortal (newSViv (cal->selected_day)));
+		break;
+	}
+
 ## GtkWidget* gtk_calendar_new (void)
 GtkWidget*
 gtk_calendar_new (class)
 	SV * class
     C_ARGS:
+	/*void*/
 
 ## gboolean gtk_calendar_select_month (GtkCalendar *calendar, guint month, guint year)
 gboolean

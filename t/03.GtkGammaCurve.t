@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/03.GtkGammaCurve.t,v 1.1 2003/06/05 15:01:02 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/03.GtkGammaCurve.t,v 1.2 2003/08/19 14:25:13 rwmcfa1 Exp $
 #
 
 #########################
@@ -9,17 +9,20 @@
 
 #########################
 
-# change 'tests => 1' to 'tests => last_test_to_print';
-
-use Test::More tests => 5;
+use Test::More;
 BEGIN { use_ok('Gtk2') };
 
+if( Gtk2->init_check )
+{
+	plan tests => 3;
+}
+else
+{
+	plan skip_all =>
+		'Gtk2->init_check failed, probably unable to open DISPLAY';
+}
+
 #########################
-
-# Insert your test code below, the Test::More module is use()ed here so read
-# its man page ( perldoc Test::More ) for help writing this test script.
-
-ok( Gtk2->init );
 
 ok( $win = Gtk2::Window->new("toplevel") );
 

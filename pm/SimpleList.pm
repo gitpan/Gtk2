@@ -1,10 +1,11 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.5 2003/07/31 05:45:56 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.8 2003/08/20 01:25:50 rwmcfa1 Exp $
 #
 
 #########################
 package Gtk2::SimpleList;
 
+use strict;
 use Carp;
 use Gtk2;
 use base 'Gtk2::TreeView';
@@ -31,6 +32,7 @@ only bool is editable, and that's set up for you.
 =cut
 
 our %column_types = (
+  'hidden' => {type=>'Glib::String',                                        attr=>'hidden'},
   'text'   => {type=>'Glib::String',  renderer=>'Gtk2::CellRendererText',   attr=>'text'},
   'int'    => {type=>'Glib::Int',     renderer=>'Gtk2::CellRendererText',   attr=>'text'},
   'double' => {type=>'Glib::Double',  renderer=>'Gtk2::CellRendererText',   attr=>'text'},
@@ -85,6 +87,10 @@ sub new {
 				$column_info[$i]{title},
 				$column_info[$i]{rtype}->new,
 				$column_info[$i]{attr}, $i);
+		}
+		elsif ('hidden' eq $column_info[$i]{attr})
+		{
+			# skip hidden column
 		}
 		else
 		{
@@ -190,6 +196,7 @@ sub set_data_array
 
 ##################################
 package Gtk2::SimpleList::TiedRow;
+
 use strict;
 use Gtk2;
 use Carp;
@@ -221,7 +228,7 @@ sub FETCH {
 
 sub STORE {
 	return $_[0]->{model}->set ($_[0]->{iter}, $_[1], $_[2])
-		if( $_[2] );
+		if defined $_[2]; # allow 0, but not undef
 }
 
 sub FETCHSIZE {
@@ -362,7 +369,23 @@ sub get_model {
 }
 
 sub STORESIZE { carp "STORESIZE: operation not supported"; }
-sub SPLICE { carp "SPLICE: operation not supported"; }
+
+sub SPLICE {
+	if ($_[2] == 0 && 'ARRAY' eq ref($_[3])) {
+		my $iter = $_[0]->{model}->insert($_[1]);
+		my @row;
+		tie @row, 'Gtk2::SimpleList::TiedRow', $_[0]->{model}, $iter;
+		if ('ARRAY' eq ref $_[3]) {
+			@row = @{$_[3]};
+		} else {
+			$row[0] = $_[3];
+		}
+		return 1;
+
+	} else {
+		carp "SPLICE: operation not fully supported";
+	}
+}
 
 1;
 
@@ -376,7 +399,7 @@ Gtk2::SimpleList - A simple interface to Gtk2's complex MVC list widget
 =head1 SYNOPSIS
 
   use Gtk2 -init;
-  use Gtk2::SimpleList.pm;
+  use Gtk2::SimpleList;
 
   use constant TRUE  => 1;
   use constant FALSE => 0;
@@ -408,6 +431,10 @@ Gtk2::SimpleList - A simple interface to Gtk2's complex MVC list widget
 
   # simple way to make text columns editable
   $slist->set_column_editable ($col_num, TRUE);
+
+  # Gtk2::SimpleList is derived from Gtk2::TreeView
+  $slist->set_rules_hint (TRUE);
+  $slist->signal_connect (row_activated => \&row_clicked);
 
 =head1 ABSTRACT
 

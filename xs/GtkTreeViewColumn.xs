@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.6 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.9 2003/08/27 22:42:46 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -85,7 +85,7 @@ GtkTreeViewColumn *
 gtk_tree_view_column_new (class)
 	SV * class
     C_ARGS:
-
+	/*void*/
 
 GtkTreeViewColumn *
 gtk_tree_view_column_new_with_attributes (class, title, cell, ...)
@@ -315,6 +315,7 @@ GtkSortType
 gtk_tree_view_column_get_sort_order (tree_column)
 	GtkTreeViewColumn *tree_column
 
+# FIXME 
 #### void gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column, GtkTreeModel *tree_model, GtkTreeIter *iter, gboolean is_expander, gboolean is_expanded)
 ##void
 ##gtk_tree_view_column_cell_set_cell_data (tree_column, tree_model, iter, is_expander, is_expanded)
@@ -324,6 +325,7 @@ gtk_tree_view_column_get_sort_order (tree_column)
 ##	gboolean is_expander
 ##	gboolean is_expanded
 ##
+# FIXME need to return a rectangle from the stack, OUTLIST won't work
 #### void gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column, GdkRectangle *cell_area, gint *x_offset, gint *y_offset, gint *width, gint *height)
 ##void
 ##gtk_tree_view_column_cell_get_size (tree_column, cell_area, x_offset, y_offset, width, height)
@@ -333,19 +335,21 @@ gtk_tree_view_column_get_sort_order (tree_column)
 ##	gint *y_offset
 ##	gint *width
 ##	gint *height
-##
+
 #### gboolean gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
-##gboolean
-##gtk_tree_view_column_cell_is_visible (tree_column)
-##	GtkTreeViewColumn *tree_column
-##
+gboolean
+gtk_tree_view_column_cell_is_visible (tree_column)
+	GtkTreeViewColumn *tree_column
+
+### not documented as such, but this doesn't appear to exist in 2.0.6
+
+#if GTK_CHECK_VERSION(2,2,0)
+
 #### gboolean gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell_renderer, gint *start_pos, gint *width)
-##gboolean
-##gtk_tree_view_column_cell_get_position (tree_column, cell_renderer, start_pos, width)
-##	GtkTreeViewColumn *tree_column
-##	GtkCellRenderer *cell_renderer
-##	gint *start_pos
-##	gint *width
+void
+gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell_renderer, OUTLIST gint start_pos, OUTLIST gint width)
+
+#endif
 
 #if GTK_CHECK_VERSION(2,2,0)
 
@@ -373,7 +377,7 @@ gtk_tree_view_insert_column_with_attributes (tree_view, position, title, cell, .
 	GtkTreeViewColumn * column;
     CODE:
 	if (!check_stack_for_attributes (4))
-		croak ("Usage: Gtk2::TreeViewColumn->new_with_attributes (TITLE, CELLRENDERER, ATTR1, COL1, ATTR2, COL2, ...)");
+		croak ("Usage: Gtk2::TreeViewColumn->new_with_attributes (POSITOIN, TITLE, CELLRENDERER, ATTR1, COL1, ATTR2, COL2, ...)");
 	column = gtk_tree_view_column_new ();
 	RETVAL = gtk_tree_view_insert_column (tree_view, column, position);
 	gtk_tree_view_column_set_title (column, title);

@@ -16,12 +16,13 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoContext.xs,v 1.2 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoContext.xs,v 1.3 2003/08/18 16:22:03 muppetman Exp $
  */
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Pango::Context	PACKAGE = Gtk2::Pango::Context	PREFIX = pango_context_
 
+# FIXME
 ###  PangoContext *pango_context_new (void) 
 #PangoContext_noinc *
 #pango_context_new (class)
@@ -29,12 +30,14 @@ MODULE = Gtk2::Pango::Context	PACKAGE = Gtk2::Pango::Context	PREFIX = pango_cont
 #    C_ARGS:
 #	
 
+# FIXME
 ###  void pango_context_set_font_map (PangoContext *context, PangoFontMap *font_map) 
 #void
 #pango_context_set_font_map (context, font_map)
 #	PangoContext *context
 #	PangoFontMap *font_map
 
+## FIXME
 ###  void pango_context_list_families (PangoContext *context, PangoFontFamily ***families, int *n_families) 
 #void
 #pango_context_list_families (context, families, n_families)
@@ -109,6 +112,7 @@ PangoDirection
 pango_context_get_base_dir (context)
 	PangoContext *context
 
+# FIXME
 ###  GList *pango_itemize (PangoContext *context, const char *text, int start_index, int length, PangoAttrList *attrs, PangoAttrIterator *cached_iter) 
 #GList *
 #pango_itemize (context, text, start_index, length, attrs, cached_iter)

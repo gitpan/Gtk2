@@ -111,8 +111,8 @@ FIXME if anyone can think of a better way to check this, i'm all ears.
 The gtk stock item stuff is a little different -- the GTK_STOCK_* constants
 are actually macros which evaluate to strings, so they aren't handled by the
 mechanism described above; you just specify the string, e.g., 
-GTK_STOCK_OK => 'gtk-ok'.   I don't know where the docs are for those strings,
-but it's been my first guess every time.
+GTK_STOCK_OK => 'gtk-ok'. The full list of stock items can be found at 
+http://developer.gnome.org/doc/API/2.0/gtk/gtk-Stock-Items.html
 
 =head2 Memory Handling
 
@@ -201,6 +201,12 @@ The gtk_* functions are deprecated in favor of the g_* ones.  Gtk2::Helper
 has a wrapper for Glib::IOChannel->add_watch which makes it behave more
 like gtk_input_add.
 
+=item gtk_accel_group_from_accel_closure => no replacement
+
+Because of the use of Perl subroutine references in place of GClosures, there
+is no way to preserve at the Perl level the one-to-one mapping between
+GtkAccelGroups and GClosures.  Without that mapping, this function is useless.
+
 =back
 
 
@@ -235,25 +241,87 @@ first parameter. All parameters after that are considered to be entries.
 
 Position and items parameters flipped order so that an open ended parameter
 list could be used. C<< $list->insert_items($position, $item1, $item2, ...) >>
-(Note that GtkList and GtkListItem are deprecated and only included b/c
+(Note that GtkList and GtkListItem are deprecated and only included because
 GtkCombo still makes use of them, they are subject to removal at any point so
-you should not utilize them unless absolutly necessary.)
+you should not utilize them unless absolutely necessary.)
 
-=item Gtk2::TreeModel->get
+=item Gtk2::TreeModel::get
 
 If no column idexes are passed all columns are returned as an array. This is a
-slight deviation from the C api that can be easily impelemented in the wrappers
+slight deviation from the C api that can be easily implemented in the wrappers
 and may be useful. If you don't know it's there it should in no way effect the
 behavior of the function.
 
 =item Gtk2::TreeSelection::get_selected
 
-In scalar context, returns $iter; in list context, returns ($model, $iter).
+Since most of the time you are interested only in the iter, this function
+behaves differently in scalar context than in list context:
+
+  ## scalar context
+  $iter = $tree_selection->get_selected;
+  ## list context
+  ($model, $iter) = $tree_selection->get_selected;
 
 =item Gtk2::TreeSelection::get_selected_rows
 
 Returns @paths; model is not returned as documented in the C API.
 to get the model, try C<< $selection->get_tree_view->get_model >>.
+
+=item Gtk2::Widget::path
+
+=item Gtk2::Widget::class_path
+
+In C, these functions return the length of the strings, the path string, and
+the reverse path string.  In perl, the string length is unnecessary, and has
+been omitted from the return list.
+
+ ($path, $path_reverse) = $widget->path;
+ ($path, $path_reverse) = $widget->class_path;
+
+=item Gtk2::Gdk::Colormap::alloc_colors
+
+Whereas alloc_color only takes one color, alloc_colors takes an array of 
+colors; the colors are thus moved to the end on the vectorized version.
+alloc_colors returns a list containing a boolean status value for each
+color passed in, telling whether the color could be allocated.
+
+ # single
+ $gdkcolormap->alloc_color ($color, $writeable, $best_match)
+ @s = $gdkcolormap->alloc_colors ($writable, $best_match, @colors)
+
+Note that C<< $colormap->free_colors (@colors) >> is used to deallocate
+colors allocated by alloc_color/alloc_colors, and has nothing to do with
+memory management.  therefore, you may need to call free_colors.
+
+=item Gtk2::Style::paint_polygon
+
+The list of coordinates for the vertices was moved to the end to use the
+argument stack.
+
+ $style->paint_polygon ($gdkwindow, $state_type, $shadow_type,
+                        $area, $widget, $detail, $fill,
+                        $x1, $y1, $x2, $y2, ...);
+
+=item Gtk2::AccelGroup::connect
+
+=item Gtk2::AccelGroup::disconnect
+
+Where a GClosure is wanted by the C stuff, a perl subroutine reference
+suffices.  However, because of this, there are a few subtle differences in
+sematics.  a GClosure may be connected to only one GtkAccelGroup; however, a
+perl subroutine may be connected to many GtkAccelGroups (because at the binding
+level, a new GClosure is created on each call to ->connect).  Thus,
+$accel_group->disconnect will disconnect the first group it finds to be
+connected to the given perl subroutine.  To disconnect all groups attached to a
+subroutine, you can call disconnect with the same subroutine reference (or
+name) until it stops returning true.
+
+=item Gtk2::TreePath->new_from_indices
+
+Unlike its C counterpart, this function does not need a -1 to terminate the
+list of index values; in fact, it will croak on negative numbers with a 
+friendly reminder.  Although this function was introduced into gtk+ in
+2.2.0, it is available in gtk2-perl with gtk+ 2.0.x.
 
 =back
 

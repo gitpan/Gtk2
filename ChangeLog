@@ -1,3 +1,322 @@
+2003/08/28 23:17 muppetman
+
+	* Gtk2.pm, README, debian/changelog: updated for 0.96 release
+
+	* xs/GtkCalendar.xs: celendar members patch from chas, mangled by me
+
+2003/08/28 10:09 rwmcfa1
+
+	* xs/GtkWidget.xs: slight modifications of a patch by thierry vignaud 
+	applied. impelements text direction functions.
+
+2003/08/28 08:44 rwmcfa1
+
+	* t/24.GtkTreeView.t: torsten's patch applied to fix "assertion
+	`column_in_tree' failed" problem on various systems/versions. cached
+	version info into an array and then use rather than getting it over and
+	over.
+
+2003/08/27 18:43 muppetman
+
+	another round of treeview-related patched from torsten:
+	* xs/GtkTreeView.xs xs/GtkTreeViewColumn.xs: a few more missing functions
+	* t/22.GtkListStore.t t/23.GtkTreeStore.t t/24.GtkTreeView.t: new tests
+	* t/22.GtkTreeSelection.t, t/25.GtkTreeSelection.t: renamed and updated
+	* MANIFEST: updated accordingly
+
+2003/08/25 13:40 pcg
+
+        * t/04.GtkSocket-GtkPlug.t: Applied patch by Skye Cove to add
+        -Mblib. Also change ctrl-x character to the more readable (and
+        transferable) ^X.
+
+2003/08/22 01:38 muppetman
+
+	* Gtk2.pm, README, MANIFEST, META.yml, debian/changelog:
+	updated for 0.95 release
+
+2003/08/21 14:22 muppetman
+
+	* xs/GtkTreeModel.xs: even yet still another patch from torsten,
+	implementing gtk_tree_path_new_from_indices and fixing thr broken
+	signature of gtk_tree_row_reference_new.  i took some liberties with
+	the patch, making it croak with a helpful message on the -1 that will
+	inevitably be passed in by people who read the C API reference.  i also
+	removed the separate binding of new_from_string and aliased it into
+	new, since new already calls new_from_string if you supply a string.
+
+	* api.pod: mention how new_from_indices differs from the C func,
+	and actually commit the accel group stuff i thought i commited
+	yesterday.
+
+2003/08/20 14:27 muppetman
+
+	* t/22.GtkTreeSelection.t: new test, another patch from torsten
+
+2003/08/20 12:39 rwmcfa1
+
+	* api.pod: url of stock items strings added, thierry vignaud
+
+	* t/04.GtkSocket-GtkPlug.t: make sure that forked perl runs under the
+	same interperter that it does, calle dybedahl
+
+2003/08/20 04:20 muppetman
+
+	* TODO, examples/accel_groups.pl, xs/GtkAccelGroup.xs, api.pod:
+	implemented a bunch of the GtkAccelGroup stuff, with an example.
+
+2003/08/20 01:45 muppetma
+
+	* xs/GtkTreeSelection.xs: patch from Torsten Schoenfeld implements
+	gtk_tree_selection_set_select_function and
+	gtk_tree_selection_selected_foreach
+
+	* xs/GtkContainer.xs, t/21.GtkContainer.t: implemented a slew of
+	missing GtkContainer methods, with a test.  the functions for child
+	properties are still unbound.
+
+	* xs/GtkTreeDnd.xs: missing functions gtk_tree_get_row_drag_data
+	and gtk_tree_drag_source_drag_data_get.  changed package for
+	gtk_tree_(get|set)_row_drag_data to Gtk2::SelectionData so they
+	will be called properly as methods.
+
+	* xs/GtkImage.xs: implemented the functions to do with GdkImages
+	and GdkPixbufAnimations
+
+	* xs/GtkStyle.xs api.pod: implement $style->render_icon and
+	$style->paint_polygon
+
+2003/08/19 22:52 rwmcfa1
+
+	* xs/GtkTextBuffer.xs: implemented gtk_text_buffer_insert_with_tags,
+	torsten schoenfeld
+
+	* xs/GtkTreeViewColumn.xs: corrected error message, torsten schoenfeld
+
+2003/08/19 21:11 rwmcfa1
+
+	* Makefile.PL: added realclean removal of build dir to postamble 
+	section.
+
+2003/08/19 21:11 rwmcfa1
+
+	* pm/SimpleMenu.pm, examples/simple_menu.pl: initial versions, and
+	example of how to use it, pod still to come.
+
+	* Makefile.PL: added realclean removal of build dir to postamble 
+	section. install SimpleMenu.pm
+
+2003/08/19 10:19 rwmcfa1
+
+	* api.pod: url added for location of stock item strings, thierry
+	vignaud
+
+	* t/04.GtkSocket-GtkPlug.t: 
+
+2003/08/19 10:19 rwmcfa1
+
+	* t/*.t: fixed things so that test do not fail if init_check fails,
+	this is so that it can be build without a DISPLAY. tests are skipped
+	and a warning message is printed by Test::More. in reality passing
+	this doesn't mean much more than Gtk2 will load, but without a display
+	that's all that can be done.
+
+2003/08/18 17:24 muppetman
+
+	* README: remove FIXME: we do have more docs, they're linked
+	from Gtk2.pm
+
+	* api.pod: updated.
+
+	* gtk-demo/changedisplay.pl: a few more tweaks.  it almost works.
+
+	* t/07.GtkBoxes.t: this is the most obvious place for tests for
+	widget tools, since this test plays with packing boxes and such.
+
+	* xs/GdkDisplay.xs: flesh out the get_window_at_pointer xsub, else
+	the changedisplay.pl demo says it can't do something with a CODE
+	reference.  (i don't understand...)
+
+	* xs/GdkWindow.xs: apparently $gdkwindow->get_user_data isn't the
+	same as GObject user data...
+
+	* xs/GtkWidget.xs: consolidating void $widget->method($void) methods
+	into one ALIASED xsub saved over 2K in the object file, even with
+	the other ten or so such methods implemented.  wow.
+	also implemented get_ancestor, is_ancestor gtk_widget_modify_style
+	gtk_widget_get_modifier_style gtk_widget_path gtk_widget_class_path.
+
+2003/08/18 11:54 muppetman
+
+	went for a complete audit of xs/*.xs, looking for FIXMEs and 
+	unimplemented functions.  this is part of that completeness sweep.
+
+	* xs/GdkPixmap.xs xs/GtkClipboard.xs xs/GtkDnd.xs xs/GtkItemFactory.xs
+	xs/GtkMenu.xs xs/GtkTextIter.xs xs/GtkTreeViewColumn.xs xs/PangoFont.xs
+	xs/PangoLayout.xs xs/PangoContext.xs: updated FIXME comments
+
+	* xs/GdkWindow.xs: updated FIXMEs, implemented several missing functions
+
+	* xs/Gtk2.xs: quit_add_destroy, get_current_event, 
+	get_current_event_(time|state), get_event_widget
+
+	* xs/GtkAccelGroup.xs xs/GtkHButtonBox.xs xs/GtkVButtonBox.xs
+	xs/GtkHScale.xs xs/GtkVScale.xs xs/GtkWindow.xs: some static methods
+	were implemented incorrectly (not taking the class parameter).
+	this fixes that, but will break any code that used it.  since i've
+	not heard any complaints, i assume no-one is using it.  at any rate,
+	it was wrong, is now right.
+
+	* xs/GtkButtonBox.xs xs/GtkMenuShell.xs xs/GtkPlug.xs xs/GtkScale.xs
+	xs/GtkTextTag.xs xs/GtkTooltips.xs: removed commented implementation
+	of private function; it will never be bound
+
+	* xs/GtkEntry.xs: update FIXME comments, implement get_layout and
+	get_layout_offesets
+
+	* xs/GtkLabel.xs: implemented (get|set)_attributes
+
+	* xs/GtkList.xs xs/GtkSelection.xs xs/GtkStock.xs xs/GtkTreeModel.xs
+	xs/GtkTreeView.xs: clarified commentary
+
+	* xs/GtkListStore.xs xs/GtkTreeStore.xs gtk2perl.h: implement
+	gtk_(list|tree)_store_set_column_types, since it is now possible
+	to derive GObject types in perl; this is necessary to implement
+	the constructor of a derived list or tree store.  factored out
+	the stack handling code, into gtk2perl.h, to avoid needing to
+	create another header.
+
+	* xs/GtkTextBuffer.xs: implemented missing clipboard functions:
+	add_selection_clipboard remove_selection_clipboard cut_clipboard
+	copy_clipboard paste_clipboard
+
+	* xs/GtkWidget.xs: implemented get_pointer, is_ancestor,
+	translate_coordinates, set_style, ensure_style; added FIXMEs
+
+	* xs/GdkEvent.xs: let gdk_event_set_screen in there twice, because
+	i wasn't building against 2.2.x.  fixed.
+
+2003/08/18 03:56 muppetman
+
+	* TODO: updates
+
+	* xs/Gdk.xs: update some FIXMEs, implement the gdk_threads stuff
+
+	* xs/GdkColor.xs, api.pod, t/20.GdkColor.t: gdk_colormap_alloc_colors,
+	free_colors, and query_color
+
+	* xs/GdkDisplay.xs, xs/GdkDrawable.xs, xs/GdkPixbuf.xs,
+	xs/GdkPixbufLoader.xs, xs/GdkRgb.xs: update some FIXMEs
+
+	* xs/GdkEvent.xs, xs/GdkGC.xs: more missing functions and FIXMEs
+
+2003/08/15 18:06 rwmcfa1
+
+	* t/01.GtkWindow.t: fixed bug 'ok' -> 'is' causing really strange 
+	makemaker warnings. didn't have anything to do with libs. bad muppet,
+	no cookie for you...
+
+2003/08/15 09:35 muppetman
+
+	* pm/SimpleList.pm, AUTHORS: patch from Dr. Michael Langner,
+	allowing 0 to be a value in the tied list, implementing the SPLICE
+	operation, and adding a new column type, 'hidden'.  many thanks!
+
+	* debian/*: patch from James Curbo adding maintainence files for
+	debian packages.
+
+	* devel.pod, Makefile.PL: more docs
+
+	* Gtk2.pm, README: updated for 0.94 release
+
+2003/08/14 22:43 muppetman
+
+	busy day, busy day...
+
+	* t/00.Gtk2.t, t/16.GtkMenu-etc.t, t/19.GtkSimpleList.t: patch from
+	Torsten Schoenfeld hushes some warnings in make test
+
+	* xs/GtkTreeView.xs: another TreeView patch from Torsten, hacked up
+	a bit by me, to add some callbacks.  get_search_equal_func isn't
+	bound because there's really no reliable and not easily-broken way
+	to return a function pointer value or a code reference and then know
+	what to do with them on the other end.  (presumably for restoring
+	the search func after setting it.)  also, i left out the 
+	destroy_count_func stuff, as the docs say they are supposed to be
+	private.
+
+	* t/04.GtkSocket-GtkPlug.t: i did it wrong.  i swear it works,
+	this time.
+
+2003/08/14 16:59 muppetman
+
+	* t/04.GtkSocket-GtkPlug.t: skip this test on win32
+
+	* Makefile.PL: find_extra_libs is a hack to look through the perl
+	library tree for the library created when the Glib module was 
+	installed, so we can add that to the libs line for Gtk2.  this is
+	necessary because win32 doesn't allow unresolved symbols in anything,
+	so we can't link to the all-important gperl_* without this.
+	*grumble*
+
+	* t/01.GtkWindow.t: true and false are not enums; use constants for
+	them and get around some hidden bugs; try to skip tests that aren't
+	available on windows.  number of tests didn't match up on various
+	versions because of improper method of skipping tests... i think it
+	works right now.
+
+2003/08/14 12:00 muppetman
+
+	* TODO: updates
+
+	* xs/GdkPixmap.xs, gtk-demo/textview.pl: a GdkBitmap is a GdkPixmap
+	with depth 1.  so, set Gtk2::Gdk::Pixmap in @Gtk2::Gdk::Bitmap rather
+	than Gtk2::Gdk::Drawable.  this fixes a couple of annoying FIXMEs."
+
+	* xs/Gtk2.xs: cleanup and commentary
+
+	* xs/GdkDisplay.xs, xs/GdkDisplayManager.xs, gtk-demo/changedisplay.pl:
+	a couple more >=2.2 objects to make the changedisplay demo work.
+	dunno if it actually works with more than one display, because i
+	only have one here, but it doesn't crash like before...
+
+2003/08/11 12:52 muppetman
+
+	* xs/GtkTreeView.xs, AUTHORS: patch from Torsten Schoenfeld to enable
+	drag and drop stuff for TreeView
+
+2003/08/09 23:31 pcg
+
+	* Makefile.PL: some more Win32 and command.com fixes.
+
+2003/08/08 12:09 muppetman
+
+	* Gtk2.pm, README: pod updates, bump version to 0.93
+
+	* Makefile.PL: use makefile variables for manpage extensions (idea
+	suggested by Roderich Schupp, thanks)
+
+	* genkeysyms.pl: add pod to generated file
+
+2003/08/06 23:19 rwmcfa1
+
+	* Makefile.PL: .pm -> .3pm copy and paste bug corrected, spotted by 
+	James Curbo
+
+2003/08-06 16:58 ggc
+
+	* xs/GtkWidget.xs: add gtk_widget_size_request
+
+2003/08/06 12:57 muppetman
+
+	* xs/GtkWindow.xs: plug a memleak in list_toplevels
+
+	* xs/GtkWidget.xs: ->get_clipboard
+
+2003/08/05 22:16 muppetman
+
+	* pm/SimpleList.pm: pod patch from James Curbo
+
 2003/08/01 12:45 muppetman
 
 	* MANIFEST, Gtk2.pm, README, Makefile.PL: updated for 0.92 release

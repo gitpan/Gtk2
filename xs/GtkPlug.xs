@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPlug.xs,v 1.5 2003/07/24 00:58:38 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPlug.xs,v 1.6 2003/08/18 16:22:28 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -64,15 +64,6 @@ gtk_plug_get_id (plug)
 	GtkPlug * plug
 
 ## void _gtk_plug_add_to_socket (GtkPlug *plug, GtkSocket *socket)
-#void
-#_gtk_plug_add_to_socket (plug, socket)
-#	GtkPlug   * plug
-#	GtkSocket * socket
-
 ## void _gtk_plug_remove_from_socket (GtkPlug *plug, GtkSocket *socket)
-#void
-#_gtk_plug_remove_from_socket (plug, socket)
-#	GtkPlug   * plug
-#	GtkSocket * socket
 
 #endif

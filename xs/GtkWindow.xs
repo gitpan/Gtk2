@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.10 2003/07/15 00:58:08 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.12 2003/08/18 16:22:24 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -316,11 +316,14 @@ void
 gtk_window_list_toplevels (class)
 	SV * class
     PREINIT:
-	GList * toplvls;
+	GList * toplvls, * i;
     PPCODE:
-	for( toplvls = gtk_window_list_toplevels(); toplvls; 
-	     toplvls = toplvls->next )
-		XPUSHs (sv_2mortal (newSVGtkWindow (toplvls->data)));
+	toplvls = gtk_window_list_toplevels ();
+	for (i = toplvls; i != NULL; i = i->next)
+		XPUSHs (sv_2mortal (newSVGtkWindow (i->data)));
+	/* documentation doesn't mention it, but according to the source,
+	 * it's on us to free this! */
+	g_list_free (toplvls);
 
 ## void gtk_window_add_mnemonic (GtkWindow *window, guint keyval, GtkWidget *target)
 void
@@ -448,7 +451,10 @@ gtk_window_parse_geometry (window, geometry)
 
 ## GtkWindowGroup * gtk_window_group_new (void)
 GtkWindowGroup *
-gtk_window_group_new ()
+gtk_window_group_new (class)
+	SV * class
+    C_ARGS:
+	/*void*/
 
 ## void gtk_window_group_add_window (GtkWindowGroup *window_group, GtkWindow *window)
 void

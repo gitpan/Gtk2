@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.7 2003/06/26 18:58:44 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.8 2003/08/18 16:22:03 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -251,7 +251,8 @@ gtk_item_factory_popup (ifactory, x, y, mouse_button, time_, popup_data=NULL)
 	                                   : NULL, 
 	                                  x, y, mouse_button, time_);
 
-
+### FIXME these will need special handling to fetch the data set
+###       by $item_factory->popup
 ###  gpointer gtk_item_factory_popup_data (GtkItemFactory *ifactory) 
 #gpointer
 #gtk_item_factory_popup_data (ifactory)
@@ -262,6 +263,7 @@ gtk_item_factory_popup (ifactory, x, y, mouse_button, time_, popup_data=NULL)
 #gtk_item_factory_popup_data_from_widget (widget)
 #	GtkWidget *widget
 
+# FIXME
 ###  void gtk_item_factory_set_translate_func (GtkItemFactory *ifactory, GtkTranslateFunc func, gpointer data, GtkDestroyNotify notify) 
 #void
 #gtk_item_factory_set_translate_func (ifactory, func, data, notify)

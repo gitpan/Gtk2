@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.3 2003/07/05 08:21:30 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.4 2003/08/18 16:22:03 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -121,6 +121,7 @@ gtk_clipboard_get_display (clipboard)
 
 #endif /* >=2.2.0 */
 
+# FIXME needs validation
 ######  gboolean gtk_clipboard_set_with_data (GtkClipboard *clipboard, const GtkTargetEntry *targets, guint n_targets, GtkClipboardGetFunc get_func, GtkClipboardClearFunc clear_func, gpointer user_data) 
 ##gboolean
 ##gtk_clipboard_set_with_data (clipboard, targets, n_targets, get_func, clear_func, user_data)
@@ -184,6 +185,7 @@ gtk_clipboard_get_display (clipboard)
 ##    OUTPUT:
 ##	RETVAL
 ##
+# FIXME needs validation
 ####  gboolean gtk_clipboard_set_with_owner (GtkClipboard *clipboard, const GtkTargetEntry *targets, guint n_targets, GtkClipboardGetFunc get_func, GtkClipboardClearFunc clear_func, GObject *owner) 
 ##gboolean
 ##gtk_clipboard_set_with_owner (clipboard, targets, n_targets, get_func, clear_func, owner)

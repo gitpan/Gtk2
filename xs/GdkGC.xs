@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.6 2003/05/22 14:23:22 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.7 2003/08/18 08:00:05 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -43,16 +43,19 @@ gdk_gc_new (class, drawable)
     C_ARGS:
 	drawable
 
+# FIXME need GdkGCValues
  ##GdkGC * gdk_gc_new_with_values (GdkDrawable * drawable, GdkGCValues * values);
 ##  implement this with an optional values arg to ->new
  ##GdkScreen * gdk_gc_get_screen (GdkGC * gc);
 
+# FIXME need GdkGCValues
 # ## void gdk_gc_get_values (GdkGC *gc, GdkGCValues *values)
 #void
 #gdk_gc_get_values (gc, values)
 #	GdkGC *gc
 #	GdkGCValues *values
 #
+# FIXME need GdkGCValues
 # ## void gdk_gc_set_values (GdkGC *gc, GdkGCValues *values, GdkGCValuesMask values_mask)
 #void
 #gdk_gc_set_values (gc, values, values_mask)
@@ -130,6 +133,7 @@ gdk_gc_set_clip_rectangle (gc, rectangle)
 	GdkGC *gc
 	GdkRectangle *rectangle
 
+# FIXME needs GdkRegion
 # ## void gdk_gc_set_clip_region (GdkGC *gc, GdkRegion *region)
 #void
 #gdk_gc_set_clip_region (gc, region)
@@ -205,8 +209,11 @@ gdk_gc_set_rgb_bg_color (gc, color)
 	GdkGC *gc
 	GdkColor *color
 
-# ## GdkScreen * gdk_gc_get_screen (GdkGC *gc)
-#GdkScreen *
-#gdk_gc_get_screen (gc)
-#	GdkGC *gc
-#
+#ifdef GDK_TYPE_SCREEN
+
+ ## GdkScreen * gdk_gc_get_screen (GdkGC *gc)
+GdkScreen *
+gdk_gc_get_screen (gc)
+	GdkGC *gc
+
+#endif /* have GdkScreen */

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVScale.xs,v 1.4 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVScale.xs,v 1.5 2003/08/18 16:22:24 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -33,8 +33,11 @@ gtk_vscale_new (class, adjustment=NULL)
 
 ## GtkWidget* gtk_vscale_new_with_range (gdouble min, gdouble max, gdouble step)
 GtkWidget *
-gtk_vscale_new_with_range (min, max, step)
+gtk_vscale_new_with_range (class, min, max, step)
+	SV * class
 	gdouble min
 	gdouble max
 	gdouble step
+    C_ARGS:
+	min, max, step
 

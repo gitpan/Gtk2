@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.7 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.8 2003/08/18 16:22:28 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -86,7 +86,4 @@ gtk_tooltips_force_window (tooltips)
 	GtkTooltips * tooltips
 
 ## void _gtk_tooltips_toggle_keyboard_mode (GtkWidget *widget)
-#void
-#_gtk_tooltips_toggle_keyboard_mode (widget)
-#	GtkWidget * widget
 

@@ -3,7 +3,7 @@
 # 	- rm
 #########################
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/04.GtkSocket-GtkPlug.t,v 1.1 2003/06/05 15:01:02 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/04.GtkSocket-GtkPlug.t,v 1.6 2003/08/25 13:42:47 pcg Exp $
 #
 
 
@@ -11,15 +11,26 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 6;
-BEGIN { use_ok('Gtk2') };
+use Gtk2;
+use Test::More;
+
+if ($^O eq 'MSWin32')
+{
+	plan skip_all => "socket and plug not implemented on win32";
+	# ...despite patches that have been around for a long time
+}
+elsif( not Gtk2->init_check )
+{
+	plan skip_all =>
+		'Gtk2->init_check failed, probably unable to open DISPLAY';
+}
+else
+{
+	plan tests => 4;
+}
 
 #########################
 
-# Insert your test code below, the Test::More module is use()ed here so read
-# its man page ( perldoc Test::More ) for help writing this test script.
-
-ok( Gtk2->init );
 ok( $win = Gtk2::Window->new );
 
 ok( $socket = Gtk2::Socket->new );
@@ -27,7 +38,7 @@ $win->add($socket);
 
 ok( $id = $socket->get_id );
 
-$str = "perl -e '\$id = $id;\n\n".<<EOL;
+$str = "$^X -Mblib -e '\$id = $id;\n\n".<<EOL;
 use Gtk2;
 
 Gtk2->init;

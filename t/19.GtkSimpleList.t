@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/19.GtkSimpleList.t,v 1.4 2003/07/31 05:45:56 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/19.GtkSimpleList.t,v 1.6 2003/08/19 14:25:13 rwmcfa1 Exp $
 #
 
 #########################
@@ -7,34 +7,40 @@
 # 	- rm
 #########################
 
+use Gtk2;
+use Test::More;
 
+if( Gtk2->init_check )
+{
+	plan tests => 27;
+	require_ok( 'Gtk2::SimpleList' );
+}
+else
+{
+	plan skip_all =>
+		'Gtk2->init_check failed, probably unable to open DISPLAY';
+}
 
-#########################
-
-use Gtk2 '-init';
-
-use Test::More tests => 27;
-BEGIN { use_ok('Gtk2::SimpleList') };
 
 #########################
 
 Gtk2::SimpleList->add_column_type(
 	'ralacs', 	# think about it for a second...
-		type     => 'Glib::Scalar',      
-		renderer => 'Gtk2::CellRendererText',   
+		type     => 'Glib::Scalar',
+		renderer => 'Gtk2::CellRendererText',
 		attr     => sub {
 			my ($tree_column, $cell, $model, $iter, $i) = @_;
 			my ($info) = $model->get ($iter, $i);
 			$info = join('',reverse(split('', $info || '' )));
 			$cell->set (text => $info );
-		} 
+		}
 	);
 
 # add a new type of column that sums up an array reference
 Gtk2::SimpleList->add_column_type(
 	'sum_of_array',
-		type     => 'Glib::Scalar',      
-		renderer => 'Gtk2::CellRendererText',   
+		type     => 'Glib::Scalar',
+		renderer => 'Gtk2::CellRendererText',
 		attr     => sub {
 			my ($tree_column, $cell, $model, $iter, $i) = @_;
 			my $sum = 0;
@@ -44,7 +50,7 @@ Gtk2::SimpleList->add_column_type(
 				$sum += $_;
 			}
 			$cell->set (text => $sum);
-		} 
+		}
 	);
 
 my $win = Gtk2::Window->new;
@@ -104,7 +110,7 @@ my $count = 0;
 Glib::Idle->add( sub
 	{
 		my $ldata = $list->{data};
-		
+
 		ok( scalar(@$ldata) == 4 );
 
 		# test the initial values we put in there
@@ -125,14 +131,14 @@ Glib::Idle->add( sub
 			$ldata->[1][3] == 0 and
 			$ldata->[2][3] == 1 and
 			$ldata->[3][3] == 0 and
-			$ldata->[0][4] == undef and
-			$ldata->[1][4] == undef and
-			$ldata->[2][4] == $scalar and
-			$ldata->[3][4] == $scalar and
+			not defined($ldata->[0][4]) and
+			not defined($ldata->[1][4]) and
+			$ldata->[2][4] eq $scalar and
+			$ldata->[3][4] eq $scalar and
 			$ldata->[0][5] == $pixbuf and
-			$ldata->[1][5] == undef and
+			not defined($ldata->[1][5]) and
 			$ldata->[2][5] == $pixbuf and
-			$ldata->[3][5] == $undef and
+			not defined($ldata->[3][5]) and
 			eq_array($ldata->[0][7], [0, 1, 2]) and
 			eq_array($ldata->[1][7], [1, 2, 3]) and
 			eq_array($ldata->[2][7], [2, 3, 4]) and
@@ -185,14 +191,14 @@ Glib::Idle->add( sub
 			$ldata->[1][3] == 0 and
 			$ldata->[2][3] == 1 and
 			$ldata->[3][3] == 0 and
-			$ldata->[0][4] == undef and
-			$ldata->[1][4] == undef and
-			$ldata->[2][4] == $scalar and
-			$ldata->[3][4] == $scalar and
+			not defined($ldata->[0][4]) and
+			not defined($ldata->[1][4]) and
+			$ldata->[2][4] eq $scalar and
+			$ldata->[3][4] eq $scalar and
 			$ldata->[0][5] == $pixbuf and
-			$ldata->[1][5] == undef and
+			not defined($ldata->[1][5]) and
 			$ldata->[2][5] == $pixbuf and
-			$ldata->[3][5] == $undef and
+			not defined($ldata->[3][5]) and
 			eq_array($ldata->[0][7], [0, 1, 2]) and
 			eq_array($ldata->[1][7], [1, 2, 3]) and
 			eq_array($ldata->[2][7], [2, 3, 4]) and

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkList.xs,v 1.2 2003/06/24 13:26:42 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkList.xs,v 1.3 2003/08/18 16:22:42 muppetman Exp $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you
@@ -36,7 +36,8 @@ gtk_list_new (class)
 	SV * class
     C_ARGS:
 
-## parameter order flipped on this function
+## parameter order flipped on this function so the item
+## list soaks up the rest of the arg stack
 ##  void gtk_list_insert_items (GtkList *list, GList *items, gint position) 
 void
 gtk_list_insert_items (list, position, list_item, ...)

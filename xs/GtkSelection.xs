@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.2 2003/05/28 00:47:11 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.3 2003/08/18 16:22:42 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -81,8 +81,10 @@ gtk2perl_read_gtk_target_entry (SV * sv,
 	}
 }
 
-MODULE = Gtk2::Selection	PACKAGE = Gtk2::TargetList	PREFIX = gtk_target_list_
-
+/*
+ * FIXME no typemap for GtkTargetList
+##MODULE = Gtk2::Selection	PACKAGE = Gtk2::TargetList	PREFIX = gtk_target_list_
+##
 ####  GtkTargetList *gtk_target_list_new (const GtkTargetEntry *targets, guint ntargets) 
 ##GtkTargetList *
 ##gtk_target_list_new (targets, ntargets)
@@ -130,6 +132,7 @@ MODULE = Gtk2::Selection	PACKAGE = Gtk2::TargetList	PREFIX = gtk_target_list_
 ##		XSRETURN_UNDEF;
 ##    OUTPUT:
 ##	RETVAL
+*/
 
 MODULE = Gtk2::Selection	PACKAGE = Gtk2::Selection	PREFIX = gtk_selection_
 
@@ -166,6 +169,7 @@ gtk_selection_add_target (widget, selection, target, info)
 	GdkAtom target
 	guint info
 
+# FIXME
 ####  void gtk_selection_add_targets (GtkWidget *widget, GdkAtom selection, const GtkTargetEntry *targets, guint ntargets) 
 ##void
 ##gtk_selection_add_targets (widget, selection, targets, ntargets)

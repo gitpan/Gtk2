@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVButtonBox.xs,v 1.4 2003/05/22 14:23:24 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkVButtonBox.xs,v 1.5 2003/08/18 16:22:24 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,27 +25,30 @@ MODULE = Gtk2::VButtonBox	PACKAGE = Gtk2::VButtonBox	PREFIX = gtk_vbutton_box_
 
 ## GtkWidget* gtk_vbutton_box_new (void)
 GtkWidget *
-gtk_vbutton_box_new (class)
-	SV * class
+gtk_vbutton_box_new (SV * class)
     C_ARGS:
+	/*void*/
 
 ## void gtk_vbutton_box_set_spacing_default (gint spacing)
 void
-gtk_vbutton_box_set_spacing_default (spacing)
-	gint spacing
+gtk_vbutton_box_set_spacing_default (SV * class, gint spacing)
+    C_ARGS:
+	spacing
 
 ## GtkButtonBoxStyle gtk_vbutton_box_get_layout_default (void)
 GtkButtonBoxStyle
-gtk_vbutton_box_get_layout_default ()
+gtk_vbutton_box_get_layout_default (SV * class)
+    C_ARGS:
+	/*void*/
 
 ## void gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout)
 void
-gtk_vbutton_box_set_layout_default (layout)
-	GtkButtonBoxStyle layout
+gtk_vbutton_box_set_layout_default (SV * class, GtkButtonBoxStyle layout)
+    C_ARGS:
+	layout
 
 ##gint gtk_vbutton_box_get_spacing_default (void)
 gint
-gtk_vbutton_box_get_spacing_default (class)
-	SV * class
+gtk_vbutton_box_get_spacing_default (SV * class)
     C_ARGS:
-
+	/*void*/

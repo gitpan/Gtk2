@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/16.GtkMenu-etc.t,v 1.3 2003/05/17 13:31:06 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/16.GtkMenu-etc.t,v 1.5 2003/08/19 14:25:13 rwmcfa1 Exp $
 #
 
 #########################
@@ -9,17 +9,20 @@
 
 #########################
 
-# change 'tests => 1' to 'tests => last_test_to_print';
+use Gtk2;
+use Test::More;
 
-use Test::More tests => 33;
-BEGIN { use_ok('Gtk2') };
+if( Gtk2->init_check )
+{
+	plan tests => 31;
+}
+else
+{
+	plan skip_all =>
+		'Gtk2->init_check failed, probably unable to open DISPLAY';
+}
 
 #########################
-
-# Insert your test code below, the Test::More module is use()ed here so read
-# its man page ( perldoc Test::More ) for help writing this test script.
-
-ok( Gtk2->init );
 
 ok( $win = Gtk2::Window->new('toplevel') );
 $win->set_title('GtkMenu-etc.t Test Window');
@@ -69,7 +72,7 @@ $vbox->pack_start($optmenu, 0, 0, 0);
 $optmenu->set_menu($menu);
 
 Glib::Idle->add( sub {
-		$menu->popup(undef, undef, undef, undef, undef, undef);
+		$menu->popup(undef, undef, undef, undef, 1, 0);
 		ok(1);
 		Gtk2->main_quit;
 		0;

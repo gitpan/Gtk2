@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenu.xs,v 1.7 2003/06/18 20:56:45 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenu.xs,v 1.8 2003/08/18 16:22:03 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -142,10 +142,11 @@ gtk_menu_set_accel_path (menu, accel_path)
 	GtkMenu *menu
 	const gchar *accel_path
 
+# FIXME nbeeds a callback
  ##void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
  ##					   GtkWidget	       *attach_widget,
  ##					   GtkMenuDetachFunc	detacher);
- ##
+
 void
 gtk_menu_detach (menu)
 	GtkMenu *menu

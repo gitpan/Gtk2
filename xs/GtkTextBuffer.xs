@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.9 2003/07/05 08:21:30 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.11 2003/08/20 02:52:40 rwmcfa1 Exp $
  */
 
 #include "gtk2perl.h"
@@ -72,16 +72,26 @@ gtk_text_buffer_insert_range_interactive (buffer, iter, start, end, default_edit
 	gboolean default_editable
 
 #### void gtk_text_buffer_insert_with_tags (GtkTextBuffer *buffer, GtkTextIter *iter, const gchar *text, gint len, GtkTextTag *first_tag, ...)
-##void
-##gtk_text_buffer_insert_with_tags (buffer, iter, text, len, first_tag, first_tag)
-##	GtkTextBuffer *buffer
-##	GtkTextIter *iter
-##	const gchar *text
-##	gint len
-##	GtkTextTag *first_tag
-##	...
-##
-#### void gtk_text_buffer_insert_with_tags_by_name (GtkTextBuffer *buffer, GtkTextIter *iter, const gchar *text, gint len, const gchar *first_tag_name, ...)
+void
+gtk_text_buffer_insert_with_tags (buffer, iter, text, ...)
+	GtkTextBuffer *buffer
+	GtkTextIter *iter
+	const gchar *text
+    PREINIT:
+	int i;
+	gint start_offset;
+	GtkTextIter start;
+    CODE:
+	start_offset = gtk_text_iter_get_offset (iter);
+	gtk_text_buffer_insert (buffer, iter, text, -1);
+	gtk_text_buffer_get_iter_at_offset (buffer, &start, start_offset);
+	for (i = 3 ; i < items ; i++) {
+		gtk_text_buffer_apply_tag (buffer, SvGtkTextTag (ST (i)),
+					   &start, iter);
+	}
+ 
+
+## void gtk_text_buffer_insert_with_tags_by_name (GtkTextBuffer *buffer, GtkTextIter *iter, const gchar *text, gint len, const gchar *first_tag_name, ...)
 void
 gtk_text_buffer_insert_with_tags_by_name (buffer, iter, text, ...)
 	GtkTextBuffer *buffer
@@ -405,41 +415,42 @@ gtk_text_buffer_set_modified (buffer, setting)
 	GtkTextBuffer *buffer
 	gboolean setting
 
-#### FIXME need typemap for GtkClipboard for these.  GtkClipboard needs
-####       GtkAtom, and i need to learn what all that means before
-####       i can start implementing it.
-##### void gtk_text_buffer_add_selection_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard)
-###void
-###gtk_text_buffer_add_selection_clipboard (buffer, clipboard)
-###	GtkTextBuffer *buffer
-###	GtkClipboard *clipboard
-###
-##### void gtk_text_buffer_remove_selection_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard)
-###void
-###gtk_text_buffer_remove_selection_clipboard (buffer, clipboard)
-###	GtkTextBuffer *buffer
-###	GtkClipboard *clipboard
-###
-##### void gtk_text_buffer_cut_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard, gboolean default_editable)
-###void
-###gtk_text_buffer_cut_clipboard (buffer, clipboard, default_editable)
-###	GtkTextBuffer *buffer
-###	GtkClipboard *clipboard
-###	gboolean default_editable
-###
-##### void gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard)
-###void
-###gtk_text_buffer_copy_clipboard (buffer, clipboard)
-###	GtkTextBuffer *buffer
-###	GtkClipboard *clipboard
-###
-##### void gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard, GtkTextIter *override_location, gboolean default_editable)
-###void
-###gtk_text_buffer_paste_clipboard (buffer, clipboard, override_location, default_editable)
-###	GtkTextBuffer *buffer
-###	GtkClipboard *clipboard
-###	GtkTextIter_ornull *override_location
-###	gboolean default_editable
+#ifdef GTK_TYPE_CLIPBOARD
+
+## void gtk_text_buffer_add_selection_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard)
+void
+gtk_text_buffer_add_selection_clipboard (buffer, clipboard)
+	GtkTextBuffer *buffer
+	GtkClipboard *clipboard
+
+## void gtk_text_buffer_remove_selection_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard)
+void
+gtk_text_buffer_remove_selection_clipboard (buffer, clipboard)
+	GtkTextBuffer *buffer
+	GtkClipboard *clipboard
+
+## void gtk_text_buffer_cut_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard, gboolean default_editable)
+void
+gtk_text_buffer_cut_clipboard (buffer, clipboard, default_editable)
+	GtkTextBuffer *buffer
+	GtkClipboard *clipboard
+	gboolean default_editable
+
+## void gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard)
+void
+gtk_text_buffer_copy_clipboard (buffer, clipboard)
+	GtkTextBuffer *buffer
+	GtkClipboard *clipboard
+
+## void gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer, GtkClipboard *clipboard, GtkTextIter *override_location, gboolean default_editable)
+void
+gtk_text_buffer_paste_clipboard (buffer, clipboard, override_location, default_editable)
+	GtkTextBuffer *buffer
+	GtkClipboard *clipboard
+	GtkTextIter_ornull *override_location
+	gboolean default_editable
+
+#endif /* defined GTK_TYPE_CLIPBOARD */
 
 ## gboolean gtk_text_buffer_get_selection_bounds (GtkTextBuffer *buffer, GtkTextIter *start, GtkTextIter *end)
 ## returns empty list if there is no selection

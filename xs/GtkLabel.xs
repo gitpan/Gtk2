@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.5 2003/05/31 07:54:49 borup Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.6 2003/08/18 16:22:36 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -50,10 +50,10 @@ const gchar *
 gtk_label_get_text (label)
 	GtkLabel      * label
 
- #void gtk_label_set_attributes    (GtkLabel      * label,
- #                                  PangoAttrList * attrs)
- #
- #PangoAttrList * gtk_label_get_attributes    (GtkLabel      * label);
+void gtk_label_set_attributes (GtkLabel * label, PangoAttrList * attrs)
+
+# can return NULL, but we don't have a boxed _ornull OUTPUT variant. :-/
+PangoAttrList * gtk_label_get_attributes    (GtkLabel      * label);
 
 ### gtk_label_[gs]et_label ---- string includes any embedded stuff
 void

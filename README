@@ -1,6 +1,6 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/README,v 1.11 2003/08/01 16:52:55 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/README,v 1.16 2003/08/29 03:17:08 muppetman Exp $
 
-Gtk2 version 0.92
+Gtk2 version 0.96
 =================
 
 Perl bindings to the 2.x series of the Gtk+ graphical user interface library.
@@ -19,8 +19,6 @@ join gtk-perl-list@gnome.org at lists.gnome.org.
 
 Also have a look at the gtk2-perl website and sourceforge project page,
 http://gtk2-perl.sourceforge.net
-
-FIXME we have no other documentation, but we probably need it.
 
 
 INSTALLATION

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.3 2003/05/22 14:23:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.4 2003/08/18 16:22:32 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -51,12 +51,14 @@ gboolean
 gtk_entry_get_visibility (entry)
 	GtkEntry *entry
 
+# FIXME  need typemap for gunichar
  ## void gtk_entry_set_invisible_char (GtkEntry *entry, gunichar ch)
  ##void
  ##gtk_entry_set_invisible_char (entry, ch)
  ##	GtkEntry *entry
  ##	gunichar ch
- ##
+ #
+# FIXME need typemap for gunichar
  ## gunichar gtk_entry_get_invisible_char (GtkEntry *entry)
  ##gunichar
  ##gtk_entry_get_invisible_char (entry)
@@ -108,18 +110,13 @@ const gchar*
 gtk_entry_get_text (entry)
 	GtkEntry      *entry
 
- ## PangoLayout* gtk_entry_get_layout (GtkEntry *entry)
- ##PangoLayout*
- ##gtk_entry_get_layout (entry)
- ##	GtkEntry *entry
- ##
+PangoLayout*
+gtk_entry_get_layout (entry)
+	GtkEntry *entry
+
  ## void gtk_entry_get_layout_offsets (GtkEntry *entry, gint *x, gint *y)
- ##void
- ##gtk_entry_get_layout_offsets (entry, x, y)
- ##	GtkEntry *entry
- ##	gint *x
- ##	gint *y
- ##
+void
+gtk_entry_get_layout_offsets (GtkEntry *entry, OUTLIST gint x, OUTLIST gint y)
 
 void
 gtk_entry_append_text (entry, text)

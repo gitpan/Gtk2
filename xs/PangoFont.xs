@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.5 2003/07/04 20:33:51 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.6 2003/08/18 16:22:03 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -252,26 +252,10 @@ pango_font_family_list_faces (family)
 	}
 	g_free(faces);
 
-#MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::Font	PREFIX = pango_font_
-#
+###MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::Font	PREFIX = pango_font_
+###
+### no typemaps for this stuff.
+### it looks like it would only be useful from C, though.
 ### PangoCoverage * pango_font_get_coverage (PangoFont *font, PangoLanguage *language)
-#PangoCoverage *
-#pango_font_get_coverage (font, language)
-#	PangoFont *font
-#	PangoLanguage *language
-#
 ### PangoEngineShape * pango_font_find_shaper (PangoFont *font, PangoLanguage *language, guint32 ch)
-#PangoEngineShape *
-#pango_font_find_shaper (font, language, ch)
-#	PangoFont *font
-#	PangoLanguage *language
-#	guint32 ch
-#
 ### void pango_font_get_glyph_extents (PangoFont *font, PangoGlyph glyph, PangoRectangle *ink_rect, PangoRectangle *logical_rect)
-#void
-#pango_font_get_glyph_extents (font, glyph, ink_rect, logical_rect)
-#	PangoFont *font
-#	PangoGlyph glyph
-#	PangoRectangle *ink_rect
-#	PangoRectangle *logical_rect
-#

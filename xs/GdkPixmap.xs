@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.5 2003/05/22 14:23:22 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.7 2003/08/18 16:22:03 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -46,7 +46,12 @@ newSVGdkBitmap_noinc (GdkBitmap * bitmap)
 MODULE = Gtk2::Gdk::Pixmap	PACKAGE = Gtk2::Gdk::Bitmap	PREFIX = gdk_bitmap_
 
 BOOT:
-	gperl_set_isa ("Gtk2::Gdk::Bitmap", "Gtk2::Gdk::Drawable");
+	/* a GdkBitmap is a GdkPixmap with depth one.  they are all
+	 * typedef'd to GdkDrawable, but GdkBitmap doesn't get a type
+	 * wrapper.  since it's a GdkPixmap, i'll put Gtk2::Gdk::Pixmap
+	 * in its isa so that bitmaps can be used wherever pixmaps are
+	 * wanted.  otherwise, apps need to bless by hand. */
+	gperl_set_isa ("Gtk2::Gdk::Bitmap", "Gtk2::Gdk::Pixmap");
 
  ## GdkBitmap* gdk_bitmap_create_from_data (class, GdkDrawable *drawable, const gchar *data, gint width, gint height)
 ### intentionally switched to char instead of gchar
@@ -171,20 +176,8 @@ gdk_pixmap_colormap_create_from_xpm_d (class, drawable, colormap, transparent_co
 	if (pixmap) XPUSHs (sv_2mortal (newSVGdkPixmap_noinc (pixmap)));
 	if (mask)   XPUSHs (sv_2mortal (newSVGdkBitmap_noinc (mask)));
 
+
+# FIXME shouldn't we be able just to do lookup and foreign new in GdkDrawable?
 ## ## GdkPixmap* gdk_pixmap_lookup (GdkNativeWindow anid)
-##GdkPixmap*
-##gdk_pixmap_lookup (anid)
-##	GdkNativeWindow anid
-##
 ## ## GdkPixmap* gdk_pixmap_foreign_new_for_display (GdkDisplay *display, GdkNativeWindow anid)
-##GdkPixmap*
-##gdk_pixmap_foreign_new_for_display (display, anid)
-##	GdkDisplay *display
-##	GdkNativeWindow anid
-##
 ## ## GdkPixmap* gdk_pixmap_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
-##GdkPixmap*
-##gdk_pixmap_lookup_for_display (display, anid)
-##	GdkDisplay *display
-##	GdkNativeWindow anid
-##

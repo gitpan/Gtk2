@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.25 2003/08/01 16:52:55 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.29 2003/08/29 03:17:08 muppetman Exp $
 #
 
 package Gtk2;
@@ -14,7 +14,7 @@ use Glib;
 
 require DynaLoader;
 
-our $VERSION = '0.92';
+our $VERSION = '0.96';
 
 our @ISA = qw(DynaLoader);
 
@@ -173,26 +173,29 @@ join gtk-perl-list@gnome.org at lists.gnome.org.
 Also have a look at the gtk2-perl website and sourceforge project page,
 http://gtk2-perl.sourceforge.net
 
-FIXME we have no other documentation, but we probably need it.
-
-
-
 =head1 SEE ALSO
 
 perl(1), Glib(3pm).
 
+Gtk2::Gdk::Keysyms(3pm) contains a hash of key codes, culled from
+gdk/gdkkeysyms.h
+
 Gtk2::api(3pm) describes how to map the C API into perl, and some of the
 important differences in the perl bindings.
 
-The Gtk2::Helper module contains stuff that makes writing Gtk2 programs
+Gtk2::Helper(3pm) contains stuff that makes writing Gtk2 programs
 a little easier.
 
-Gtk2::SimpleList makes the GtkListStore and GtkTreeModel a I<lot>
+Gtk2::SimpleList(3pm) makes the GtkListStore and GtkTreeModel a I<lot>
 easier to use.
 
 Gtk2 also provides code to make it relatively painless to create perl
 wrappers for other GLib/Gtk-based libraries.  See Gtk2::CodeGen, 
-Glib::PkgConfig, and ExtUtils::Depends.
+Glib::PkgConfig, and ExtUtils::Depends.  If you're writing bindings,
+you'll probably also be interested in Gtk2::devel, which is a supplement
+to Glib::devel and Glib::xsapi.  The Binding Howto, at
+http://gtk2-perl.sourceforge.net/doc/binding_howto.pod.html, ties it all
+together.
 
 =head1 AUTHORS
 

@@ -1,9 +1,46 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/TODO,v 1.3 2003/05/18 17:56:56 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/TODO,v 1.8 2003/08/20 08:22:02 muppetman Exp $
 #
 
-update modules_list.txt
-move colorselectiontest.pl to a proper t/* test
+turn examples/colorselectiontest.pl into a proper t/* test
 give a better name to the entry point for gtk-demo
 make gtk-demo not show the 2.2 stuff when running on 2.0
-figure out why GdkPixbufLoader is flaky; see gtk-demo/images.pl
+should example programs be installed?
+there are plenty of unbound apis, either because of lack of interest or
+	lack of need -- these should be audited.
+
+do string columns in GtkTreeModels do automatic memory management?
+if not, do we need to automate it?  are we safe with sv strings?
+
+gdk_pixbuf_render_pixmap_and_mask_for_colormap
+gdk_pixbuf_render_pixmap_and_mask
+gdk_pixbuf_new_from_data <- how would we do that?
+
+gtk_key_snooper_install/remove
+
+no typemap (and therefore no bindings) for
+	GdkRegion
+	GdkPixbufFormat
+	GdkRgbCmap
+	GdkGeometry
+	gunichar
+	GScanner
+	GtkTargetList (GtkSelection.xs)
+	PangoGlyph
+	PangoEngineShape
+	PangoCoverage
+	PangoRectangle
+	PangoLayoutLine
+	PangoLayoutIter
+
+many functions missing from GtkRc; no methods bound for GtkRcStyle
+
+gdk_thread_init is supposed to be called before gtk_init.
+probably should have another import option, -thread-init,
+to avoid *always* enabling thread safety, since it will
+be rare to have a multi-threaded perl gtk program until
+perl threading is more mainstream.
+
+need a gchar_ornull typemap
+
+what about decorated window stuff?

@@ -79,16 +79,22 @@ use constant SCREEN_NUM_COLUMNS   => 2;
 sub find_toplevel_at_pointer {
   my $display = shift;
 
-  my $pointer_window = $display->get_window_at_pointer (undef, undef);
+#  my $pointer_window = $display->get_window_at_pointer;
+  use Data::Dumper;
+  my ($pointer_window, undef, undef) = $display->get_window_at_pointer;
 
   #
   # The user data field of a GdkWindow is used to store a pointer
   # to the widget that created it.
   #
   if ($pointer_window) {
-##### FIXME we'll need something like Gtk::Widget->new_from_pointer for this
-    my $widget = $pointer_window->get_user_data;
-    return $widget ? $widget->get_toplevel : undef;
+    my $ptr = $pointer_window->get_user_data;
+    if ($ptr) {
+      my $widget = Glib::Object->new_from_pointer ($ptr);
+      return $widget ? $widget->get_toplevel : undef;
+    } else {
+      return undef;
+    }
   } else {
     return undef;
   }
@@ -115,7 +121,6 @@ sub query_for_toplevel {
   my $popup = Gtk2::Window->new ('popup');
   $popup->set_screen ($screen);
   $popup->set_modal (TRUE);
-#  $popup->set_position ('GTK_WIN_POS_CENTER');
   $popup->set_position ('center');
   
   my $frame = Gtk2::Frame->new;
@@ -133,10 +138,10 @@ sub query_for_toplevel {
                                'button-release-mask',
                                undef,
                                $cursor,
-                               undef) eq 'GDK_GRAB_SUCCESS')
+                               0) eq 'success') #'GDK_GRAB_SUCCESS')
     {
       my $clicked = FALSE;
-      
+
       $popup->signal_connect (button_release_event => \&button_release_event_cb, \$clicked);
       
       #
@@ -145,19 +150,13 @@ sub query_for_toplevel {
       # are no events currently.
       #
       while (!$clicked) {
-	#g_main_context_iteration (NULL, TRUE);
-	#Glib::MainContext->iteration (TRUE);
-	#Glib::MainContext::iteration (undef, TRUE);
-	Gtk2->main_iteration; ## FIXME doesn't block!!!
+	Glib::MainContext->default->iteration (TRUE);
+#	Gtk2->main_iteration; ## FIXME doesn't block!!!
       }
-## FIXME could redo the above with another Gtk2->main, and have the
-##       button_release_event kill the new main loop, no?
       
       $toplevel = find_toplevel_at_pointer ($screen->get_display);
-##      if ($toplevel == $popup)
-      if ($toplevel->eq ($popup)) {
-	$toplevel = undef;
-      }
+      # don't move yourself
+      $toplevel = undef if defined $toplevel and $toplevel == $popup;
     }
       
 #  gdk_cursor_unref (cursor);
@@ -199,16 +198,14 @@ sub fill_screens {
       
       for (my $i = 0; $i < $n_screens; $i++) {
 	  my $screen = $info->{current_display}->get_screen ($i);
-	  GtkTreeIter iter;
 	  
 	  my $iter = $info->{screen_model}->append;
 	  $info->{screen_model}->set ($iter,
 				      SCREEN_COLUMN_NUMBER, $i,
 				      SCREEN_COLUMN_SCREEN, $screen);
 
-	  if ($i == 0) {
-	    $info->{selection}->select_iter ($iter);
-	  }
+	  $info->{screen_selection}->select_iter ($iter)
+              if $i == 0;
       }
   }
 }
@@ -219,9 +216,10 @@ sub fill_screens {
 # "Change" button was clicked, we destroy the dialog.
 #
 sub response_cb {
-  my ($dialog, $response_id, $info);
+  my ($dialog, $response_id, $info) = @_;
 
-  if ($response_id eq 'ok') {
+  # ok is -5
+  if ($response_id == -5) {
     query_change_display ($info);
   } else {
     $dialog->destroy;
@@ -249,7 +247,7 @@ sub open_display_cb {
     Gtk2::Label->new ("Please enter the name of\nthe new display\n");
 
   $dialog->vbox->add ($dialog_label);
-  $dialog->vbox->add ($dialog_label, $display_entry);
+  $dialog->vbox->add ($display_entry);
 
   $display_entry->grab_focus;
   $dialog->child->show_all;
@@ -294,7 +292,6 @@ sub display_changed_cb {
     my ($d) = $model->get ($iter, DISPLAY_COLUMN_DISPLAY);
     $info->{current_display} = $d;
   } else {
-##    $info->{current_display} = undef;
     delete $info->{current_display};
   }
 
@@ -437,9 +434,7 @@ sub display_closed_cb {
       my ($tmp_display) =
             $info->{display_model}->get ($iter,  DISPLAY_COLUMN_DISPLAY);
 
-##### FIXME can we overload operator == on GObjects?
-#      if ($tmp_display == $display) {
-      if ($tmp_display->eq($display)) {
+      if ($tmp_display == $display) {
 	  $info->{display_model}->remove ($iter);
 	  last;
       }
@@ -481,7 +476,6 @@ sub display_opened_cb {
 sub initialize_displays {
   my $info = shift;
   my $manager = Gtk2::Gdk::DisplayManager->get;
-##  GSList *tmp_list;
 
   foreach my $display ($manager->list_displays) {
     add_display ($info, $display);
@@ -500,7 +494,6 @@ sub destroy_info {
 
   my $manager = Gtk2::Gdk::DisplayManager->get;
   my @displays = $manager->list_displays;
-#  GSList *tmp_list;
 
   $manager->signal_handlers_disconnect_by_func (\&display_opened_cb, $info);
 
@@ -508,10 +501,6 @@ sub destroy_info {
     $display->signal_handlers_disconnect_by_func (\&display_closed_cb, $info);
   }
   
-#  g_slist_free (tmp_list);
-
-#  g_object_unref (info->size_group);
-#  g_free (info);
   $info = undef;
 }
 

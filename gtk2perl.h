@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.12 2003/07/24 00:58:32 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.13 2003/08/18 16:22:46 muppetman Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -81,5 +81,30 @@ SV * newSVGtkTargetEntry (GtkTargetEntry * target_entry);
  * they are only good for the block of code in which they are created */
 GtkTargetEntry * SvGtkTargetEntry (SV * sv);
 void gtk2perl_read_gtk_target_entry (SV * sv, GtkTargetEntry * entry);
+
+
+/* 
+ * get a list of GTypes from the xsub argument stack
+ * used to collect column types for creating and initializing GtkTreeStores
+ * and GtkListStores.
+ */
+#define GTK2PERL_STACK_ITEMS_TO_GTYPE_ARRAY(arrayvar, first, last)	\
+	(arrayvar) = g_array_new (FALSE, FALSE, sizeof (GType));	\
+	g_array_set_size ((arrayvar), (last) - (first) + 1);		\
+	{								\
+	int i;								\
+	for (i = (first) ; i <= (last) ; i++) {				\
+		char * package = SvPV_nolen (ST (i));			\
+		/* look up GType by package name. */			\
+		GType t = gperl_type_from_package (package);		\
+		if (t == 0) {						\
+			g_array_free ((arrayvar), TRUE);		\
+			croak ("package %s is not registered with GPerl", \
+			       package);				\
+			g_assert ("not reached");			\
+		}							\
+		g_array_index ((arrayvar), GType, i-(first)) = t;	\
+	}								\
+	}
 
 #endif /* _GTK2PERL_H_ */

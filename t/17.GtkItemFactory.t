@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/17.GtkItemFactory.t,v 1.2 2003/07/08 15:26:03 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/17.GtkItemFactory.t,v 1.3 2003/08/19 14:25:13 rwmcfa1 Exp $
 #
 
 #########################
@@ -9,10 +9,18 @@
 
 #########################
 
-use Test::More tests => 10;
-BEGIN { use_ok('Gtk2') };
+use Gtk2;
+use Test::More;
 
-use Data::Dumper;
+if( Gtk2->init_check )
+{
+	plan tests => 9;
+}
+else
+{
+	plan skip_all =>
+		'Gtk2->init_check failed, probably unable to open DISPLAY';
+}
 
 #########################
 
