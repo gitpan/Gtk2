@@ -1,0 +1,9 @@
+#
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/TODO,v 1.3 2003/05/18 17:56:56 muppetman Exp $
+#
+
+update modules_list.txt
+move colorselectiontest.pl to a proper t/* test
+give a better name to the entry point for gtk-demo
+make gtk-demo not show the 2.2 stuff when running on 2.0
+figure out why GdkPixbufLoader is flaky; see gtk-demo/images.pl
