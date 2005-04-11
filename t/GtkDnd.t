@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 5;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDnd.t,v 1.8 2005/01/02 16:25:51 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDnd.t,v 1.8.2.1 2005/04/11 18:18:08 kaffeetisch Exp $
 
 my $button = Gtk2::Button -> new("Bla");
 my $window = Gtk2::Window -> new();
@@ -42,7 +42,12 @@ if (defined($context)) {
   # warn $context -> get_source_widget();
 
   $context -> set_icon_widget($window, 5, 5);
-  # $context -> set_icon_pixmap(...);
+
+  my $pixmap = Gtk2::Gdk::Pixmap->new ($window->window, 16, 16, -1);
+  $context -> set_icon_pixmap($pixmap->get_colormap, $pixmap, undef, 5, 5);
+  my $mask = Gtk2::Gdk::Pixmap->new ($window->window, 16, 16, 1);
+  $context -> set_icon_pixmap($pixmap->get_colormap, $pixmap, $mask, 5, 5);
+
   $context -> set_icon_pixbuf($pixbuf, 5, 5);
   $context -> set_icon_stock("gtk-add", 5, 5);
   $context -> set_icon_default();
@@ -99,5 +104,5 @@ $button -> drag_source_unset();
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
-full list).  See LICENSE for more information.
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for
+the full list).  See LICENSE for more information.

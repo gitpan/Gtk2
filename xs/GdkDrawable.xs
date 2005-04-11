@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDrawable.xs,v 1.17 2005/01/02 16:25:51 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDrawable.xs,v 1.17.2.1 2005/04/11 18:18:08 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -267,7 +267,7 @@ gdk_draw_pixbuf (drawable, gc, pixbuf, src_x, src_y, dest_x, dest_y, width, heig
 
 #endif
 
- # FIXME need typemap for PangoGlyphString
+ # FIXME need a way to retrieve a PangoGlyphString
 ## ## void gdk_draw_glyphs (GdkDrawable *drawable, GdkGC *gc, PangoFont *font, gint x, gint y, PangoGlyphString *glyphs)
 ##void
 ##gdk_draw_glyphs (drawable, gc, font, x, y, glyphs)
