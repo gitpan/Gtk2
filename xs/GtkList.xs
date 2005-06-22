@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkList.xs,v 1.10 2004/01/15 19:40:06 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkList.xs,v 1.10.8.1 2005/06/22 22:22:13 kaffeetisch Exp $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you
@@ -27,6 +27,18 @@
 #include "gtk2perl.h"
 
 MODULE = Gtk2::List	PACKAGE = Gtk2::List	PREFIX = gtk_list_
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+Gtk2::List is deprecated; use Gtk2::TreeView and a Gtk2::ListStore instead.
+
+Gtk2::List is included in Gtk2-Perl only because Gtk2::Combo still makes
+use of it, and Gtk2::Combo's replacement, Gtk2::ComboBox, didn't appear in
+gtk+ until 2.4.0.
+
+=cut
 
 #ifdef GTK_TYPE_LIST
 

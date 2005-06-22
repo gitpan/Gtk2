@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListItem.xs,v 1.8 2003/12/17 03:14:07 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListItem.xs,v 1.8.10.1 2005/06/22 22:22:14 kaffeetisch Exp $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you
@@ -27,6 +27,20 @@
 #include "gtk2perl.h"
 
 MODULE = Gtk2::ListItem	PACKAGE = Gtk2::ListItem	PREFIX = gtk_list_item_
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+Gtk2::ListItem is the widget used for each item in a Gtk2::List.  Gtk2::List
+and Gtk2::ListItem are deprecated; use Gtk2::TreeView and a Gtk2::ListStore
+instead.
+
+Gtk2::ListItem is included in Gtk2-Perl only because Gtk2::Combo contains a
+Gtk2::List, and Gtk2::Combo's replacement, Gtk2::ComboBox, didn't appear in
+gtk+ until 2.4.0.
+
+=cut
 
 #ifdef GTK_TYPE_LIST_ITEM
 

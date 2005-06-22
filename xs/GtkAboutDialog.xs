@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.8 2005/02/08 05:17:34 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.8.2.1 2005/06/14 01:49:08 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -81,6 +81,12 @@ void gtk_show_about_dialog (class, GtkWindow_ornull * parent, first_property_nam
 				g_value_unset (&value);
 			}
 		}
+		if (parent)
+			g_object_set_data_full (G_OBJECT (parent),
+					       	"gtk-about-dialog",
+						dialog, g_object_unref);
+		else
+			global_about_dialog = dialog;
 	}
 	gtk_window_present (GTK_WINDOW (dialog));
 

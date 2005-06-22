@@ -1,14 +1,29 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioAction.xs,v 1.4 2004/02/22 19:57:34 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioAction.xs,v 1.4.8.1 2005/06/22 22:22:14 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::RadioAction	PACKAGE = Gtk2::RadioAction	PREFIX = gtk_radio_action_
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  my $action = Gtk2::RadioAction->new (name => 'one',
+                                       tooltip => 'One',
+                                       value => 23);
+
+Note that the constructor slightly deviates from the convenience constructor in
+the C API.  Instead of passing in a list of values for name, label, tooltip,
+stock-id and value, you just use key => value pairs like with
+Glib::Object::new.
+
+=cut
 
 ## GSList  *gtk_radio_action_get_group (GtkRadioAction *action);
 void

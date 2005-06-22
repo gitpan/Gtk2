@@ -1,9 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooser.t,v 1.20 2005/03/07 21:06:00 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooser.t,v 1.20.2.1 2005/06/22 22:59:27 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, "GtkFileChooser is new in 2.4"],
+	skip_all => "GtkFileChooser is completely broken",
 	tests => 43;
 use File::Spec;
 use Cwd;

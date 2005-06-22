@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.24 2005/01/10 06:27:12 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.24.2.1 2005/06/22 22:22:13 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -99,6 +99,32 @@ gtk2perl_dialog_response_marshal (GClosure * closure,
 }
 
 MODULE = Gtk2::Dialog	PACKAGE = Gtk2::Dialog	PREFIX = gtk_dialog_
+
+=for position SYNOPSIS
+
+=head1 SYNOPSIS
+
+  # create a new dialog with some buttons - one stock, one not.
+  $dialog = Gtk2::Dialog->new ($title, $parent_window, $flags,
+                               'gtk-cancel' => 'cancel',
+                               'Do it'      => 'ok');
+  # create window contents for yourself.
+  $dialog->vbox->add ($some_widget);
+
+  $dialog->set_default_response ('ok');
+
+  # show and interact modally -- blocks until the user
+  # activates a response.
+  $response = $dialog->run;
+  if ($response eq 'ok') {
+      do_the_stuff ();
+  }
+
+  # activating a response does not destroy the window,
+  # that's up to you.
+  $dialog->destroy;
+
+=cut
 
 =for position DESCRIPTION
 
