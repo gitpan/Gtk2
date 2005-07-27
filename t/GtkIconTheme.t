@@ -1,10 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.11 2005/01/30 02:17:29 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.11.2.1 2005/07/27 01:11:48 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, 'GtkIconTheme is new in 2.4'],
-	tests => 17;
+	tests => 16;
 
 my $icon_theme = Gtk2::IconTheme->new;
 isa_ok ($icon_theme, 'Gtk2::IconTheme');
@@ -19,7 +19,6 @@ $icon_theme->set_screen (Gtk2::Gdk::Screen->get_default);
 
 ok ($icon_theme->list_icons (undef));
 
-ok (!$icon_theme->has_icon ('gtk-open'));
 ok (!$icon_theme->has_icon ('something crazy'));
 
 my $icon_info = $icon_theme->lookup_icon ('stock_edit', 24, 'use-builtin');
@@ -84,5 +83,5 @@ ok (!$icon_theme->rescan_if_needed);
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

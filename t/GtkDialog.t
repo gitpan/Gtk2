@@ -1,5 +1,6 @@
+# vim: set syntax=perl :
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDialog.t,v 1.4 2005/01/02 17:45:21 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDialog.t,v 1.4.2.1 2005/07/24 04:28:25 muppetman Exp $
 #
 
 #########################
@@ -70,6 +71,7 @@ SKIP: {
 		unless Gtk2->CHECK_VERSION (2, 6, 0);
 
 	$d3->set_alternative_button_order (2, 3);
+	$d3->set_alternative_button_order (qw(ok cancel accept), 3);
 	$d3->set_alternative_button_order;
 
 	my $screen = Gtk2::Gdk::Screen->get_default;

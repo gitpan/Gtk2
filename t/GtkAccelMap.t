@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 23;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelMap.t,v 1.5.2.1 2005/06/22 22:22:13 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelMap.t,v 1.5.2.3 2005/07/27 01:30:00 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 
@@ -51,5 +51,5 @@ Gtk2::AccelMap -> foreach_unfiltered("bla", sub {
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/TestHelper.pm,v 1.9 2005/01/06 04:23:14 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/TestHelper.pm,v 1.9.2.1 2005/07/27 01:11:47 kaffeetisch Exp $
 #
 
 package Gtk2::TestHelper;
@@ -108,7 +108,7 @@ __END__
 
 =head1 NAME
 
-Gtk2::Test::Helper - Code to make testing Gtk2 and friends simpler.
+Gtk2::TestHelper - Code to make testing Gtk2 and friends simpler.
 
 =head1 SYNOPSIS
 

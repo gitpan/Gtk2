@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAction.t,v 1.5 2005/01/02 16:25:51 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAction.t,v 1.5.2.2 2005/07/27 01:30:00 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -59,7 +59,7 @@ $action->set_accel_group (undef);
 $action->set_accel_group (Gtk2::AccelGroup->new);
 
 SKIP: {
-	skip "set_sensitive and set_visible are new in 2.6", 2
+	skip "new 2.6 stuff", 2
 		unless Gtk2->CHECK_VERSION (2, 6, 0);
 
 	$action->set_sensitive(FALSE);
@@ -71,5 +71,5 @@ SKIP: {
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

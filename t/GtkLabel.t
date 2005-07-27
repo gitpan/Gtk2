@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkLabel.t,v 1.6 2005/01/10 06:27:35 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkLabel.t,v 1.6.2.1 2005/07/24 04:51:06 muppetman Exp $
 #
 # TODO: 
 #	(set|get)_attributes
@@ -62,8 +62,8 @@ is ($label->get_use_markup, 1, '$label->get_use_markup, true');
 $label->set_line_wrap (1);
 ok ($label->get_line_wrap, '$label->(set|get)_line_wrap');
 
-ok (eq_array ([$label->get_layout_offsets],  [0, 0]), 
-	'$label-get_layout_offsets');
+my @offsets = $label->get_layout_offsets;
+is (scalar (@offsets), 2, '$label->get_layout_offsets');
 
 isa_ok ($label->get_layout, 'Gtk2::Pango::Layout');
 

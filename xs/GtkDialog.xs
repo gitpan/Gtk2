@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.24.2.1 2005/06/22 22:22:13 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDialog.xs,v 1.24.2.2 2005/07/24 04:28:25 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -468,7 +468,7 @@ gtk_dialog_set_alternative_button_order (dialog, ...)
 	if ((n_params = (items - 1)) > 0) {
 		new_order = g_new0 (gint, n_params);
 		for (i = 1; i < items; i++)
-			new_order[i - 1] = SvIV (ST (i));
+			new_order[i - 1] = sv_to_response_id (ST (i));
 
 		gtk_dialog_set_alternative_button_order_from_array (
 			dialog, n_params, new_order);

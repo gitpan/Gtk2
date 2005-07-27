@@ -3,7 +3,7 @@ use strict;
 use Test::More;
 use Gtk2;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.13 2004/10/30 17:13:22 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.13.2.1 2005/07/27 01:11:47 kaffeetisch Exp $
 
 Gtk2::Gdk::Threads -> init();
 
@@ -47,7 +47,8 @@ SKIP: {
 }
 
 ok(Gtk2::Gdk -> set_locale());
-Gtk2::Gdk -> set_sm_client_id();
+Gtk2::Gdk -> set_sm_client_id("blub");
+Gtk2::Gdk -> set_sm_client_id(undef);
 
 Gtk2::Gdk -> set_program_class("gtk2perl");
 is(Gtk2::Gdk -> get_program_class(), "gtk2perl");
