@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkLabel.t,v 1.6.2.1 2005/07/24 04:51:06 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkLabel.t,v 1.8 2005/08/07 04:37:20 muppetman Exp $
 #
 # TODO: 
 #	(set|get)_attributes

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.6 2005/02/08 05:17:52 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.9 2005/07/27 00:46:47 kaffeetisch Exp $
 #
 
 #########################
@@ -12,7 +12,7 @@
 use strict;
 use warnings;
 
-use Gtk2::TestHelper tests => 30,
+use Gtk2::TestHelper tests => 52,
     at_least_version => [2, 6, 0, "GtkIconView is new in 2.6"],
     ;
 
@@ -58,7 +58,7 @@ foreach (qw/horizontal vertical/)
 	is ($iview->get_orientation, $_, '$iview->set|get_orienation, '.$_);
 }
 
-# extended should be in this list, but it seems to fail 
+# extended should be in this list, but it seems to fail
 foreach (qw/none single browse multiple/)
 {
 	$iview->set_selection_mode ($_);
@@ -66,20 +66,38 @@ foreach (qw/none single browse multiple/)
 	    '$iview->set|get_selection_mode '.$_);
 }
 
+$iview->set_columns (23);
+is ($iview->get_columns, 23);
+
+$iview->set_item_width (23);
+is ($iview->get_item_width, 23);
+
+$iview->set_spacing (23),
+is ($iview->get_spacing, 23);
+
+$iview->set_row_spacing (23);
+is ($iview->get_row_spacing, 23);
+
+$iview->set_column_spacing (23);
+is ($iview->get_column_spacing, 23);
+
+$iview->set_margin (23);
+is ($iview->get_margin, 23);
+
 #$win->show_all;
 
 run_main {
 	# this stuff is liable to be flaky, it may require TODO's
 	my $path = $iview->get_path_at_pos (50, 50);
 	isa_ok ($path, 'Gtk2::TreePath', '$iview->get_path_at_pos (50, 50)');
-	
-	is ($iview->path_is_selected ($path), '', 
+
+	is ($iview->path_is_selected ($path), '',
 	    '$iview->path_is_selected, no');
 	$iview->select_path ($path);
-	is ($iview->path_is_selected ($path), 1, 
+	is ($iview->path_is_selected ($path), 1,
 	    '$iview->path_is_selected, yes');
 	$iview->unselect_path ($path);
-	is ($iview->path_is_selected ($path), '', 
+	is ($iview->path_is_selected ($path), '',
 	    '$iview->path_is_selected, no');
 
 	$iview->item_activated ($path);
@@ -110,6 +128,58 @@ run_main {
 	my @selected_items = $iview->get_selected_items;
 	is ($ncalls, scalar(@selected_items),
 	    'called once for each selected child');
+
+	SKIP: {
+		skip 'new 2.8 stuff', 16
+			unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+
+		$win->add ($iview);
+		$win->show_all;
+
+		my ($path, $cell) = $iview->get_item_at_pos (50, 50);
+		isa_ok ($path, "Gtk2::TreePath");
+		isa_ok ($cell, "Gtk2::CellRenderer");
+
+		$iview->set_cursor ($path, undef, FALSE);
+		my @tmp = $iview->get_cursor;
+		is (@tmp, 2);
+		isa_ok ($tmp[0], "Gtk2::TreePath");
+		is ($tmp[1], undef);
+
+		$iview->set_cursor ($path, $cell, TRUE);
+		@tmp = $iview->get_cursor;
+		is (@tmp, 2);
+		isa_ok ($tmp[0], "Gtk2::TreePath");
+		is ($tmp[1], $cell);
+
+		@tmp = $iview->get_visible_range;
+		isa_ok ($tmp[0], "Gtk2::TreePath");
+		isa_ok ($tmp[1], "Gtk2::TreePath");
+
+		$iview->scroll_to_path ($path, TRUE, 0.5, 0.5);
+
+		$iview->enable_model_drag_source ([qw/shift-mask/], "copy",
+		  { target => "STRING", flags => ["same-app", "same-widget"], info => 42 });
+		$iview->enable_model_drag_dest ("copy",
+		  { target => "STRING", flags => ["same-app", "same-widget"], info => 42 });
+
+		$iview->unset_model_drag_source;
+		$iview->unset_model_drag_dest;
+
+		$iview->set_reorderable (TRUE);
+		ok ($iview->get_reorderable);
+
+		$iview->set_drag_dest_item ($path, "drop-into");
+		@tmp = $iview->get_drag_dest_item;
+		isa_ok ($tmp[0], "Gtk2::TreePath");
+		is ($tmp[1], "drop-into");
+
+		my ($tmp_path, $pos) = $iview->get_dest_item_at_pos (50, 50);
+		isa_ok ($tmp_path, "Gtk2::TreePath");
+		like ($pos, qr/drop/);
+
+		isa_ok ($iview->create_drag_icon ($path), "Gtk2::Gdk::Pixmap");
+	}
 };
 
 sub create_store
@@ -138,11 +208,11 @@ sub fill_store
 	my $store = shift;
 	my $pbs = shift;
 
-	foreach (qw/one two three four five six seven eight nine uno dos 
+	foreach (qw/one two three four five six seven eight nine uno dos
 		    tres quatro cinco/)
 	{
 		my $iter = $store->append;
-		$store->set ($iter, 
+		$store->set ($iter,
 			     TEXT, "$_",
 			     PIXBUF, $pbs->[rand (@$pbs)],
 			     BOOLEAN, rand (2),

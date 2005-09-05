@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.8.2.1 2005/06/14 01:49:08 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.9 2005/06/08 02:10:42 muppetman Exp $
  */
 
 #include "gtk2perl.h"

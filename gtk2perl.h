@@ -18,7 +18,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
  * 
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.36 2005/02/17 04:33:47 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.37 2005/07/11 22:39:12 kaffeetisch Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -186,5 +186,11 @@ void gtk2perl_menu_position_func (GtkMenu       * menu,
 SV * newSVGdkGeometry (GdkGeometry *geometry);
 GdkGeometry * SvGdkGeometry (SV *object);
 GdkGeometry * SvGdkGeometryReal (SV *object, GdkWindowHints *hints);
+
+/* special handling for GdkPixbufFormat, which was introduced in gtk+ 2.2.0 */
+#if GTK_CHECK_VERSION (2, 2, 0)
+SV * newSVGdkPixbufFormat (GdkPixbufFormat * format);
+GdkPixbufFormat * SvGdkPixbufFormat (SV * sv);
+#endif
 
 #endif /* _GTK2PERL_H_ */

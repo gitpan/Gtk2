@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 39;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.14 2005/01/02 16:25:51 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.15 2005/07/10 12:22:20 kaffeetisch Exp $
 
 my $attributes = {
   title => "Bla",
@@ -275,9 +275,17 @@ SKIP: {
   $window -> set_focus_on_map(TRUE);
 }
 
+SKIP: {
+  skip("new 2.8 stuff", 0)
+    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+
+  $window_three -> set_urgency_hint(TRUE);
+  $window_three -> move_region($region, 10, 10);
+}
+
 $window -> hide();
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

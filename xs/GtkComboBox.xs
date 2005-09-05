@@ -3,23 +3,13 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBox.xs,v 1.9.2.1 2005/06/22 22:22:13 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBox.xs,v 1.11 2005/07/10 12:22:20 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 #if GTK_CHECK_VERSION (2, 6, 0)
-
-/* Defined in GtkTreeView.xs. */
-
-extern GPerlCallback *
-gtk2perl_tree_view_row_separator_func_create (SV * func, SV * data);
-
-extern gboolean
-gtk2perl_tree_view_row_separator_func (GtkTreeModel      *model,
-				       GtkTreeIter       *iter,
-				       gpointer           data);
-
+# include "gtk2perl-private.h" /* For the row separator callback. */
 #endif
 
 MODULE = Gtk2::ComboBox	PACKAGE = Gtk2::ComboBox	PREFIX = gtk_combo_box_

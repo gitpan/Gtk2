@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 23;
+use Gtk2::TestHelper tests => 24;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelMap.t,v 1.5.2.3 2005/07/27 01:30:00 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelMap.t,v 1.8 2005/06/22 17:40:16 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 
@@ -48,6 +48,16 @@ Gtk2::AccelMap -> foreach_unfiltered("bla", sub {
   is(shift(), 1);
   is(shift(), "bla");
 });
+
+SKIP: {
+  skip "new stuff", 1
+    unless Gtk2 -> CHECK_VERSION(2, 4, 0);
+
+  isa_ok(Gtk2::AccelMap -> get(), "Gtk2::AccelMap");
+
+  Gtk2::AccelMap -> lock_path("<gtk2-perl-tests>/Bla/Blub");
+  Gtk2::AccelMap -> unlock_path("<gtk2-perl-tests>/Bla/Blub");
+}
 
 __END__
 

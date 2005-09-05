@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk-demo/main.pl,v 1.14 2004/06/02 02:05:36 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk-demo/main.pl,v 1.15 2005/04/02 17:03:45 kaffeetisch Exp $
 #
 
 our $PROGDIR = $0;
@@ -53,6 +53,10 @@ push @testgtk_demos,
   { title => "Entry Completion", filename => "entry_completion.pl", func => 'stub', },
   { title => "UI Manager",       filename => "ui_manager.pl",       func => 'stub', }
 	if Gtk2->CHECK_VERSION (2, 4, 0);
+
+push @testgtk_demos,
+  { title => "Rotated Text", filename => "rotated_text.pl", func => 'stub', },
+	if Gtk2->CHECK_VERSION (2, 6, 0);
 
 # some globals.
 my $info_buffer;

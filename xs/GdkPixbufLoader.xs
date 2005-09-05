@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbufLoader.xs,v 1.11 2004/09/19 21:47:11 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbufLoader.xs,v 1.12 2005/07/11 22:39:21 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -30,13 +30,21 @@ gdk_pixbuf_loader_new (class)
 
 ##  GdkPixbufLoader * gdk_pixbuf_loader_new_with_type (const char *image_type, GError **error) 
 =for apidoc __gerror__
+=for signature pixbufloader = Gtk2::Gdk::PixbufLoader->new_with_type ($image_type)
 =cut
 GdkPixbufLoader_noinc *
-gdk_pixbuf_loader_new_with_type (image_type)
-	const char *image_type
+gdk_pixbuf_loader_new_with_type (...)
     PREINIT:
+	const char *image_type;
 	GError * error = NULL;
     CODE:
+	if (items == 1)
+		image_type = SvPV_nolen (ST (0));
+	else if (items == 2)
+		image_type = SvPV_nolen (ST (1));
+	else
+		croak ("Usage: Gtk2::Gdk::PixbufLoader::new_with_type (class, image_type)");
+
 	RETVAL = gdk_pixbuf_loader_new_with_type (image_type, &error);
 	if (!RETVAL)
 		gperl_croak_gerror (NULL, error);
@@ -47,12 +55,21 @@ gdk_pixbuf_loader_new_with_type (image_type)
 
 ## GdkPixbufLoader * gdk_pixbuf_loader_new_with_mime_type (const char *mime_type, GError **error);
 =for apidoc __gerror__
+=for signature pixbufloader = Gtk2::Gdk::PixbufLoader->new_with_mime_type ($mime_type)
 =cut
 GdkPixbufLoader_noinc *
-gdk_pixbuf_loader_new_with_mime_type (const char *mime_type)
+gdk_pixbuf_loader_new_with_mime_type (...)
     PREINIT:
+	const char *mime_type;
 	GError * error = NULL;
     CODE:
+	if (items == 1)
+		mime_type = SvPV_nolen (ST (0));
+	else if (items == 2)
+		mime_type = SvPV_nolen (ST (1));
+	else
+		croak ("Usage: Gtk2::Gdk::PixbufLoader::new_with_mime_type (class, mime_type)");
+
 	RETVAL = gdk_pixbuf_loader_new_with_mime_type (mime_type, &error);
 	if (!RETVAL)
 		gperl_croak_gerror (NULL, error);
@@ -114,10 +131,9 @@ gdk_pixbuf_loader_close (loader)
 
 #if GTK_CHECK_VERSION(2,2,0)
 
- ## no typemap for GdkPixbufFormat
-###  GdkPixbufFormat *gdk_pixbuf_loader_get_format (GdkPixbufLoader *loader) 
-#GdkPixbufFormat *
-#gdk_pixbuf_loader_get_format (loader)
-#	GdkPixbufLoader *loader
+##  GdkPixbufFormat *gdk_pixbuf_loader_get_format (GdkPixbufLoader *loader) 
+GdkPixbufFormat *
+gdk_pixbuf_loader_get_format (loader)
+	GdkPixbufLoader *loader
 
 #endif /* >= 2.2.0 */

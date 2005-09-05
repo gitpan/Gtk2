@@ -1,5 +1,6 @@
+# vim: set syntax=perl :
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSimpleList.t,v 1.6 2005/01/06 04:23:18 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSimpleList.t,v 1.7 2005/07/22 04:41:32 muppetman Exp $
 #
 
 #########################

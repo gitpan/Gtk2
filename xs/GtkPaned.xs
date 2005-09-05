@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPaned.xs,v 1.11 2004/02/26 00:57:54 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPaned.xs,v 1.13 2005/06/20 19:40:42 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -61,11 +61,17 @@ GtkWidget *
 child1 (GtkPaned * paned)
     ALIAS:
 	Gtk2::Paned::child2 = 1
+	Gtk2::Paned::get_child1 = 2
+	Gtk2::Paned::get_child2 = 3
     CODE:
 	RETVAL = NULL;
 	switch (ix) {
-		case 0: RETVAL = paned->child1; break;
-		case 1: RETVAL = paned->child2; break;
+		case 0:
+		case 2:
+			RETVAL = paned->child1; break;
+		case 1:
+		case 3:
+			RETVAL = paned->child2; break;
 		default:
 			RETVAL = NULL;
 			g_assert_not_reached ();

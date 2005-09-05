@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkX11.xs,v 1.5 2005/01/02 16:25:51 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkX11.xs,v 1.6 2005/07/10 12:22:20 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 #ifdef GDK_WINDOWING_X11
@@ -158,6 +158,14 @@ MODULE = Gtk2::Gdk::X11	PACKAGE = Gtk2::Gdk::Display	PREFIX = gdk_x11_display_
 void gdk_x11_display_grab (GdkDisplay *display);
 
 void gdk_x11_display_ungrab (GdkDisplay *display);
+
+#if GTK_CHECK_VERSION (2, 7, 0) /* FIXME: 2.8 */
+
+void gdk_x11_display_set_cursor_theme (GdkDisplay *display, const gchar *theme, gint size);
+
+guint32 gdk_x11_display_get_user_time (GdkDisplay *display);
+
+#endif
 
 #endif
 

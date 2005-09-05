@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.11.2.1 2005/07/27 01:11:48 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.13 2005/07/27 00:46:47 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper

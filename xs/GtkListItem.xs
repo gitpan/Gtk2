@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListItem.xs,v 1.8.10.1 2005/06/22 22:22:14 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkListItem.xs,v 1.9 2005/06/08 02:13:33 muppetman Exp $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you

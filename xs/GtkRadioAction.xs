@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioAction.xs,v 1.4.8.1 2005/06/22 22:22:14 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioAction.xs,v 1.5 2005/04/25 17:37:46 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

@@ -3,7 +3,7 @@ use strict;
 use Test::More;
 use Gtk2;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.13.2.1 2005/07/27 01:11:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.14 2005/07/10 12:22:19 kaffeetisch Exp $
 
 Gtk2::Gdk::Threads -> init();
 

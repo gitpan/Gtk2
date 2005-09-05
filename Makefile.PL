@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.99.2.1 2005/04/11 18:33:11 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.105 2005/09/05 19:00:29 kaffeetisch Exp $
 #
 
 use 5.008;
@@ -32,7 +32,7 @@ use Cwd;
 our %build_reqs = (
 	'perl-ExtUtils-Depends'   => '0.2',
 	'perl-ExtUtils-PkgConfig' => '1.03',
-	'perl-Glib'               => '1.081',
+	'perl-Glib'               => '1.100',
 	'Gtk+'                    => '2.0.0',
 );
 our %PREREQ_PM = (
@@ -227,6 +227,21 @@ WriteMakefile(
     DL_FUNCS      => { Gtk2 => [] },
     $gtk2->get_makefile_vars,
 );
+
+=unstable
+
+print <<__EOW__;
+WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+
+   This is an unstable development release of Gtk2.  The API is not
+   frozen and things are subject to change at any time.  Report any
+   bugs to gtk-perl-list AT gnome DOT org as soon as possible.
+   Please use the 1.08x series for important work.
+
+WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+__EOW__
+
+=cut
 
 #
 # extra makefile override stuff... watch for falling wizardry.

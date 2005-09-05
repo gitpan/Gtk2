@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBoxEntry.xs,v 1.8.2.1 2005/06/22 22:22:13 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBoxEntry.xs,v 1.9 2005/06/08 02:13:33 muppetman Exp $
  */
 
 #include "gtk2perl.h"

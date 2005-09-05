@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the full
-# list)
+# Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
+# full list)
 # 
 # This library is free software; you can redistribute it and/or modify it under
 # the terms of the GNU Library General Public License as published by the Free
@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gdk.typemap,v 1.13 2004/04/19 19:20:29 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gdk.typemap,v 1.14 2005/04/25 17:37:44 kaffeetisch Exp $
 #
 
 # this is where Gdk hand coded typemap stuff resides
@@ -38,3 +38,6 @@ GdkWindowAttr *		T_GPERL_GENERIC_WRAPPER
 
 # can be either an object or NULL to get the default keymap
 GdkKeymap_orclass *	T_GPERL_GENERIC_WRAPPER
+
+# wrapped as a blessed hash
+GdkPixbufFormat *	T_GPERL_GENERIC_WRAPPER

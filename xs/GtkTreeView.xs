@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.34 2005/01/30 02:17:30 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.36 2005/07/31 16:40:39 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -763,5 +763,22 @@ gtk_tree_view_set_row_separator_func (GtkTreeView *tree_view, SV * func, SV * da
 				 callback,
 				 (GDestroyNotify) gperl_callback_destroy);
 
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 7, 3) /* FIXME: 2.8 */
+
+#gboolean gtk_tree_view_get_visible_range (GtkTreeView *tree_view, GtkTreePath **start_path, GtkTreePath **end_path);
+void
+gtk_tree_view_get_visible_range (tree_view)
+	GtkTreeView *tree_view
+    PREINIT:
+	GtkTreePath *start_path, *end_path;
+    PPCODE:
+	if (!gtk_tree_view_get_visible_range (tree_view, &start_path, &end_path))
+		XSRETURN_EMPTY;
+	EXTEND (sp, 2);
+	PUSHs (sv_2mortal (newSVGtkTreePath_own (start_path)));
+	PUSHs (sv_2mortal (newSVGtkTreePath_own (end_path)));
 
 #endif

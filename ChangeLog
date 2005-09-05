@@ -1,24 +1,46 @@
+2005/09/05	kaffeetisch
+
+	* MANIFEST, META.yml: Remove META.yml.
+
+	* doctypes: Add GdkPixbuf_noinc.
+
+	* t/PangoRenderer.t: Remove draw_trapezoid test.
+
+	* Gtk2.pm, Makefile.PL, README, NEWS: Stable release 1.100.
+
+2005/07/31	muppetman
+
+	* t/GtkTreeModel.t, t/GtkTreeView.t, xs/GtkFileChooser.xs,
+	  xs/GtkTreeModel.xs, xs/GtkTreeView.xs, xs/GtkTreeViewColumn.xs,
+	  AUTHORS: Patch from HE fixes up some bad version checks.  Features
+	  added in gtk+ 2.7.3 were incorrectly marked as 2.7.0, breaking
+	  testing with 2.7.[0-2].
+
+	* xs/GtkSelection.xs: fix some pointer signedness warnings.
+
 2005/07/27	kaffeetisch
 
-	* Gtk2.pm, META.yml, NEWS, README: Stable release 1.083.
+	* Gtk2.pm, META.yml, Makefile.PL, NEWS, README: Unstable release
+	1.093.
 
 2005/07/27	kaffeetisch
 
-	Merge from HEAD:
+	* t/GdkPixbuf.t: Make get_image() more tolerant.
 
-	* pm/TestHelper.pm: Use Gtk2::TestHelper instead
-	Gtk2::Test::Helper in the NAME section.
+	* t/GtkAction.t: Correct skip message.
 
-	* t/Gdk.t, t/GdkEvent.t, t/GdkGC.t, t/GtkIconTheme.t: Various test
-	fixes/additions.
+	* t/GtkIconTheme.t: Update copyright.
 
-2005/07/24	muppetman
+	* t/GtkIconView.t: Make the position test less fragile.
 
-	* t/GtkLabel.t: Backport a test fix from HEAD; gtk+ changed in 2.7.x,
-	so we test that get_layout_offsets() returns two items instead of
-	checking their values.
+	* t/PangoRenderer.t: Wrap draw_trapezoid() inside a SKIP block
+	till it gets fixed.
 
-2005/07/24	muppetman
+2005/07/26	muppetman
+
+	* CodeGen.pm: Gtk2::CodeGen is now just a wrapper for Glib::CodeGen.
+
+2005/07/21	muppetman
 
 	* xs/GtkDialog.xs, AUTHORS: Patch from lonefox at welho dot com
 	changes Gtk2::Dialog::set_alternative_button_order() to accept
@@ -26,16 +48,146 @@
 
 	* t/GtkDialog.t: Test response strings as well as numbers.
 
-2005/06/23	kaffeetisch
+2005/07/19	kaffeetisch
 
-	* Gtk2.pm, META.yml, NEWS, README: Stable release 1.082.
+	* pm/TestHelper.pm: Correct NAME section to read Gtk2::TestHelper
+	instead of Gtk2::Test::Helper.
 
-2005/06/23	kaffeetisch
+	* t/GtkFileChooser.t, xs/GtkFileChooser.xs: Bind
+	gtk_file_chooser_[sg]et_do_overwrite_confirmation.
 
-	Merge from HEAD:
+	* t/GtkTreeModel.t, xs/GtkTreeModel.xs: Bind and test
+	gtk_tree_row_reference_get_model.
 
-	* t/GtkFileChooserButton.t: Use "open" instead of "save" for the
-	dialog since the button doesn't support "save".
+	* t/GtkTreeView.t, xs/GtkTreeView.xs: Bind and test
+	gtk_tree_view_get_visible_range.
+
+	* t/GtkTreeView.t, xs/GtkTreeViewColumn.xs: Bind and test
+	gtk_tree_view_column_queue_resize.
+
+2005/07/12	kaffeetisch
+
+	* t/GdkPixbuf.t, t/GdkPixbufLoader.t: Expand two skip sections to
+	include newer versions to account for some test failures.
+
+	* Gtk2.pm, MANIFEST, META.yml, Makefile.PL, NEWS, README: Unstable
+	release 1.092.
+
+2005/07/12	kaffeetisch
+
+	* t/GdkPixbuf.t, xs/GdkPixbuf.xs: Add Gtk2::Gdk::PixbufAnimation
+	tests.  Quell warnings about unregistered subclasses of
+	GdkPixbufAnimationIter.
+
+	* t/GdkPixbufLoader.t: New test from muppet.
+
+	* Gtk2.exports, gtk2perl.h, xs/GdkPixbuf.xs,
+	xs/GdkPixbufLoader.xs: Fix Gtk2::Gdk::PixbufLoader::new_with_type
+	and new_with_mime_type so they can be called correctly.  Bind
+	gdk_pixbuf_loader_get_format and make the GdkPixbufFormat
+	converters public.  Patch from muppet.
+
+	* xs/GtkTreeDnd.xs: Add support for GtkTreeDragSource and
+	GtkTreeDragDest interfaces.  Patch from muppet.
+
+	* xs/PangoLayout.xs, xs/PangoScript.xs: Use crashers for the
+	GBoxedCopyFunc of PangoLayoutIter and PangoScriptIter instead of
+	the incorrect g_boxed_copy.
+
+2005/07/10	kaffeetisch
+
+	* gtk2perl-private.h, MANIFEST, xs/GtkComboBox.xs,
+	xs/GtkActionGroup.xs: Add a private header for non-static,
+	non-public stuff to get rid of the 'extern' declarations.
+
+	* maps-2.8, MANIFEST: Add GtkPackDirection and
+	GtkIconViewDropPosition support.
+
+	* t/Gdk.t, t/GdkGC.t, t/GdkInput.t, t/GtkIconTheme.t,
+	t/GtkLabel.t: Fix a few test suite issues.  Add some tests.
+
+	* t/GdkCursor.t, xs/GdkCursor.xs: Bind gdk_cursor_new_from_name,
+	gdk_cursor_get_image.
+
+	* t/GdkDisplay.t, xs/GdkDisplay.xs: Bind gdk_display_warp_pointer.
+
+	* t/GdkEvent.t, xs/GdkEvent.xs: Add support for the grab-broken
+	event.
+
+	* t/GdkScreen.t, xs/GdkScreen.xs: Bind
+	gdk_screen_get_rgba_colormap, gdk_screen_get_rgba_visual.
+
+	* t/GdkWindow.t, xs/GdkWindow.xs: Bind
+	gdk_window_set_urgency_hint, gdk_window_move_region.
+
+	* t/GdkX11.t, xs/GdkX11.xs: Bind gdk_x11_display_set_cursor_theme,
+	gdk_x11_display_get_user_time.
+
+	* t/GtkDialog.t, xs/GtkDialog.xs: Bind
+	gtk_dialog_get_response_for_widget.
+
+	* t/GtkDnd.t, xs/GtkDnd.xs: Bind gtk_drag_source_set_icon_name.
+
+	* t/GtkEntryCompletion.t, xs/GtkEntryCompletion.xs: Bind
+	gtk_entry_completion_set_popup_set_width,
+	gtk_entry_completion_get_popup_set_width,
+	gtk_entry_completion_set_popup_single_match,
+	gtk_entry_completion_get_popup_single_match.
+
+	* t/GtkIconView.t, xs/GtkIconView.xs: Bind
+	gtk_icon_view_get_cursor, gtk_icon_view_get_item_at_pos,
+	gtk_icon_view_get_visible_range,
+	gtk_icon_view_enable_model_drag_source,
+	gtk_icon_view_enable_model_drag_dest,
+	gtk_icon_view_unset_model_drag_source,
+	gtk_icon_view_unset_model_drag_dest,
+	gtk_icon_view_set_reorderable, gtk_icon_view_get_reorderable,
+	gtk_icon_view_set_drag_dest_item,
+	gtk_icon_view_get_drag_dest_item,
+	gtk_icon_view_get_dest_item_at_pos,
+	gtk_icon_view_create_drag_icon.
+
+	* t/GtkImage.t, xs/GtkImage.xs: Bind gtk_image_clear.
+
+	* t/GtkMenuBar.t, xs/GtkMenuBar.xs: Bind
+	gtk_menu_bar_get_child_pack_direction,
+	gtk_menu_bar_set_child_pack_direction,
+	gtk_menu_bar_get_pack_direction, gtk_menu_bar_set_pack_direction.
+
+	* t/GtkMenuShell.t, xs/GtkMenuShell.xs: Bind
+	gtk_menu_shell_get_take_focus, gtk_menu_shell_set_take_focus.
+
+	* t/GtkScrolledWindow.t, xs/GtkScrolledWindow.xs: Bind
+	gtk_scrolled_window_get_hscrollbar,
+	gtk_scrolled_window_get_vscrollbar.
+
+	* t/GtkSizeGroup.t, xs/GtkSizeGroup.xs: Bind
+	gtk_size_group_set_ignore_hidden,
+	gtk_size_group_get_ignore_hidden.
+
+	* t/GtkStock.t, xs/GtkStock.xs: Bind gtk_stock_set_translate_func.
+
+	* t/GtkTextIter.t, xs/GtkTextIter.xs: Bind
+	gtk_text_iter_forward_visible_line,
+	gtk_text_iter_backward_visible_line,
+	gtk_text_iter_forward_visible_lines,
+	gtk_text_iter_backward_visible_lines.
+
+	* t/GtkToolButton.t, xs/GtkToolButton.xs: Bind
+	gtk_tool_button_set_icon_name, gtk_tool_button_get_icon_name.
+
+	* t/01.GtkWindow.t, xs/GtkWindow.xs: Bind
+	gtk_window_set_urgency_hint, gtk_window_get_urgency_hint,
+	gtk_window_present_with_time.
+
+2005/06/28	kaffeetisch
+
+	* Gtk2.pm, t/GtkTreeModelIface.t, xs/GtkTreeSortable.xs: Make it
+	possible for custom tree models to implement the GtkTreeSortable
+	interface.  Also add a FIXME comment about an incorrectly bound
+	method.
+
+2005/06/22	kaffeetisch
 
 	* t/GtkAccelGroup.t, t/GtkAccelMap.t, t/GtkStock.t: Use is()
 	instead of is_deeply() to test flags values since the latter was
@@ -43,46 +195,134 @@
 	recent versions of Test::More, whereas the former seems to work
 	correctly.  Tested with Test::More 0.45 and 0.60.
 
+2005/06/21	kaffeetisch
+
+	* t/GtkWidget.t, xs/GtkWidget.xs: Turn Gtk2::Widget::window into a
+	mutator.
+
+2005/06/20	kaffeetisch
+
+	* xs/GtkPaned.xs: Fix the child aliases to have unique ids to hush
+	warnings from newer ExtUtils::ParseXS versions.
+
+2005/06/20	kaffeetisch
+
 	* t/GtkTreeView.t: Make sure we only enter the row separator
 	callback once to make this test more robust.
+
+	* xs/GdkPixbuf.xs: Escape ">" in the POD for
+	gdk_pixbuf_format_set_disabled.
+
+2005/06/16	muppetman
+
+	* pm/SimpleList.pm:  Don't trap the model in closures and signal
+	handler data.  This makes it possible to change the SimpleList's
+	model without breaking editable renderers.  This isn't a complete
+	solution, but is cleaner even by itself.
+
+2005/06/07	muppetman
+
+	* xs/GnomeAboutDialog.xs: Actually store the instances created by
+	Gtk2::show_about_dialog(), so that they can be reused.
 
 	* xs/GtkComboBox.xs, xs/GtkComboBoxEntry.xs, xs/GtkDialog.xs,
 	xs/GtkList.xs, xs/GtkListItem.xs, xs/GtkMessageDialog.xs: Add or
 	beef up a few synopsis and description sections.
 
+2005/06/06	kaffeetisch
+
+	* Gtk2.pm, META.yml, Makefile.PL, NEWS, README: Unstable release
+	1.091.
+
+2005/06/03	kaffeetisch
+
+	* t/GtkFileChooserButton.t: Use "open" instead of "save" for the
+	dialog since the button doesn't support "save".
+
+2005/04/25	kaffeetisch
+
+	* Gtk2.pm, Makefile.PL, META.yml, NEWS, README: Unstable release
+	1.090.
+
+2005/04/25	kaffeetisch
+
+	* CodeGen.pm: Add const typemaps for object types.
+
+	* t/GtkFileChooser.t: Skip this test completely as it's failing.
+
+	* t/GtkAccelMap.t, t/GtkAccelGroup.t, t/GtkStock.t: Remove some
+	TODO block since the relevant Test::More bug has been fixed.
+
+	* gdk.typemap, maps-2.6, t/GdkPixbuf.t, xs/GdkPixbuf.xs: Bind and
+	test gdk_pixbuf_new_from_file_at_scale, gdk_pixbuf_rotate_simple,
+	gdk_pixbuf_flip, gdk_pixbuf_get_file_info, the new GdkPixbufFormat
+	members and gdk_pixbuf_format_set_disabled.
+
+	* t/GtkDnd.t, xs/GtkDnd.xs, xs/GtkNotebook.xs: Merge from
+	stable-1-08: Update copyright disclaimers.
+
 	* xs/GtkRadioAction.xs, xs/GtkToggleAction.xs: Add synopsis
 	sections that show and explain our custom constructors for these
 	types.
 
-2005/06/13	muppetman
+2005/04/17	kaffeetisch
 
-	Merge from HEAD:
+	* Gtk2.pm, META.yml, Makefile.PL, NEWS, README: Merge from
+	stable-1-08.
 
-	* xs/GnomeAboutDialog.xs: Actually store the instances created by
-	Gtk2::show_about_dialog(), so that they can be reused.
+2005/04/08	rmcfarla
 
-2005/04/11	kaffeetisch
+	* xs/GtkNotebook.xs: added pod comments to functions that now return 
+	integers saying this is new as of Gtk2-Perl 1.080.
 
-	* Gtk2.pm, META.yml, Makefile.PL, NEWS, README: Stable release
-	1.081.
-
-2005/04/11	kaffeetisch
-
-	Merge from HEAD:
+2005/04/07	kaffeetisch
 
 	* xs/GdkDrawable.xs: Update a FIXME comment.
 
-	* xs/GtkIconView.xs: Add a license disclaimer.
+	* t/GtkAccelMap.t, xs/GtkAccelMap.xs: Bind and test
+	gtk_accel_map_get, gtk_accel_map_lock_path,
+	gtk_accel_map_unlock_path.
 
-	* xs/GtkNotebook.xs: Document that the integer return values are
-	new in 1.080.
+	* t/GtkAction.t, xs/GtkAction.xs: Bind and test
+	gtk_action_get_accel_path.
 
-	* t/GtkDnd.t, xs/GtkDnd.xs: Allow undef for the mask argument of
-	gtk_drag_set_icon_pixmap.
+	* t/GtkIconView.t, xs/GtkIconView.xs: Bind and test
+	gtk_icon_view_set_columns, gtk_icon_view_get_columns,
+	gtk_icon_view_set_item_width, gtk_icon_view_get_item_width,
+	gtk_icon_view_set_spacing, gtk_icon_view_get_spacing,
+	gtk_icon_view_set_row_spacing, gtk_icon_view_get_row_spacing,
+	gtk_icon_view_set_column_spacing,
+	gtk_icon_view_get_column_spacing, gtk_icon_view_set_margin,
+	gtk_icon_view_get_margin.  Also add a copyright disclaimer to
+	GtkIconView.xs.
+
+	* t/GtkPaned.t, xs/GtkPaned.xs: Add and test get_child1 and
+	get_child2 aliases to the existing child1 and child2 accessors.
+
+2005/04/04	muppetman
+
+	* xs/GtkStyle.xs, t/GtkStyle.t: turn Gtk2::Style::bg_pixmap
+	into a mutator.
+
+	* xs/GtkDnd.xs, t/GtkDnd.t: allow undef for the mask parameter
+	to gtk_drag_set_icon_pixmap(), with tests.
+
+2005/04/02	muppetman
+
+	A examples/draw_text.pl
+	M MANIFEST
+	Add a new example.
+
+2005/04/02	kaffeetisch
+
+	* MANIFEST, maps-2.4, maps-2.6, maps_pango-1.8, xs_files-2.0,
+	xs_files-2.6, gtk-demo/main.pl, gtk-demo/rotated_text.pl,
+	t/GdkPango.t, t/PangoRenderer.t, xs/GdkPango.xs,
+	xs/PangoRenderer.xs: Add initial bindings and tests for
+	PangoRenderer and GtkPango.  Also add muppet's rotated text
+	example.
 
 2005/03/25	kaffeetisch
-
-	Merge from HEAD:
 
 	* CodeGen.pm: Make the GEnum and GFlags converters cast their
 	return values to the correct type to fix compilation when using a

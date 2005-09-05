@@ -6,7 +6,6 @@ Gtk2.pm
 LICENSE
 MANIFEST
 MANIFEST.SKIP
-META.yml			Module meta-data in YAML
 Makefile.PL
 NEWS
 README
@@ -29,6 +28,7 @@ examples/combo_box.pl
 examples/customlist.pl
 examples/customrenderer.pl
 examples/dialog.pl
+examples/draw_text.pl
 examples/file_chooser.pl
 examples/filesel_multisel.pl
 examples/histogramplot.pl
@@ -75,20 +75,24 @@ gtk-demo/main.pl
 gtk-demo/menus.pl
 gtk-demo/panes.pl
 gtk-demo/pixbufs.pl
+gtk-demo/rotated_text.pl
 gtk-demo/sizegroup.pl
 gtk-demo/stock_browser.pl
 gtk-demo/textview.pl
 gtk-demo/tree_store.pl
 gtk-demo/ui_manager.pl
 gtk.typemap
+gtk2perl-private.h
 gtk2perl.h
 maps-2.0
 maps-2.2
 maps-2.4
 maps-2.6
+maps-2.8
 maps_pango-1.0
 maps_pango-1.4
 maps_pango-1.6
+maps_pango-1.8
 pango.typemap
 perl-Gtk2.spec.in
 pm/Helper.pm
@@ -111,7 +115,9 @@ t/GdkEvent.t
 t/GdkGC.t
 t/GdkInput.t
 t/GdkKeys.t
+t/GdkPango.t
 t/GdkPixbuf.t
+t/GdkPixbufLoader.t
 t/GdkPixmap.t
 t/GdkProperty.t
 t/GdkRegion.t
@@ -267,6 +273,7 @@ t/PangoFont.t
 t/PangoFontMap.t
 t/PangoFontset.t
 t/PangoLayout.t
+t/PangoRenderer.t
 t/PangoScript.t
 t/PangoTabs.t
 t/PangoTypes.t
@@ -286,6 +293,7 @@ xs/GdkEvent.xs
 xs/GdkGC.xs
 xs/GdkInput.xs
 xs/GdkKeys.xs
+xs/GdkPango.xs
 xs/GdkPixbuf.xs
 xs/GdkPixbufLoader.xs
 xs/GdkPixmap.xs
@@ -449,6 +457,7 @@ xs/PangoFont.xs
 xs/PangoFontMap.xs
 xs/PangoFontset.xs
 xs/PangoLayout.xs
+xs/PangoRenderer.xs
 xs/PangoScript.xs
 xs/PangoTabs.xs
 xs/PangoTypes.xs
@@ -456,3 +465,4 @@ xs_files-2.0
 xs_files-2.2
 xs_files-2.4
 xs_files-2.6
+META.yml                                 Module meta-data (added by MakeMaker)

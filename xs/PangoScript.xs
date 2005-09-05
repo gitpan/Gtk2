@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoScript.xs,v 1.2 2004/10/30 17:13:23 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoScript.xs,v 1.3 2005/07/11 22:39:21 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,13 +25,20 @@
 
 #if PANGO_CHECK_VERSION (1, 4, 0)
 
+static gpointer
+gtk2perl_pango_script_iter_copy (gpointer boxed)
+{
+	croak ("Can't copy a PangoScriptIter");
+	return boxed;
+}
+
 GType
 gtk2perl_pango_script_iter_get_type (void)
 {
 	static GType t = 0;
 	if (!t)
 		t = g_boxed_type_register_static ("PangoScriptIter",
-		      (GBoxedCopyFunc) g_boxed_copy,
+		      (GBoxedCopyFunc) gtk2perl_pango_script_iter_copy,
 		      (GBoxedFreeFunc) pango_script_iter_free);
 	return t;
 }

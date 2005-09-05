@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 8, noinit => 1;
+use Gtk2::TestHelper tests => 10, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkScrolledWindow.t,v 1.5 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkScrolledWindow.t,v 1.6 2005/07/10 12:22:20 kaffeetisch Exp $
 
 my $window = Gtk2::ScrolledWindow -> new();
 isa_ok($window, "Gtk2::ScrolledWindow");
@@ -33,7 +33,15 @@ is($window -> get_placement(), "bottom-right");
 $window -> set_shadow_type("etched-in");
 is($window -> get_shadow_type(), "etched-in");
 
+SKIP: {
+  skip("new 2.8 stuff", 2)
+    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+
+  isa_ok($window -> get_hscrollbar(), "Gtk2::HScrollbar");
+  isa_ok($window -> get_vscrollbar(), "Gtk2::VScrollbar");
+}
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

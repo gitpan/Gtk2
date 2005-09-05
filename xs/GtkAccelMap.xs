@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelMap.xs,v 1.7 2004/06/04 20:44:59 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelMap.xs,v 1.8 2005/04/07 11:05:43 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -161,3 +161,27 @@ gtk_accel_map_foreach_unfiltered (class, data, foreach_func)
 	gtk_accel_map_foreach_unfiltered
 		(callback, (GtkAccelMapForeach)gtk2perl_gtk_accel_map_foreach);
 	gperl_callback_destroy (callback);
+
+#if GTK_CHECK_VERSION (2, 4, 0)
+
+## GtkAccelMap* gtk_accel_map_get (void);
+GtkAccelMap *
+gtk_accel_map_get (class)
+    C_ARGS:
+	/* void */
+
+##  void gtk_accel_map_lock_path (const gchar *accel_path);
+void
+gtk_accel_map_lock_path (class, accel_path)
+	const gchar *accel_path
+    C_ARGS:
+	accel_path
+
+##  void gtk_accel_map_unlock_path (const gchar *accel_path);
+void
+gtk_accel_map_unlock_path (class, accel_path)
+	const gchar *accel_path
+    C_ARGS:
+	accel_path
+
+#endif

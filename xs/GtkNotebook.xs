@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkNotebook.xs,v 1.14.2.1 2005/04/11 18:18:08 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkNotebook.xs,v 1.16 2005/04/25 17:37:46 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 21,
   at_least_version => [2, 2, 0, "GdkDisplay is new in 2.2"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.8 2005/01/02 16:25:51 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.9 2005/07/10 12:22:19 kaffeetisch Exp $
 
 my $display = Gtk2::Gdk::Display -> open($ENV{DISPLAY});
 isa_ok($display, "Gtk2::Gdk::Display");
@@ -81,10 +81,17 @@ SKIP: {
   }
 }
 
+SKIP: {
+  skip("new 2.8 stuff", 0)
+    unless Gtk2 -> CHECK_VERSION(2, 7, 0); # FIXME: 2.8
+
+  $display -> warp_pointer($screen, 100, 100);
+}
+
 # FIXME: currently segfaults for me.  see #85715.
 # $display -> close();
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCursor.xs,v 1.10 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCursor.xs,v 1.11 2005/07/10 12:22:20 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -79,5 +79,19 @@ gdk_cursor_new_from_pixbuf (class, display, pixbuf, x, y)
 	gint y
     C_ARGS:
 	display, pixbuf, x, y
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 7, 0) /* FIXME: 2.8 */
+
+## GdkCursor* gdk_cursor_new_from_name (GdkDisplay  *display, const gchar *name);
+GdkCursor_own*
+gdk_cursor_new_from_name (class, display, name)
+	GdkDisplay  *display
+	const gchar *name
+    C_ARGS:
+	display, name
+
+GdkPixbuf_noinc* gdk_cursor_get_image (GdkCursor *cursor);
 
 #endif

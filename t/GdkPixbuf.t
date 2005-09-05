@@ -1,8 +1,43 @@
 use strict;
 use warnings;
-use Gtk2::TestHelper tests => 73, noinit => 1;
+use Gtk2::TestHelper tests => 98, noinit => 1;
 
 my $show = 0;
+
+
+
+my $gif = 'gtk-demo/floppybuddy.gif';
+
+SKIP: {
+	skip 'animation not found', 12
+		unless -r $gif;
+
+	my $ani = Gtk2::Gdk::PixbufAnimation -> new_from_file($gif);
+	isa_ok ($ani, 'Gtk2::Gdk::PixbufAnimation');
+
+	like ($ani->get_width, qr/^\d+$/);
+	like ($ani->get_height, qr/^\d+$/);
+
+	my $iter = $ani->get_iter;
+	isa_ok ($iter, 'Gtk2::Gdk::PixbufAnimationIter');
+
+	$iter = $ani->get_iter (0, 0);
+	isa_ok ($iter, 'Gtk2::Gdk::PixbufAnimationIter');
+
+	ok (!$ani->is_static_image);
+	isa_ok($ani->get_static_image, 'Gtk2::Gdk::Pixbuf');
+
+	ok (!$iter->advance);
+	ok (!$iter->advance (0, 0));
+	like ($iter->get_delay_time, qr/^\d+$/);
+	ok (!$iter->on_currently_loading_frame);
+	isa_ok ($iter->get_pixbuf, 'Gtk2::Gdk::Pixbuf');
+}
+
+eval {
+  Gtk2::Gdk::PixbufAnimation -> new_from_file("aslkhaklh.gif");
+};
+isa_ok ($@, "Glib::File::Error");
 
 
 
@@ -135,6 +170,26 @@ SKIP: {
   is ($pixbuf->get_height, 25);
 }
 
+SKIP: {
+  skip "new_from_file_at_scale is new in 2.6", 3
+    unless Gtk2->CHECK_VERSION(2,6,0);
+
+  $pixbuf = Gtk2::Gdk::Pixbuf->new_from_file_at_scale ($filename, 20, 25, FALSE);
+  isa_ok ($pixbuf, 'Gtk2::Gdk::Pixbuf', 'new_from_file_at_scale');
+  is ($pixbuf->get_width, 20);
+  is ($pixbuf->get_height, 25);
+}
+
+SKIP: {
+  skip "new stuff", 3
+    unless Gtk2->CHECK_VERSION (2,6,0);
+
+  my ($format, $width, $height) = Gtk2::Gdk::Pixbuf->get_file_info ($filename);
+  isa_ok ($format, "Gtk2::Gdk::PixbufFormat");
+  is ($width, 4);
+  is ($height, 5);
+}
+
 unlink $filename;
 
 
@@ -192,6 +247,14 @@ sub pack_rgba {
 	return (($_[0] << 0) | ($_[1] << 8) | ($_[2] << 16) | ($_[3] << 24));
 }
 $pixbuf->fill (pack_rgba (255, 127, 96, 196));
+
+SKIP: {
+  skip "new 2.6 stuff", 2
+    unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+  isa_ok ($pixbuf->flip (TRUE), "Gtk2::Gdk::Pixbuf");
+  isa_ok ($pixbuf->rotate_simple ("clockwise"), "Gtk2::Gdk::Pixbuf");
+}
 
 $pixbuf = Gtk2::Gdk::Pixbuf->new ('rgb', TRUE, 8, 32, 32);
 $pixbuf2->scale ($pixbuf, 0, 0, 10, 15, 1, 2, 1.2, 3.5, 'bilinear');
@@ -295,21 +358,32 @@ isa_ok ($pixbuf, 'Gtk2::Gdk::Pixbuf', 'composite_color_simple');
 #
 
 SKIP: {
-  skip "GdkPixbufFormat stuff is new in 2.2.0", 8
+  skip "GdkPixbufFormat stuff is new in 2.2.0", 12
     unless Gtk2->CHECK_VERSION (2,2,0);
 
   my @formats = Gtk2::Gdk::Pixbuf->get_formats;
   ok (scalar (@formats), "got a list back");
-  is (ref $formats[0], 'HASH', "list of hashes");
+  is (ref $formats[0], 'Gtk2::Gdk::PixbufFormat', "list of formats");
   ok (exists $formats[0]{name}, "contains key 'name'");
   ok (exists $formats[0]{description}, "contains key 'description'");
   ok (exists $formats[0]{mime_types}, "contains key 'mime_types'");
   is (ref $formats[0]{mime_types}, 'ARRAY', "'mime_types' is a list");
   ok (exists $formats[0]{extensions}, "contains key 'extensions'");
   is (ref $formats[0]{extensions}, 'ARRAY', "'extensions' is a list");
+
+  SKIP: {
+    skip "new format stuff", 4
+      unless Gtk2->CHECK_VERSION (2,6,0);
+
+    ok (exists $formats[0]{is_scalable});
+    ok (exists $formats[0]{is_disabled});
+    ok (exists $formats[0]{license});
+
+    $formats[0]->set_disabled (TRUE);
+    @formats = Gtk2::Gdk::Pixbuf->get_formats;
+    is ($formats[0]->{is_disabled}, TRUE);
+  }
 }
-
-
 
 if ($show) {
 	$win->show_all;

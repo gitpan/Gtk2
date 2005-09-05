@@ -1,7 +1,7 @@
 
-use Gtk2::TestHelper tests => 55;
+use Gtk2::TestHelper tests => 59;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPaned.t,v 1.7 2004/02/27 05:31:48 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPaned.t,v 1.8 2005/04/07 11:05:42 kaffeetisch Exp $
 
 my $window = Gtk2::Window->new;
 my $hpaned = Gtk2::HPaned->new;
@@ -29,6 +29,11 @@ $vpaned->remove ($vframe2);
 
 $vpaned->pack1 ($vframe1, TRUE, FALSE);
 $vpaned->pack2 ($vframe2, FALSE, FALSE);
+
+is ($vpaned->child1, $vframe1);
+is ($vpaned->child2, $vframe2);
+is ($vpaned->get_child1, $vframe1);
+is ($vpaned->get_child2, $vframe2);
 
 $vpaned->set_position (23);
 is ($vpaned->get_position, 23);
@@ -139,5 +144,5 @@ sub sizeof {
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

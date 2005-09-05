@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 6;
+use Gtk2::TestHelper tests => 8;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkCursor.t,v 1.5 2004/03/21 04:38:32 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkCursor.t,v 1.7 2005/07/27 00:46:47 kaffeetisch Exp $
 
 my $cursor = Gtk2::Gdk::Cursor -> new("watch");
 isa_ok($cursor, "Gtk2::Gdk::Cursor");
@@ -29,6 +29,16 @@ my $mask = Gtk2::Gdk::Bitmap->create_from_data (undef, $eyes_mask_bits, width, h
 $cursor = Gtk2::Gdk::Cursor->new_from_pixmap ($source, $mask, $fg, $bg, 8, 8);
 isa_ok($cursor, "Gtk2::Gdk::Cursor");
 
+SKIP: {
+  skip("new_for_display is new in 2.2", 2)
+    unless Gtk2 -> CHECK_VERSION(2, 2, 0);
+
+  my $display = Gtk2::Gdk::Display -> get_default();
+
+  $cursor = Gtk2::Gdk::Cursor -> new_for_display($display, "watch");
+  isa_ok($cursor, "Gtk2::Gdk::Cursor");
+  is($cursor -> get_display(), $display);
+}
 
 SKIP: {
   skip("new_from_pixbuf is new in 2.4", 1)
@@ -42,17 +52,20 @@ SKIP: {
 }
 
 SKIP: {
-  skip("new_for_display is new in 2.2", 2)
-    unless Gtk2 -> CHECK_VERSION(2, 2, 0);
+  skip("new 2.8 stuff", 2)
+    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
 
   my $display = Gtk2::Gdk::Display -> get_default();
 
-  $cursor = Gtk2::Gdk::Cursor -> new_for_display($display, "watch");
+  my $cursor = Gtk2::Gdk::Cursor -> new_from_name($display, "watch");
   isa_ok($cursor, "Gtk2::Gdk::Cursor");
-  is($cursor -> get_display(), $display);
+
+  my $pixbuf = $cursor -> get_image();
+  ok(!defined $pixbuf || ref $pixbuf eq "Gtk2::Gdk::Pixbuf");
+
 }
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

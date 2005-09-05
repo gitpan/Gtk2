@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkImage.t,v 1.5 2005/01/30 02:17:29 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkImage.t,v 1.6 2005/07/10 12:22:20 kaffeetisch Exp $
 #
 
 #########################
@@ -193,8 +193,15 @@ SKIP: {
 	is ($img->get_pixel_size, 23);
 }
 
+SKIP: {
+	skip 'new stuff in 2.8', 0
+		unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+
+	$img->clear;
+}
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.
 

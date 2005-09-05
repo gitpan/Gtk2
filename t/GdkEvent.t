@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkEvent.t,v 1.17.2.1 2005/07/27 01:11:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkEvent.t,v 1.18 2005/07/10 12:22:19 kaffeetisch Exp $
 #
 
 #########################
@@ -7,7 +7,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 115;
+use Gtk2::TestHelper tests => 117;
 use Data::Dumper;
 
 # Expose #######################################################################
@@ -411,6 +411,19 @@ SKIP: {
 
 	$event->selection_time (42);
 	is ($event->selection_time, 42);
+}
+
+# GrabBroken ##################################################################
+
+SKIP: {
+	skip ("the grab-broken event is new in 2.8", 2)
+		unless (Gtk2->CHECK_VERSION (2, 7, 0)); # FIXME: 2.8
+
+	isa_ok ($event = Gtk2::Gdk::Event->new ("grab-broken"),
+		"Gtk2::Gdk::Event::GrabBroken");
+
+	$event->keyboard (TRUE);
+	is ($event->keyboard, TRUE);
 }
 
 __END__

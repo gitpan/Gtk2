@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the full
+# Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the full
 # list)
 # 
 # This library is free software; you can redistribute it and/or modify it under
@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.exports,v 1.6 2004/09/19 21:47:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.exports,v 1.7 2005/07/11 22:39:12 kaffeetisch Exp $
 #
 
 @exports = qw(
@@ -28,6 +28,7 @@ newSVGdkBitmap
 newSVGdkBitmap_noinc
 newSVGdkGCValues
 newSVGdkGeometry
+newSVGdkPixbufFormat
 newSVGtkTargetEntry
 newSVGtkTargetList
 newSVPangoRectangle
@@ -35,6 +36,7 @@ SvGdkAtom
 SvGdkGCValues
 SvGdkGeometry
 SvGdkGeometryReal
+SvGdkPixbufFormat
 SvGtkTargetEntry
 SvGtkTargetList
 );

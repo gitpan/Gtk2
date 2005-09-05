@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuBar.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuBar.xs,v 1.7 2005/07/10 12:22:20 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -28,5 +28,17 @@ GtkWidget *
 gtk_menu_bar_new (class)
     C_ARGS:
 	/* void */
+
+#if GTK_CHECK_VERSION (2, 7, 0) /* FIXME: 2.8 */
+
+GtkPackDirection gtk_menu_bar_get_child_pack_direction (GtkMenuBar *menubar);
+
+void gtk_menu_bar_set_child_pack_direction (GtkMenuBar *menubar, GtkPackDirection child_pack_dir);
+
+GtkPackDirection gtk_menu_bar_get_pack_direction (GtkMenuBar *menubar);
+
+void gtk_menu_bar_set_pack_direction (GtkMenuBar *menubar, GtkPackDirection pack_dir);
+
+#endif
 
 ##void _gtk_menu_bar_cycle_focus (GtkMenuBar *menubar, GtkDirectionType dir

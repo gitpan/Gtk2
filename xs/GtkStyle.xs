@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStyle.xs,v 1.23 2004/04/04 17:28:12 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStyle.xs,v 1.24 2005/04/05 02:03:56 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -120,11 +120,19 @@ fg_gc (style, state)
 
 # legitimate reference, not a copy
 GdkPixmap *
-bg_pixmap (style, state)
+bg_pixmap (style, state, pixmap=NULL)
 	GtkStyle * style
 	GtkStateType state
+	GdkPixmap_ornull * pixmap
     CODE:
 	RETVAL = style->bg_pixmap[state];
+	if (items > 2 && style->bg_pixmap[state] != pixmap) {
+		if (style->bg_pixmap[state])
+			g_object_unref (style->bg_pixmap[state]);
+		style->bg_pixmap[state] = pixmap;
+		if (pixmap)
+			g_object_ref (pixmap);
+	}
     OUTPUT:
 	RETVAL
 
