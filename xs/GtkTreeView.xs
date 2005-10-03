@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.36 2005/07/31 16:40:39 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.37 2005/09/18 15:07:22 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -766,7 +766,7 @@ gtk_tree_view_set_row_separator_func (GtkTreeView *tree_view, SV * func, SV * da
 
 #endif
 
-#if GTK_CHECK_VERSION (2, 7, 3) /* FIXME: 2.8 */
+#if GTK_CHECK_VERSION (2, 8, 0)
 
 #gboolean gtk_tree_view_get_visible_range (GtkTreeView *tree_view, GtkTreePath **start_path, GtkTreePath **end_path);
 void

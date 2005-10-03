@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSizeGroup.t,v 1.6 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSizeGroup.t,v 1.7 2005/09/18 15:07:22 kaffeetisch Exp $
 
 my $group = Gtk2::SizeGroup -> new("vertical");
 isa_ok($group, "Gtk2::SizeGroup");
@@ -17,7 +17,7 @@ $group -> remove_widget($label);
 
 SKIP: {
   skip("new 2.8 stuff", 1)
-    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+    unless Gtk2->CHECK_VERSION (2, 8, 0);
 
   $group -> set_ignore_hidden(TRUE);
   ok($group -> get_ignore_hidden());

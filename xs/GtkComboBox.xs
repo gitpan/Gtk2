@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBox.xs,v 1.11 2005/07/10 12:22:20 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBox.xs,v 1.12 2005/09/18 15:07:22 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -85,7 +85,9 @@ C<insert_text>, C<prepend_text>, C<remove_text> and C<get_active_text>.
 
 BOOT:
 	gperl_set_isa ("Gtk2::ComboBox", "Gtk2::CellLayout");
+#if GTK_CHECK_VERSION (2, 6, 0)
 	gperl_set_isa ("Gtk2::ComboBox", "Gtk2::CellEditable");
+#endif
 
 GtkWidget *gtk_combo_box_new (class, GtkTreeModel *model=NULL)
     ALIAS:

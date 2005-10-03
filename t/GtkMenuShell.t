@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenuShell.t,v 1.8 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenuShell.t,v 1.9 2005/09/18 15:07:22 kaffeetisch Exp $
 
 my $shell = Gtk2::Menu -> new();
 isa_ok($shell, "Gtk2::MenuShell");
@@ -40,7 +40,7 @@ SKIP: {
 
 SKIP: {
   skip("new 2.8 stuff", 1)
-    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+    unless Gtk2->CHECK_VERSION (2, 8, 0);
 
   $shell -> set_take_focus(TRUE);
   ok($shell -> get_take_focus());

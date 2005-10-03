@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.45 2005/07/31 16:40:39 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.46 2005/09/18 15:07:22 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -829,7 +829,7 @@ gtk_tree_row_reference_valid (reference)
 ##	gint *new_order
 ##
 
-#if GTK_CHECK_VERSION (2, 7, 3) /* FIXME: 2.8 */
+#if GTK_CHECK_VERSION (2, 8, 0)
 
 GtkTreeModel_ornull * gtk_tree_row_reference_get_model (GtkTreeRowReference *reference);
 

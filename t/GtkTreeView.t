@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 137;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.20 2005/07/31 16:40:25 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.21 2005/09/18 15:07:22 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -338,7 +338,7 @@ SKIP: {
 
 SKIP: {
 	skip("new 2.8 stuff", 2)
-		unless Gtk2 -> CHECK_VERSION(2, 7, 3); # FIXME: 2.8
+		unless Gtk2 -> CHECK_VERSION(2, 8, 0);
 
 	my ($start, $end) = $view -> get_visible_range();
         isa_ok($start, "Gtk2::TreePath");

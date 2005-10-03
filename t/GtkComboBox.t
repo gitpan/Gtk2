@@ -1,6 +1,6 @@
 ###!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.15 2005/02/08 06:04:38 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.16 2005/09/18 15:07:22 kaffeetisch Exp $
 
 use Gtk2::TestHelper
 	tests => 23,
@@ -12,7 +12,13 @@ my $combo_box;
 ## convenience -- text
 $combo_box = Gtk2::ComboBox->new_text;
 isa_ok ($combo_box, 'Gtk2::ComboBox');
-isa_ok ($combo_box, 'Gtk2::CellEditable');
+
+SKIP: {
+	skip '@ISA check', 1
+		unless Gtk2 -> CHECK_VERSION (2, 6, 0);
+
+	isa_ok ($combo_box, 'Gtk2::CellEditable');
+}
 
 $combo_box->append_text ("some text");
 $combo_box->append_text ("more text");

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 4;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkX11.t,v 1.5 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkX11.t,v 1.6 2005/09/18 15:07:22 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();
@@ -34,7 +34,7 @@ SKIP: {
 
   SKIP: {
     skip("new 2.8 stuff", 1)
-      unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+      unless Gtk2->CHECK_VERSION (2, 8, 0);
 
     my $display = Gtk2::Gdk::Display -> get_default();
 

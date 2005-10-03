@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntryCompletion.xs,v 1.8 2005/07/10 12:22:20 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntryCompletion.xs,v 1.9 2005/09/18 15:07:22 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -104,7 +104,7 @@ gboolean gtk_entry_completion_get_popup_completion (GtkEntryCompletion *completi
 
 #endif
 
-#if GTK_CHECK_VERSION(2,7,0) /* FIXME: 2.8 */
+#if GTK_CHECK_VERSION(2, 8, 0)
 
 void gtk_entry_completion_set_popup_set_width (GtkEntryCompletion *completion, gboolean popup_set_width);
 

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 93, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextIter.t,v 1.12 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextIter.t,v 1.13 2005/09/18 15:07:22 kaffeetisch Exp $
 
 my $model = Gtk2::TextBuffer->new;
 my $tag = $model->create_tag ("indent", indent => 5);
@@ -178,7 +178,7 @@ SKIP: {
 
 SKIP: {
   skip("new 2.8 stuff", 4)
-    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+    unless Gtk2->CHECK_VERSION (2, 8, 0);
 
   ok ($iter->forward_visible_line);
   ok ($iter->backward_visible_line);

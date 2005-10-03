@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.9 2005/07/27 00:46:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.10 2005/09/18 15:07:22 kaffeetisch Exp $
 #
 
 #########################
@@ -131,7 +131,7 @@ run_main {
 
 	SKIP: {
 		skip 'new 2.8 stuff', 16
-			unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+			unless Gtk2->CHECK_VERSION (2, 8, 0);
 
 		$win->add ($iview);
 		$win->show_all;

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 10, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkScrolledWindow.t,v 1.6 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkScrolledWindow.t,v 1.7 2005/09/18 15:07:22 kaffeetisch Exp $
 
 my $window = Gtk2::ScrolledWindow -> new();
 isa_ok($window, "Gtk2::ScrolledWindow");
@@ -35,7 +35,7 @@ is($window -> get_shadow_type(), "etched-in");
 
 SKIP: {
   skip("new 2.8 stuff", 2)
-    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+    unless Gtk2->CHECK_VERSION (2, 8, 0);
 
   isa_ok($window -> get_hscrollbar(), "Gtk2::HScrollbar");
   isa_ok($window -> get_vscrollbar(), "Gtk2::VScrollbar");

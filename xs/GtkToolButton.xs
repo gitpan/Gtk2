@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolButton.xs,v 1.4 2005/07/10 12:22:20 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolButton.xs,v 1.5 2005/09/18 15:07:22 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -41,7 +41,7 @@ void gtk_tool_button_set_label_widget (GtkToolButton *button, GtkWidget_ornull *
 
 GtkWidget_ornull * gtk_tool_button_get_label_widget (GtkToolButton *button);
 
-#if GTK_CHECK_VERSION (2, 7, 0) /* FIXME: 2.8 */
+#if GTK_CHECK_VERSION (2, 8, 0)
 
 void gtk_tool_button_set_icon_name (GtkToolButton *button, const gchar_ornull *icon_name);
 

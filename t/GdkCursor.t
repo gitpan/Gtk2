@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 8;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkCursor.t,v 1.7 2005/07/27 00:46:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkCursor.t,v 1.8 2005/09/18 15:07:22 kaffeetisch Exp $
 
 my $cursor = Gtk2::Gdk::Cursor -> new("watch");
 isa_ok($cursor, "Gtk2::Gdk::Cursor");
@@ -53,7 +53,7 @@ SKIP: {
 
 SKIP: {
   skip("new 2.8 stuff", 2)
-    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+    unless Gtk2->CHECK_VERSION (2, 8, 0);
 
   my $display = Gtk2::Gdk::Display -> get_default();
 

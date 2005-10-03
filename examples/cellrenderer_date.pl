@@ -17,7 +17,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_date.pl,v 1.5 2005/01/07 21:31:59 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/cellrenderer_date.pl,v 1.7 2005/09/07 03:07:08 muppetman Exp $
 #
 
 
@@ -208,18 +208,30 @@ sub START_EDITING {
   $calendar -> select_month($month - 1, $year);
   $calendar -> select_day($day);
 
-  # Necessary to get the correct allocation of the popup.
-  $popup -> move(-500, -500);
-  $popup -> show_all();
+  # Figure out where to put the popup - i.e., don't put it offscreen,
+  # as it's not movable (by the user).
 
-  # Align the top right edge of the popup with the the bottom right edge of the
-  # cell.
+  $popup -> get_child -> show_all();  # all but $popup itself
+  $popup -> realize;
+  my ($requisition) = $popup->size_request;
+  my ($popup_width, $popup_height) = ($requisition->width, $requisition->height);
+
+  my $screen_height = $popup->get_screen->get_height;
+
   my ($x_origin, $y_origin) =  $view -> get_bin_window() -> get_origin();
 
-  $popup -> move(
-    $x_origin + $cell_area -> x() + $cell_area -> width() - $popup -> allocation() -> width(),
-    $y_origin + $cell_area -> y() + $cell_area -> height()
-  );
+  my $popup_x = $x_origin + $cell_area->x + $cell_area->width - $popup_width;
+  if ($popup_x < 0) {
+    $popup_x = 0;
+  }
+
+  my $popup_y = $y_origin + $cell_area->y + $cell_area->height;
+  if ($popup_y + $popup_height > $screen_height) {
+    $popup_y = $y_origin + $cell_area->y - $popup_height;
+  }
+
+  $popup -> move($popup_x, $popup_y);
+  $popup -> show();
 
   # Grab the focus and the pointer.
   Gtk2 -> grab_add($popup);

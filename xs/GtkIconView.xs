@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconView.xs,v 1.6 2005/07/10 12:22:20 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconView.xs,v 1.7 2005/09/18 15:07:22 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -131,7 +131,7 @@ void gtk_icon_view_unselect_all (GtkIconView * icon_view);
 
 void gtk_icon_view_item_activated (GtkIconView * icon_view, GtkTreePath * path);
 
-#if GTK_CHECK_VERSION(2,7,0) /* FIXME: 2.8 */
+#if GTK_CHECK_VERSION(2, 8, 0)
 
 ## gboolean gtk_icon_view_get_cursor (GtkIconView *icon_view, GtkTreePath **path, GtkCellRenderer **cell);
 void

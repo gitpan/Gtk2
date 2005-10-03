@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 5;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDnd.t,v 1.11 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDnd.t,v 1.12 2005/09/18 15:07:22 kaffeetisch Exp $
 
 my $button = Gtk2::Button -> new("Bla");
 my $window = Gtk2::Window -> new();
@@ -102,7 +102,7 @@ SKIP: {
 
 SKIP: {
   skip("2.8 stuff", 0)
-    unless Gtk2 -> CHECK_VERSION(2, 7, 0); # FIXME: 2.8
+    unless Gtk2 -> CHECK_VERSION(2, 8, 0);
 
   $button -> drag_source_set_icon_name("gtk-ok");
 }

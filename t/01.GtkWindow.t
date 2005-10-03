@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.31 2005/07/10 12:22:19 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.32.2.1 2005/10/03 18:41:55 kaffeetisch Exp $
 #
 
 #########################
@@ -121,7 +121,7 @@ ok(1);
 $win2->set_mnemonic_modifier("control-mask");
 ok(1);
 
-is( $win2->get_mnemonic_modifier, "control-mask");
+is_deeply(\@{ $win2->get_mnemonic_modifier }, ["control-mask"]);
 
 $win2->set_focus;
 ok(1);
@@ -339,7 +339,7 @@ SKIP: {
 
 SKIP: {
 	skip("new 2.8 stuff", 1)
-		unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+		unless Gtk2->CHECK_VERSION (2, 8, 0);
 
 	$win->set_urgency_hint (TRUE);
 	is ($win->get_urgency_hint, TRUE);

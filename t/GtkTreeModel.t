@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 73, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModel.t,v 1.5 2005/07/31 16:40:25 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModel.t,v 1.6 2005/09/18 15:07:22 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -76,7 +76,7 @@ SKIP: {
 
 	SKIP: {
 		skip("new 2.8 stuff", 1)
-			unless Gtk2 -> CHECK_VERSION(2, 7, 3); # FIXME: 2.8
+			unless Gtk2 -> CHECK_VERSION(2, 8, 0);
 
 		is($ref_one -> get_model(), $model);
 	}

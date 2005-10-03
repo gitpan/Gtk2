@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntryCompletion.t,v 1.7 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntryCompletion.t,v 1.8 2005/09/18 15:07:22 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -63,7 +63,7 @@ SKIP: {
 
 SKIP: {
 	skip 'new 2.8 stuff', 2
-		unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+		unless Gtk2->CHECK_VERSION (2, 8, 0);
 
 	$completion->set_popup_set_width (TRUE);
 	is ($completion->get_popup_set_width, TRUE);

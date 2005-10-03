@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelIface.t,v 1.4 2005/07/31 04:05:18 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelIface.t,v 1.4.2.1 2005/10/03 18:41:55 kaffeetisch Exp $
 
 package CustomList;
 
@@ -352,7 +352,7 @@ use warnings;
 
 my $model = CustomList->new;
 
-is ($model->get_flags, [qw/list-only iters-persist/]);
+ok ($model->get_flags eq [qw/iters-persist list-only/]);
 is ($model->get_n_columns, 23, "get_n_columns reports the number correctly");
 is ($model->get_column_type (1), Glib::String::);
 

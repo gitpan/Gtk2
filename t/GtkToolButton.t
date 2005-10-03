@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolButton.t,v 1.4 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolButton.t,v 1.5 2005/09/18 15:07:22 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -55,7 +55,7 @@ is ($tool_button->get_label_widget, undef);
 
 SKIP: {
   skip("new 2.8 stuff", 2)
-    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+    unless Gtk2->CHECK_VERSION (2, 8, 0);
 
   $tool_button->set_icon_name ("gtk-ok");
   is ($tool_button->get_icon_name, "gtk-ok");

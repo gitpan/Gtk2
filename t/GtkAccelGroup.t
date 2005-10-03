@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 17;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelGroup.t,v 1.12 2005/06/22 17:40:16 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelGroup.t,v 1.12.2.1 2005/10/03 18:41:55 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 
@@ -19,7 +19,7 @@ my $closure = sub {
   is($_[0], $group);
   is($_[1], $window);
   is($_[2], $key);
-  is($_[3], $mask);
+  is_deeply(\@{ $_[3] }, [$mask]);
 };
 
 $group -> connect($key, $mask, qw(visible), $closure);
@@ -35,7 +35,7 @@ is(Gtk2::Accelerator -> valid($key, $mask), 1);
 
 my @test = Gtk2::Accelerator -> parse("<Shift>KP_Enter");
 is($test[0], $key);
-is($test[1], $mask);
+is_deeply(\@{ $test[1] }, [$mask]);
 
 is(Gtk2::Accelerator -> name($key, $mask), "<Shift>KP_Enter");
 

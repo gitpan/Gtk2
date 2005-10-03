@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 39;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.15 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.16.2.1 2005/10/03 18:41:55 kaffeetisch Exp $
 
 my $attributes = {
   title => "Bla",
@@ -60,7 +60,7 @@ SKIP: {
   $window -> unfullscreen();
 }
 
-is($window -> get_state(), "withdrawn");
+is_deeply(\@{ $window -> get_state() }, ["withdrawn"]);
 
 is_deeply([$window -> get_position()], [10, 10]);
 
@@ -277,7 +277,7 @@ SKIP: {
 
 SKIP: {
   skip("new 2.8 stuff", 0)
-    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+    unless Gtk2->CHECK_VERSION (2, 8, 0);
 
   $window_three -> set_urgency_hint(TRUE);
   $window_three -> move_region($region, 10, 10);

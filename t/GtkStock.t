@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 9, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStock.t,v 1.9 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStock.t,v 1.10.2.1 2005/10/03 18:41:55 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 
@@ -25,13 +25,13 @@ is_deeply([(Gtk2::Stock -> list_ids())[0, 1]], ["gtk2perl-test-script", "gtk2per
 my $test = Gtk2::Stock -> lookup("gtk2perl-test-script");
 is($test -> { stock_id }, $items[0] -> { stock_id });
 is($test -> { label }, $items[0] -> { label });
-is($test -> { modifier }, $items[0] -> { modifier });
+is_deeply(\@{ $test -> { modifier } }, $items[0] -> { modifier });
 is($test -> { keyval }, $items[0] -> { keyval });
 is($test -> { translation_domain }, $items[0] -> { translation_domain });
 
 SKIP: {
   skip("new 2.8 stuff", 3)
-    unless Gtk2->CHECK_VERSION (2, 7, 0); # FIXME: 2.8
+    unless Gtk2->CHECK_VERSION (2, 8, 0);
 
   Gtk2::Stock -> set_translate_func("de_DE", sub {
     my ($label, $data) = @_;

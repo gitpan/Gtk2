@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
 use Gtk2::TestHelper
-  tests => 5, noinit => 1,
+  tests => 5,
   at_least_version => [2, 6, 0, "GtkMenuToolButton is new in 2.6"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenuToolButton.t,v 1.1 2005/01/02 16:25:51 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenuToolButton.t,v 1.2 2005/09/18 15:07:22 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Urgs");
 

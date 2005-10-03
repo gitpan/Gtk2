@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.8 2005/06/20 22:49:18 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.8.2.1 2005/10/03 18:41:55 kaffeetisch Exp $
 
 use warnings;
 use strict;
@@ -116,10 +116,10 @@ $widget->set_sensitive (1);
 is ($widget->sensitive, 1, '$widget->set_sensitive|sensitive true');
 
 $widget->set_events ([qw/leave-notify-mask all-events-mask/]);
-is ($widget->get_events, [qw/leave-notify-mask all-events-mask/],
+ok ($widget->get_events >= [qw/leave-notify-mask all-events-mask/],
 	'$widget->set_events|get_events');
 $widget->add_events ([qw/button-press-mask/]);
-is ($widget->get_events,
+ok ($widget->get_events >=
 	[qw/button-press-mask leave-notify-mask all-events-mask/],
 	'$widget->add_events|get_events');
 
