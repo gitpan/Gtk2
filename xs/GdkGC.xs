@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.19 2004/04/19 19:20:51 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkGC.xs,v 1.19.8.1 2005/10/10 20:15:33 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -273,19 +273,19 @@ gdk_gc_set_clip_mask (gc, mask)
 	GdkGC *gc
 	SV *mask
     CODE:
-	gdk_gc_set_clip_mask (gc, SvGdkBitmap (mask));
+	gdk_gc_set_clip_mask (gc, SvGdkBitmap_ornull (mask));
 
  ## void gdk_gc_set_clip_rectangle (GdkGC *gc, GdkRectangle *rectangle)
 void
 gdk_gc_set_clip_rectangle (gc, rectangle)
 	GdkGC *gc
-	GdkRectangle *rectangle
+	GdkRectangle_ornull *rectangle
 
  ## void gdk_gc_set_clip_region (GdkGC *gc, GdkRegion *region)
 void
 gdk_gc_set_clip_region (gc, region)
 	GdkGC *gc
-	GdkRegion *region
+	GdkRegion_ornull *region
 
  ## void gdk_gc_set_subwindow (GdkGC *gc, GdkSubwindowMode mode)
 void

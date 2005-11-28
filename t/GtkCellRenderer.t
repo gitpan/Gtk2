@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellRenderer.t,v 1.11 2005/02/08 05:17:41 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellRenderer.t,v 1.11.4.1 2005/11/28 20:13:17 kaffeetisch Exp $
 
 use Gtk2::TestHelper tests => 9;
 use strict;
@@ -145,7 +145,7 @@ SKIP: {
 
 ##########################################################################
 
-run_main {
+run_main sub {
 	$treeview->set_cursor (Gtk2::TreePath->new_from_string ('0'),
 	                       $column, 1);
 	$treeview->set_cursor (Gtk2::TreePath->new_from_string ('0'),

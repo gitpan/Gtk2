@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkNotebook.t,v 1.5 2005/02/26 21:30:39 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkNotebook.t,v 1.5.4.1 2005/11/28 20:13:17 kaffeetisch Exp $
 #
 
 #########################
@@ -116,7 +116,7 @@ is_deeply( [ $nb->query_tab_label_packing($child) ],
 
 $win->show_all;
 ok(1);
-run_main {
+run_main sub {
 		$nb->next_page;
 		ok(1);
 		$nb->prev_page;

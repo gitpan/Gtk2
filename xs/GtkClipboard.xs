@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.21 2005/01/02 17:45:21 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkClipboard.xs,v 1.21.4.1 2005/11/28 20:13:17 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -431,10 +431,10 @@ gtk_clipboard_set_can_store (clipboard, ...);
 	GtkClipboard *clipboard
     PREINIT:
 	GtkTargetEntry *targets = NULL;
-	gint n_targets;
+	guint n_targets;
     CODE:
 	GTK2PERL_STACK_ITEMS_TO_TARGET_ENTRY_ARRAY (1, targets, n_targets);
-	gtk_clipboard_set_can_store (clipboard, targets, n_targets);
+	gtk_clipboard_set_can_store (clipboard, targets, (gint) n_targets);
 
 void gtk_clipboard_store (GtkClipboard *clipboard);
 

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.46 2005/09/18 15:07:22 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.46.2.1 2005/10/05 19:05:40 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -630,6 +630,10 @@ _ADD_INTERFACE (class, const char * target_class)
 
 MODULE = Gtk2::TreeModel	PACKAGE = Gtk2::TreePath	PREFIX = gtk_tree_path_
 
+=for apidoc
+Create a new path.  For convenience, if you pass a value for I<$path>,
+this is just an alias for C<new_from_string>.
+=cut
 GtkTreePath_own_ornull *
 gtk_tree_path_new (class, path=NULL)
 	const gchar * path

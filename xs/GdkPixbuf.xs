@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.36 2005/07/11 22:39:21 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.36.2.1 2005/10/10 20:15:33 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -711,7 +711,7 @@ gdk_pixbuf_scale_simple (src, dest_width, dest_height, interp_type)
 	GdkInterpType interp_type
 
 ##  GdkPixbuf *gdk_pixbuf_composite_color_simple (const GdkPixbuf *src, int dest_width, int dest_height, GdkInterpType interp_type, int overall_alpha, int check_size, guint32 color1, guint32 color2) 
-GdkPixbuf *
+GdkPixbuf_noinc *
 gdk_pixbuf_composite_color_simple (src, dest_width, dest_height, interp_type, overall_alpha, check_size, color1, color2)
 	GdkPixbuf *src
 	int dest_width

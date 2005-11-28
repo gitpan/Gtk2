@@ -1,6 +1,6 @@
 # vim: set syntax=perl :
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSimpleList.t,v 1.7 2005/07/22 04:41:32 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSimpleList.t,v 1.7.2.1 2005/11/28 20:13:17 kaffeetisch Exp $
 #
 
 #########################
@@ -96,7 +96,7 @@ ok( $list->signal_connect( row_activated => sub
 	} ) );
 
 my $count = 0;
-run_main {
+run_main sub {
 		my $ldata = $list->{data};
 
 		ok( scalar(@$ldata) == 4 );

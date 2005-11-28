@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 137;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.21 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.21.2.1 2005/11/28 20:13:17 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -432,7 +432,7 @@ $view->signal_connect (button_press_event => sub {
 	});
 my $event = Gtk2::Gdk::Event->new ('button-press');
 
-run_main { $view->signal_emit ('button_press_event', $event) };
+run_main sub { $view->signal_emit ('button_press_event', $event) };
 
 __END__
 

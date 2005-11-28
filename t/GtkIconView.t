@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.10 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.10.2.1 2005/11/28 20:13:17 kaffeetisch Exp $
 #
 
 #########################
@@ -86,7 +86,7 @@ is ($iview->get_margin, 23);
 
 #$win->show_all;
 
-run_main {
+run_main sub {
 	# this stuff is liable to be flaky, it may require TODO's
 	my $path = $iview->get_path_at_pos (50, 50);
 	isa_ok ($path, 'Gtk2::TreePath', '$iview->get_path_at_pos (50, 50)');

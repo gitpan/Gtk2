@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.32.2.1 2005/10/03 18:41:55 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.32.2.2 2005/11/28 20:13:17 kaffeetisch Exp $
 #
 
 #########################
@@ -218,7 +218,7 @@ SKIP: {
 $win->show;
 ok(1);
 
-run_main {
+run_main sub {
 		$win2->show;
 
 		# there are no widgets, so this should fail

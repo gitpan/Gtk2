@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use Gtk2::TestHelper tests => 46, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.16 2005/01/09 03:48:40 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.16.4.1 2005/11/28 20:13:17 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -188,7 +188,7 @@ SKIP: {
 	$i++;
     }
 
-    run_main {
+    run_main sub {
 		SKIP: {
 			skip 'function only in version > 2.2', 5
 				unless Gtk2->CHECK_VERSION (2, 2, 0);

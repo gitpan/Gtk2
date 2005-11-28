@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.105 2005/09/05 19:00:29 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.105.2.1 2005/10/05 19:05:40 kaffeetisch Exp $
 #
 
 use 5.008;
@@ -56,7 +56,7 @@ unless (eval "use ExtUtils::Depends '$build_reqs{'perl-ExtUtils-Depends'}';"
    exit 1; # not reached
 }
 
-require 'CodeGen.pm'; # other modules can should 'use Gtk2::CodeGen;' --
+require 'CodeGen.pm'; # other modules should 'use Gtk2::CodeGen;' --
                       # we can't because it's not installed yet.
 
 # all the generated stuff will go into this subdir...
@@ -77,7 +77,6 @@ foreach my $filename (@xs_lists) {
 }
 my $target = ExtUtils::PkgConfig->variable ('gtk+-2.0', 'target');
 if ($target =~ /x11/) {
-	warn "Congratulations, you're building on X11!\n";
 	push @xs_files, 'xs/GdkX11.xs';
 }
 

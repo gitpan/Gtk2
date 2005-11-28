@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooser.t,v 1.23.2.1 2005/10/03 18:41:55 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooser.t,v 1.23.2.3 2005/11/28 20:13:17 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -32,7 +32,7 @@ my $cwd = cwd ();
 
 $file_chooser->set_current_name ('something that may not exist');
 TODO: {
-      local $TODO = "GtkFileChooser trouble";
+	local $TODO = "GtkFileChooser trouble";
 	is ($file_chooser->get_filename,
 	    $cwd . "/" . 'something that may not exist',
 	    'set current name');
@@ -141,7 +141,7 @@ $file_chooser->set_current_folder ($cwd);
 $filename = File::Spec->catfile ($cwd, 'gtk2perl.h');
 ok ($file_chooser->select_filename ($filename));
 
-run_main {
+run_main sub {
   TODO: {
     local $TODO = "gtk+ 2.6 seems to return undef for some reason";
     is ($file_chooser->get_preview_filename, $filename, 'get_preview_filename');
@@ -195,7 +195,7 @@ ok (!scalar (@list), 'no uris selected');
 is (scalar (@list), 0, 'unselected everything');
 
 $file_chooser->remove_shortcut_folder ($cwd);
-$file_chooser->remove_shortcut_folder_uri ($cwd);
+$file_chooser->remove_shortcut_folder_uri ("file://$cwd");
 
 SKIP: {
 	skip("[sg]et_show_hidden are new in 2.6", 1)

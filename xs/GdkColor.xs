@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.19 2004/05/28 22:38:21 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.19.8.1 2005/11/28 20:13:17 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -187,9 +187,9 @@ saturation.  If you are used to dealing with colors on the range of 0 to
 
 GdkColor_own *
 gdk_color_new (class, red, green, blue)
-	int red
-	int green
-	int blue
+	guint16 red
+	guint16 green
+	guint16 blue
     PREINIT:
 	GdkColor c;
     CODE:
