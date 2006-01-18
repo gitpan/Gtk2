@@ -3,15 +3,12 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellView.xs,v 1.6 2005/01/19 13:03:31 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellView.xs,v 1.6.4.1 2006/01/18 20:08:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::CellView PACKAGE = Gtk2::CellView PREFIX = gtk_cell_view_
-
-BOOT:
-	gperl_set_isa ("Gtk2::CellView", "Gtk2::CellLayout");
 
 GtkWidget * gtk_cell_view_new (class)
     C_ARGS:

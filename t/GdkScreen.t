@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 21,
   at_least_version => [2, 2, 0, "GdkScreen is new in 2.2"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkScreen.t,v 1.4 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkScreen.t,v 1.4.2.1 2006/01/18 20:08:15 kaffeetisch Exp $
 
 my $screen = Gtk2::Gdk::Screen -> get_default();
 isa_ok($screen, "Gtk2::Gdk::Screen");
@@ -47,13 +47,11 @@ SKIP: {
     unless Gtk2->CHECK_VERSION (2, 8, 0);
 
   my $visual = $screen -> get_rgba_visual();
-  if (defined $visual) {
-    isa_ok($visual, "Gtk2::Gdk::Visual");
-    isa_ok($screen -> get_rgba_colormap(), "Gtk2::Gdk::Colormap");
-  } else {
-    ok(1);
-    ok(1);
-  }
+  skip "visual stuff", 2
+    unless defined $visual;
+
+  isa_ok($visual, "Gtk2::Gdk::Visual");
+  isa_ok($screen -> get_rgba_colormap(), "Gtk2::Gdk::Colormap");
 }
 
 __END__

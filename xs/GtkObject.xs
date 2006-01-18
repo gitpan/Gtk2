@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkObject.xs,v 1.15 2005/02/18 14:55:56 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkObject.xs,v 1.15.4.1 2006/01/18 20:08:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -83,7 +83,6 @@ MODULE = Gtk2::Object	PACKAGE = Gtk2::Object	PREFIX = gtk_object_
 BOOT:
 	/* GtkObject uses a different method of ownership than GObject */
 	gperl_register_sink_func (GTK_TYPE_OBJECT, gtk2perl_object_sink);
-
 
  ## void gtk_object_sink	  (GtkObject *object);
  ## we don't need this to be exported to perl, it's automagical

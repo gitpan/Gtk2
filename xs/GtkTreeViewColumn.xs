@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.28 2005/09/18 15:07:22 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.28.2.1 2006/01/18 20:08:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -76,12 +76,6 @@ gtk2perl_tree_cell_data_func (GtkTreeViewColumn * tree_column,
 
 
 MODULE = Gtk2::TreeViewColumn	PACKAGE = Gtk2::TreeViewColumn	PREFIX = gtk_tree_view_column_
-
-BOOT:
-#if GTK_CHECK_VERSION(2,4,0)
-	gperl_set_isa ("Gtk2::TreeViewColumn", "Gtk2::CellLayout");
-#endif
-
 
 GtkTreeViewColumn *
 gtk_tree_view_column_new (class)

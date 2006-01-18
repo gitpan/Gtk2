@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkProgressBar.t,v 1.6 2005/01/02 16:25:51 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkProgressBar.t,v 1.6.4.1 2006/01/18 20:08:15 kaffeetisch Exp $
 #
 
 #########################
@@ -7,7 +7,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 31, noinit => 1;
+use Gtk2::TestHelper tests => 35, noinit => 1;
 
 ok( my $vbox = Gtk2::VBox->new( 0, 5 ) );
 
@@ -17,6 +17,7 @@ my @prog;
 foreach (@ori)
 {
 	ok( my $prog = Gtk2::ProgressBar->new );
+	isa_ok( $prog, 'Gtk2::Widget' );
 	$vbox->pack_start($prog, 0, 0, 0);
 
 	$prog->set_orientation($_);

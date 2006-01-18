@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBoxEntry.xs,v 1.9 2005/06/08 02:13:33 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBoxEntry.xs,v 1.9.2.1 2006/01/18 20:08:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -46,10 +46,6 @@ The ComboBoxEntry has a Gtk2::Entry as its child.  To get or set the
 currently-displayed text, just manipulate the entry normally.
 
 =cut
-
-BOOT:
-	gperl_set_isa ("Gtk2::ComboBoxEntry", "Gtk2::CellEditable");
-	gperl_set_isa ("Gtk2::ComboBoxEntry", "Gtk2::CellLayout");
 
  ## GtkWidget *gtk_combo_box_entry_new (void);
  ## GtkWidget *gtk_combo_box_entry_new_with_model (GtkTreeModel *model, gint text_column);

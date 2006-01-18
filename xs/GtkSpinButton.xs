@@ -16,16 +16,12 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSpinButton.xs,v 1.8 2005/01/19 13:03:31 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSpinButton.xs,v 1.8.4.1 2006/01/18 20:08:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::SpinButton	PACKAGE = Gtk2::SpinButton	PREFIX = gtk_spin_button_
-
-BOOT:
-	gperl_set_isa ("Gtk2::SpinButton", "Gtk2::CellEditable");
-	gperl_set_isa ("Gtk2::SpinButton", "Gtk2::Editable");
 
 ##GtkWidget * gtk_spin_button_new (GtkAdjustment *adjustment, gdouble climb_rate, guint digits)
 GtkWidget *

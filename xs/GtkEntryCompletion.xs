@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntryCompletion.xs,v 1.9 2005/09/18 15:07:22 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntryCompletion.xs,v 1.9.2.1 2006/01/18 20:08:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -33,9 +33,6 @@ gtk2perl_entry_completion_match_func (GtkEntryCompletion *completion,
 }
 
 MODULE = Gtk2::EntryCompletion	PACKAGE = Gtk2::EntryCompletion	PREFIX = gtk_entry_completion_
-
-BOOT:
-	gperl_set_isa("Gtk2::EntryCompletion", "Gtk2::CellLayout");
 
 
 GtkEntryCompletion *gtk_entry_completion_new (class)

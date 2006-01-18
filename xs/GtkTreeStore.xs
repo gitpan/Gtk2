@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeStore.xs,v 1.23 2004/04/05 13:42:36 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeStore.xs,v 1.23.8.1 2006/01/18 20:08:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -28,9 +28,6 @@ BOOT:
 	 * Gtk2::TreeModel::get isn't masked by Glib::Object::get.
 	 * should we change the api to something unique, instead? */
 	gperl_prepend_isa ("Gtk2::TreeStore", "Gtk2::TreeModel");
-	gperl_set_isa ("Gtk2::TreeStore", "Gtk2::TreeDragSource");
-	gperl_set_isa ("Gtk2::TreeStore", "Gtk2::TreeDragDest");
-	gperl_set_isa ("Gtk2::TreeStore", "Gtk2::TreeSortable");
 
 ## GtkTreeStore* gtk_tree_store_new (gint n_columns, ...);
 =for apidoc

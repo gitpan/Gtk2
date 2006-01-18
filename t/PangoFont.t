@@ -2,12 +2,12 @@
 use strict;
 use Gtk2::TestHelper tests => 53;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoFont.t,v 1.6 2005/01/07 21:31:59 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoFont.t,v 1.6.4.1 2006/01/18 20:08:15 kaffeetisch Exp $
 
 my $description = Gtk2::Pango::FontDescription -> new();
 isa_ok($description, "Gtk2::Pango::FontDescription");
 
-is($description -> hash(), 0);
+like($description -> hash(), qr/^\d+$/);
 is($description -> equal($description), 1);
 
 $description -> set_family("Sans");
