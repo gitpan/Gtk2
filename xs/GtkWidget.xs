@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.60 2005/06/20 22:49:18 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.60.2.1 2006/02/05 15:30:16 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -534,8 +534,8 @@ gtk_widget_activate (widget)
 gboolean
 gtk_widget_set_scroll_adjustments (widget, hadjustment, vadjustment)
 	GtkWidget     * widget
-	GtkAdjustment * hadjustment
-	GtkAdjustment * vadjustment
+	GtkAdjustment_ornull * hadjustment
+	GtkAdjustment_ornull * vadjustment
 
 void
 gtk_widget_reparent (widget, new_parent)

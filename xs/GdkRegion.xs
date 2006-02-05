@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRegion.xs,v 1.6 2004/01/05 16:45:06 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRegion.xs,v 1.6.10.1 2006/02/05 15:30:16 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 #include "gperl_marshal.h"
@@ -143,7 +143,7 @@ gdk_region_get_rectangles (region)
 	gdk_region_get_rectangles (region, &rectangles, &n_rectangles);
 	EXTEND (SP, n_rectangles);
 	for (i = 0 ; i < n_rectangles ; i++)
-		PUSHs (sv_2mortal (newSVGdkRectangle (rectangles + i)));
+		PUSHs (sv_2mortal (newSVGdkRectangle_copy (rectangles + i)));
 	g_free (rectangles);
 
 ##  gboolean gdk_region_empty (GdkRegion *region) 
