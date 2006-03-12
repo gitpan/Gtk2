@@ -1,12 +1,13 @@
 #!/usr/bin/perl -w
-use Gtk2::TestHelper tests => 46, noinit => 1;
+use Gtk2::TestHelper tests => 47, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.16.4.1 2005/11/28 20:13:17 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.19 2006/01/18 19:04:10 kaffeetisch Exp $
 
 ###############################################################################
 
 my $model = Gtk2::ListStore -> new("Glib::String", "Glib::Int");
 isa_ok($model, "Gtk2::ListStore");
+ginterfaces_ok($model);
 
 $model -> set_column_types("Glib::String", "Glib::Int");
 is($model -> get_column_type(0), "Glib::String");

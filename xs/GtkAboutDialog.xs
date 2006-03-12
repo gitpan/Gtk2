@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.9 2005/06/08 02:10:42 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.10 2005/09/29 22:49:35 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -116,6 +116,14 @@ void gtk_about_dialog_set_comments (GtkAboutDialog * about, const gchar_ornull *
 const gchar_ornull * gtk_about_dialog_get_license (GtkAboutDialog * about);
 
 void gtk_about_dialog_set_license (GtkAboutDialog * about, const gchar_ornull * license);
+
+#if GTK_CHECK_VERSION (2, 8, 0)
+
+gboolean gtk_about_dialog_get_wrap_license (GtkAboutDialog *about);
+
+void gtk_about_dialog_set_wrap_license (GtkAboutDialog *about, gboolean wrap_license);
+
+#endif
 
 const gchar_ornull * gtk_about_dialog_get_website (GtkAboutDialog * about);
 

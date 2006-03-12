@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellRenderer.t,v 1.11.4.1 2005/11/28 20:13:17 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellRenderer.t,v 1.12 2005/11/12 21:08:00 kaffeetisch Exp $
 
 use Gtk2::TestHelper tests => 9;
 use strict;

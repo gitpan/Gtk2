@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellView.t,v 1.6 2005/01/30 02:17:29 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellView.t,v 1.8 2006/01/24 20:00:29 kaffeetisch Exp $
 #
 
 #########################
@@ -25,7 +25,7 @@ my $win = Gtk2::Window->new;
 isa_ok (my $cview = Gtk2::CellView->new, 'Gtk2::CellView',
 	'Gtk2::CellView->new');
 
-isa_ok ($cview, 'Gtk2::CellLayout');
+ginterfaces_ok($cview);
 
 isa_ok ($cview = Gtk2::CellView->new_with_text ('text'), 'Gtk2::CellView',
 	'Gtk2::CellView->new_with_text');

@@ -1,11 +1,12 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 15;
+use Gtk2::TestHelper tests => 16;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntry.t,v 1.10 2005/01/30 02:17:29 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntry.t,v 1.12 2006/01/18 19:04:10 kaffeetisch Exp $
 
 my $entry = Gtk2::Entry -> new();
 isa_ok($entry, "Gtk2::Entry");
+ginterfaces_ok($entry);
 
 $entry -> set_text("Bla");
 is($entry -> get_text(), "Bla");

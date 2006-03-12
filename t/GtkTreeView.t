@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 137;
+use Gtk2::TestHelper tests => 138;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.21.2.1 2005/11/28 20:13:17 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.24 2006/01/18 19:04:10 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -49,6 +49,7 @@ $window -> show_all();
 
 my $view_column = Gtk2::TreeViewColumn -> new();
 isa_ok($view_column, "Gtk2::TreeViewColumn");
+ginterfaces_ok($view_column);
 
 $view_column -> set_spacing(23);
 is($view_column -> get_spacing(), 23);

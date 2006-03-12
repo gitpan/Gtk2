@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.10.2.1 2005/11/28 20:13:17 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.13 2006/01/18 19:04:10 kaffeetisch Exp $
 #
 
 #########################
@@ -12,7 +12,7 @@
 use strict;
 use warnings;
 
-use Gtk2::TestHelper tests => 52,
+use Gtk2::TestHelper tests => 53,
     at_least_version => [2, 6, 0, "GtkIconView is new in 2.6"],
     ;
 
@@ -28,6 +28,7 @@ my $model = create_store ();
 
 isa_ok (my $iview = Gtk2::IconView->new, 'Gtk2::IconView',
 	'Gtk2::IconView->new');
+ginterfaces_ok($iview);
 
 is ($iview->get_model, undef, '$iview->get_model, undef');
 $iview->set_model ($model);

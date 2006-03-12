@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolbar.xs,v 1.17.6.1 2005/11/28 20:13:17 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolbar.xs,v 1.18 2005/10/18 16:16:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

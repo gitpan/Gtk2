@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelIface.t,v 1.4.2.1 2005/10/03 18:41:55 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelIface.t,v 1.5 2005/10/05 19:13:07 kaffeetisch Exp $
 
 package CustomList;
 

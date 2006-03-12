@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooserDialog.t,v 1.5 2004/03/17 03:52:24 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooserDialog.t,v 1.6 2006/01/18 19:04:10 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -12,7 +12,7 @@ my $dialog = Gtk2::FileChooserDialog->new ('some title', undef, 'save',
                                            'gtk-ok' => 'ok');
 
 isa_ok ($dialog, 'Gtk2::FileChooserDialog');
-isa_ok ($dialog, 'Gtk2::FileChooser');
+ginterfaces_ok($dialog);
 
 is ($dialog->get_action, 'save');
 

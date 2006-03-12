@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 39;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.16.2.1 2005/10/03 18:41:55 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.17 2005/10/05 19:13:07 kaffeetisch Exp $
 
 my $attributes = {
   title => "Bla",

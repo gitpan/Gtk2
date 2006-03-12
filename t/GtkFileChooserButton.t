@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 8,
   at_least_version => [2, 6, 0, "GtkFileChooserButton is new in 2.6"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooserButton.t,v 1.2 2005/06/03 17:43:59 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooserButton.t,v 1.3 2006/01/18 19:04:10 kaffeetisch Exp $
 
 my $dialog = Gtk2::FileChooserDialog -> new("Urgs", undef, "open",
                                             "gtk-cancel" => "cancel",
@@ -12,7 +12,7 @@ my $dialog = Gtk2::FileChooserDialog -> new("Urgs", undef, "open",
 
 my $button = Gtk2::FileChooserButton -> new("Urgs", "open");
 isa_ok($button, "Gtk2::FileChooserButton");
-isa_ok($button, "Gtk2::FileChooser");
+ginterfaces_ok($button);
 
 $button = Gtk2::FileChooserButton -> new_with_backend("Urgs", "open", "backend");
 isa_ok($button, "Gtk2::FileChooserButton");

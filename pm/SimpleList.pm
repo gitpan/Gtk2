@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.27 2005/06/16 04:38:11 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.28 2005/10/14 03:51:26 muppetman Exp $
 #
 
 #########################
@@ -819,6 +819,9 @@ section will prove redundant, but just in case:
 
 Perl(1), Glib(3pm), Gtk2(3pm), Gtk2::TreeView(3pm), Gtk2::TreeModel(3pm),
 Gtk2::ListStore(3pm).
+
+Note: Gtk2::SimpleList is deprecated in favor of Gtk2::Ex::Simple::List, part
+of the Gtk2-Perl-Ex project at http://gtk2-perl-ex.sf.net .
 
 =head1 AUTHORS
 

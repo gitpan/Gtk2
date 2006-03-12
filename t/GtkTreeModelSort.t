@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 8, noinit => 1;
+use Gtk2::TestHelper tests => 11, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelSort.t,v 1.4 2005/01/19 13:02:46 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelSort.t,v 1.7 2006/01/18 19:04:10 kaffeetisch Exp $
 
 my $list = Gtk2::ListStore -> new("Glib::Int");
 
@@ -11,7 +11,7 @@ $list -> set($list -> append(), 0 => 23);
 
 my $sort = Gtk2::TreeModelSort -> new_with_model($list);
 isa_ok($sort, "Gtk2::TreeModelSort");
-isa_ok($sort, "Gtk2::TreeDragSource");
+ginterfaces_ok($sort);
 is($sort -> get_model(), $list);
 
 my $path = Gtk2::TreePath -> new_from_string("1");
@@ -31,6 +31,13 @@ SKIP: {
 
   is($sort -> iter_is_valid($sort -> get_iter($path)), 1);
 }
+
+# other ways to construct
+ok (Gtk2::TreeModelSort->new ($list), 'new with one arg');
+ok (Gtk2::TreeModelSort->new (model => $list), 'new with two args');
+# this should die with a usage message.
+eval { $sort = Gtk2::TreeModelSort->new(); };
+ok ($@, 'new with no args is an error');
 
 __END__
 

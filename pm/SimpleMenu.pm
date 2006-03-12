@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleMenu.pm,v 1.8 2004/04/19 18:18:42 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleMenu.pm,v 1.9 2005/10/14 03:51:26 muppetman Exp $
 #
 
 package Gtk2::SimpleMenu;
@@ -313,6 +313,8 @@ accelerators are being used in the menu tree's items.
 =head1 SEE ALSO
 
 Perl(1), Glib(3pm), Gtk2(3pm), examples/simple_menu.pl.
+
+Note: Gtk2::SimpleMenu is deprecated in favor of Gtk2::Ex::Simple::Menu, part of the Gtk2-Perl-Ex project at L<http://gtk2-perl-ex.sf.net/> .
 
 =head1 AUTHORS
 

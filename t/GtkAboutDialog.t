@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAboutDialog.t,v 1.7 2005/02/08 05:17:34 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAboutDialog.t,v 1.8 2005/09/29 22:49:35 kaffeetisch Exp $
 #
 
 #########################
@@ -12,7 +12,7 @@
 use strict;
 use warnings;
 
-use Gtk2::TestHelper tests => 29,
+use Gtk2::TestHelper tests => 30,
     at_least_version => [2, 6, 0, "GtkAboutDialog is new in 2.6"];
 
 isa_ok (my $dialog = Gtk2::AboutDialog->new, 'Gtk2::AboutDialog',
@@ -48,6 +48,14 @@ is ($dialog->get_license, 'LGPL', '$dialog->set|get_license');
 
 $dialog->set_license (undef);
 is ($dialog->get_license, undef);
+
+SKIP: {
+	skip "new 2.8 stuff", 1
+		unless Gtk2->CHECK_VERSION (2, 8, 0);
+
+	$dialog->set_wrap_license (TRUE);
+	is ($dialog->get_wrap_license, TRUE);
+}
 
 $dialog->set_authors (qw/one two three/);
 ok (eq_array ([$dialog->get_authors], [qw/one two three/]),

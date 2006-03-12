@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooserWidget.t,v 1.5 2004/03/17 03:52:24 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooserWidget.t,v 1.6 2006/01/18 19:04:10 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -10,7 +10,7 @@ use Gtk2::TestHelper
 my $widget = Gtk2::FileChooserWidget->new ('save');
 
 isa_ok ($widget, 'Gtk2::FileChooserWidget');
-isa_ok ($widget, 'Gtk2::FileChooser');
+ginterfaces_ok($widget);
 
 is ($widget->get_action, 'save');
 

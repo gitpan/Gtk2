@@ -1,13 +1,14 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 41, noinit => 1;
+use Gtk2::TestHelper tests => 42, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeStore.t,v 1.10 2004/03/12 17:47:05 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeStore.t,v 1.12 2006/01/18 19:04:10 kaffeetisch Exp $
 
 ###############################################################################
 
 my $model = Gtk2::TreeStore -> new("Glib::String", "Glib::Int");
 isa_ok($model, "Gtk2::TreeStore");
+ginterfaces_ok($model);
 
 $model -> set_column_types("Glib::String", "Glib::Int");
 is($model -> get_column_type(0), "Glib::String");

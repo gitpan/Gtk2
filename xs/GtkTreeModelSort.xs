@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,18 +16,50 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModelSort.xs,v 1.7.4.1 2006/01/18 20:08:15 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModelSort.xs,v 1.10 2006/01/24 20:00:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::TreeModelSort	PACKAGE = Gtk2::TreeModelSort	PREFIX = gtk_tree_model_sort_
 
-GtkTreeModel_noinc *
+GtkTreeModelSort_noinc *
 gtk_tree_model_sort_new_with_model (class, child_model)
 	GtkTreeModel * child_model
-    C_ARGS:
-	child_model
+    CODE:
+	RETVAL = (GtkTreeModelSort *)
+	  gtk_tree_model_sort_new_with_model (child_model);
+    OUTPUT:
+	RETVAL
+
+=for apidoc
+=for signature treemodel = Gtk2::TreeModelSort->new ($child_model)
+=for signature treemodel = Gtk2::TreeModelSort->new (model => $child_model)
+=for arg ... (__hide__)
+=for arg child_model (GtkTreeModel*) The tree model to proxy.
+Aliases for C<new_with_model>.  Before Gtk2 1.120, C<new> resolved to
+C<Glib::Object::new>, which would allow creation of an invalid object if the
+required property C<model> was not supplied.
+=cut
+GtkTreeModelSort_noinc *
+gtk_tree_model_sort_new (class, ...)
+    PREINIT:
+	GtkTreeModel * child_model = NULL;
+    CODE:
+	if (items == 2)
+		/* called as Gtk2::TreeModelSort->new ($model) */
+		child_model = SvGtkTreeModel (ST (1));
+	else if (items == 3)
+		/* called as Gtk2::TreeModelSort->new (model => $model) */
+		child_model = SvGtkTreeModel (ST (2));
+	else
+		croak ("Usage: $sort = Gtk2::TreeModelSort->new ($child_model)\n"
+		       "   or  $sort = Gtk2::TreeModelSort->new (model => $child_model)\n"
+		       "   ");
+	RETVAL = (GtkTreeModelSort *)
+	  gtk_tree_model_sort_new_with_model (child_model);
+    OUTPUT:
+	RETVAL
 
 GtkTreeModel *
 gtk_tree_model_sort_get_model (tree_model)

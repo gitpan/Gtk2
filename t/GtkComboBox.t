@@ -1,9 +1,9 @@
 ###!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.16 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.18 2006/01/18 19:04:10 kaffeetisch Exp $
 
 use Gtk2::TestHelper
-	tests => 23,
+	tests => 24,
 	at_least_version => [2, 4, 0, "GtkComboBox is new in 2.4"],
 	;
 
@@ -12,6 +12,7 @@ my $combo_box;
 ## convenience -- text
 $combo_box = Gtk2::ComboBox->new_text;
 isa_ok ($combo_box, 'Gtk2::ComboBox');
+ginterfaces_ok($combo_box);
 
 SKIP: {
 	skip '@ISA check', 1

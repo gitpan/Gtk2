@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.44.2.1 2005/11/13 19:57:16 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.46 2005/11/13 19:44:52 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -366,6 +366,8 @@ MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event	PREFIX = gdk_event_
 
 =item * L<Gtk2::Gdk::Event::OwnerChange> (since gtk+ 2.6)
 
+=item * L<Gtk2::Gdk::Event::GrabBroken> (since gtk+ 2.8)
+
 =back
 
 =cut
@@ -453,12 +455,12 @@ gdk_event_copy (event)
 =for signature $timestamp = $event->get_time
 =for signature $timestamp = $event->time
 =for arg ... (hide)
-Get I<$event>'s time.  If that event type doesn't have a time, 
-returns GDK_CURRENT_TIME, which is 0.
+Get I<$event>'s time.  If that event type doesn't have a time, or if
+I<$event> is undef, returns GDK_CURRENT_TIME, which is 0.
 =cut
 guint
 gdk_event_get_time (event, ...)
-	GdkEvent *event
+	GdkEvent_ornull *event
     ALIAS:
 	Gtk2::Gdk::Event::time = 1
 	Gtk2::Gdk::Event::set_time = 2
@@ -683,6 +685,7 @@ DESTROY (sv)
 	Gtk2::Gdk::Event::WindowState::DESTROY = 16
 	Gtk2::Gdk::Event::DND::DESTROY         = 17
 	Gtk2::Gdk::Event::OwnerChange::DESTROY = 18
+	Gtk2::Gdk::Event::GrabBroken::DESTROY  = 19
     CODE:
 	PERL_UNUSED_VAR (ix);
 	default_wrapper_class->destroy (sv);

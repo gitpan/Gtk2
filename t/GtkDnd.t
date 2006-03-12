@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 5;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDnd.t,v 1.12 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDnd.t,v 1.13 2005/09/29 22:49:35 kaffeetisch Exp $
 
 my $button = Gtk2::Button -> new("Bla");
 my $window = Gtk2::Window -> new();
@@ -51,6 +51,13 @@ if (defined($context)) {
   $context -> set_icon_pixbuf($pixbuf, 5, 5);
   $context -> set_icon_stock("gtk-add", 5, 5);
   $context -> set_icon_default();
+
+  SKIP: {
+    skip "new 2.8 stuff", 0
+      unless Gtk2 -> CHECK_VERSION(2, 8, 0);
+
+    $context -> set_icon_name("gtk-add", 5, 5);
+  }
 }
 
 is($button -> drag_check_threshold(5, 5, 100, 100), 1);

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDnd.xs,v 1.17 2005/09/18 15:07:22 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkDnd.xs,v 1.18 2005/09/29 22:49:35 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -69,6 +69,12 @@ gtk_drag_set_icon_stock (context, stock_id, hot_x, hot_y)
 	const gchar *stock_id
 	gint hot_x
 	gint hot_y
+
+#if GTK_CHECK_VERSION (2, 8, 0)
+
+void gtk_drag_set_icon_name (GdkDragContext *context, const gchar *icon_name, gint hot_x, gint hot_y)
+
+#endif
 
 ##  void gtk_drag_set_icon_default (GdkDragContext *context) 
 void
