@@ -1,11 +1,16 @@
 #!/usr/bin/perl -w
+# vim: set ft=perl :
 use strict;
 use Test::More;
 use Gtk2;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.14 2005/07/10 12:22:19 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.15 2006/03/28 12:22:08 muppetman Exp $
 
-Gtk2::Gdk::Threads -> init();
+use Config;
+my $have_threads = $Config{usethreads};
+
+Gtk2::Gdk::Threads -> init()
+	if $have_threads;
 
 @ARGV = qw(--help --name bla --urgs tree);
 
@@ -107,5 +112,5 @@ Gtk2::Gdk -> beep();
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.
