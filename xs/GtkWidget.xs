@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.63 2006/02/02 20:25:54 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.63.2.1 2006/05/26 00:20:26 muppetman Exp $
  */
 #include "gtk2perl.h"
 
@@ -820,15 +820,15 @@ void gtk_widget_modify_style (GtkWidget *widget, GtkRcStyle *style);
 
 GtkRcStyle * gtk_widget_get_modifier_style (GtkWidget * widget);
 
-void gtk_widget_modify_fg (GtkWidget * widget, GtkStateType state, GdkColor * color);
+void gtk_widget_modify_fg (GtkWidget * widget, GtkStateType state, GdkColor_ornull * color);
 
-void gtk_widget_modify_bg (GtkWidget * widget, GtkStateType state, GdkColor * color);
+void gtk_widget_modify_bg (GtkWidget * widget, GtkStateType state, GdkColor_ornull * color);
 
-void gtk_widget_modify_text (GtkWidget * widget, GtkStateType state, GdkColor * color);
+void gtk_widget_modify_text (GtkWidget * widget, GtkStateType state, GdkColor_ornull * color);
 
-void gtk_widget_modify_base (GtkWidget * widget, GtkStateType state, GdkColor * color);
+void gtk_widget_modify_base (GtkWidget * widget, GtkStateType state, GdkColor_ornull * color);
 
-void gtk_widget_modify_font (GtkWidget *widget, PangoFontDescription *font_desc)
+void gtk_widget_modify_font (GtkWidget *widget, PangoFontDescription_ornull *font_desc)
 
 
  #PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);

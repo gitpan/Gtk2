@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 10, noinit => 1;
+use Gtk2::TestHelper tests => 10;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkScrolledWindow.t,v 1.7 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkScrolledWindow.t,v 1.7.4.1 2006/05/26 17:58:47 kaffeetisch Exp $
 
 my $window = Gtk2::ScrolledWindow -> new();
 isa_ok($window, "Gtk2::ScrolledWindow");

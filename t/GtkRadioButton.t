@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRadioButton.t,v 1.3 2004/01/10 17:41:59 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRadioButton.t,v 1.3.12.1 2006/05/26 17:58:47 kaffeetisch Exp $
 #
 
 #########################
@@ -7,7 +7,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 9, noinit => 1;
+use Gtk2::TestHelper tests => 9;
 
 ok( my $vbox = Gtk2::VBox->new(0, 5) );
 # $win->add($vbox);

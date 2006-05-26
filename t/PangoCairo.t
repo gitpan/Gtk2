@@ -4,15 +4,14 @@ use Glib qw/TRUE FALSE/;
 use Gtk2;
 use Test::More;
 
-eval "use Cairo";
-
-if (!$@ && Gtk2::Pango -> CHECK_VERSION(1, 10, 0)) {
+if (UNIVERSAL::can("Gtk2::Pango::Cairo::FontMap", "new") &&
+    Gtk2::Pango -> CHECK_VERSION(1, 10, 0)) {
   plan tests => 10;
 } else {
   plan skip_all => "Need Cairo";
 }
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoCairo.t,v 1.1 2005/09/29 22:43:30 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoCairo.t,v 1.1.2.1 2006/05/26 17:58:47 kaffeetisch Exp $
 
 my $fontmap = Gtk2::Pango::Cairo::FontMap -> new();
 isa_ok($fontmap, "Gtk2::Pango::Cairo::FontMap");

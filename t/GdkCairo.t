@@ -4,15 +4,15 @@ use Glib qw/TRUE FALSE/;
 use Gtk2;
 use Test::More;
 
-eval "use Cairo";
-
-if (!$@ && Gtk2 -> CHECK_VERSION(2, 8, 0) && Gtk2->init_check ) {
+if (UNIVERSAL::can("Gtk2::Gdk::Cairo::Context", "create") &&
+    Gtk2 -> CHECK_VERSION(2, 8, 0) &&
+    Gtk2->init_check ) {
   plan tests => 2;
 } else {
   plan skip_all => "Need Cairo";
 }
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkCairo.t,v 1.2 2005/11/02 02:19:08 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkCairo.t,v 1.2.2.1 2006/05/26 17:58:47 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();

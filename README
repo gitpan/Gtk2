@@ -1,6 +1,6 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/README,v 1.70 2006/04/08 16:25:39 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/README,v 1.70.2.1 2006/05/26 18:23:58 kaffeetisch Exp $
 
-Gtk2 version 1.121
+Gtk2 version 1.122
 ==================
 
 Perl bindings to the 2.x series of the Gtk+ graphical user interface library.

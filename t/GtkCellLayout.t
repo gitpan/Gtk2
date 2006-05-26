@@ -2,10 +2,9 @@
 use strict;
 use Gtk2::TestHelper
   at_least_version => [2, 4, 0, "GtkCellLayout is new in 2.4"],
-  tests => 4,
-  noinit => 1;
+  tests => 4;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellLayout.t,v 1.4 2004/04/19 18:18:42 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellLayout.t,v 1.4.10.1 2006/05/26 17:58:47 kaffeetisch Exp $
 
 my $column = Gtk2::TreeViewColumn -> new();
 isa_ok($column, "Gtk2::CellLayout");

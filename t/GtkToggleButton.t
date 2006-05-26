@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 9, noinit => 1;
+use Gtk2::TestHelper tests => 9;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToggleButton.t,v 1.5 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToggleButton.t,v 1.5.12.1 2006/05/26 17:58:47 kaffeetisch Exp $
 
 my $button = Gtk2::ToggleButton -> new();
 isa_ok($button, "Gtk2::ToggleButton");

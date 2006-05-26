@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.20 2005/01/06 04:23:15 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.20.6.1 2006/05/26 17:58:47 kaffeetisch Exp $
 #
 
 use strict;
@@ -47,7 +47,7 @@ SKIP:
 {
 	Gtk2->disable_setlocale;
 
-	@ARGV = qw(--help --g-fatal-warnings --name gtk2perl --urgs tree);
+	@ARGV = qw(--help --name gtk2perl --urgs tree);
 
 	skip 'Gtk2->init_check failed, probably unable to open DISPLAY', 
 		19, unless( Gtk2->init_check );

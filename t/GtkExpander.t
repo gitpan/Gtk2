@@ -1,10 +1,9 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkExpander.t,v 1.5 2004/03/17 03:52:24 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkExpander.t,v 1.5.10.1 2006/05/26 17:58:47 kaffeetisch Exp $
 
 use Gtk2::TestHelper
 	tests => 14,
-	noinit => 1,
 	at_least_version => [2, 4, 0, "GtkExpander is new in 2.4"],
 	;
 
