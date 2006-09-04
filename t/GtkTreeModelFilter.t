@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   noinit => 1,
   at_least_version => [2, 4, 0, "GtkTreeModelFilter is new in 2.4"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelFilter.t,v 1.7 2006/01/18 19:04:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelFilter.t,v 1.8 2006/06/18 13:39:53 kaffeetisch Exp $
 
 my $list = Gtk2::ListStore -> new("Glib::Int", "Glib::String");
 
@@ -35,8 +35,8 @@ my $iter = $list -> get_iter($path);
 isa_ok(my $tmp = $filter -> convert_child_iter_to_iter($iter), "Gtk2::TreeIter");
 isa_ok($filter -> convert_iter_to_child_iter($tmp), "Gtk2::TreeIter");
 
-isa_ok($filter -> convert_child_path_to_path($path), "Gtk2::TreePath");
-isa_ok($filter -> convert_path_to_child_path($path), "Gtk2::TreePath");
+isa_ok($tmp = $filter -> convert_child_path_to_path($path), "Gtk2::TreePath");
+isa_ok($filter -> convert_path_to_child_path($tmp), "Gtk2::TreePath");
 
 $filter -> set_visible_func(sub {
   my ($model, $iter, $data) = @_;

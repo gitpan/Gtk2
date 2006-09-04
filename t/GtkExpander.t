@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkExpander.t,v 1.5.10.1 2006/05/26 17:58:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkExpander.t,v 1.6 2006/04/23 14:18:38 kaffeetisch Exp $
 
 use Gtk2::TestHelper
 	tests => 14,

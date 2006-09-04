@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.15 2003/12/04 05:56:34 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCurve.xs,v 1.16 2006/08/07 18:36:09 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -67,7 +67,6 @@ gtk_curve_get_vector (curve, veclen=32)
 	vector = g_new(gfloat, veclen);
 	gtk_curve_get_vector(curve, veclen, vector);
 	EXTEND(SP, veclen);
-	/* TODO: precision issues ?? */
 	for( i = 0; i < veclen; i++ )
 		PUSHs(sv_2mortal(newSVnv(vector[i])));
 	g_free(vector);

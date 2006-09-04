@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioAction.xs,v 1.5 2005/04/25 17:37:46 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioAction.xs,v 1.7 2006/08/07 18:36:10 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -60,3 +60,8 @@ void gtk_radio_action_set_group (GtkRadioAction *action, SV *member_or_listref);
 
 gint gtk_radio_action_get_current_value (GtkRadioAction *action);
 
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+void gtk_radio_action_set_current_value (GtkRadioAction *action, gint value);
+
+#endif

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.2 2005/11/14 19:32:03 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.4 2006/08/07 18:36:11 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -13,9 +13,6 @@ MODULE = Gtk2::Pango::Cairo	PACKAGE = Gtk2::Pango::Cairo::FontMap	PREFIX = pango
 
 BOOT:
 	gperl_set_isa ("Gtk2::Pango::Cairo::FontMap", "Gtk2::Pango::FontMap");
-	PERL_UNUSED_VAR (file); /* for older pango's. */
-
-#if PANGO_CHECK_VERSION (1, 10, 0)
 
 # PangoFontMap *pango_cairo_font_map_new (void);
 SV *
@@ -39,7 +36,7 @@ pango_cairo_font_map_new (class)
 
 	    default:
 		fontmap = NULL; stash = NULL; RETVAL = NULL;
-		croak ("FIXME: Hu?");
+		g_assert_not_reached ();
 	}
 
 	stash = gperl_object_stash_from_type (PANGO_TYPE_CAIRO_FONT_MAP);
@@ -53,11 +50,9 @@ double pango_cairo_font_map_get_resolution (PangoCairoFontMap *fontmap);
 
 PangoContext *pango_cairo_font_map_create_context (PangoCairoFontMap *fontmap);
 
-#endif
+# --------------------------------------------------------------------------- #
 
 MODULE = Gtk2::Pango::Cairo	PACKAGE = Gtk2::Pango::Cairo	PREFIX = pango_cairo_
-
-#if PANGO_CHECK_VERSION (1, 10, 0)
 
 void pango_cairo_update_context (cairo_t *cr, PangoContext *context);
 
@@ -79,11 +74,15 @@ void pango_cairo_glyph_string_path (cairo_t *cr, PangoFont *font, PangoGlyphStri
 
 void pango_cairo_layout_path (cairo_t *cr, PangoLayout *layout);
 
+#if PANGO_CHECK_VERSION (1, 14, 0)
+
+void pango_cairo_show_error_underline (cairo_t *cr, double x, double y, double width, double height);
+
+void pango_cairo_error_underline_path (cairo_t *cr, double x, double y, double width, double height);
+
 #endif
 
 MODULE = Gtk2::Pango::Cairo	PACKAGE = Gtk2::Pango::Cairo::Context	PREFIX = pango_cairo_context_
-
-#if PANGO_CHECK_VERSION (1, 10, 0)
 
 void pango_cairo_context_set_font_options (PangoContext *context, const cairo_font_options_t *options);
 
@@ -98,5 +97,3 @@ const cairo_font_options_t *pango_cairo_context_get_font_options (PangoContext *
 void pango_cairo_context_set_resolution (PangoContext *context, double dpi);
 
 double pango_cairo_context_get_resolution (PangoContext *context);
-
-#endif

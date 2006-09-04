@@ -1,8 +1,9 @@
 #!/usr/bin/perl -w
+# vim: set ft=perl et sw=8 sts=8 :
 use strict;
-use Gtk2::TestHelper tests => 42, noinit => 1;
+use Gtk2::TestHelper tests => 44, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeStore.t,v 1.12 2006/01/18 19:04:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeStore.t,v 1.14 2006/08/07 18:36:06 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -127,9 +128,22 @@ SKIP: {
   is($model -> iter_is_valid($iter_model), 1);
 }
 
+SKIP: {
+        skip "new stuff in gtk+ 2.10", 2
+                unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+        my $nrows_before = $model->iter_n_children (undef);
+
+        my $iter = $model->insert_with_values (undef, -1);
+        isa_ok ($iter, 'Gtk2::TreeIter', 'insert_with_values with no values');
+
+        $iter = $model->insert_with_values ($iter, -1, 1, 42, 0, 'foo');
+        isa_ok ($iter, 'Gtk2::TreeIter', 'insert_with_values with values');
+}
+
 ###############################################################################
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntryCompletion.t,v 1.10 2006/01/18 19:04:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntryCompletion.t,v 1.11 2006/07/27 20:13:30 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -17,7 +17,7 @@ sub match_func {
 
 my $entry = Gtk2::Entry->new;
 
-$completion = Gtk2::EntryCompletion->new;
+my $completion = Gtk2::EntryCompletion->new;
 isa_ok ($completion, 'Gtk2::EntryCompletion');
 ginterfaces_ok($completion);
 

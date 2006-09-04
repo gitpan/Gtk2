@@ -1,4 +1,4 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.9.2.1 2006/05/26 00:20:26 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.12 2006/08/07 18:36:07 kaffeetisch Exp $
 # vim: set ft=perl :
 
 use warnings;
@@ -406,7 +406,15 @@ SKIP: {
 	$widget->remove_mnemonic_label ($label_two);
 }
 
+SKIP: {
+	skip "stuff that's new in 2.10", 0
+		unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+	$widget->input_shape_combine_mask ($bitmap, 23, 42);
+	$widget->input_shape_combine_mask (undef, 0, 0);
+}
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -1,17 +1,15 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/README,v 1.70.2.1 2006/05/26 18:23:58 kaffeetisch Exp $
-
-Gtk2 version 1.122
+Gtk2 version 1.140
 ==================
 
 Perl bindings to the 2.x series of the Gtk+ graphical user interface library.
-This module allows you to write graphical user interfaces in a perlish and
+This module allows you to write graphical user interfaces in a Perlish and
 object-oriented way, freeing you from the casting and memory management in C,
 yet remaining very close in spirit to original API.  Find out more about Gtk+
 at http://www.gtk.org.
 
 The GTK+ Reference Manual [ http://developer.gnome.org/doc/API/2.0/gtk/ ]
 is also a handy companion when writing Gtk programs in any language.
-The perl bindings follow the C API very closely, and the C reference
+The Perl bindings follow the C API very closely, and the C reference
 should be considered the canonical documentation.
 
 Be sure to check out the example programs in the "examples" and "gtk-demo"
@@ -25,6 +23,7 @@ http://gtk2-perl.sourceforge.net
 
 
 INSTALLATION
+------------
 
 To install this module type the following:
 
@@ -57,19 +56,33 @@ ways:
 
 
 DEPENDENCIES
+------------
 
 This module requires these other modules and libraries:
 
   perl >= 5.8.0
-  Glib >= 1.120 (perl module)
+  Glib >= 1.140 (Perl module)
   GTK+ > 2.x (C library)
+
+If GTK+ is as new or newer as 2.8, the Cairo module is also required:
+
+  Cairo >= 1.00 (Perl module)
 
 In order to build it from source, you'll also need
 
   ExtUtils::Depends >= 0.2
   ExtUtils::PkgConfig >= 1.03
 
+
+BUG REPORTS
+-----------
+
+Please report bugs to the gnome-perl product in GNOME's Bugzilla:
+<http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-perl>
+
+
 COPYRIGHT AND LICENSE
+---------------------
 
 Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list)
@@ -87,3 +100,5 @@ details.
 You should have received a copy of the GNU Library General Public License along
 with this library; if not, write to the Free Software Foundation, Inc., 59
 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
+
+# $Id: README,v 1.77 2006/09/04 18:37:04 kaffeetisch Exp $

@@ -1,8 +1,9 @@
 #!/usr/bin/perl -w
-use Gtk2::TestHelper tests => 85,
+# vim: set ft=perl :
+use Gtk2::TestHelper tests => 95,
 	at_least_version => [2, 2, 0, "GtkClipboard didn't exist in 2.0.x"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkClipboard.t,v 1.8 2005/01/02 17:45:21 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkClipboard.t,v 1.12 2006/08/07 18:36:03 kaffeetisch Exp $
 
 my $clipboard;
 
@@ -86,6 +87,32 @@ SKIP: {
 	}, "bla");
 }
 
+SKIP: {
+        skip "new stuff in 2.10", 6
+                unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+	my $buffer = Gtk2::TextBuffer->new;
+	$buffer->insert ($buffer->get_start_iter, 'bla!');
+	$buffer->register_serialize_format (
+		'text/rdf',
+		sub { warn "here"; return 'bla!'; });
+	$buffer->register_deserialize_format (
+		'text/rdf',
+		sub { warn "here"; $_[1]->insert ($_[2], 'bla!'); });
+
+	$clipboard->request_rich_text ($buffer, sub {
+		# print "hello from the callback\n" . Dumper(\@_);
+		is ($_[0], $clipboard);
+		is ($_[1]->name, 'text/rdf');
+		is ($_[2], undef); # FIXME
+		is ($_[3], 'user data!');
+	}, 'user data!');
+
+	# FIXME
+	ok (!$clipboard->wait_is_rich_text_available ($buffer));
+	is ($clipboard->wait_for_rich_text ($buffer), undef);
+}
+
 Glib::Timeout->add (200, sub {Gtk2->main_quit;1});
 Gtk2->main;
 
@@ -144,6 +171,19 @@ sub get_func {
 		is_deeply ([$_[1]->get_uris], []);
 
 		is ($_[1]->targets_include_image (TRUE), FALSE);
+	}
+
+	SKIP: {
+		skip '2.10 stuff', 2
+			unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+		is ($_[1]->targets_include_uri, FALSE);
+
+		my $buffer = Gtk2::TextBuffer->new;
+		$buffer->register_deserialize_format (
+			'text/rdf',
+			sub { warn "here"; $_[1]->insert ($_[2], 'bla!'); });
+		is ($_[1]->targets_include_rich_text ($buffer), FALSE);
 	}
 }
 
@@ -214,5 +254,5 @@ $clipboard->clear;
 
 __END__
 
-Copyright (C) 2003-2004 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

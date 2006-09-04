@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.25 2005/07/31 17:37:35 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.28 2006/08/07 18:36:10 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -83,21 +83,49 @@ gtk2perl_read_gtk_target_entry (SV * sv,
 	}
 }
 
+/* gtk+ 2.10 introduces a boxed type for GtkTargetList. */
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+static GPerlBoxedWrapperClass *default_wrapper_class;
+static GPerlBoxedWrapperClass gtk_target_list_wrapper_class;
+
+static SV *
+gtk_target_list_wrap (GType gtype,
+                      const char *package,
+                      gpointer boxed,
+                      gboolean own)
+{
+	/* To keep compatibility with the old wrappers, we always assume
+	 * ownership of the list. */
+	gtk_target_list_ref ((GtkTargetList *) boxed);
+	return default_wrapper_class->wrap (gtype, package, boxed, TRUE);
+}
+
+#endif /* 2.10 */
+
 SV *
 newSVGtkTargetList (GtkTargetList * list)
 {
+#if GTK_CHECK_VERSION (2, 9, 0)
+	return gperl_new_boxed (list, GTK_TYPE_TARGET_LIST, TRUE);
+#else
 	gtk_target_list_ref (list);
 	return sv_setref_pv (newSV (0), "Gtk2::TargetList", list);
-	
+#endif
 }
 
 GtkTargetList *
 SvGtkTargetList (SV * sv)
 {
+#if GTK_CHECK_VERSION (2, 9, 0)
+	return gperl_get_boxed_check (sv, GTK_TYPE_TARGET_LIST);
+#else
 	if (!sv || !SvROK (sv) ||
 	    !sv_derived_from (sv, "Gtk2::TargetList"))
 		croak ("variable is not of type Gtk2::TargetList");
 	return INT2PTR (GtkTargetList*, SvUV (SvRV (sv)));
+#endif
 }
 
 
@@ -141,13 +169,26 @@ target type without extensive string compares.
 
 MODULE = Gtk2::Selection	PACKAGE = Gtk2::TargetList	PREFIX = gtk_target_list_
 
+BOOT:
+#if GTK_CHECK_VERSION (2, 9, 0)
+	default_wrapper_class = gperl_default_boxed_wrapper_class ();
+	gtk_target_list_wrapper_class = *default_wrapper_class;
+	gtk_target_list_wrapper_class.wrap = gtk_target_list_wrap;
+	gperl_register_boxed (GTK_TYPE_TARGET_LIST, "Gtk2::TargetList",
+	                      &gtk_target_list_wrapper_class);
+#endif
+
 =for see_also Gtk2::TargetEntry
 =cut
+
+#if !GTK_CHECK_VERSION (2, 10, 0)
 
 void
 DESTROY (SV * list)
     CODE:
 	gtk_target_list_unref (SvGtkTargetList (list));
+
+#endif /* !2.10 */
 
 ##  GtkTargetList *gtk_target_list_new (const GtkTargetEntry *targets, guint ntargets) 
 =for apidoc
@@ -165,10 +206,6 @@ gtk_target_list_new (class, ...)
 	RETVAL
     CLEANUP:
 	gtk_target_list_unref (RETVAL);
-
- ## unmapped, automagical
-##  void gtk_target_list_ref (GtkTargetList *list) 
-##  void gtk_target_list_unref (GtkTargetList *list) 
 
 ##  void gtk_target_list_add (GtkTargetList *list, GdkAtom target, guint flags, guint info) 
 void
@@ -215,6 +252,12 @@ void gtk_target_list_add_text_targets (GtkTargetList  *list, guint info);
 void gtk_target_list_add_image_targets (GtkTargetList *list, guint info, gboolean writable);
 
 void gtk_target_list_add_uri_targets (GtkTargetList  *list, guint info);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+void gtk_target_list_add_rich_text_targets (GtkTargetList  *list, guint info, gboolean deserializable, GtkTextBuffer * buffer);
 
 #endif
 
@@ -289,6 +332,62 @@ gtk_selection_convert (widget, selection, target, time_)
 void
 gtk_selection_remove_all (widget)
 	GtkWidget *widget
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+MODULE = Gtk2::Selection	PACKAGE = Gtk2	PREFIX = gtk_
+
+gboolean gtk_targets_include_text (class, first_target_atom, ...)
+    ALIAS:
+        targets_include_uri = 1
+    PREINIT:
+        GdkAtom * targets;
+        gint n_targets;
+        gint i;
+    CODE:
+        n_targets = items - 1;
+        targets = g_new (GdkAtom, n_targets);
+        for (i = 1; i < items ; i++)
+                targets[i-1] = SvGdkAtom (ST (i));
+        if (ix == 1)
+                RETVAL = gtk_targets_include_uri (targets, n_targets);
+        else
+                RETVAL = gtk_targets_include_text (targets, n_targets);
+        g_free (targets);
+    OUTPUT:
+        RETVAL
+
+gboolean gtk_targets_include_rich_text (class, GtkTextBuffer * buffer, first_target_atom, ...)
+    PREINIT:
+        GdkAtom * targets;
+        gint n_targets;
+        gint i;
+    CODE:
+        n_targets = items - 2;
+        targets = g_new (GdkAtom, n_targets);
+        for (i = 2; i < items ; i++)
+                targets[i-2] = SvGdkAtom (ST (i));
+        RETVAL = gtk_targets_include_rich_text (targets, n_targets, buffer);
+        g_free (targets);
+    OUTPUT:
+        RETVAL
+
+gboolean gtk_targets_include_image (class, gboolean writable, first_target_atom, ...)
+    PREINIT:
+        GdkAtom * targets;
+        gint n_targets;
+        gint i;
+    CODE:
+        n_targets = items - 2;
+        targets = g_new (GdkAtom, n_targets);
+        for (i = 2; i < items ; i++)
+                targets[i-2] = SvGdkAtom (ST (i));
+        RETVAL = gtk_targets_include_image (targets, n_targets, writable);
+        g_free (targets);
+    OUTPUT:
+        RETVAL
+
+#endif /* 2.10 */
 
 MODULE = Gtk2::Selection	PACKAGE = Gtk2::SelectionData	PREFIX = gtk_selection_data_
 
@@ -441,15 +540,12 @@ gtk_selection_data_get_uris (selection_data)
 
 gboolean gtk_selection_data_targets_include_image (GtkSelectionData *selection_data, gboolean writable);
 
-#endif
+#endif /* 2.6 */
 
- ## PRIVATE
-##  gboolean _gtk_selection_request (GtkWidget *widget, GdkEventSelection *event) 
-##  gboolean _gtk_selection_incr_event (GdkWindow *window, GdkEventProperty *event) 
-##  gboolean _gtk_selection_notify (GtkWidget *widget, GdkEventSelection *event) 
-##  gboolean _gtk_selection_property_notify (GtkWidget *widget, GdkEventProperty *event) 
+#if GTK_CHECK_VERSION (2, 10, 0)
 
- ## boxed wrapper support, taken care of by Glib::Boxed
-##  GtkSelectionData *gtk_selection_data_copy (GtkSelectionData *data) 
-##  void gtk_selection_data_free (GtkSelectionData *data) 
+gboolean gtk_selection_data_targets_include_rich_text (GtkSelectionData *selection_data, GtkTextBuffer * buffer) 
 
+gboolean gtk_selection_data_targets_include_uri (GtkSelectionData *selection_data) 
+
+#endif /* 2.10 */

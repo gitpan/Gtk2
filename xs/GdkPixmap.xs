@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.18 2005/02/26 21:24:18 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.20 2006/08/07 18:36:08 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -239,5 +239,15 @@ gdk_pixmap_foreign_new_for_display (class, display, anid)
 	GdkNativeWindow anid
     C_ARGS:
 	display, anid
+
+#endif
+
+#if GTK_CHECK_VERSION(2, 10, 0)
+
+## GdkPixmap* gdk_pixmap_foreign_new_for_screen (GdkScreen *screen, GdkNativeWindow anid, gint width, gint height, gint depth);
+GdkPixmap *
+gdk_pixmap_foreign_new_for_screen (class, GdkScreen *screen, GdkNativeWindow anid, gint width, gint height, gint depth)
+    C_ARGS:
+	screen, anid, width, height, depth
 
 #endif

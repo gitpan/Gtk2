@@ -1,13 +1,19 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 1, noinit => 1;
+use Gtk2::TestHelper tests => 3, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkHButtonBox.t,v 1.5 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkHButtonBox.t,v 1.6 2006/05/20 21:11:46 kaffeetisch Exp $
 
 my $box = Gtk2::HButtonBox -> new();
 isa_ok($box, "Gtk2::HButtonBox");
 
+$box -> set_layout_default("spread");
+is($box -> get_layout_default(), "spread");
+
+$box -> set_spacing_default(23);
+is($box -> get_spacing_default(), 23);
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

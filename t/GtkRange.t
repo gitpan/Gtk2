@@ -1,8 +1,9 @@
 #!/usr/bin/perl -w
+# vim: set ft=perl :
 use strict;
-use Gtk2::TestHelper tests => 5;
+use Gtk2::TestHelper tests => 7;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRange.t,v 1.6 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRange.t,v 1.8 2006/08/07 18:36:05 kaffeetisch Exp $
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 
@@ -24,7 +25,18 @@ is($range -> get_value(), 23.42);
 $range -> set_increments(1, 5);
 $range -> set_range(0, 100);
 
+SKIP: {
+        skip 'new stuff in 2.10', 2
+                unless Gtk2 -> CHECK_VERSION(2, 10, 0);
+
+        $range -> set_lower_stepper_sensitivity('off');
+        is ($range -> get_lower_stepper_sensitivity, 'off');
+
+	$range -> set_upper_stepper_sensitivity('on');
+	is ($range -> get_upper_stepper_sensitivity, 'on');
+}
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003,2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

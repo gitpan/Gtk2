@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.42 2005/09/18 15:07:22 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.44 2006/08/07 18:36:08 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -824,6 +824,20 @@ void gdk_window_set_focus_on_map (GdkWindow *window, gboolean focus_on_map);
 void gdk_window_set_urgency_hint (GdkWindow *window, gboolean urgent);
 
 void gdk_window_move_region (GdkWindow *window, GdkRegion *region, gint dx, gint dy);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+GdkWindowTypeHint gdk_window_get_type_hint (GdkWindow *window);
+
+void gdk_window_input_shape_combine_mask (GdkWindow * window, GdkBitmap *mask, gint x, gint y);
+
+void gdk_window_input_shape_combine_region (GdkWindow * window, GdkRegion *shape, gint offset_x, gint offset_y);
+
+void gdk_window_set_child_input_shapes (GdkWindow *window);
+
+void gdk_window_merge_child_input_shapes (GdkWindow *window);
 
 #endif
 

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 53;
+use Gtk2::TestHelper tests => 55;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoFont.t,v 1.7 2005/12/12 19:39:14 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoFont.t,v 1.10 2006/08/07 18:36:07 kaffeetisch Exp $
 
 my $description = Gtk2::Pango::FontDescription -> new();
 isa_ok($description, "Gtk2::Pango::FontDescription");
@@ -63,6 +63,13 @@ my $number = qr/^-?\d+$/;
 
 isa_ok($font -> describe(), "Gtk2::Pango::FontDescription");
 
+SKIP: {
+  skip "new 1.14 stuff", 1
+    unless Gtk2::Pango -> CHECK_VERSION(1, 14, 0);
+
+  isa_ok($font -> describe_with_absolute_size(), "Gtk2::Pango::FontDescription");
+}
+
 foreach my $rectangle ($font -> get_glyph_extents(23)) {
   foreach my $key (qw(x y width height)) {
     like($rectangle -> { $key }, $number);
@@ -85,6 +92,13 @@ SKIP: {
   like($metrics -> get_underline_thickness(), $number);
   like($metrics -> get_strikethrough_position(), $number);
   like($metrics -> get_strikethrough_thickness(), $number);
+}
+
+SKIP: {
+  skip("new 1.10 stuff", 1)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 10, 0));
+
+  isa_ok($font -> get_font_map(), "Gtk2::Pango::FontMap");
 }
 
 ###############################################################################

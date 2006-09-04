@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.63.2.1 2006/05/26 00:20:26 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.66 2006/08/07 18:36:11 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -892,24 +892,24 @@ void gtk_widget_push_composite_child (class_or_widget=NULL)
 void gtk_widget_pop_composite_child (class_or_widget=NULL)
     C_ARGS: /* void */
 
-# bunch of FIXMEs FIXME FIXME FIXME
- #
- #/* widget style properties
- # */
- #void gtk_widget_class_install_style_property        (GtkWidgetClass     *klass,
- #						     GParamSpec         *pspec);
- #void gtk_widget_class_install_style_property_parser (GtkWidgetClass     *klass,
- #						     GParamSpec         *pspec,
- #						     GtkRcPropertyParser parser);
- #void gtk_widget_style_get_property (GtkWidget *widget, const gchar *property_name, GValue *value);
- #void gtk_widget_style_get_valist (GtkWidget *widget, const gchar *first_property_name, va_list var_args);
- #void gtk_widget_style_get (GtkWidget *widget, const gchar *first_property_name, ...);
+# bunch of FIXMEs: widget class style properties
+#
+#void gtk_widget_class_install_style_property        (GtkWidgetClass     *klass,
+#						     GParamSpec         *pspec);
+#void gtk_widget_class_install_style_property_parser (GtkWidgetClass     *klass,
+#						     GParamSpec         *pspec,
+#						     GtkRcPropertyParser parser);
+
 ### gtk_widget_class_find_style_property isn't available until 2.2.0, so we
 ### can't implement gtk_widget_style_get and friends until 2.2.0, because
 ### we have to be able to query the property's pspec to know what type of
 ### GValue to send it.
 
 #if GTK_CHECK_VERSION(2,2,0)
+
+#void gtk_widget_style_get_property (GtkWidget *widget, const gchar *property_name, GValue *value);
+#void gtk_widget_style_get_valist (GtkWidget *widget, const gchar *first_property_name, va_list var_args);
+#void gtk_widget_style_get (GtkWidget *widget, const gchar *first_property_name, ...);
 
 =for apidoc style_get_property
 =for arg first_property_name (string)
@@ -1114,3 +1114,9 @@ void gtk_widget_add_mnemonic_label (GtkWidget *widget, GtkWidget *label);
 void gtk_widget_remove_mnemonic_label (GtkWidget *widget, GtkWidget *label);
 
 #endif
+
+#if GTK_CHECK_VERSION(2, 10, 0)
+
+void gtk_widget_input_shape_combine_mask (GtkWidget *widget, GdkBitmap_ornull *shape_mask, gint offset_x, gint offset_y);
+
+#endif /* 2.10 */

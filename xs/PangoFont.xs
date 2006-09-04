@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.23 2005/01/07 21:31:59 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.26 2006/08/07 18:36:11 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -70,7 +70,7 @@ PANGO_PIXELS (class, d)
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontDescription	PREFIX = pango_font_description_
 
 ##PangoFontDescription* pango_font_description_new (void)
-PangoFontDescription *
+PangoFontDescription_own *
 pango_font_description_new (class)
     C_ARGS:
 	/* void */
@@ -356,9 +356,16 @@ pango_font_get_metrics (font, language)
 	PangoLanguage *language
 
 ## PangoFontDescription* pango_font_describe (PangoFont *font)
-PangoFontDescription *
+PangoFontDescription_own *
 pango_font_describe (font)
 	PangoFont *font
+
+#if PANGO_CHECK_VERSION(1, 14, 0)
+
+ ## PangoFontDescription *pango_font_describe_with_absolute_size (PangoFont *font);
+PangoFontDescription_own *pango_font_describe_with_absolute_size (PangoFont *font);
+
+#endif
 
 ## void pango_font_get_glyph_extents (PangoFont *font, PangoGlyph glyph, PangoRectangle *ink_rect, PangoRectangle *logical_rect)
 void
@@ -373,6 +380,12 @@ pango_font_get_glyph_extents (font, glyph)
 	EXTEND (sp, 2);
 	PUSHs (sv_2mortal (newSVPangoRectangle (&ink_rect)));
 	PUSHs (sv_2mortal (newSVPangoRectangle (&logical_rect)));
+
+#if PANGO_CHECK_VERSION(1, 10, 0)
+
+PangoFontMap * pango_font_get_font_map (PangoFont *font);
+
+#endif
 
 ### no typemaps for this stuff.
 ### it looks like it would only be useful from C, though.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.37 2005/09/18 15:07:22 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.40 2006/08/07 18:36:11 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -166,6 +166,30 @@ gtk2perl_tree_view_row_separator_func (GtkTreeModel      *model,
 }
 
 #endif /* 2.6.0 */
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+static GPerlCallback *
+gtk2perl_tree_view_search_position_func_create (SV * func,
+                                                SV * data)
+{
+        GType param_types[2];
+        param_types[0] = GTK_TYPE_TREE_VIEW;
+        param_types[1] = GTK_TYPE_WIDGET;
+        return gperl_callback_new (func, data, G_N_ELEMENTS (param_types),
+                                   param_types, G_TYPE_NONE);
+}
+
+static void
+gtk2perl_tree_view_search_position_func (GtkTreeView *tree_view,
+                                         GtkWidget *search_dialog,
+                                         gpointer user_data)
+{
+        gperl_callback_invoke ((GPerlCallback *) user_data, NULL,
+                               tree_view, search_dialog);
+}
+
+#endif /* 2.10 */
 
 
 MODULE = Gtk2::TreeView	PACKAGE = Gtk2::TreeView	PREFIX = gtk_tree_view_
@@ -782,3 +806,53 @@ gtk_tree_view_get_visible_range (tree_view)
 	PUSHs (sv_2mortal (newSVGtkTreePath_own (end_path)));
 
 #endif
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+gboolean gtk_tree_view_get_headers_clickable (GtkTreeView *tree_view);
+
+void gtk_tree_view_set_search_entry (GtkTreeView *tree_view, GtkEntry_ornull *entry);
+
+GtkEntry_ornull * gtk_tree_view_get_search_entry (GtkTreeView *tree_view);
+
+=for apidoc
+Pass undef for the I<func> to restore the default search position function.
+=cut
+void gtk_tree_view_set_search_position_func (GtkTreeView *tree_view, SV *func, SV *user_data=NULL)
+    PREINIT:
+        GtkTreeViewSearchPositionFunc real_func;
+        gpointer real_data;
+        GDestroyNotify destroy;
+    CODE:
+        if (SvTRUE (func)) {
+                real_func = gtk2perl_tree_view_search_position_func;
+                real_data = gtk2perl_tree_view_search_position_func_create
+                                                        (func, user_data);
+                destroy = (GDestroyNotify) gperl_callback_destroy;
+        } else {
+                real_func = real_data = destroy = NULL;
+        }
+        gtk_tree_view_set_search_position_func
+                        (tree_view, real_func, real_data, destroy);
+
+### allowing restoration of the old function is rather fragile and not done at
+### this point.
+### gtk_tree_view_get_search_position_func
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+void gtk_tree_view_set_rubber_banding (GtkTreeView *tree_view, gboolean enable);
+
+gboolean gtk_tree_view_get_rubber_banding (GtkTreeView *tree_view);
+
+GtkTreeViewGridLines gtk_tree_view_get_grid_lines (GtkTreeView *tree_view);
+
+void gtk_tree_view_set_grid_lines (GtkTreeView *tree_view, GtkTreeViewGridLines grid_lines);
+
+gboolean gtk_tree_view_get_enable_tree_lines (GtkTreeView *tree_view);
+
+void gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view, gboolean enabled);
+
+#endif /* 2.10 */

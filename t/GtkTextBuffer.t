@@ -1,8 +1,9 @@
 #!/usr/bin/perl -w
+# vim: set filetype=perl expandtab shiftwidth=2 softtabstop=2 :
 use strict;
-use Gtk2::TestHelper tests => 32;
+use Gtk2::TestHelper tests => 37;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextBuffer.t,v 1.7 2005/01/02 16:25:51 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextBuffer.t,v 1.10 2006/08/07 18:36:06 kaffeetisch Exp $
 
 my $table = Gtk2::TextTagTable -> new();
 
@@ -131,7 +132,23 @@ SKIP: {
   $buffer -> backspace($buffer -> get_end_iter(), TRUE, TRUE);
 }
 
+SKIP: {
+  skip "new stuff in 2.10", 5
+    unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+  my $bool = $buffer -> get_has_selection();
+  ok (1);
+
+  my $targetlist = $buffer -> get_copy_target_list();
+  isa_ok($targetlist, 'Gtk2::TargetList');
+  $targetlist = $buffer -> get_paste_target_list();
+  isa_ok($targetlist, 'Gtk2::TargetList');
+
+  isa_ok($buffer -> get('copy-target-list'), 'Gtk2::TargetList');
+  isa_ok($buffer -> get('paste-target-list'), 'Gtk2::TargetList');
+}
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

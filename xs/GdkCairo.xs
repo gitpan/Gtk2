@@ -3,13 +3,13 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCairo.xs,v 1.2 2005/11/14 19:32:03 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCairo.xs,v 1.4 2006/08/07 18:36:08 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 #include <cairo-perl.h>
 
-MODULE = Gtk2::Gdk::Cairo::Context	PACKAGE = Gtk2::Gdk::Cairo::Context	PREFIX = gdk_cairo_
+MODULE = Gtk2::Gdk::Cairo	PACKAGE = Gtk2::Gdk::Cairo::Context	PREFIX = gdk_cairo_
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Cairo::Context", "Cairo::Context");
@@ -56,5 +56,23 @@ gdk_cairo_rectangle (cairo_t *cr, ...)
 	}
 
 void gdk_cairo_region (cairo_t *cr, GdkRegion *region);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+void gdk_cairo_set_source_pixmap (cairo_t *cr, GdkPixmap *pixmap, double pixmap_x, double pixmap_y);
+
+#endif
+
+# ---------------------------------------------------------------------------- #
+
+MODULE = Gtk2::Gdk::Cairo	PACKAGE = Gtk2::Gdk::Screen	PREFIX = gdk_screen_
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+const cairo_font_options_t_ornull* gdk_screen_get_font_options (GdkScreen *screen);
+
+void gdk_screen_set_font_options (GdkScreen *screen, const cairo_font_options_t_ornull *options);
 
 #endif

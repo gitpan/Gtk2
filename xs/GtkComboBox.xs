@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2003-2004 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBox.xs,v 1.13 2005/09/29 22:28:45 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkComboBox.xs,v 1.15 2006/08/07 18:36:09 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -187,5 +187,13 @@ void gtk_combo_box_set_focus_on_click (GtkComboBox *combo_box, gboolean focus_on
 gboolean gtk_combo_box_get_focus_on_click (GtkComboBox *combo_box);
 
 #AtkObject * gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+void gtk_combo_box_set_title (GtkComboBox *combo_box, const gchar * title);
+
+const gchar * gtk_combo_box_get_title (GtkComboBox *combo_box);
 
 #endif

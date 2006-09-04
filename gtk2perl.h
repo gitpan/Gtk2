@@ -18,7 +18,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
  * 
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.39 2006/01/18 19:04:10 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.42 2006/08/07 18:36:01 kaffeetisch Exp $
  */
 
 #ifndef _GTK2PERL_H_
@@ -151,7 +151,18 @@ void gtk2perl_read_gtk_target_entry (SV * sv, GtkTargetEntry * entry);
  * some custom opaque object handling for private gtk structures needed 
  * for doing drag and drop.
  */
-typedef GtkTargetList GtkTargetList_ornull;
+
+/* gtk+ 2.10 introduces a boxed type for GtkTargetList and we use it for
+ * property marshalling, etc.  But we also need to keep backwards compatability
+ * with the old wrappers so we overwrite the macros. */
+#if GTK_CHECK_VERSION (2, 10, 0)
+# undef newSVGtkTargetList
+# undef newSVGtkTargetList_ornull
+# undef SvGtkTargetList
+# undef SvGtkTargetList_ornull
+#else
+  typedef GtkTargetList GtkTargetList_ornull;
+#endif
 SV * newSVGtkTargetList (GtkTargetList * list);
 #define newSVGtkTargetList_ornull(list)	((list) ? newSVGtkTargetList (list) : &PL_sv_undef)
 GtkTargetList * SvGtkTargetList (SV * sv);

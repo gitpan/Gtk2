@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.13 2005/07/27 00:46:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.14 2006/07/14 19:19:36 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -56,7 +56,7 @@ SKIP: {
 
 	skip 'get_icon_sizes returned empty, can not test them', 1
 		unless (@sizes);
-	
+
 	like ($sizes[0], qr/^\d+$/);
 }
 

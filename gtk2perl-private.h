@@ -18,7 +18,7 @@
  *
  * THIS IS A PRIVATE HEADER FOR USE ONLY IN Gtk2 ITSELF.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl-private.h,v 1.1 2005/07/10 12:22:11 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl-private.h,v 1.2 2006/07/12 09:36:48 ebassi Exp $
  */
 
 #ifndef _GTK2PERL_PRIVATE_H_
@@ -29,6 +29,10 @@
 /* Implemented in GtkItemFactory.xs. */
 GPerlCallback * gtk2perl_translate_func_create (SV * func, SV * data);
 gchar * gtk2perl_translate_func (const gchar *path, gpointer data);
+
+/* Implemented in GtkRecentManager.xs */
+const gchar ** gtk2perl_sv_to_strv (SV *sv);
+SV * gtk2perl_sv_from_strv (const gchar **strv);
 
 #if GTK_CHECK_VERSION (2, 6, 0)
 /* Implemented in GtkTreeView.xs. */

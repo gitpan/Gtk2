@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 5;
+use Gtk2::TestHelper tests => 6;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDnd.t,v 1.13 2005/09/29 22:49:35 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDnd.t,v 1.16 2006/08/07 18:36:04 kaffeetisch Exp $
 
 my $button = Gtk2::Button -> new("Bla");
 my $window = Gtk2::Window -> new();
@@ -30,10 +30,16 @@ my $pixbuf = Gtk2::Gdk::Pixbuf -> new("rgb", 0, 8, 10, 10);
 my $event = Gtk2::Gdk::Event -> new("button-press");
 
 my $context = Gtk2::Drag -> begin($button, $list, "default", 1, $event);
-isa_ok($context, "Gtk2::Gdk::DragContext");
+SKIP: {
+  skip "context test", 1 unless defined $context;
+  isa_ok($context, "Gtk2::Gdk::DragContext");
+}
 
 $context = $button -> drag_begin($list, "default", 1, $event);
-isa_ok($context, "Gtk2::Gdk::DragContext");
+SKIP: {
+  skip "context test", 1 unless defined $context;
+  isa_ok($context, "Gtk2::Gdk::DragContext");
+}
 
 if (defined($context)) {
   # warn $button -> drag_dest_find_target($context, $list);
@@ -74,6 +80,14 @@ SKIP: {
   $button -> drag_dest_add_text_targets();
   $button -> drag_dest_add_image_targets();
   $button -> drag_dest_add_uri_targets();
+}
+
+SKIP: {
+  skip("2.10 stuff", 1)
+    unless Gtk2 -> CHECK_VERSION(2, 10, 0);
+
+  $button -> drag_dest_set_track_motion(FALSE);
+  ok(!$button -> drag_dest_get_track_motion());
 }
 
 $button -> drag_dest_unset();
@@ -118,5 +132,5 @@ $button -> drag_source_unset();
 
 __END__
 
-Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for
 the full list).  See LICENSE for more information.

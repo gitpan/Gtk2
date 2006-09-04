@@ -1,8 +1,9 @@
 #!/usr/bin/perl -w
+# vim: set ft=perl expandtab shiftwidth=2 softtabstop=2 :
 use strict;
-use Gtk2::TestHelper tests => 112;
+use Gtk2::TestHelper tests => 113;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStyle.t,v 1.7 2005/04/05 02:03:06 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStyle.t,v 1.9 2006/08/07 18:36:06 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();
@@ -123,7 +124,16 @@ SKIP: {
   Gtk2 -> draw_insertion_cursor($button, $window -> window(), $rectangle, $rectangle, 1, "ltr", 1);
 }
 
+SKIP: {
+  skip("lookup_color is new in 2.10", 1)
+    unless (Gtk2->CHECK_VERSION(2, 10, 0));
+
+  my $color = $style->lookup_color ('foreground');
+  # at this point we can't verify anything about it...
+  ok (1);
+}
+
 __END__
 
-Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use Gtk2::TestHelper tests => 47, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.19 2006/01/18 19:04:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.20 2006/07/27 20:13:30 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -128,6 +128,7 @@ foreach (@data)
 		'$store->set/get');
 }
 
+my $iter;
 ok ($iter = $store->insert (0), '$store->insert (5)');
 ok ($iter = $store->insert (0), '$store->insert (0)');
 ok ($iter = $store->insert_before ($iter), '$store->insert_before');

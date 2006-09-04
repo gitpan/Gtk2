@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.22 2005/02/19 20:35:40 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.23 2006/05/13 16:13:00 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -82,6 +82,8 @@ gdk_atom_intern (class, atom_name, only_if_exists=FALSE)
 	atom_name, only_if_exists
     CLEANUP:
 	PERL_UNUSED_VAR (ix);
+
+## 2.10 adds gdk_atom_intern_static_string().  This isn't useful from perl.
 
 ##  gchar* gdk_atom_name (GdkAtom atom) 
 gchar_own *

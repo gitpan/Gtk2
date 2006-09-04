@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStyle.xs,v 1.24 2005/04/05 02:03:56 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStyle.xs,v 1.26 2006/08/07 18:36:10 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -556,7 +556,19 @@ gtk_draw_insertion_cursor (class, widget, drawable, area, location, is_primary, 
 
 #endif
 
-  # for boxed support, not needed
- ## void gtk_border_free ( GtkBorder *border_)
-  # private
- ## void _gtk_style_init_for_settings (GtkStyle *style, GtkSettings *settings)
+MODULE = Gtk2::Style	PACKAGE = Gtk2::Style	PREFIX = gtk_style_
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+GdkColor_copy *
+gtk_style_lookup_color (GtkStyle *style, const gchar *color_name)
+    PREINIT:
+        GdkColor color;
+    CODE:
+        if (!gtk_style_lookup_color (style, color_name, &color))
+                XSRETURN_UNDEF;
+        RETVAL = &color;
+    OUTPUT:
+        RETVAL
+
+#endif

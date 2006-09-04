@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
 use Gtk2::TestHelper
-  tests => 8,
+  tests => 9,
   at_least_version => [2, 6, 0, "GtkFileChooserButton is new in 2.6"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooserButton.t,v 1.3 2006/01/18 19:04:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooserButton.t,v 1.5 2006/08/07 18:36:04 kaffeetisch Exp $
 
 my $dialog = Gtk2::FileChooserDialog -> new("Urgs", undef, "open",
                                             "gtk-cancel" => "cancel",
@@ -28,7 +28,15 @@ is($button -> get_title(), "Urgs");
 $button -> set_width_chars(23);
 is($button -> get_width_chars(), 23);
 
+SKIP: {
+  skip "new 2.10 stuff", 1
+    unless Gtk2 -> CHECK_VERSION(2, 10, 0);
+
+  $button -> set_focus_on_click(TRUE);
+  is($button -> get_focus_on_click(), TRUE);
+}
+
 __END__
 
-Copyright (C) 2004 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2004-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

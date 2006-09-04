@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 138;
+use Gtk2::TestHelper tests => 143;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.24 2006/01/18 19:04:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.27 2006/08/07 18:36:07 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -244,6 +244,13 @@ is($view -> get_headers_visible(), 1);
 
 $view -> set_headers_clickable(1);
 
+SKIP: {
+	skip "new 2.10 stuff", 1
+		unless Gtk2 -> CHECK_VERSION(2, 10, 0);
+
+	is($view -> get_headers_clickable(), 1);
+}
+
 $view -> set_rules_hint(1);
 is($view -> get_rules_hint(), 1);
 
@@ -346,6 +353,35 @@ SKIP: {
         isa_ok($end, "Gtk2::TreePath");
 }
 
+SKIP: {
+	skip("new 2.10 stuff", 1)
+		unless Gtk2 -> CHECK_VERSION(2, 10, 0);
+
+	my $entry = Gtk2::Entry -> new();
+	$view -> set_search_entry($entry);
+	isa_ok($view -> get_search_entry(), "Gtk2::Entry");
+
+	# FIXME: This doesn't actually invoke the handler.
+	$view -> set_search_position_func(sub { warn @_; }, "bla");
+	run_main sub { $view -> signal_emit("start_interactive_search") };
+
+	$view -> set_search_position_func(undef);
+}
+
+SKIP: {
+	skip("new 2.10 stuff", 3)
+		unless Gtk2 -> CHECK_VERSION(2, 9, 2);
+
+	$view -> set_rubber_banding(TRUE);
+	ok($view -> get_rubber_banding());
+
+	$view -> set_grid_lines("both");
+	is($view -> get_grid_lines(), "both");
+
+	$view -> set_enable_tree_lines(FALSE);
+	ok(!$view -> get_enable_tree_lines());
+}
+
 ###############################################################################
 
 my $i_know_this_place = 0;
@@ -437,5 +473,5 @@ run_main sub { $view->signal_emit ('button_press_event', $event) };
 
 __END__
 
-Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

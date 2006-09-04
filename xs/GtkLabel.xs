@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.17 2005/01/09 03:48:41 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLabel.xs,v 1.18 2006/06/25 13:27:08 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -206,5 +206,13 @@ gdouble gtk_label_get_angle (GtkLabel *label);
 void gtk_label_set_single_line_mode (GtkLabel *label, gboolean single_line_mode);
 
 gboolean gtk_label_get_single_line_mode (GtkLabel *label);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 9, 4)
+
+void gtk_label_set_line_wrap_mode (GtkLabel *label, PangoWrapMode wrap_mode);
+
+PangoWrapMode gtk_label_get_line_wrap_mode (GtkLabel *label);
 
 #endif

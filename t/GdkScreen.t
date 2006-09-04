@@ -1,10 +1,11 @@
 #!/usr/bin/perl -w
+# vim: set ft=perl :
 use strict;
 use Gtk2::TestHelper
-  tests => 21,
+  tests => 25,
   at_least_version => [2, 2, 0, "GdkScreen is new in 2.2"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkScreen.t,v 1.5 2006/01/16 21:50:28 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkScreen.t,v 1.7 2006/08/07 18:36:02 kaffeetisch Exp $
 
 my $screen = Gtk2::Gdk::Screen -> get_default();
 isa_ok($screen, "Gtk2::Gdk::Screen");
@@ -52,6 +53,31 @@ SKIP: {
 
   isa_ok($visual, "Gtk2::Gdk::Visual");
   isa_ok($screen -> get_rgba_colormap(), "Gtk2::Gdk::Colormap");
+}
+
+SKIP: {
+  skip "new 2.10 stuff", 4
+    unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+  my $dpi = $screen->get_resolution;
+  ok ($dpi);
+  $screen->set_resolution ($dpi);
+
+  my @stack = $screen->get_window_stack;
+  if (@stack > 0) {
+    isa_ok ($stack[0], "Gtk2::Gdk::Window");
+  } else {
+    ok (1);
+  }
+
+  skip "cairo stuff", 2
+    unless UNIVERSAL::can("Cairo::FontOptions", "create");
+
+  my $options = Cairo::FontOptions->create;
+  $screen->set_font_options (undef);
+  is ($screen->get_font_options, undef);
+  $screen->set_font_options ($options);
+  isa_ok ($screen->get_font_options, "Cairo::FontOptions");
 }
 
 __END__

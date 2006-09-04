@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.20.6.1 2006/05/26 17:58:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.21 2006/05/14 10:57:07 kaffeetisch Exp $
 #
 
 use strict;

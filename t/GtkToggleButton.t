@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 9;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToggleButton.t,v 1.5.12.1 2006/05/26 17:58:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToggleButton.t,v 1.6 2006/04/23 14:18:38 kaffeetisch Exp $
 
 my $button = Gtk2::ToggleButton -> new();
 isa_ok($button, "Gtk2::ToggleButton");

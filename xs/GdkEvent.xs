@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.46 2005/11/13 19:44:52 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.47 2006/05/20 21:11:47 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -392,7 +392,6 @@ BOOT:
 	gdk_event_wrapper_class.unwrap = (GPerlBoxedUnwrapFunc)gdk_event_unwrap;
 	gperl_register_boxed (GDK_TYPE_EVENT, "Gtk2::Gdk::Event",
 	                      &gdk_event_wrapper_class);
-	gperl_set_isa ("Gtk2::Gdk::Event", "Glib::Boxed");
 
  ## GdkEvent* gdk_event_get (void)
  ## GdkEvent* gdk_event_peek (void)

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkButton.t,v 1.11 2005/01/30 02:17:29 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkButton.t,v 1.13 2006/08/07 18:36:03 kaffeetisch Exp $
 #
 
 #########################
@@ -9,7 +9,7 @@
 
 #########################
 
-use Gtk2::TestHelper tests => 38;
+use Gtk2::TestHelper tests => 39;
 
 ok( my $button = Gtk2::Button->new("Not Yet") );
 ok(1);
@@ -103,7 +103,15 @@ SKIP: {
 	is ($button->get_image, undef);
 }
 
+SKIP: {
+	skip("[sg]et_image_position are new in 2.10", 1)
+		unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+	$button->set_image_position ("left");
+	is ($button->get_image_position, "left");
+}
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

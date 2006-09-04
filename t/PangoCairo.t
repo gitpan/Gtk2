@@ -11,7 +11,7 @@ if (UNIVERSAL::can("Gtk2::Pango::Cairo::FontMap", "new") &&
   plan skip_all => "Need Cairo";
 }
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoCairo.t,v 1.1.2.1 2006/05/26 17:58:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoCairo.t,v 1.4 2006/08/07 18:36:07 kaffeetisch Exp $
 
 my $fontmap = Gtk2::Pango::Cairo::FontMap -> new();
 isa_ok($fontmap, "Gtk2::Pango::Cairo::FontMap");
@@ -53,6 +53,14 @@ Gtk2::Pango::Cairo::layout_path($cr, $layout);
 
 # FIXME: Test pango_cairo_show_glyph_string, pango_cairo_glyph_string_path,
 # pango_cairo_show_layout_line, pango_cairo_layout_line_path.
+
+SKIP: {
+  skip "error line stuff", 0
+    unless Gtk2::Pango -> CHECK_VERSION(1, 14, 0);
+
+  Gtk2::Pango::Cairo::show_error_underline($cr, 23, 42, 5, 5);
+  Gtk2::Pango::Cairo::error_underline_path($cr, 23, 42, 5, 5);
+}
 
 __END__
 

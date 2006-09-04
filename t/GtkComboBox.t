@@ -1,9 +1,9 @@
 ###!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.18.2.1 2006/05/26 17:58:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkComboBox.t,v 1.20 2006/08/07 18:36:04 kaffeetisch Exp $
 
 use Gtk2::TestHelper
-	tests => 23,
+	tests => 24,
 	at_least_version => [2, 4, 0, "GtkComboBox is new in 2.4"],
 	;
 
@@ -119,7 +119,17 @@ SKIP: {
 	is ($combo_box->get_column_span_column, 1);
 }
 
+SKIP: {
+	skip "new api in gtk+ 2.10", 1
+		unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+	$combo_box->set_title ("whee");
+	is ($combo_box->get_title, "whee");
+}
+
 __END__
 
-Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.
+
+vim: set ft=perl :

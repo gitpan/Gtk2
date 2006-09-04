@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSizeGroup.xs,v 1.8 2005/09/18 15:07:22 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSizeGroup.xs,v 1.10 2006/08/07 18:36:10 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -61,9 +61,19 @@ void gtk_size_group_set_ignore_hidden (GtkSizeGroup *size_group, gboolean ignore
 
 gboolean gtk_size_group_get_ignore_hidden (GtkSizeGroup *size_group);
 
-#endif
+#endif /* 2.8 */
 
-##  void _gtk_size_group_get_child_requisition (GtkWidget *widget, GtkRequisition *requisition) 
-##  void _gtk_size_group_compute_requisition (GtkWidget *widget, GtkRequisition *requisition) 
-##  void _gtk_size_group_queue_resize (GtkWidget *widget) 
+#if GTK_CHECK_VERSION (2, 10, 0)
 
+## the returned list is owned by GTK+ and should not be modified.
+void gtk_size_group_get_widgets (GtkSizeGroup *size_group)
+    PREINIT:
+        GSList * widgets;
+    PPCODE:
+        widgets = gtk_size_group_get_widgets (size_group);
+        while (widgets) {
+                XPUSHs (sv_2mortal (newSVGtkWidget (widgets->data)));
+                widgets = widgets->next;
+        }
+
+#endif /* 2.10 */

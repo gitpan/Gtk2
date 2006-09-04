@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 10;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkScrolledWindow.t,v 1.7.4.1 2006/05/26 17:58:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkScrolledWindow.t,v 1.10 2006/08/07 18:36:05 kaffeetisch Exp $
 
 my $window = Gtk2::ScrolledWindow -> new();
 isa_ok($window, "Gtk2::ScrolledWindow");
@@ -41,7 +41,14 @@ SKIP: {
   isa_ok($window -> get_vscrollbar(), "Gtk2::VScrollbar");
 }
 
+SKIP: {
+  skip("new 2.10 stuff", 0)
+    unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+  $window -> unset_placement();
+}
+
 __END__
 
-Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

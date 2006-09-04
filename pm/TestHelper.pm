@@ -1,8 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/TestHelper.pm,v 1.11 2005/11/13 18:29:33 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/TestHelper.pm,v 1.12 2006/07/27 20:13:27 kaffeetisch Exp $
 #
 
 package Gtk2::TestHelper;
+use strict;
+use warnings;
 use Test::More;
 use Carp;
 
@@ -48,13 +50,15 @@ sub import
 
 	# ignore keyboard
 	Gtk2->key_snooper_install (sub { 1; });
+
+	# turn on strict and warnings in caller
+	$^W = 1;
+	@_ = ();
+	goto &strict::import;
 }
 
 package main;
 
-# these are to make people behave
-use strict;
-use warnings;
 # go ahead and use Gtk2 for them.
 use Gtk2;
 # and obviously they'll need Test::More

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRange.xs,v 1.4 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRange.xs,v 1.6 2006/08/07 18:36:10 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -81,3 +81,14 @@ gdouble
 gtk_range_get_value (range)
 	GtkRange * range
 
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+GtkSensitivityType gtk_range_get_lower_stepper_sensitivity (GtkRange *range);
+
+void gtk_range_set_lower_stepper_sensitivity (GtkRange *range, GtkSensitivityType sensitivity);
+
+GtkSensitivityType gtk_range_get_upper_stepper_sensitivity (GtkRange *range);
+
+void gtk_range_set_upper_stepper_sensitivity (GtkRange *range, GtkSensitivityType sensitivity);
+
+#endif

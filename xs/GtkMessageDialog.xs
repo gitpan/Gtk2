@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.17 2005/06/08 02:13:33 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.19 2006/08/07 18:36:10 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -175,5 +175,11 @@ gtk_message_dialog_format_secondary_markup (message_dialog, message)
 	const gchar_ornull *message
     C_ARGS:
 	message_dialog, message
+
+#endif
+
+#if GTK_CHECK_VERSION(2,10,0)
+
+void gtk_message_dialog_set_image (GtkMessageDialog *dialog, GtkWidget *image);
 
 #endif

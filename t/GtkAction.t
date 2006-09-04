@@ -1,10 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAction.t,v 1.7 2005/07/27 00:46:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAction.t,v 1.10 2006/08/07 18:36:03 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, "Action-based menus are new in 2.4"],
-	tests => 16, noinit => 0;
+	tests => 17, noinit => 0;
 
 my $action = Gtk2::Action->new (name => 'Open',
                                 label => '_Open',
@@ -24,19 +24,19 @@ $action->signal_connect (activate => sub { ok (TRUE) });
 $action->activate;
 
 # most of these are for action implementations
-$icon_widget = $action->create_icon ('large-toolbar');
+my $icon_widget = $action->create_icon ('large-toolbar');
 isa_ok ($icon_widget, 'Gtk2::Image');
 
 my $group = Gtk2::ActionGroup->new ('dummy');
 $group->add_action ($action);
 
-$widget = $action->create_menu_item;
+my $widget = $action->create_menu_item;
 isa_ok ($widget, 'Gtk2::MenuItem');
 
 $widget = $action->create_tool_item;
 isa_ok ($widget, 'Gtk2::ToolItem');
 
-@proxies = $action->get_proxies;
+my @proxies = $action->get_proxies;
 is (@proxies, 1);
 
 my $proxy = Gtk2::Statusbar->new;
@@ -71,7 +71,14 @@ SKIP: {
 	ok (defined $action->get_accel_path);
 }
 
+SKIP: {
+	skip "new 2.10 stuff", 1
+		unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+	isa_ok ($widget->get_action, 'Gtk2::Action');
+}
+
 __END__
 
-Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

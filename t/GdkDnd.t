@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 20;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDnd.t,v 1.8 2005/01/02 16:25:51 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDnd.t,v 1.9 2006/08/07 18:36:02 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();
@@ -81,6 +81,8 @@ SKIP: {
 
   $context -> status(qw(move), 0);
   ok($context -> action() == qw(move));
+
+  $context -> status([], 0);
 
   $context -> drop_reply(1, 0);
   $context -> drop_finish(1, 0);

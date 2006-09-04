@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.34 2005/11/12 21:08:00 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.36 2006/08/07 18:36:01 kaffeetisch Exp $
 #
 
 #########################
@@ -9,7 +9,7 @@
 
 #########################
 
-use Gtk2::TestHelper tests => 107;
+use Gtk2::TestHelper tests => 109;
 
 ok( my $win = Gtk2::Window->new );
 ok( $win = Gtk2::Window->new('popup') );
@@ -101,8 +101,7 @@ my $mnemonic = $Gtk2::Gdk::Keysyms{ KP_Enter };
 $win2->add_mnemonic($mnemonic, $label);
 ok(1);
 
-# FIXME: is it correct to assume that it always returns false?
-ok( ! $win2->mnemonic_activate($mnemonic, "shift-mask") );
+ok( defined $win2->mnemonic_activate($mnemonic, "shift-mask") );
 
 SKIP: {
 	skip "activate_key and propagate_key_event are new in 2.4", 2
@@ -347,7 +346,17 @@ SKIP: {
 	$win->present_with_time (time);
 }
 
+SKIP: {
+	skip("new 2.10 stuff", 2)
+		unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+	$win->set_deletable (TRUE);
+	is ($win->get_deletable, TRUE);
+
+	isa_ok ($win->get_group, "Gtk2::WindowGroup");
+}
+
 __END__
 
-Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

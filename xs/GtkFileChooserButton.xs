@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2004 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2004-2006 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileChooserButton.xs,v 1.1 2005/01/02 16:25:51 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileChooserButton.xs,v 1.3 2006/08/07 18:36:10 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -44,3 +44,11 @@ void gtk_file_chooser_button_set_title (GtkFileChooserButton *button, const gcha
 gint gtk_file_chooser_button_get_width_chars (GtkFileChooserButton *button);
 
 void gtk_file_chooser_button_set_width_chars (GtkFileChooserButton *button, gint n_chars);
+
+#if GTK_CHECK_VERSION (2, 10, 0)
+
+void gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button, gboolean focus_on_click)
+
+gboolean gtk_file_chooser_button_get_focus_on_click (GtkFileChooserButton *button)
+
+#endif
