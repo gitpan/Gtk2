@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 15,
   at_least_version => [2, 10, 0, "GtkRecentChooser"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRecentChooser.t,v 1.2 2006/07/13 19:04:11 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRecentChooser.t,v 1.2.2.1 2006/11/19 20:28:59 kaffeetisch Exp $
 
 unlink "./test.xbel"; # in case of an aborted run
 my $manager = Glib::Object::new("Gtk2::RecentManager", filename => "./test.xbel");
@@ -45,6 +45,7 @@ use Cwd qw(cwd);
 my $uri_one = "file://" . cwd() . "/" . $0;
 my $uri_two = "file://" . $^X;
 
+$manager -> purge_items();
 $manager -> add_item($uri_one);
 $manager -> add_item($uri_two);
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.16 2006/08/07 18:36:09 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.16.2.1 2006/11/08 18:42:39 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -183,9 +183,9 @@ gtk_entry_get_layout_offsets (GtkEntry *entry, OUTLIST gint x, OUTLIST gint y)
 
 #if GTK_CHECK_VERSION(2,4,0)
 
-void gtk_entry_set_completion (GtkEntry *entry, GtkEntryCompletion *completion);
+void gtk_entry_set_completion (GtkEntry *entry, GtkEntryCompletion_ornull *completion);
 
-GtkEntryCompletion *gtk_entry_get_completion (GtkEntry *entry);
+GtkEntryCompletion_ornull *gtk_entry_get_completion (GtkEntry *entry);
 
 #endif
 

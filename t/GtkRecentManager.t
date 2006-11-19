@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRecentManager.t,v 1.4 2006/07/12 09:36:49 ebassi Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRecentManager.t,v 1.4.2.1 2006/11/19 20:29:00 kaffeetisch Exp $
 #
 
 #########################
@@ -34,6 +34,9 @@ $manager->set_screen(Gtk2::Gdk::Screen->get_default);
 unlink './test.xbel'; # in case of an aborted run
 $manager = Glib::Object::new('Gtk2::RecentManager', filename => './test.xbel');
 isa_ok($manager, 'Gtk2::RecentManager');
+
+# purge existing items.
+$manager->purge_items;
 
 # use this silly trick to get a file
 my $icon_theme = Gtk2::IconTheme->get_default;

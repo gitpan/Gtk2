@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.28 2006/08/07 18:36:10 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.29 2006/10/03 15:49:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -336,6 +336,9 @@ gtk_selection_remove_all (widget)
 #if GTK_CHECK_VERSION (2, 10, 0)
 
 MODULE = Gtk2::Selection	PACKAGE = Gtk2	PREFIX = gtk_
+
+=for object Gtk2::Selection
+=cut
 
 gboolean gtk_targets_include_text (class, first_target_atom, ...)
     ALIAS:

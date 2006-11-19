@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.28 2005/10/14 03:51:26 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.29 2006/10/03 15:49:15 kaffeetisch Exp $
 #
 
 #########################
@@ -227,12 +227,8 @@ use strict;
 use Gtk2;
 use Carp;
 
-=cut
-
-TiedRow is the lowest-level tie, allowing you to treat a row as an array
-of column data.
-
-=cut
+# TiedRow is the lowest-level tie, allowing you to treat a row as an array
+# of column data.
 
 sub TIEARRAY {
 	my $class = shift;
@@ -291,11 +287,7 @@ use strict;
 use Gtk2;
 use Carp;
 
-=cut
-
-TiedList is an array in which each element is a row in the liststore.
-
-=cut
+# TiedList is an array in which each element is a row in the liststore.
 
 sub TIEARRAY {
 	my $class = shift;

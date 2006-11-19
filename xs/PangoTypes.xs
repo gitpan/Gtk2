@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTypes.xs,v 1.5 2004/10/30 17:13:23 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTypes.xs,v 1.6 2006/10/03 15:49:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -24,6 +24,9 @@
 MODULE = Gtk2::Pango::Types	PACKAGE = Gtk2::Pango	PREFIX = pango_
 
 #if PANGO_CHECK_VERSION (1, 4, 0)
+
+=for object Gtk2::Pango::Language
+=cut
 
 ##  PangoDirection pango_find_base_dir (const gchar *text, gint length)
 PangoDirection

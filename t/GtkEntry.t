@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 18;
+use Gtk2::TestHelper tests => 19;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntry.t,v 1.14 2006/08/07 18:36:04 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntry.t,v 1.14.2.1 2006/11/08 18:42:39 kaffeetisch Exp $
 
 my $entry = Gtk2::Entry -> new();
 isa_ok($entry, "Gtk2::Entry");
@@ -36,13 +36,16 @@ like($x, qr/^-?\d+$/);
 like($y, qr/^-?\d+$/);
 
 SKIP: {
-  skip("[sg]et_completion are new in 2.4", 1)
+  skip("[sg]et_completion are new in 2.4", 2)
     unless Gtk2->CHECK_VERSION (2, 4, 0);
 
   my $completion = Gtk2::EntryCompletion -> new();
 
   $entry -> set_completion($completion);
   is($entry -> get_completion(), $completion);
+
+  $entry -> set_completion(undef);
+  is($entry -> get_completion(), undef);
 }
 
 SKIP: {

@@ -1,12 +1,17 @@
 #########################
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSocket-GtkPlug.t,v 1.2 2004/01/10 04:43:38 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSocket-GtkPlug.t,v 1.3 2006/09/10 17:26:53 kaffeetisch Exp $
 #
 
 #########################
 
 # ...despite patches that have been around for a long time, no win32
 use Gtk2::TestHelper tests => 4, nowin32 => 1;
+
+SKIP: {
+
+skip "blib can't be found", 4
+	unless -d "blib";
 
 ok( my $win = Gtk2::Window->new );
 
@@ -62,6 +67,8 @@ else
 	$win->show_all;
 	Gtk2->main;
 	ok( waitpid($pid, 0) );
+}
+
 }
 
 __END__

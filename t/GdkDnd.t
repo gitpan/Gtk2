@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 20;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDnd.t,v 1.9 2006/08/07 18:36:02 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDnd.t,v 1.10 2006/09/10 17:26:53 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();
@@ -75,8 +75,10 @@ SKIP: {
   }
 
   is($context -> dest_window(), $destination);
-  TODO: { local $TODO = "This seems to fail harmlessly with Apple's X11";
-  isa_ok($context -> get_selection(), "Gtk2::Gdk::Atom");
+  SKIP: {
+    skip "selection test; it seems to fail with Apple's X11", 1
+      if $^O eq 'darwin';
+    isa_ok($context -> get_selection(), "Gtk2::Gdk::Atom");
   }
 
   $context -> status(qw(move), 0);
