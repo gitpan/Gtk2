@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for
+# Copyright (C) 2003-2007 by the gtk2-perl team (see the file AUTHORS for
 # the full list)
 #
 # This library is free software; you can redistribute it and/or modify it under
@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.100.2.1 2006/11/19 20:30:25 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.100.2.2 2007/01/21 16:07:05 kaffeetisch Exp $
 #
 
 package Gtk2;
@@ -35,7 +35,7 @@ eval "use Cairo;";
 
 require DynaLoader;
 
-our $VERSION = '1.141';
+our $VERSION = '1.142';
 
 our @ISA = qw(DynaLoader);
 
@@ -218,7 +218,7 @@ The gtk2-perl team:
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2003-2006 by the gtk2-perl team.
+Copyright 2003-2007 by the gtk2-perl team.
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public

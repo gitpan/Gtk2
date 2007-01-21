@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconView.xs,v 1.7 2005/09/18 15:07:22 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconView.xs,v 1.7.6.1 2007/01/08 19:26:01 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -117,9 +117,8 @@ gtk_icon_view_get_selected_items (GtkIconView * icon_view)
 		GList * curr;
 
 		for (curr = list; curr; curr = g_list_next (curr))
-			XPUSHs (sv_2mortal (newSVGtkTreePath (curr->data)));
+			XPUSHs (sv_2mortal (newSVGtkTreePath_own (curr->data)));
 
-		g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
 		g_list_free (list);
 	}
 	else

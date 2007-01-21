@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.11 2005/06/28 19:42:58 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.11.6.1 2006/12/30 15:41:37 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -52,6 +52,8 @@ gtk2perl_tree_sortable_get_sort_column_id (GtkTreeSortable *sortable,
                                            GtkSortType     *order)
 {
 	gboolean retval = FALSE;
+	gint real_sort_column_id;
+	GtkSortType real_order;
 	GET_METHOD ("GET_SORT_COLUMN_ID");
 
 	if (METHOD_EXISTS) {
@@ -65,12 +67,17 @@ gtk2perl_tree_sortable_get_sort_column_id (GtkTreeSortable *sortable,
 
 		SPAGAIN;
 
-		*order = SvGtkSortType (POPs);
-		*sort_column_id = POPi;
+		real_order = SvGtkSortType (POPs);
+		real_sort_column_id = POPi;
 		retval = POPu;
 
 		PUTBACK;
 		FINISH;
+
+		if (sort_column_id)
+			*sort_column_id = real_sort_column_id;
+		if (order)
+			*order = real_order;
 	}
 
 	return retval;
