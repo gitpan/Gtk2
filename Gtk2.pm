@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.100.2.2 2007/01/21 16:07:05 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.100.2.4 2007/02/25 12:41:36 kaffeetisch Exp $
 #
 
 package Gtk2;
@@ -35,7 +35,7 @@ eval "use Cairo;";
 
 require DynaLoader;
 
-our $VERSION = '1.142';
+our $VERSION = '1.143';
 
 our @ISA = qw(DynaLoader);
 
@@ -101,6 +101,22 @@ package Gtk2::TreeSortable::IterCompareFunc;
 use overload
 	'&{}' => sub { \&Gtk2::TreeSortable::IterCompareFunc::invoke },
 	fallback => 1;
+
+package Gtk2::TreeModelSort;
+
+# We forgot to prepend Gtk2::TreeModel to @Gtk2::TreeModelSort::ISA.  So this
+# hack is here to make sure that $model_sort->get resolves to
+# Gtk2::TreeModel::get when appropriate and to Glib::Object::get otherwise, so
+# we stay backwards compatible.
+sub get {
+	if (@_ > 1 and ref $_[1] eq 'Gtk2::TreeIter') {
+		# called as $model->get ($iter, columns...);
+		return Gtk2::TreeModel::get (@_);
+	} else {
+		# called as $model->get (names...);
+		return Glib::Object::get (@_);
+	}
+}
 
 package Gtk2;
 

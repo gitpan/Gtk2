@@ -16,12 +16,16 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModelSort.xs,v 1.10 2006/01/24 20:00:29 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModelSort.xs,v 1.10.4.2 2007/02/24 14:24:43 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::TreeModelSort	PACKAGE = Gtk2::TreeModelSort	PREFIX = gtk_tree_model_sort_
+
+# gperl_prepend_isa ("Gtk2::TreeModelSort", "Gtk2::TreeModel") should be here
+# but isn't and can't be added now since that'd break compatibility.  Instead,
+# we handle get() at runtime in Gtk2.pm.
 
 GtkTreeModelSort_noinc *
 gtk_tree_model_sort_new_with_model (class, child_model)
@@ -88,7 +92,7 @@ gtk_tree_model_sort_convert_child_iter_to_iter (tree_model_sort, child_iter)
     PREINIT:
 	GtkTreeIter sort_iter;
     CODE:
-	gtk_tree_model_sort_convert_iter_to_child_iter (tree_model_sort,
+	gtk_tree_model_sort_convert_child_iter_to_iter (tree_model_sort,
 	                                                &sort_iter,
 	                                                child_iter);
 	RETVAL = &sort_iter;
