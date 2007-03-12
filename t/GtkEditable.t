@@ -1,8 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 9;
+use Gtk2::TestHelper tests => 10;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEditable.t,v 1.1 2004/02/06 21:34:08 kaffeetisch Exp $
+use utf8; # for the umlaut test
+
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEditable.t,v 1.1.14.1 2007/03/11 17:54:05 kaffeetisch Exp $
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 my $spin = Gtk2::SpinButton -> new($adjustment, 0.2, 1);
@@ -37,6 +39,10 @@ $entry -> cut_clipboard();
 $entry -> copy_clipboard();
 $entry -> paste_clipboard();
 $entry -> delete_selection();
+
+$entry -> signal_connect(insert_text => sub { return (); });
+$entry -> set_text("äöü");
+is($entry -> get_text(), "äöü");
 
 __END__
 

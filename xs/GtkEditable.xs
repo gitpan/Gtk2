@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.14 2004/02/06 21:34:08 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.14.14.1 2007/03/11 17:54:05 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -60,7 +60,7 @@ gtk2perl_editable_insert_text_marshal (GClosure * closure,
 	GPERL_CLOSURE_MARSHAL_PUSH_INSTANCE (param_values);
 
 	/* new_text */
-	string = newSVpv (g_value_get_string (param_values+1), 0);
+	string = newSVGChar (g_value_get_string (param_values+1));
 	XPUSHs (string);
 
 	/* text length is redundant, but documented.  it doesn't hurt
