@@ -1,3 +1,67 @@
+2007-07-02	kaffeetisch
+
+	* Gtk2.pm, NEWS, README: Stable release 1.145.
+
+2007-07-02	kaffeetisch
+
+	Merge from HEAD:
+
+	* xs/GtkAboutDialog.xs: Hide the AboutDialog on any reponse.
+	See http://svn.gnome.org/viewcvs/gtk%2B?revision=14919&view=revision
+	which changed the behavior of the dialog in gtk+ between 2.8 and 2.10.
+
+	* xs/GdkPixbuf.xs: Plug reference leaks on the pixmap and bitmap
+	returned from Gtk2::Gdk::Pixbuf::render_pixmap_and_mask() and
+	render_pixmap_and_mask_for_colormap().  Also add a couple of
+	FIXMEs.
+
+2007-06-25	kaffeetisch
+
+	Merge from HEAD:
+
+	* t/GtkIconView.t
+	* xs/GtkIconView.xs: Supply default values for scroll_to_path.
+	Suggested by Jeffrey Ratcliffe.
+
+	* exampels/cellrenderer_popup.pl: Slightly modified patch from
+	Grant McLean makes sure the popup works properly when using simple
+	clicks instead of click-and-hold.
+
+2007-06-22	kaffeetisch
+
+	Merge from HEAD:
+
+	* t/GtkIconTheme.t: Remove unreliable result check for
+	get_example_icon_name.
+
+	* t/GtkListStore.t
+	* t/GtkTreeStore.t
+	* xs/GtkTreeStore.xs: Make sure Gtk2::ListStore's and
+	Gtk2::TreeStore's move_before() and move_after() accept undef for
+	the position parameter.  Reported by Dave Howorth.
+
+	* t/GdkPixbufLoader.t: Use more adapted size values to test
+	load-time scaling in order to avoid test failures due to rounding.
+
+2007-03-17	kaffeetisch
+
+	Merge from HEAD:
+
+	* t/GtkAccelLabel.t
+	* t/GtkBox.t
+	* t/GtkButtonBox.t
+	* t/GtkCheckButton.t
+	* t/GtkCheckMenuItem.t
+	* t/GtkListStore.t
+	* t/GtkRadioMenuItem.t
+	* t/GtkTable.t
+	* t/GtkTextTag.t
+	* t/GtkTreeSelection.t: Remove the -noinit option for tests which
+	now need an initialized gtk+.
+
+	* xs/GtkTextBufferRichText.xs: Patch from Mario Fischer fixes a
+	compilation problem that occurs when using MS' compiler.
+
 2007-03-12	kaffeetisch
 
 	* Gtk2.pm, NEWS, README: Stable release 1.144.

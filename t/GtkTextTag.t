@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 2, noinit => 1;
+use Gtk2::TestHelper tests => 2;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextTag.t,v 1.3 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextTag.t,v 1.3.14.1 2007/03/17 14:58:34 kaffeetisch Exp $
 
 my $tag = Gtk2::TextTag -> new("bla");
 isa_ok($tag, "Gtk2::TextTag");

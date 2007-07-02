@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBufferRichText.xs,v 1.1 2006/05/13 16:13:00 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBufferRichText.xs,v 1.1.2.1 2007/03/17 14:31:14 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -86,9 +86,9 @@ gtk2perl_text_buffer_deserialize_func (GtkTextBuffer     *register_buffer,
                                        gpointer           user_data,
                                        GError           **error)
 {
-        dGPERL_CALLBACK_MARSHAL_SP;
         GPerlCallback *callback = (GPerlCallback*) user_data;
         gboolean retval = TRUE;
+        dGPERL_CALLBACK_MARSHAL_SP;
 
         /* we should trap exceptions and turn those into GErrors.
          * that will require using call_sv() directly. */

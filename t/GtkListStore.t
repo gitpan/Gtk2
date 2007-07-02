@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
-use Gtk2::TestHelper tests => 47, noinit => 1;
+use Gtk2::TestHelper tests => 47;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.20 2006/07/27 20:13:30 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.20.2.2 2007/06/22 17:11:06 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -92,6 +92,9 @@ SKIP: {
 	is($model -> get($model -> get_iter_from_string("1"), 0), "bli");
 	is($model -> get($model -> get_iter_from_string("2"), 0), "ble");
 	is($model -> get($model -> get_iter_from_string("3"), 0), "bla");
+
+	$model -> move_before($model -> get_iter_from_string("0"), undef);
+	$model -> move_after($model -> get_iter_from_string("3"), undef);
 }
 
 ###############################################################################

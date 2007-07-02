@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.13.4.2 2007/01/08 19:26:01 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.13.4.3 2007/06/25 20:06:48 kaffeetisch Exp $
 #
 
 #########################
@@ -164,6 +164,7 @@ run_main sub {
 		isa_ok ($tmp[1], "Gtk2::TreePath");
 
 		$iview->scroll_to_path ($path, TRUE, 0.5, 0.5);
+		$iview->scroll_to_path ($path);
 
 		$iview->enable_model_drag_source ([qw/shift-mask/], "copy",
 		  { target => "STRING", flags => ["same-app", "same-widget"], info => 42 });

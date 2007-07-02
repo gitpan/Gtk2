@@ -17,7 +17,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
 # Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkPixbufLoader.t,v 1.2 2005/07/12 00:31:48 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkPixbufLoader.t,v 1.2.6.1 2007/06/22 17:11:43 kaffeetisch Exp $
 
 use strict;
 use warnings;
@@ -91,7 +91,7 @@ SKIP: {
 
     $loader = Gtk2::Gdk::PixbufLoader->new;
     $loader->set_size (48, 32);
-    $loader->write (make_ppm_data (100, 100));
+    $loader->write (make_ppm_data (96, 64));
     $loader->close;
     $pixbuf = $loader->get_pixbuf;
     is ($pixbuf->get_width, 48);

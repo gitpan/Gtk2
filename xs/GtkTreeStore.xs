@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeStore.xs,v 1.26 2006/08/07 18:36:11 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeStore.xs,v 1.26.2.1 2007/06/22 17:11:07 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -270,14 +270,14 @@ void
 gtk_tree_store_move_before (tree_store, iter, position)
 	GtkTreeStore *tree_store
 	GtkTreeIter *iter
-	GtkTreeIter *position
+	GtkTreeIter_ornull *position
 
 ## void gtk_tree_store_move_after (GtkTreeStore *tree_store, GtkTreeIter *iter, GtkTreeIter *position)
 void
 gtk_tree_store_move_after (tree_store, iter, position)
 	GtkTreeStore *tree_store
 	GtkTreeIter *iter
-	GtkTreeIter *position
+	GtkTreeIter_ornull *position
 
 #endif /* >= 2.2.0 */
 

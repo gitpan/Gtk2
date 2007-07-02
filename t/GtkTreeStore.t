@@ -3,7 +3,7 @@
 use strict;
 use Gtk2::TestHelper tests => 44, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeStore.t,v 1.14 2006/08/07 18:36:06 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeStore.t,v 1.14.2.1 2007/06/22 17:11:06 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -87,6 +87,9 @@ SKIP: {
 	is($model -> get($model -> get_iter_from_string("1:0"), 0), "blee");
 	is($model -> get($model -> get_iter_from_string("2:0"), 0), "bliii");
 	is($model -> get($model -> get_iter_from_string("3:0"), 0), "blabla");
+
+	$model -> move_before($model -> get_iter_from_string("0"), undef);
+	$model -> move_after($model -> get_iter_from_string("3"), undef);
 }
 
 ###############################################################################

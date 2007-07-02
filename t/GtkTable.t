@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 5, noinit => 1;
+use Gtk2::TestHelper tests => 5;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTable.t,v 1.5 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTable.t,v 1.5.14.1 2007/03/17 14:58:34 kaffeetisch Exp $
 
 my $table = Gtk2::Table -> new(5, 5, 1);
 

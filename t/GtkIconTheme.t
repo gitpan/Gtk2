@@ -1,10 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.14 2006/07/14 19:19:36 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.14.2.1 2007/06/22 17:32:49 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, 'GtkIconTheme is new in 2.4'],
-	tests => 16;
+	tests => 15;
 
 my $icon_theme = Gtk2::IconTheme->new;
 isa_ok ($icon_theme, 'Gtk2::IconTheme');
@@ -77,7 +77,8 @@ is_deeply ([$icon_theme->get_search_path], \@paths);
 $icon_theme = Gtk2::IconTheme->new;
 $icon_theme->set_custom_theme ('crazy custom theme');
 
-is ($icon_theme->get_example_icon_name, undef);
+# Ignore result.  Might be anything, including undef.
+$icon_theme->get_example_icon_name;
 
 ok (!$icon_theme->rescan_if_needed);
 

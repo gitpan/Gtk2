@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconView.xs,v 1.7.6.1 2007/01/08 19:26:01 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconView.xs,v 1.7.6.2 2007/06/25 20:06:49 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -178,7 +178,7 @@ gtk_icon_view_get_visible_range (icon_view)
 	PUSHs (sv_2mortal (newSVGtkTreePath_own (start_path)));
 	PUSHs (sv_2mortal (newSVGtkTreePath_own (end_path)));
 
-void gtk_icon_view_scroll_to_path (GtkIconView *icon_view, GtkTreePath *path, gboolean use_align, gfloat row_align, gfloat col_align);
+void gtk_icon_view_scroll_to_path (GtkIconView *icon_view, GtkTreePath *path, gboolean use_align=FALSE, gfloat row_align=0.0, gfloat col_align=0.0);
 
 ## void gtk_icon_view_enable_model_drag_source (GtkIconView *icon_view, GdkModifierType start_button_mask, const GtkTargetEntry *targets, gint n_targets, GdkDragAction actions);
 =for apidoc

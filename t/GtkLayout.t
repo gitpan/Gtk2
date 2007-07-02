@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 6, noinit => 1;
+use Gtk2::TestHelper tests => 6;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkLayout.t,v 1.5 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkLayout.t,v 1.5.14.1 2007/03/17 14:58:34 kaffeetisch Exp $
 
 my $layout = Gtk2::Layout -> new();
 isa_ok($layout, "Gtk2::Layout");
