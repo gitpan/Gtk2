@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTypes.xs,v 1.6 2006/10/03 15:49:15 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTypes.xs,v 1.6.2.1 2007/07/22 21:15:15 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -113,7 +113,11 @@ pango_matrix_new (class, xx = 1., xy = 0., yx = 0., yy = 1., x0 = 0., y0 = 0.)
 	double x0
 	double y0
     CODE:
+#if PANGO_CHECK_VERSION (1, 12, 0)
+	RETVAL = g_slice_new0 (PangoMatrix);
+#else
 	RETVAL = g_new0 (PangoMatrix, 1);
+#endif
 	RETVAL->xx = xx;
 	RETVAL->xy = xy;
 	RETVAL->yx = yx;

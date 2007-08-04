@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.14.2.1 2007/06/22 17:32:49 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.14.2.2 2007/07/22 21:19:08 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -34,7 +34,7 @@ SKIP: {
 
 	isa_ok ($icon_info->load_icon, 'Gtk2::Gdk::Pixbuf');
 
-	is ($icon_info->get_base_size, 24);
+	ok (defined $icon_info->get_base_size);
 	like ($icon_info->get_filename, qr/stock_edit/);
 
 	# FIXME:

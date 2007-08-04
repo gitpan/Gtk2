@@ -1,8 +1,8 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolbar.t,v 1.8 2004/08/15 21:15:12 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolbar.t,v 1.8.10.1 2007/08/04 12:24:17 kaffeetisch Exp $
 #
 
-use Gtk2::TestHelper tests => 53;
+use Gtk2::TestHelper tests => 52;
 
 use strict;
 use warnings;
@@ -224,9 +224,6 @@ $toolbar->unset_icon_size;
 
 $toolbar->set_tooltips (TRUE);
 ok ($toolbar->get_tooltips, '[sg]et_tooltips');
-
-$toolbar->set_tooltips (FALSE);
-ok (!$toolbar->get_tooltips, '[sg]et_tooltips');
 
 $toolbar->set_orientation ('vertical');
 is ('vertical', $toolbar->get_orientation, '[sg]et_orientation');

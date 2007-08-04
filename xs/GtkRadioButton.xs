@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioButton.xs,v 1.16 2004/10/09 03:21:42 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioButton.xs,v 1.16.10.1 2007/07/22 21:19:10 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -195,5 +195,5 @@ gtk_radio_button_get_group (radio_button)
 	{
 		av_push(av, newSVGtkRadioButton(GTK_RADIO_BUTTON(i->data)));
 	}
-	XPUSHs(newRV_noinc((SV*)av));
+	PUSHs(sv_2mortal(newRV_noinc((SV*)av)));
 

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkActionGroup.t,v 1.7 2005/01/10 06:32:28 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkActionGroup.t,v 1.7.8.1 2007/07/22 21:19:08 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -30,9 +30,9 @@ $action_group->remove_action ($action);
 is (@list, 0);
 
 $action_group->add_action_with_accel ($action, undef);
-$action_group->add_action_with_accel ($action, "<shift>a");
-
 $action_group->remove_action ($action);
+
+$action_group->add_action_with_accel ($action, "<shift>a");
 $action_group->remove_action ($action);
 
 my @action_entries = (
@@ -95,6 +95,8 @@ $action_group->set_translation_domain("de_DE");
 SKIP: {
 	skip "translation API is (semi) new in 2.6", 3+14
 		unless Gtk2->CHECK_VERSION (2, 6, 0);
+
+	my $action_group = Gtk2::ActionGroup->new ("Fred");
 
 	$action_group->set_translate_func(sub {
 		my ($string, $data) = @_;

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 40;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.19 2006/08/07 18:36:03 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.19.2.1 2007/07/22 21:19:08 kaffeetisch Exp $
 
 my $attributes = {
   title => "Bla",
@@ -267,7 +267,7 @@ $window_three -> set_group($window_three);
 $window -> set_decorations("all");
 
 my @deco = $window -> get_decorations();
-like($deco[0], qr/^(?:1|)$/);
+ok(defined $deco[0]);
 isa_ok($deco[1], "Gtk2::Gdk::WMDecoration");
 
 $window -> set_functions("all");

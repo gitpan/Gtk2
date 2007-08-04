@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioMenuItem.xs,v 1.15 2004/03/17 03:52:25 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioMenuItem.xs,v 1.15.12.1 2007/07/22 21:19:10 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -101,7 +101,7 @@ gtk_radio_menu_item_get_group (radio_menu_item)
 	{
 		av_push(av, newSVGtkRadioMenuItem(GTK_RADIO_MENU_ITEM(i->data)));
 	}
-	XPUSHs(newRV_noinc((SV*)av));
+	PUSHs(sv_2mortal(newRV_noinc((SV*)av)));
 
 void
 gtk_radio_menu_item_set_group (radio_menu_item, member_or_listref)

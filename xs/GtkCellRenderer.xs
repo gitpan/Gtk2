@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellRenderer.xs,v 1.29 2005/02/08 05:17:41 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellRenderer.xs,v 1.29.8.1 2007/07/22 21:19:09 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -132,8 +132,8 @@ gtk2perl_cell_renderer_get_size (GtkCellRenderer      * cell,
 		PUSHMARK (SP);
 
 		EXTEND (SP, 3);
-		PUSHs (newSVGtkCellRenderer (cell));
-		PUSHs (newSVGtkWidget (widget));
+		PUSHs (sv_2mortal (newSVGtkCellRenderer (cell)));
+		PUSHs (sv_2mortal (newSVGtkWidget (widget)));
 		PUSHs (sv_2mortal (newSVGdkRectangle_ornull (cell_area)));
 
 		PUTBACK;
@@ -177,9 +177,9 @@ gtk2perl_cell_renderer_render (GtkCellRenderer      * cell,
 		PUSHMARK (SP);
 
 		EXTEND (SP, 7);
-		PUSHs (newSVGtkCellRenderer (cell));
-		PUSHs (newSVGdkDrawable_ornull (drawable));
-		PUSHs (newSVGtkWidget_ornull (widget));
+		PUSHs (sv_2mortal (newSVGtkCellRenderer (cell)));
+		PUSHs (sv_2mortal (newSVGdkDrawable_ornull (drawable)));
+		PUSHs (sv_2mortal (newSVGtkWidget_ornull (widget)));
 		PUSHs (sv_2mortal (newSVGdkRectangle_ornull (background_area)));
 		PUSHs (sv_2mortal (newSVGdkRectangle_ornull (cell_area)));
 		PUSHs (sv_2mortal (newSVGdkRectangle_ornull (expose_area)));
@@ -213,9 +213,9 @@ gtk2perl_cell_renderer_activate (GtkCellRenderer      * cell,
 		SAVETMPS;
 		PUSHMARK (SP);
 
-		XPUSHs (newSVGtkCellRenderer (cell));
+		XPUSHs (sv_2mortal (newSVGtkCellRenderer (cell)));
 		XPUSHs (sv_2mortal (newSVGdkEvent_ornull (event)));
-		XPUSHs (newSVGtkWidget_ornull (widget));
+		XPUSHs (sv_2mortal (newSVGtkWidget_ornull (widget)));
 		XPUSHs (sv_2mortal (newSVGChar_ornull (path)));
 		XPUSHs (sv_2mortal (newSVGdkRectangle_ornull (background_area)));
 		XPUSHs (sv_2mortal (newSVGdkRectangle_ornull (cell_area)));
@@ -257,9 +257,9 @@ gtk2perl_cell_renderer_start_editing (GtkCellRenderer      * cell,
 		PUSHMARK (SP);
 
 		EXTEND (SP, 7);
-		PUSHs (newSVGtkCellRenderer (cell));
+		PUSHs (sv_2mortal (newSVGtkCellRenderer (cell)));
 		PUSHs (sv_2mortal (newSVGdkEvent_ornull (event)));
-		PUSHs (newSVGtkWidget_ornull (widget));
+		PUSHs (sv_2mortal (newSVGtkWidget_ornull (widget)));
 		PUSHs (sv_2mortal (newSVGChar_ornull (path)));
 		PUSHs (sv_2mortal (newSVGdkRectangle_ornull (background_area)));
 		PUSHs (sv_2mortal (newSVGdkRectangle_ornull (cell_area)));
@@ -727,7 +727,7 @@ GET_SIZE (GtkCellRenderer * cell, ...)
 						         SvGdkRectangle_ornull (ST (5)),
 						         SvGtkCellRendererState (ST (6)));
 			EXTEND (SP, 1);
-			PUSHs (newSVGtkCellEditable_ornull (editable));
+			PUSHs (sv_2mortal (newSVGtkCellEditable_ornull (editable)));
 		}
 		break;
 	    default:

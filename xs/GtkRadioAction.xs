@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioAction.xs,v 1.7 2006/08/07 18:36:10 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioAction.xs,v 1.7.2.1 2007/07/22 21:19:10 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -36,7 +36,7 @@ gtk_radio_action_get_group (GtkRadioAction *action)
 	av = newAV ();
 	for (i = group ; i != NULL ; i = i->next)
 		av_push (av, newSVGtkRadioAction (i->data));
-	XPUSHs (newRV_noinc ((SV*)av));
+	PUSHs (sv_2mortal (newRV_noinc ((SV*)av)));
 
 ## void gtk_radio_action_set_group (GtkRadioAction *action, GSList *group);
 void gtk_radio_action_set_group (GtkRadioAction *action, SV *member_or_listref);
