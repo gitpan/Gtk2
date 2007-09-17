@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuToolButton.xs,v 1.1 2005/01/02 16:25:51 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuToolButton.xs,v 1.3 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -30,3 +30,11 @@ void gtk_menu_tool_button_set_menu (GtkMenuToolButton *button, GtkWidget_ornull 
 GtkWidget_ornull * gtk_menu_tool_button_get_menu (GtkMenuToolButton *button);
 
 void gtk_menu_tool_button_set_arrow_tooltip (GtkMenuToolButton *button, GtkTooltips *tooltips, const gchar *tip_text, const gchar *tip_private);
+
+#if GTK_CHECK_VERSION(2, 12, 0)
+
+void gtk_menu_tool_button_set_arrow_tooltip_text (GtkMenuToolButton *button, const gchar_ornull *text);
+
+void gtk_menu_tool_button_set_arrow_tooltip_markup (GtkMenuToolButton *button, const gchar_ornull *markup);
+
+#endif

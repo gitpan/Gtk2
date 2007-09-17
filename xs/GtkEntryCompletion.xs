@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntryCompletion.xs,v 1.10 2005/09/29 22:28:45 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntryCompletion.xs,v 1.12 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -110,5 +110,15 @@ gboolean gtk_entry_completion_get_popup_set_width (GtkEntryCompletion *completio
 void gtk_entry_completion_set_popup_single_match (GtkEntryCompletion *completion, gboolean popup_single_match);
 
 gboolean gtk_entry_completion_get_popup_single_match (GtkEntryCompletion *completion);
+
+#endif
+
+#if GTK_CHECK_VERSION(2, 12, 0)
+
+void gtk_entry_completion_set_inline_selection (GtkEntryCompletion *completion, gboolean inline_selection);
+
+gboolean gtk_entry_completion_get_inline_selection (GtkEntryCompletion *completion);
+
+const gchar_ornull *gtk_entry_completion_get_completion_prefix (GtkEntryCompletion *completion);
 
 #endif

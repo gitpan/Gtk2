@@ -16,12 +16,21 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLayout.xs,v 1.7 2004/01/02 01:21:55 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLayout.xs,v 1.8 2006/11/04 13:36:42 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Layout	PACKAGE = Gtk2::Layout	PREFIX = gtk_layout_
+
+## layout->bin_window
+GdkWindow_ornull *
+bin_window (layout)
+	GtkLayout * layout
+    CODE:
+	RETVAL = layout->bin_window;
+    OUTPUT:
+	RETVAL
 
 ## GtkWidget* gtk_layout_new (GtkAdjustment *hadjustment, GtkAdjustment *vadjustment)
 GtkWidget *

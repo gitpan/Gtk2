@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.27 2006/08/07 18:36:10 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBuffer.xs,v 1.29 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -534,3 +534,9 @@ GtkTargetList* gtk_text_buffer_get_copy_target_list (GtkTextBuffer *buffer);
 GtkTargetList* gtk_text_buffer_get_paste_target_list (GtkTextBuffer *buffer);
 
 #endif /* 2.10 */
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+void gtk_text_buffer_add_mark (GtkTextBuffer *buffer, GtkTextMark *mark, GtkTextIter *where);
+
+#endif

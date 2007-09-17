@@ -16,15 +16,12 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.26 2006/08/07 18:36:11 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFont.xs,v 1.31 2007/09/15 14:33:03 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango
-
-BOOT:
-	gperl_object_set_no_warn_unreg_subclass (PANGO_TYPE_FONT, TRUE);
 
 =for object Gtk2::Pango::FontDescription
 =cut
@@ -224,6 +221,14 @@ gboolean pango_font_description_get_size_is_absolute (const PangoFontDescription
 
 #endif
 
+#if PANGO_CHECK_VERSION (1, 16, 0)
+
+void pango_font_description_set_gravity (PangoFontDescription *desc, PangoGravity gravity);
+
+PangoGravity pango_font_description_get_gravity (const PangoFontDescription *desc);
+
+#endif
+
 MODULE = Gtk2::Pango::Font	PACKAGE = Gtk2::Pango::FontMetrics	PREFIX = pango_font_metrics_
 
 # should happen automagicly
@@ -344,6 +349,12 @@ pango_font_face_list_sizes (PangoFontFace *face)
 			PUSHs (sv_2mortal (newSViv (sizes[i])));
 		g_free (sizes);
 	}
+
+#endif
+
+#if PANGO_CHECK_VERSION(1, 18, 0)
+
+gboolean pango_font_face_is_synthesized (PangoFontFace *face);
 
 #endif
 

@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/maps_pango-1.0,v 1.3 2004/10/30 17:13:17 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/maps_pango-1.0,v 1.5 2006/11/19 19:47:52 kaffeetisch Exp $
 #
 
 #
@@ -50,4 +50,8 @@ PANGO_TYPE_VARIANT	PangoVariant	GEnum	Gtk2::Pango::Variant
 PANGO_TYPE_WEIGHT	PangoWeight	GEnum	Gtk2::Pango::Weight
 PANGO_TYPE_WRAP_MODE	PangoWrapMode	GEnum	Gtk2::Pango::WrapMode
 
-PANGO_TYPE_LAYOUT_ITER	PangoLayoutIter	GBoxed	Gtk2::Pango::LayoutIter
+# custom types
+PANGO_TYPE_ATTRIBUTE		PangoAttribute		GBoxed	Gtk2::Pango::Attribute
+PANGO_TYPE_ATTR_ITERATOR	PangoAttrIterator	GBoxed	Gtk2::Pango::AttrIterator
+PANGO_TYPE_LAYOUT_ITER		PangoLayoutIter		GBoxed	Gtk2::Pango::LayoutIter
+PANGO_TYPE_LAYOUT_LINE		PangoLayoutLine		GBoxed	Gtk2::Pango::LayoutLine

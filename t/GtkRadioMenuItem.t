@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 9;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRadioMenuItem.t,v 1.8.12.1 2007/03/17 14:58:34 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRadioMenuItem.t,v 1.9 2007/03/17 14:54:25 kaffeetisch Exp $
 
 my $item_one = Gtk2::RadioMenuItem -> new();
 isa_ok($item_one, "Gtk2::RadioMenuItem");

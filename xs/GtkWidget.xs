@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.66 2006/08/07 18:36:11 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.71 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -1120,3 +1120,31 @@ void gtk_widget_remove_mnemonic_label (GtkWidget *widget, GtkWidget *label);
 void gtk_widget_input_shape_combine_mask (GtkWidget *widget, GdkBitmap_ornull *shape_mask, gint offset_x, gint offset_y);
 
 #endif /* 2.10 */
+
+#if GTK_CHECK_VERSION(2, 12, 0)
+
+gboolean gtk_widget_keynav_failed (GtkWidget *widget, GtkDirectionType direction);
+
+void gtk_widget_error_bell (GtkWidget *widget);
+
+void gtk_widget_set_tooltip_window (GtkWidget *widget, GtkWindow_ornull *custom_window);
+
+GtkWindow_ornull *gtk_widget_get_tooltip_window (GtkWidget *widget);
+
+void gtk_widget_trigger_tooltip_query (GtkWidget *widget);
+
+void gtk_widget_set_tooltip_text (GtkWidget *widget, const gchar_ornull *text);
+
+gchar_own * gtk_widget_get_tooltip_text (GtkWidget *widget);
+
+void gtk_widget_set_tooltip_markup (GtkWidget *widget, const gchar_ornull *markup);
+
+gchar_own * gtk_widget_get_tooltip_markup (GtkWidget *widget);
+
+void gtk_widget_modify_cursor (GtkWidget *widget, const GdkColor *primary, const GdkColor *secondary);
+
+void gtk_widget_set_has_tooltip (GtkWidget *widget, gboolean has_tooltip);
+
+gboolean gtk_widget_get_has_tooltip (GtkWidget *widget);
+
+#endif

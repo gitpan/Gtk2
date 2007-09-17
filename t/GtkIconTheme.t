@@ -1,10 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.14.2.2 2007/07/22 21:19:08 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.18 2007/09/15 14:32:59 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, 'GtkIconTheme is new in 2.4'],
-	tests => 15;
+	tests => 17;
 
 my $icon_theme = Gtk2::IconTheme->new;
 isa_ok ($icon_theme, 'Gtk2::IconTheme');
@@ -58,6 +58,16 @@ SKIP: {
 		unless (@sizes);
 
 	like ($sizes[0], qr/^\d+$/);
+}
+
+SKIP: {
+	skip 'new 2.12 stuff', 2
+		unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+	ok (defined $icon_theme->list_contexts);
+
+	my $info = $icon_theme->choose_icon (['gtk-bla', 'gtk-cancel'], 24, 'use-builtin');
+	isa_ok ($info, 'Gtk2::IconInfo');
 }
 
 my @paths = qw(/tmp /etc /home);

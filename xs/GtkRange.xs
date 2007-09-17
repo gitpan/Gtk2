@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRange.xs,v 1.6 2006/08/07 18:36:10 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRange.xs,v 1.8 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -90,5 +90,21 @@ void gtk_range_set_lower_stepper_sensitivity (GtkRange *range, GtkSensitivityTyp
 GtkSensitivityType gtk_range_get_upper_stepper_sensitivity (GtkRange *range);
 
 void gtk_range_set_upper_stepper_sensitivity (GtkRange *range, GtkSensitivityType sensitivity);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+void gtk_range_set_show_fill_level (GtkRange *range, gboolean show_fill_level);
+
+gboolean gtk_range_get_show_fill_level (GtkRange *range);
+
+void gtk_range_set_restrict_to_fill_level (GtkRange *range, gboolean restrict_to_fill_level);
+
+gboolean gtk_range_get_restrict_to_fill_level (GtkRange *range);
+
+void gtk_range_set_fill_level (GtkRange *range, gdouble fill_level);
+
+gdouble gtk_range_get_fill_level (GtkRange *range);
 
 #endif

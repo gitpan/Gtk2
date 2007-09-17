@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTypes.xs,v 1.6.2.1 2007/07/22 21:15:15 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTypes.xs,v 1.10 2007/06/17 12:55:58 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -37,6 +37,32 @@ pango_find_base_dir (class, text)
 
 #endif
 
+#if PANGO_CHECK_VERSION (1, 16, 0)
+
+=for object Gtk2::Pango::Font
+=cut
+
+=for apidoc __function__
+=cut
+int pango_units_from_double (double d);
+
+=for apidoc __function__
+=cut
+double pango_units_to_double (int i);
+
+=for apidoc __function__
+=cut
+##  void pango_extents_to_pixels (PangoRectangle *ink_rect, PangoRectangle *logical_rect)
+void
+pango_extents_to_pixels (PangoRectangle *ink_rect, PangoRectangle *logical_rect)
+    PPCODE:
+	pango_extents_to_pixels (ink_rect, logical_rect);
+	EXTEND (SP, 2);
+	PUSHs (sv_2mortal (newSVPangoRectangle (ink_rect)));
+	PUSHs (sv_2mortal (newSVPangoRectangle (logical_rect)));
+
+#endif
+
 MODULE = Gtk2::Pango::Types	PACKAGE = Gtk2::Pango::Language	PREFIX = pango_language_
 
 ##  PangoLanguage * pango_language_from_string (const char *language)
@@ -53,6 +79,8 @@ const char *
 pango_language_to_string (language)
 	PangoLanguage *language
 
+# FIXME: WTF is the Gnome2::Pango::Language::matches alias doing here?  It's
+# totally bogus, but has been in a stable release already ...
 ##  gboolean pango_language_matches (PangoLanguage *language, const char *range_list)
 gboolean
 pango_language_matches (language, range_list)
@@ -63,94 +91,12 @@ pango_language_matches (language, range_list)
     CLEANUP:
 	PERL_UNUSED_VAR (ix);
 
-MODULE = Gtk2::Pango::Types	PACKAGE = Gtk2::Pango::Matrix	PREFIX = pango_matrix_
+#if PANGO_CHECK_VERSION (1, 16, 0)
 
-#if PANGO_CHECK_VERSION (1, 6, 0)
-
-double
-xx (matrix, new = 0)
-	PangoMatrix *matrix
-	double new
-    ALIAS:
-	Gtk2::Pango::Matrix::xy = 1
-	Gtk2::Pango::Matrix::yx = 2
-	Gtk2::Pango::Matrix::yy = 3
-	Gtk2::Pango::Matrix::x0 = 4
-	Gtk2::Pango::Matrix::y0 = 5
-    CODE:
-	RETVAL = 0.0;
-
-	switch (ix) {
-		case 0: RETVAL = matrix->xx; break;
-		case 1: RETVAL = matrix->xy; break;
-		case 2: RETVAL = matrix->yx; break;
-		case 3: RETVAL = matrix->yy; break;
-		case 4: RETVAL = matrix->x0; break;
-		case 5: RETVAL = matrix->y0; break;
-		default: g_assert_not_reached ();
-	}
-
-	if (items == 2) {
-		switch (ix) {
-			case 0: matrix->xx = new; break;
-			case 1: matrix->xy = new; break;
-			case 2: matrix->yx = new; break;
-			case 3: matrix->yy = new; break;
-			case 4: matrix->x0 = new; break;
-			case 5: matrix->y0 = new; break;
-			default: g_assert_not_reached ();
-		}
-	}
-    OUTPUT:
-	RETVAL
-
-PangoMatrix_own *
-pango_matrix_new (class, xx = 1., xy = 0., yx = 0., yy = 1., x0 = 0., y0 = 0.)
-	double xx
-	double xy
-	double yx
-	double yy
-	double x0
-	double y0
-    CODE:
-#if PANGO_CHECK_VERSION (1, 12, 0)
-	RETVAL = g_slice_new0 (PangoMatrix);
-#else
-	RETVAL = g_new0 (PangoMatrix, 1);
-#endif
-	RETVAL->xx = xx;
-	RETVAL->xy = xy;
-	RETVAL->yx = yx;
-	RETVAL->yy = yy;
-	RETVAL->x0 = x0;
-	RETVAL->y0 = y0;
-    OUTPUT:
-	RETVAL
-
-##  void pango_matrix_translate (PangoMatrix *matrix, double tx, double ty)
-void
-pango_matrix_translate (matrix, tx, ty)
-	PangoMatrix *matrix
-	double tx
-	double ty
-
-##  void pango_matrix_scale (PangoMatrix *matrix, double scale_x, double scale_y)
-void
-pango_matrix_scale (matrix, scale_x, scale_y)
-	PangoMatrix *matrix
-	double scale_x
-	double scale_y
-
-##  void pango_matrix_rotate (PangoMatrix *matrix, double degrees)
-void
-pango_matrix_rotate (matrix, degrees)
-	PangoMatrix *matrix
-	double degrees
-
-##  void pango_matrix_concat (PangoMatrix *matrix, PangoMatrix *new_matrix)
-void
-pango_matrix_concat (matrix, new_matrix)
-	PangoMatrix *matrix
-	PangoMatrix *new_matrix
+##  PangoLanguage * pango_language_get_default (void)
+PangoLanguage *
+pango_language_get_default (class)
+    C_ARGS:
+	/* void */
 
 #endif

@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 5,
   at_least_version => [2, 6, 0, "GtkMenuToolButton is new in 2.6"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenuToolButton.t,v 1.2 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenuToolButton.t,v 1.4 2007/09/15 14:33:00 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Urgs");
 
@@ -28,6 +28,16 @@ is($button -> get_menu(), undef);
 my $tooltips = Gtk2::Tooltips -> new();
 
 $button -> set_arrow_tooltip($tooltips, "Urgs", "Urgs");
+
+SKIP: {
+  skip 'new 2.12 stuff', 0
+    unless Gtk2 -> CHECK_VERSION(2, 12, 0);
+
+  $button -> set_arrow_tooltip_text('Bla!');
+  $button -> set_arrow_tooltip_text(undef);
+  $button -> set_arrow_tooltip_markup('<b>Bla!</b>');
+  $button -> set_arrow_tooltip_markup(undef);
+}
 
 __END__
 

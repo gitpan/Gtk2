@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
 use Gtk2::TestHelper
-  tests => 11,
+  tests => 18,
   at_least_version => [2, 10, 0, "GtkPageSetup is new in 2.10"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPageSetup.t,v 1.2 2006/08/07 18:36:05 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPageSetup.t,v 1.4 2007/09/15 14:33:00 kaffeetisch Exp $
 
 my $setup = Gtk2::PageSetup -> new();
 isa_ok($setup, "Gtk2::PageSetup");
@@ -35,6 +35,46 @@ ok(defined $setup -> get_paper_width("mm"));
 ok(defined $setup -> get_paper_height("mm"));
 ok(defined $setup -> get_page_width("mm"));
 ok(defined $setup -> get_page_height("mm"));
+
+SKIP: {
+  skip "new 2.12 stuff", 7
+    unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+  my $new_setup;
+  $setup -> set_top_margin(23, 'mm');
+
+  my $file = 'tmp.setup';
+
+  eval {
+    $setup -> to_file($file);
+  };
+  is($@, '');
+
+  eval {
+    $new_setup = Gtk2::PageSetup -> new_from_file($file);
+  };
+  is($@, '');
+  isa_ok($new_setup, 'Gtk2::PageSetup');
+  is($new_setup -> get_top_margin('mm'), 23);
+
+  my $key_file = Glib::KeyFile -> new();
+  my $group = undef;
+  $setup -> to_key_file($key_file, $group);
+  open my $fh, '>', $file or skip 'key file tests', 3;
+  print $fh $key_file -> to_data();
+  close $fh;
+
+  $key_file = Glib::KeyFile -> new();
+  eval {
+    $key_file -> load_from_file($file, 'none');
+    $new_setup = Gtk2::PageSetup -> new_from_key_file($key_file, $group);
+  };
+  is($@, '');
+  isa_ok($new_setup, 'Gtk2::PageSetup');
+  is($new_setup -> get_top_margin('mm'), 23);
+
+  unlink $file;
+}
 
 __END__
 

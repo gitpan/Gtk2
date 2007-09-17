@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
 use Gtk2::TestHelper
-  tests => 23,
+  tests => 24,
   at_least_version => [2, 2, 0, "GdkDisplay is new in 2.2"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.12 2006/08/07 18:36:02 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.14 2007/09/15 14:32:56 kaffeetisch Exp $
 
 my $display = Gtk2::Gdk::Display -> open($ENV{DISPLAY});
 isa_ok($display, "Gtk2::Gdk::Display");
@@ -94,6 +94,13 @@ SKIP: {
 
   ok (defined $display->supports_shapes);
   ok (defined $display->supports_input_shapes);
+}
+
+SKIP: {
+  skip("new 2.11 stuff", 1)
+    unless Gtk2->CHECK_VERSION(2, 12, 0);
+
+  ok (defined $display->supports_composite);
 }
 
 # FIXME: currently segfaults for me.  see #85715.

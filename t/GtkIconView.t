@@ -1,5 +1,7 @@
+#!/usr/bin/perl
+
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.13.4.3 2007/06/25 20:06:48 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.20 2007/09/16 17:34:23 kaffeetisch Exp $
 #
 
 #########################
@@ -12,7 +14,7 @@
 use strict;
 use warnings;
 
-use Gtk2::TestHelper tests => 54,
+use Gtk2::TestHelper tests => 61,
     at_least_version => [2, 6, 0, "GtkIconView is new in 2.6"],
     ;
 
@@ -87,14 +89,16 @@ is ($iview->get_margin, 23);
 
 #$win->show_all;
 
+use constant ICON_COORD => 30;
+
 run_main sub {
-    my $path = $iview->get_path_at_pos (50, 50);
+    my $path = $iview->get_path_at_pos (ICON_COORD, ICON_COORD);
 
     SKIP: {
-	skip 'get_path_at_pos (50, 50) returned undef', 30
+	skip 'get_path_at_pos (ICON_COORD, ICON_COORD) returned undef', 30
 		unless defined $path;
 
-	isa_ok ($path, 'Gtk2::TreePath', '$iview->get_path_at_pos (50, 50)');
+	isa_ok ($path, 'Gtk2::TreePath', '$iview->get_path_at_pos (ICON_COORD, ICON_COORD)');
 
 	is ($iview->path_is_selected ($path), '',
 	    '$iview->path_is_selected, no');
@@ -143,7 +147,7 @@ run_main sub {
 		$win->add ($iview);
 		$win->show_all;
 
-		my ($path, $cell) = $iview->get_item_at_pos (50, 50);
+		my ($path, $cell) = $iview->get_item_at_pos (ICON_COORD, ICON_COORD);
 		isa_ok ($path, "Gtk2::TreePath");
 		isa_ok ($cell, "Gtk2::CellRenderer");
 
@@ -182,7 +186,7 @@ run_main sub {
 		isa_ok ($tmp[0], "Gtk2::TreePath");
 		is ($tmp[1], "drop-into");
 
-		my ($tmp_path, $pos) = $iview->get_dest_item_at_pos (50, 50);
+		my ($tmp_path, $pos) = $iview->get_dest_item_at_pos (ICON_COORD, ICON_COORD);
 		isa_ok ($tmp_path, "Gtk2::TreePath");
 		like ($pos, qr/drop/);
 
@@ -190,6 +194,51 @@ run_main sub {
 	}
     }
 };
+
+SKIP: {
+	skip 'new 2.12 stuff', 7
+		unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+	my ($bx, $by) = $iview->convert_widget_to_bin_window_coords (0, 0);
+	is_deeply ([$bx, $by], [0, 0]);
+
+	my $window = Gtk2::Window->new;
+	$window->set (tooltip_markup => "<b>Bla!</b>");
+
+	my ($path, $cell) = $iview->get_item_at_pos (ICON_COORD, ICON_COORD);
+	skip 'get_item_at_pos returned undef', 6
+		unless defined $path && defined $cell;
+
+	$window->signal_connect (query_tooltip => sub {
+		my ($window, $x, $y, $keyboard_mode, $tip) = @_;
+
+		$iview->set_tooltip_item ($tip, $path);
+		$iview->set_tooltip_cell ($tip, $path, $cell);
+
+		my ($bx, $by, $model, $tpath, $iter) = $iview->get_tooltip_context (0, 0, TRUE);
+		is ($bx, 0);
+		is ($by, 0);
+		isa_ok ($model, 'Gtk2::TreeModel');
+		isa_ok ($tpath, 'Gtk2::TreePath');
+		isa_ok ($iter, 'Gtk2::TreeIter');
+
+		$iview->set_tooltip_column (1);
+		is ($iview->get_tooltip_column, 1);
+
+		Glib::Idle->add (sub { Gtk2->main_quit; });
+
+		return TRUE;
+	});
+
+	$window->realize;
+
+	my $event = Gtk2::Gdk::Event->new ('motion-notify');
+	$event->window ($window->window);
+	Gtk2->main_do_event ($event);
+	Gtk2->main_do_event ($event);
+
+	Gtk2->main;
+}
 
 sub create_store
 {

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAction.xs,v 1.8 2006/08/07 18:36:09 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAction.xs,v 1.10 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,6 +25,12 @@ gboolean gtk_action_get_visible (GtkAction *action);
 GtkWidget* gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size);
 
 GtkWidget* gtk_action_create_menu_item (GtkAction *action);
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+GtkWidget* gtk_action_create_menu (GtkAction *action);
+
+#endif
 
 GtkWidget* gtk_action_create_tool_item (GtkAction *action);
 

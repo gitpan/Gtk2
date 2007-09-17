@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 11;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDrawable.t,v 1.6 2004/03/21 04:38:32 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDrawable.t,v 1.7 2006/11/19 19:47:53 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> show();
@@ -63,7 +63,9 @@ $win -> draw_segments($gc, 1, 2, 3, 4, 10, 11, 12, 13);
 $win -> draw_rectangle($gc, 1, 0, 0, 10, 10);
 $win -> draw_arc($gc, 1, 5, 5, 10, 10, 23, 42);
 $win -> draw_polygon($gc, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6);
+$win -> draw_layout_line($gc, 10, 10, $layout -> get_line(0));
 $win -> draw_layout($gc, 10, 10, $layout);
+$win -> draw_layout_line_with_colors($gc, 10, 10, $layout -> get_line(0), $black, $black);
 $win -> draw_layout_with_colors($gc, 10, 10, $layout, $black, $black);
 $win -> draw_drawable($gc, $win, 5, 5, 5, 5, 10, 10);
 

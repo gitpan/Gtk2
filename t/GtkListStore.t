@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use Gtk2::TestHelper tests => 47;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.20.2.2 2007/06/22 17:11:06 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkListStore.t,v 1.22 2007/06/22 17:08:56 kaffeetisch Exp $
 
 ###############################################################################
 

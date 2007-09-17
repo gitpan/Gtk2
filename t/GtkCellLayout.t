@@ -2,9 +2,9 @@
 use strict;
 use Gtk2::TestHelper
   at_least_version => [2, 4, 0, "GtkCellLayout is new in 2.4"],
-  tests => 4;
+  tests => 5;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellLayout.t,v 1.5 2006/04/23 14:18:38 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellLayout.t,v 1.7 2007/09/15 14:32:59 kaffeetisch Exp $
 
 my $column = Gtk2::TreeViewColumn -> new();
 isa_ok($column, "Gtk2::CellLayout");
@@ -35,6 +35,19 @@ $completion -> add_attribute($renderer, activatable => 1);
 $completion -> clear_attributes($renderer);
 
 $completion -> set_cell_data_func($renderer, sub { warn @_; }, 23);
+
+SKIP: {
+  skip "2.12 stuff", 1
+    unless Gtk2 -> CHECK_VERSION (2, 12, 0);
+
+  # GtkEntryCompletion doesn't seem to implement get_cells yet, so we use the
+  # GtkTreeViewColumn.
+  my $one = Gtk2::CellRendererText -> new();
+  my $two = Gtk2::CellRendererText -> new();
+  $column -> pack_start($one, 0);
+  $column -> pack_start($two, 1);
+  is_deeply([$column -> get_cells()], [$one, $two]);
+}
 
 __END__
 

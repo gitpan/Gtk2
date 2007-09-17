@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuItem.xs,v 1.11 2004/03/01 02:51:55 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuItem.xs,v 1.12 2007/06/23 17:13:53 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -102,7 +102,7 @@ gtk_menu_item_new (class, label=NULL)
 void
 gtk_menu_item_set_submenu (menu_item, submenu)
 	GtkMenuItem *menu_item
-	GtkWidget *submenu
+	GtkWidget_ornull *submenu
 
 GtkWidget_ornull*
 gtk_menu_item_get_submenu (menu_item)

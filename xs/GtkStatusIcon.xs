@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStatusIcon.xs,v 1.4 2006/08/07 18:36:10 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStatusIcon.xs,v 1.7 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -61,23 +61,43 @@ gboolean gtk_status_icon_get_blinking (GtkStatusIcon *status_icon);
 
 gboolean gtk_status_icon_is_embedded (GtkStatusIcon *status_icon);
 
-=for apidoc __function__
+=for apidoc
+
+=for signature (x, y, push_in) = Gtk2::StatusIcon::position_menu (menu, icon)
+=for signature (x, y, push_in) = Gtk2::StatusIcon::position_menu (menu, x, y, icon)
+
+=for arg menu (Gtk2::Menu)
+=for arg x (integer)
+=for arg y (integer)
+=for arg icon (Gtk2::StatusIcon)
+
+This function takes four arguments so that it may be passed directly as the
+menu position callback to Gtk2::Menu::popup(), which passes in initial x and y
+values for historical reasons.  Otherwise, you need only pass two arguments.
+
 This function can be used as the I<menu_pos_func> argument to
 I<Gtk2::Menu::popup>.
+
 =cut
-##void gtk_status_icon_position_menu (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer user_data)
 void
-gtk_status_icon_position_menu (GtkMenu *menu, gint x, gint y, GtkStatusIcon *icon)
-    PREINIT:
+gtk_status_icon_position_menu (GtkMenu *menu, ...)
+     PREINIT:
 	gboolean push_in;
-    PPCODE:
+	gint x, y;
+	GtkStatusIcon *icon;
+     PPCODE:
+	if (items == 4) {
+		/* Compatibility mode */
+		x = SvIV (ST (1));
+		y = SvIV (ST (2));
+		icon = SvGtkStatusIcon (ST (3));
+	} else
+		icon = SvGtkStatusIcon (ST (1));
 	gtk_status_icon_position_menu (menu, &x, &y, &push_in, icon);
 	EXTEND (sp, 3);
 	PUSHs (sv_2mortal (newSViv (x)));
 	PUSHs (sv_2mortal (newSViv (y)));
 	PUSHs (sv_2mortal (newSVuv (push_in)));
-
-#if GTK_CHECK_VERSION (2, 10, 0)
 
 # gboolean gtk_status_icon_get_geometry (GtkStatusIcon *status_icon, GdkScreen **screen, GdkRectangle *area, GtkOrientation *orientation);
 void
@@ -95,5 +115,11 @@ gtk_status_icon_get_geometry (GtkStatusIcon *status_icon)
 	PUSHs (sv_2mortal (newSVGdkScreen (screen)));
 	PUSHs (sv_2mortal (newSVGdkRectangle (&area)));
 	PUSHs (sv_2mortal (newSVGtkOrientation (orientation)));
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+void gtk_status_icon_set_screen (GtkStatusIcon *status_icon, GdkScreen *screen);
+
+GdkScreen *gtk_status_icon_get_screen (GtkStatusIcon *status_icon);
 
 #endif

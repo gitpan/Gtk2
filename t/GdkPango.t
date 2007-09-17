@@ -3,9 +3,9 @@ use strict;
 use warnings;
 use Gtk2::TestHelper
   at_least_version => [2, 6, 0, "GdkPango is new in 2.6"],
-  tests => 2;
+  tests => 14;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkPango.t,v 1.1 2005/04/02 17:03:46 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkPango.t,v 1.4 2007/09/15 14:32:59 kaffeetisch Exp $
 
 my $screen = Gtk2::Gdk::Screen -> get_default();
 
@@ -48,7 +48,31 @@ my $color = Gtk2::Gdk::Color -> new(0xffff, 0xffff, 0xffff);
 $renderer -> set_override_color("background", undef);
 $renderer -> set_override_color("background", $color);
 
+my $attr = Gtk2::Gdk::Pango::AttrStipple->new (undef, 0, 23);
+isa_ok ($attr, "Gtk2::Gdk::Pango::AttrStipple");
+isa_ok ($attr, "Gtk2::Pango::Attribute");
+is ($attr->stipple ($bitmap), undef);
+is ($attr->stipple, $bitmap);
+
+$attr = Gtk2::Gdk::Pango::AttrEmbossed->new (TRUE, 0, 23);
+isa_ok ($attr, "Gtk2::Gdk::Pango::AttrEmbossed");
+isa_ok ($attr, "Gtk2::Pango::Attribute");
+ok ($attr->embossed (FALSE));
+ok (!$attr->embossed);
+
+SKIP: {
+  skip "2.12 stuff", 4
+    unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+  my $color = Gtk2::Gdk::Color->new (0xffff, 0xffff, 0xffff);
+  my $attr = Gtk2::Gdk::Pango::AttrEmbossColor->new ($color);
+  isa_ok ($attr, "Gtk2::Gdk::Pango::AttrEmbossColor");
+  isa_ok ($attr, "Gtk2::Pango::Attribute");
+  is_deeply ($attr->color ([0x23, 0x42, 0x00]), [0xffff, 0xffff, 0xffff]);
+  is_deeply ($attr->color, [0x23, 0x42, 0x00]);
+}
+
 __END__
 
-Copyright (C) 2005 by the gtk2-perl team (see the file AUTHORS for the full
-list).  See LICENSE for more information.
+Copyright (C) 2005-2006 by the gtk2-perl team (see the file AUTHORS for the
+full list).  See LICENSE for more information.

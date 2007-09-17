@@ -4,7 +4,7 @@ use strict;
 use Test::More;
 use Gtk2;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.15 2006/03/28 12:22:08 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.18 2007/09/15 14:32:56 kaffeetisch Exp $
 
 use Config;
 my $have_threads = $Config{usethreads};
@@ -49,6 +49,13 @@ SKIP: {
 
   Gtk2::Gdk -> get_display_arg_name(); # FIXME: check retval?
   Gtk2::Gdk -> notify_startup_complete();
+}
+
+SKIP: {
+  skip 'new 2.12 stuff', 0
+    unless Gtk2 -> CHECK_VERSION(2, 12, 0);
+
+  Gtk2::Gdk -> notify_startup_complete_with_id('bla');
 }
 
 ok(Gtk2::Gdk -> set_locale());

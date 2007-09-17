@@ -1,42 +1,256 @@
-2007-08-04	kaffeetisch
+2007-09-16	kaffeetisch
+
+	* Gtk2.pm
+	* Makefile.PL
+	* NEWS
+	* README: Stable release 1.160.
+
+2007-09-16	kaffeetisch
+
+	* t/GtkIconView.t: Fix a test failure.
+
+2007-09-15	kaffeetisch
+
+	* t/01.GtkWindow.t
+	* t/Gdk.t
+	* t/GdkColor.t
+	* t/GdkDisplay.t
+	* t/GdkEvent.t
+	* t/GdkKeys.t
+	* t/GdkPango.t
+	* t/GdkPixbuf.t
+	* t/GdkWindow.t
+	* t/GdkX11.t
+	* t/GtkAboutDialog.t
+	* t/GtkAction.t
+	* t/GtkCellLayout.t
+	* t/GtkEntry.t
+	* t/GtkEntryCompletion.t
+	* t/GtkIconTheme.t
+	* t/GtkIconView.t
+	* t/GtkMenuItem.t
+	* t/GtkMenuToolButton.t
+	* t/GtkPageSetup.t
+	* t/GtkPaperSize.t
+	* t/GtkPrintSettings.t
+	* t/GtkRange.t
+	* t/GtkStatusIcon.t
+	* t/GtkTextBuffer.t
+	* t/GtkTextMark.t
+	* t/GtkToolItem.t
+	* t/GtkTreeView.t
+	* t/GtkWidget.t
+	* t/PangoCairo.t
+	* t/PangoFont.t
+	* t/PangoLayout.t
+	* xs/Gdk.xs
+	* xs/GdkDisplay.xs
+	* xs/GdkEvent.xs
+	* xs/GdkKeys.xs
+	* xs/GdkPango.xs
+	* xs/GdkWindow.xs
+	* xs/GdkX11.xs
+	* xs/GtkAboutDialog.xs
+	* xs/GtkAction.xs
+	* xs/GtkCellLayout.xs
+	* xs/GtkEntry.xs
+	* xs/GtkEntryCompletion.xs
+	* xs/GtkIconTheme.xs
+	* xs/GtkMenuToolButton.xs
+	* xs/GtkPageSetup.xs
+	* xs/GtkPaperSize.xs
+	* xs/GtkPrintSettings.xs
+	* xs/GtkRange.xs
+	* xs/GtkStatusIcon.xs
+	* xs/GtkTextBuffer.xs
+	* xs/GtkTextMark.xs
+	* xs/GtkToolItem.xs
+	* xs/GtkTreeView.xs
+	* xs/GtkTreeViewColumn.xs
+	* xs/GtkWidget.xs
+	* xs/GtkWindow.xs
+	* xs/PangoCairo.xs
+	* xs/PangoFont.xs
+	* xs/PangoLayout.xs: Change version checks to refer to gtk+ 2.12
+	instead of 2.11.  Thanks, perl -pi.
+
+2007-09-09	kaffeetisch
+
+	* t/GtkStatusIcon.t
+	* xs/GtkStatusIcon.xs: Make the x, y arguments to
+	Gtk2::StatusIcon::position_menu optional.  Patch by muppet.
+
+	* t/GdkWindow.t: Fix a reported test failure in the
+	get_decorations() checks.
+
+2007-08-13	kaffeetisch
+
+	* xs/GdkEvent.xs
+	* xs/GdkPixbuf.xs
+	* xs/GtkTreeModel.xs: Alter some type names in the POD so that
+	Glib::GenPod recognizes them.
+
+2007-08-01	kaffeetisch
 
 	* Gtk2.pm
 	* NEWS
-	* README: Stable release 1.146.
+	* README: Unstable release 1.155.
 
-2007-08-04	kaffeetisch
+2007-08-01	kaffeetisch
 
-	Merge from HEAD:
+	* MANIFEST: Add forgotten maps_pango-1.18.  Its absence caused
+	compilation errors.  (Reported by Thierry Vignaud)
+
+	* t/Gdk.t: Fix incorrect skip count.
 
 	* t/GtkTooltips.t: Fix test failure due to change of semantics in
 	gtk+.
 
+2007-07-29	kaffeetisch
+
+	* Gtk2.pm
+	* NEWS
+	* README: Unstable release 1.154.
+
+2007-07-29	kaffeetisch
+
+	* Makefile.PL: Don't print how many XS files were loaded from
+	which XS file list.
+
 2007-07-22	kaffeetisch
 
-	Merge from HEAD:
+	* t/GdkColor.t
+	* xs/GdkColor.xs: Wrap gdk_color_to_string.
+
+	* t/GdkDisplay.t
+	* xs/GdkDisplay.xs: Wrap gdk_display_supports_composite.
+
+	* t/GdkPixbuf.t
+	* xs/GdkPixbuf.xs: Wrap gdk_pixbuf_apply_embedded_orientation.
+
+	* t/GdkWindow.t
+	* xs/GdkWindow.xs: Wrap gdk_window_set_composited.
+
+	* t/GtkIconView.t
+	* xs/GtkIconView.xs: Wrap gtk_icon_view_set_tooltip_item,
+	gtk_icon_view_set_tooltip_cell, gtk_icon_view_get_tooltip_context,
+	gtk_icon_view_set_tooltip_column, and
+	gtk_icon_view_get_tooltip_column.
+
+	* t/GtkTooltip.t
+	* xs/GtkTooltip.xs: Wrap gtk_tooltip_set_tip_area.
+
+	* t/GtkTreeView.t
+	* xs/GtkTreeView.xs: Wrap gtk_tree_view_set_tooltip_row,
+	gtk_tree_view_set_tooltip_cell, gtk_tree_view_get_tooltip_context,
+	gtk_tree_view_set_tooltip_column, and
+	gtk_tree_view_get_tooltip_column.
+
+	* t/PangoAttributes.t
+	* xs/PangoAttributes.xs: Bless the array used to represent
+	PangoColor so it becomes possible to call methods on it.
+	Introduce some stack fiddling so you can use
+	Gtk2::Pango::Color::to_string as a method and a class function.
+
+	* xs/PangoMatrix.xs: Since pango uses GSlice starting with 1.12,
+	use g_slice_new0 instead of g_new0 in Gtk2::Pango::Matrix::new
+	when appropriate to avoid memory corruption.  (#458458, reported
+	by Quentin Sculo)
+
+2007-07-22	kaffeetisch
+
+	* xs/PangoFont.xs: Don't prevent registering subclasses of
+	PangoFont so that instances get their hierarchy set up correctly,
+	especially wrt. interfaces.
+
+	* maps_pango-1.18
+	* t/PangoCairo.t
+	* xs/PangoCairo.xs: Wrap pango_cairo_font_get_scaled_font.
+
+2007-07-12	kaffeetisch
+
+	* t/GtkIconView.t
+	* xs/GtkIconView.xs: Wrap
+	gtk_icon_view_convert_widget_to_bin_window_coords.
+
+	* t/GtkMenuToolButton.t
+	* xs/GtkMenuToolButton.xs: Wrap
+	gtk_menu_tool_button_set_arrow_tooltip_text and
+	gtk_menu_tool_button_set_arrow_tooltip_markup.
+
+	* t/GtkToolItem.t
+	* xs/GtkToolItem.xs: Wrap gtk_tool_item_set_tooltip_text and
+	gtk_tool_item_set_tooltip_markup.
+
+	* t/GtkWidget.t
+	* xs/GtkWidget.xs: Wrap gtk_widget_set_has_tooltip and
+	gtk_widget_get_has_tooltip.
+
+2007-07-10	kaffeetisch
 
 	* t/GdkWindow.t
 	* t/GtkIconTheme.t
-	* t/GtkActionGroup.t
 	* t/GtkRecentManager.t: Fix test failures.
+
+2007-07-08	kaffeetisch
+
+	* Gtk2.pm
+	* Makefile.PL
+	* NEWS
+	* README: Unstable release 1.153.
+
+2007-07-08	kaffeetisch
+
+	* xs/GtkBuilder.xs: Document the
+	$builder->connect_signals ($user_data, $object) way of connecting
+	signals.  (Reported by Grant McLean.)  Also correct a grammar
+	mistake.
 
 	* xs/GtkCellRenderer.xs: Mortalize all SVs we put on the stack.
 	In the past, we had to be careful not to cause destruction of
 	pre-existing C objects, but that's not necessary anymore.
+
+	* xs/GtkEditable.xs (gtk2perl_editable_insert_text_marshal): Add a
+	comment about why mortalizing isn't necessary here.
+
+2007-07-07	kaffeetisch
+
+	* t/GdkKeys.t
+	* xs/GdkKeys.xs: Wrap gdk_keymap_have_bidi_layouts.
+
+	* t/GtkTreeView.t
+	* xs/GtkTreeView.xs: Wrap gtk_tree_view_is_rubber_banding_active.
+
+	* xs/PangoCairo.xs
+	* xs/PangoFontMap.xs: Don't set the
+	no-warnings-for-unregistered-subclasses flag for PangoFontMap so
+	that subclasses are registered and get their ancestry set up
+	correctly (especially with respect to interfaces).  This enables
+	us to stop jumping through hoops to handle
+	pango_cairo_font_map_new and pango_cairo_font_map_get_default.
+
+	* t/PangoCairo.t
+	* xs/PangoCairo.xs: Wrap pango_cairo_font_map_new_for_font_type
+	and pango_cairo_font_map_get_font_type.
+
+	* t/PangoFont.t
+	* xs/PangoFont.xs: Wrap pango_font_face_is_synthesized.
 
 	* xs/GtkRadioAction.xs
 	* xs/GtkRadioButton.xs
 	* xs/GtkRadioMenuItem.xs: Plug leaks in the get_group() methods:
 	Mark new SVs as mortal when we put them on the stack.
 
-	* xs/PangoTypes.xs: Since pango uses GSlice starting with 1.12,
-	use g_slice_new0 instead of g_new0 in Gtk2::Pango::Matrix::new
-	when appropriate to avoid memory corruption.  (#458458, reported
-	by Quentin Sculo)
+	* t/Gdk.t
+	* xs/Gdk.xs: Wrap gdk_notify_startup_complete_with_id.
+
+	* t/GdkWindow.t
+	* xs/GdkWindow.xs: Wrap gdk_window_set_startup_id.
+
+	* t/GdkX11.t
+	* xs/GdkX11.xs: Wrap gdk_x11_display_get_startup_notification_id.
 
 2007-07-05	kaffeetisch
-
-	Merge from HEAD:
 
 	* xs/GdkPixbuf.xs: Really plug the leaks in
 	Gtk2::Gdk::Pixbuf::render_pixmap_and_mask() and
@@ -44,24 +258,25 @@
 
 2007-07-02	kaffeetisch
 
-	* Gtk2.pm, NEWS, README: Stable release 1.145.
+	* Gtk2.pm
+	* t/GtkBuilder.t
+	* xs/GtkBuilder.xs: Make Gtk2::Builder::connect_signals default to
+	the calling package (instead of main) if none was specified.
 
-2007-07-02	kaffeetisch
-
-	Merge from HEAD:
-
-	* xs/GtkAboutDialog.xs: Hide the AboutDialog on any reponse.
-	See http://svn.gnome.org/viewcvs/gtk%2B?revision=14919&view=revision
-	which changed the behavior of the dialog in gtk+ between 2.8 and 2.10.
+2007-06-27	muppetman
 
 	* xs/GdkPixbuf.xs: Plug reference leaks on the pixmap and bitmap
 	returned from Gtk2::Gdk::Pixbuf::render_pixmap_and_mask() and
 	render_pixmap_and_mask_for_colormap().  Also add a couple of
 	FIXMEs.
 
-2007-06-25	kaffeetisch
+2007-06-27	muppetman
 
-	Merge from HEAD:
+	* xs/GtkAboutDialog.xs: Hide the AboutDialog on any reponse.
+	See http://svn.gnome.org/viewcvs/gtk%2B?revision=14919&view=revision
+	which changed the behavior of the dialog in gtk+ between 2.8 and 2.10.
+
+2007-06-25	kaffeetisch
 
 	* t/GtkIconView.t
 	* xs/GtkIconView.xs: Supply default values for scroll_to_path.
@@ -71,9 +286,34 @@
 	Grant McLean makes sure the popup works properly when using simple
 	clicks instead of click-and-hold.
 
-2007-06-22	kaffeetisch
+2007-06-24	kaffeetisch
 
-	Merge from HEAD:
+	* Gtk2.pm, MANIFEST, Makefile.PL, NEWS, README: Unstable release
+	1.152.
+
+2007-06-23	kaffeetisch
+
+	* t/GtkMenuItem.t
+	* xs/GtkMenuItem.xs: gtk_menu_item_set_submenu now accepts NULL
+	for submenu.  Adjust the wrapper accordingly.
+
+	* t/GtkTextBuffer.t
+	* xs/GtkTextBuffer.xs: Wrap gtk_text_buffer_add_mark.
+
+	* t/GtkTextMark.t
+	* xs/GtkTextMark.xs: Wrap gtk_text_mark_new.
+
+	* t/GtkTreeView.t
+	* xs/GtkTreeViewColumn.xs
+	* xs/GtkTreeView.xs: Wrap gtk_tree_view_column_get_tree_view,
+	gtk_tree_view_convert_widget_to_tree_coords,
+	gtk_tree_view_convert_tree_to_widget_coords,
+	gtk_tree_view_convert_widget_to_bin_window_coords,
+	gtk_tree_view_convert_bin_window_to_widget_coords,
+	gtk_tree_view_convert_tree_to_bin_window_coords, and
+	gtk_tree_view_convert_bin_window_to_tree_coords.
+
+2007-06-22	kaffeetisch
 
 	* t/GtkIconTheme.t: Remove unreliable result check for
 	get_example_icon_name.
@@ -84,12 +324,139 @@
 	Gtk2::TreeStore's move_before() and move_after() accept undef for
 	the position parameter.  Reported by Dave Howorth.
 
+2007-06-18	kaffeetisch
+
+	* Gtk2.pm
+	* maps-2.12
+	* xs_files-2.12
+	* t/GtkBuildable.t
+	* t/GtkBuilder.t
+	* xs/GtkBuildable.xs
+	* xs/GtkBuilder.xs: Add support for GtkBuilder.
+
+2007-06-17	kaffeetisch
+
+	* t/PangoAttributes.t
+	* t/PangoContext.t
+	* t/PangoFont.t
+	* t/PangoGravity.t
+	* t/PangoLayout.t
+	* t/PangoMatrix.t
+	* t/PangoTypes.t
+	* xs/PangoAttributes.xs
+	* xs/PangoContext.xs
+	* xs/PangoFont.xs
+	* xs/PangoLayout.xs
+	* xs/PangoMatrix.xs
+	* xs/PangoTypes.xs: Refer to stable releases in version checks.
+
+	* t/PangoCairo.t
+	* xs/PangoCairo.xs: Wrap pango_cairo_context_set_shape_renderer.
+
+	* t/GtkActionGroup.t
+	* t/GtkPrintOperation.t: Fix test failures and assertions.
+
+	* t/GtkAboutDialog.t
+	* xs/GtkAboutDialog.xs: Respond to the recent deprecation of
+	gtk_about_dialog_[sg]et_name and the removal of the "name"
+	property: Make [sg]et_program_name the canonical method names for
+	all gtk+ versions; warn if the old names are used.  For new gtk+
+	versions, map the "name" property to "program-name" and issue a
+	warning.  For old gtk+ versions, map "program-name" to "name".  In
+	short: always use program-name in Perl code.
+
+2007-06-16	kaffeetisch
+
+	* maps-2.12
+	* xs_files-2.12
+	* t/GtkScaleButton.t
+	* t/GtkVolumeButton.t
+	* xs/GtkScaleButton.xs
+	* xs/GtkVolumeButton.xs: Add support for GtkScaleButton and
+	GtkVolumeButton.
+
+	* maps-2.12
+	* xs_files-2.12
+	* t/GtkRecentAction.t
+	* xs/GtkRecentAction.xs: Add support for GtkRecentAction.
+
 	* t/GdkPixbufLoader.t: Use more adapted size values to test
 	load-time scaling in order to avoid test failures due to rounding.
 
+	* t/GtkPageSetup.t
+	* xs/GtkPageSetup.xs: Wrap gtk_page_setup_new_from_file,
+	gtk_page_setup_to_file, gtk_page_setup_new_from_key_file, and
+	gtk_page_setup_to_key_file.
+
+	* t/GtkPaperSize.t
+	* xs/GtkPaperSize.xs: Wrap gtk_paper_size_new_from_key_file,
+	gtk_paper_size_to_key_file, and gtk_paper_size_get_paper_sizes.
+
+	* t/GtkPrintSettings.t
+	* xs/GtkPrintSettings.xs: Wrap gtk_print_settings_new_from_file,
+	gtk_print_settings_to_file, gtk_print_settings_new_from_key_file,
+	and gtk_print_settings_to_key_file.  Also fix the test fail to
+	actually run any tests.
+
+	* t/GtkTooltip.t
+	* xs/GtkTooltip.xs: Wrap gtk_tooltip_set_text.
+
+	* t/GtkWidget.t
+	* xs/GtkWidget.xs: Wrap gtk_widget_set_tooltip_text,
+	gtk_widget_get_tooltip_text, gtk_widget_set_tooltip_markup,
+	gtk_widget_get_tooltip_markup, and gtk_widget_modify_cursor.
+
+	* t/GtkIconTheme.t
+	* xs/GtkIconTheme.xs: Wrap gtk_icon_theme_list_contexts and
+	gtk_icon_theme_choose_icon.
+
+2007-06-12	kaffeetisch
+
+	* t/PangoLayout.t
+	* xs/PangoLayout.xs: Add support for the new PangoLogAttr property
+	is_expandable_space.
+
+	* t/GtkAction.t
+	* xs/GtkAction.xs: Wrap gtk_action_create_menu.
+
+	* t/GtkEntry.t
+	* xs/GtkEntry.xs: Wrap gtk_entry_set_cursor_hadjustment and
+	gtk_entry_get_cursor_hadjustment.
+
+	* t/GtkEntryCompletion.t
+	* xs/GtkEntryCompletion.xs: Wrap
+	gtk_entry_completion_set_inline_selection,
+	gtk_entry_completion_get_inline_selection, and
+	gtk_entry_completion_get_completion_prefix.
+
+	* t/01.GtkWindow.t
+	* xs/GtkWindow.xs: Wrap gtk_window_set_startup_id,
+	gtk_window_set_opacity, and gtk_window_get_opacity.
+
+2007-04-04  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* xs/GtkAboutDialog.xs: Add a note about the order of the
+	webmail and email properties and the url and email hook
+	functions. (#425006)
+
+2007-03-25	kaffeetisch
+
+	* maps-2.12
+	* xs_files-2.12
+	* t/GtkTooltip.t
+	* xs/GtkTooltip.xs: Wrap the new GtkTooltip API.
+
 2007-03-17	kaffeetisch
 
-	Merge from HEAD:
+	* t/GdkEvent.t
+	* xs/GdkEvent.xs: Wrap gdk_event_request_motions.
+
+	* t/GtkWidget.t
+	* xs/GtkWidget.xs: Wrap gtk_widget_set_tooltip_window,
+	gtk_widget_get_tooltip_window, and
+	gtk_widget_trigger_tooltip_query.
+
+2007-03-17	kaffeetisch
 
 	* t/GtkAccelLabel.t
 	* t/GtkBox.t
@@ -103,16 +470,12 @@
 	* t/GtkTreeSelection.t: Remove the -noinit option for tests which
 	now need an initialized gtk+.
 
+2007-03-17	kaffeetisch
+
 	* xs/GtkTextBufferRichText.xs: Patch from Mario Fischer fixes a
 	compilation problem that occurs when using MS' compiler.
 
-2007-03-12	kaffeetisch
-
-	* Gtk2.pm, NEWS, README: Stable release 1.144.
-
 2007-03-11	kaffeetisch
-
-	Merge from HEAD:
 
 	* t/GtkEditable.t
 	* xs/GtkEditbale.xs: Patch from Roderich Schupp fixes string
@@ -120,74 +483,219 @@
 
 2007-02-25	kaffeetisch
 
-	* Gtk2.pm, NEWS, README: Stable release 1.143.
+	* Makefile.PL
+	* xs_files-2.0
+	* xs_files-2.8
+	* xs_files_pango-1.0
+	* xs_files_pango-1.6
+	* xs_files_pango-1.10: Split pango's xs file list out into
+	separate files.
+
+	* maps_pango-1.16
+	* xs_files_pango-1.16
+	* t/PangoAttributes.t
+	* xs/PangoAttributes.xs
+	* t/PangoContext.t
+	* xs/PangoContext.xs
+	* t/PangoGravity.t
+	* xs/PangoGravity.xs: Add support for the new gravity API:
+	PangoGravityHint, PangoAttrGravity, PangoAttrGravityHint,
+	pango_context_set_gravity_hint, pango_context_get_gravity_hint,
+	PANGO_GRAVITY_IS_VERTICAL (wrapped as
+	Gtk2::Pango::Gravity::is_vertical), pango_gravity_to_rotation,
+	pango_gravity_get_for_matrix, pango_gravity_get_for_script.
+
+	* t/PangoAttributes.t
+	* xs/PangoAttributes.xs: Wrap pango_color_to_string.
+
+	* t/PangoTypes.t
+	* xs/PangoTypes.xs
+	* t/PangoMatrix.t
+	* xs/PangoMatrix.xs: Follow upstream and split out the matrix
+	stuff into separate files.
 
 2007-02-24	kaffeetisch
-
-	Merge from HEAD:
 
 	* Gtk2.pm, t/GtkTreeModelSort.t, xs/GtkTreeModelSort.xs: Make sure
 	calling get() on a Gtk2::TreeModelSort resolves to
 	Gtk2::TreeModel::get if appropriate, and, to keep backwards
 	compatibility, to Glib::Object::get otherwise.
 
+2007-02-24	kaffeetisch
+
+	* xs/PangoTypes.xs: Move a comment out of the ALIAS section to
+	avoid confusing the docs generator.
+
 2007-02-21	kaffeetisch
 
-	Merge from HEAD:
+	* t/GtkTreeModelSort.t: Test that the iter and path converters do
+	the right thing.
 
-	* t/GtkTreeModelSort.t, xs/GtkTreeModelSort.xs: fix copy and paste
-	error that made gtk_tree_model_sort_convert_child_iter_to_iter()
-	unusable.  Reported by Adrian Priscak.  Also, make sure we got it
-	right this time.
+2007-02-21	muppetman
 
-2007-01-21	kaffeetisch
-
-	* Gtk2.pm, NEWS, README, copyright.pod: Stable release 1.142.
+	* xs/GtkTreeModelSort.xs: fix copy and paste error that made
+	gtk_tree_model_sort_convert_child_iter_to_iter() unusable.
+	Reported by Adrian Priscak.
 
 2007-01-08	kaffeetisch
 
-	Merge from HEAD:
+	* Gtk2.pm, MANIFEST, Makefile.PL, NEWS, README, copyright.pod:
+	Unstable release 1.151.
+
+2007-01-08	kaffeetisch
 
 	* t/GtkIconView.t, xs/GtkIconView.xs: Fix the path handling in
 	Gtk2::IconView::get_selected_items.  Previously, the returned
 	paths were pointing to dead memory and any attempt to use them
 	caused havoc.
 
+2007-01-07	kaffeetisch
+
+	* t/GtkCellLayout.t, xs/GtkCellLayout.xs: Wrap
+	gtk_cell_layout_get_cells.
+
+	* xs/PangoLayout.xs: Handle NULL and undef in newSVPangoRectangle
+	and SvPangoRectangle.
+
+	* t/PangoLayout.t, xs/PangoLayout.xs: Wrap
+	pango_layout_get_line_readonly, pango_layout_get_lines_readonly,
+	and pango_layout_iter_get_line_readonly.
+
+	* t/PangoTypes.t, xs/PangoTypes.xs: Wrap pango_units_from_double,
+	pango_units_to_double, pango_extents_to_pixels,
+	pango_extents_to_pixels, pango_matrix_transform_distance,
+	pango_matrix_transform_point, pango_matrix_transform_rectangle,
+	and pango_matrix_transform_pixel_rectangle.
+
+2007-01-06  Emmanuele Bassi  <ebassi@gnome.org>
+
 	* xs/GtkRecentManager.xs: Add more documentation for the
 	Gtk2::RecentManager::add_item and Gtk2::RecentManager::add_full
 	methods; define the needed keys for the hashref to be passed
 	to the add_full method.
 
-2006-12-30	kaffeetisch
+2007-01-06  Emmanuele Bassi  <ebassi@gnome.org>
 
-	Merge from HEAD:
+	* xs/GtkCombo.xs:
+	* xs/GtkFileSelection.xs:
+	* xs/GtkItemFactory.xs:
+	* xs/GtkOptionMenu.xs: Add deprecation warnings.
+
+2006-12-30	kaffeetisch
 
 	* GtkTreeSortable.xs: Don't segfault in the GET_SORT_COLUMN_ID
 	marshaller if any of the output parameter pointers is NULL.  Patch
 	by muppet.
 
+2006-12-04	kaffeetisch
+
+	* Gtk2.pm, Makefile.PL, NEWS, README: Unstable release 1.150.
+
+2006-11-26	kaffeetisch
+
+	* NEWS: Merge from stable-1-14.
+
+	* t/GtkRange.t, xs/GtkRange.xs: Bind and test
+	gtk_range_set_show_fill_level, gtk_range_get_show_fill_level,
+	gtk_range_set_restrict_to_fill_level,
+	gtk_range_get_restrict_to_fill_level, gtk_range_set_fill_level,
+	and gtk_range_get_fill_level.
+
+	* t/GtkStatusIcon.t, xs/GtkStatusIcon.xs: Bind and test
+	gtk_status_icon_set_screen and gtk_status_icon_get_screen.
+
+	* t/GtkWidget.t, xs/GtkWidget.xs: Bind and test
+	gtk_widget_keynav_failed and gtk_widget_error_bell.
+
 2006-11-19	kaffeetisch
 
-	* Gtk2.pm, NEWS, README: Stable release 1.141.
+	* t/GdkVisual.t, t/GtkIconView.t, t/GtkRecentChooser.t,
+	t/GtkRecentManager.t: Fix test failures.
 
 2006-11-19	kaffeetisch
-
-	Merge from HEAD:
 
 	* doctypes: List GdkPixbufFormat as "hash reference".
 
 	* t/PangoCairo.t, xs/PangoCairo.xs: Also allow using method
 	calling semantics for pango_cairo_context_*.
 
-	* t/GdkVisual.t, t/GtkIconView.t, t/GtkRecentChooser.t,
-	t/GtkRecentManager.t: Fix test failures.
+	* xs/GdkCairo.xs: Remove redundant #if's.
+
+	* xs/PangoCairo.xs: Add a DESCRIPTION section and __function__ POD
+	tags to emphasize that and why the pango_cairo_* stuff is bound as
+	functions.
+
+	* gtk2perl.h, maps_pango-1.0, t/GdkDrawable.t, t/PangoCairo.t,
+	t/PangoLayout.t, t/PangoRenderer.t, xs/GdkDrawable.xs,
+	xs/PangoCairo.xs, xs/PangoLayout.xs, xs/PangoRenderer.xs: Add
+	support for PangoLayoutLine.
+
+2006-11-09	kaffeetisch
+
+	* t/PangoContext.t, xs/PangoContext.xs: Wrap
+	pango_context_set_base_gravity, pango_context_get_base_gravity,
+	and pango_context_get_gravity.
+
+	* t/PangoFont.t, xs/PangoFont.xs: Wrap
+	pango_font_description_set_gravity and
+	pango_font_description_get_gravity.
 
 2006-11-08	kaffeetisch
 
-	Merge from HEAD:
-
 	* t/GtkEntry.t, xs/GtkEntry.xs: Allow passing undef to
 	set_completion.
+
+2006-11-05	kaffeetisch
+
+	* t/GdkPango.t, xs/GdkPango.xs: Add support for
+	GdkPangoAttrEmbossColor.
+
+	* t/GdkWindow.t, xs/GdkWindow.xs: Bind gdk_window_beep.
+
+	* t/GtkTreeView.t, xs/GtkTreeView.xs: Bind
+	gtk_tree_view_set_show_expanders,
+	gtk_tree_view_get_show_expanders,
+	gtk_tree_view_set_level_indentation, and
+	gtk_tree_view_get_level_indentation.
+
+2006-11-04	kaffeetisch
+
+	* AUTHORS, t/GtkLayout.t, xs/GtkLayout.xs: Add an accessor for
+	GtkLayout's bin_window struct member.  Original patch by Philipp
+	Rumpf.
+
+2006-10-17	kaffeetisch
+
+	Add support for pango attributes.
+
+	* Gtk2.exports, xs/PangoLayout.xs: Make SvPangoRectangle public
+	since it's now needed.
+
+	* t/PangoRenderer.t, xs/PangoAttributes.xs, xs/PangoRenderer.xs:
+	Implement a custom boxed wrapper for PangoColor that represents a
+	color as an r,g,b tuple.  Use it to wrap
+	pango_renderer_[sg]et_color.
+
+	* gtk2perl-private.h: Export
+	gtk2perl_pango_attribute_register_custom_type, implement
+	GTK2PERL_PANGO_ATTR_REGISTER_CUSTOM_TYPE and
+	GTK2PERL_PANGO_ATTR_STORE_INDICES.
+
+	* gtk2perl.h, maps_pango-1.0: Make our custom types for
+	PangoAttribute and PangoAttrIterator known.
+
+	* t/PangoAttributes.t, xs/PangoAttributes.xs: Implement and test
+	all the attribute contructors, accessors, and support
+	infrastructure.
+
+	* t/GdkPango.t, xs/GdkPango.xs: Wrap and test
+	gdk_pango_attr_stipple_new and gdk_pango_attr_embossed_new.
+
+	* examples/attributes.pl: Demonstrate some of the attribute stuff.
+
+2006-10-17	kaffeetisch
+
+	* MANIFEST, ppport.h: Remove ppport.h, it's unused.
 
 2006-10-03	kaffeetisch
 

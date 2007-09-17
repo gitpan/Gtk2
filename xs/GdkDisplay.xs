@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.15 2006/08/07 18:36:08 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.17 2007/09/15 14:33:01 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -201,5 +201,11 @@ void gdk_display_warp_pointer (GdkDisplay *display, GdkScreen *screen, gint x, g
 gboolean gdk_display_supports_shapes (GdkDisplay *display);
 
 gboolean gdk_display_supports_input_shapes (GdkDisplay *display);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+gboolean gdk_display_supports_composite (GdkDisplay *display);
 
 #endif

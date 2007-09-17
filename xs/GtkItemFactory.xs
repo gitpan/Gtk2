@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.21 2005/01/06 04:19:50 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.22 2007/01/06 16:27:53 ebassi Exp $
  */
 #include "gtk2perl.h"
 
@@ -231,6 +231,8 @@ gtk2perl_item_factory_create_item_helper (GtkItemFactory *ifactory,
 
 MODULE = Gtk2::ItemFactory	PACKAGE = Gtk2::ItemFactory	PREFIX = gtk_item_factory_
 
+=for deprecated_by Gtk2::UIManager
+=cut
 
 ##  GtkItemFactory* gtk_item_factory_new (GType container_type, const gchar *path, GtkAccelGroup *accel_group) 
 GtkItemFactory*

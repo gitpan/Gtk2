@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.29 2005/09/29 22:28:45 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeViewColumn.xs,v 1.31 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -395,6 +395,12 @@ gtk_tree_view_column_focus_cell (tree_column, cell)
 #if GTK_CHECK_VERSION (2, 8, 0)
 
 void gtk_tree_view_column_queue_resize (GtkTreeViewColumn *tree_column);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+GtkWidget_ornull * gtk_tree_view_column_get_tree_view (GtkTreeViewColumn *tree_column);
 
 #endif
 

@@ -16,12 +16,15 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileSelection.xs,v 1.16 2004/02/26 00:57:54 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileSelection.xs,v 1.17 2007/01/06 16:27:53 ebassi Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::FileSelection	PACKAGE = Gtk2::FileSelection	PREFIX = gtk_file_selection_
+
+=for deprecated_by Gtk2::FileChooserDialog
+=cut
 
 GtkWidget *
 dir_list (fs)

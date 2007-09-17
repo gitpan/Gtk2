@@ -1,10 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAction.t,v 1.10 2006/08/07 18:36:03 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAction.t,v 1.12 2007/09/15 14:32:59 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, "Action-based menus are new in 2.4"],
-	tests => 17, noinit => 0;
+	tests => 18, noinit => 0;
 
 my $action = Gtk2::Action->new (name => 'Open',
                                 label => '_Open',
@@ -76,6 +76,13 @@ SKIP: {
 		unless Gtk2->CHECK_VERSION (2, 10, 0);
 
 	isa_ok ($widget->get_action, 'Gtk2::Action');
+}
+
+SKIP: {
+	skip "new 2.12 stuff", 1
+		unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+	is ($action->create_menu, undef);
 }
 
 __END__

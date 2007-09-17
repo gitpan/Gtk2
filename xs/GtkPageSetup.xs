@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPageSetup.xs,v 1.1 2006/06/20 16:49:17 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPageSetup.xs,v 1.3 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -54,3 +54,45 @@ gdouble gtk_page_setup_get_paper_height (GtkPageSetup *setup, GtkUnit unit);
 gdouble gtk_page_setup_get_page_width (GtkPageSetup *setup, GtkUnit unit);
 
 gdouble gtk_page_setup_get_page_height (GtkPageSetup *setup, GtkUnit unit);
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+# GtkPageSetup * gtk_page_setup_new_from_file (const gchar *file_name, GError **error);
+=for apidoc __gerror__
+=cut
+GtkPageSetup_noinc * gtk_page_setup_new_from_file (class, GPerlFilename file_name)
+    PREINIT:
+	GError *error = NULL;
+    CODE:
+	RETVAL = gtk_page_setup_new_from_file (file_name, &error);
+	if (error)
+		gperl_croak_gerror (NULL, error);
+    OUTPUT:
+	RETVAL
+
+# gboolean gtk_page_setup_to_file (GtkPageSetup *setup, const char *file_name, GError **error);
+=for apidoc __gerror__
+=cut
+void gtk_page_setup_to_file (GtkPageSetup *setup, GPerlFilename file_name)
+    PREINIT:
+	GError *error = NULL;
+    CODE:
+	if (!gtk_page_setup_to_file (setup, file_name, &error))
+		gperl_croak_gerror (NULL, error);
+
+# GtkPageSetup * gtk_page_setup_new_from_key_file (GKeyFile *key_file, const gchar *group_name, GError **error);
+=for apidoc __gerror__
+=cut
+GtkPageSetup_noinc * gtk_page_setup_new_from_key_file (class, GKeyFile *key_file, const gchar_ornull *group_name)
+    PREINIT:
+	GError *error = NULL;
+    CODE:
+	RETVAL = gtk_page_setup_new_from_key_file (key_file, group_name, &error);
+	if (error)
+		gperl_croak_gerror (NULL, error);
+    OUTPUT:
+	RETVAL
+
+void gtk_page_setup_to_key_file (GtkPageSetup *setup, GKeyFile *key_file, const gchar_ornull *group_name);
+
+#endif

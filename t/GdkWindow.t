@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 40;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.19.2.1 2007/07/22 21:19:08 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.25 2007/09/15 14:32:59 kaffeetisch Exp $
 
 my $attributes = {
   title => "Bla",
@@ -267,7 +267,7 @@ $window_three -> set_group($window_three);
 $window -> set_decorations("all");
 
 my @deco = $window -> get_decorations();
-ok(defined $deco[0]);
+is(scalar @deco, 2);
 isa_ok($deco[1], "Gtk2::Gdk::WMDecoration");
 
 $window -> set_functions("all");
@@ -290,10 +290,19 @@ SKIP: {
 
 SKIP: {
   skip("new 2.8 stuff", 0)
-    unless Gtk2->CHECK_VERSION (2, 8, 0);
+    unless Gtk2 -> CHECK_VERSION(2, 8, 0);
 
   $window_three -> set_urgency_hint(TRUE);
   $window_three -> move_region($region, 10, 10);
+}
+
+SKIP: {
+  skip "new 2.12 stuff", 0
+    unless Gtk2 -> CHECK_VERSION(2, 12, 0);
+
+  $window -> set_startup_id('bla');
+  $window -> set_composited(FALSE);
+  $window -> beep();
 }
 
 $window -> hide();

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 55;
+use Gtk2::TestHelper tests => 57;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoFont.t,v 1.10 2006/08/07 18:36:07 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoFont.t,v 1.14 2007/09/15 14:33:00 kaffeetisch Exp $
 
 my $description = Gtk2::Pango::FontDescription -> new();
 isa_ok($description, "Gtk2::Pango::FontDescription");
@@ -50,6 +50,14 @@ SKIP: {
 
   $description -> set_absolute_size(23.42);
   is($description -> get_size_is_absolute(), TRUE);
+}
+
+SKIP: {
+  skip("new 1.16 stuff", 1)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 16, 0));
+
+  $description -> set_gravity("south");
+  is($description -> get_gravity(), "south");
 }
 
 ###############################################################################
@@ -145,6 +153,13 @@ SKIP: {
   my @sizes = $faces[0]->list_sizes;
   #print "sizes @sizes\n";
   ok (1, 'list_sizes did not crash');
+}
+
+SKIP: {
+  skip("new 1.18 stuff", 1)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 18, 0));
+
+  ok(defined $faces[0]->is_synthesized);
 }
 
 __END__

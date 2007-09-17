@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.21 2004/04/19 18:18:43 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/Gdk.xs,v 1.23 2007/09/15 14:33:01 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -92,9 +92,16 @@ void
 gdk_notify_startup_complete (class)
     C_ARGS:
 	/* void */
-	
 
 #endif /* 2.2.0 */
+
+#if GTK_CHECK_VERSION(2, 12, 0)
+
+void gdk_notify_startup_complete_with_id (class, const gchar* startup_id)
+    C_ARGS:
+	startup_id
+
+#endif
 
 const char *
 gdk_get_program_class (class)

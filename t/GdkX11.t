@@ -1,14 +1,14 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 10;
+use Gtk2::TestHelper tests => 11;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkX11.t,v 1.7 2005/10/15 16:14:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkX11.t,v 1.9 2007/09/15 14:32:59 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();
 
 SKIP: {
-  skip("X11 stuff", 8)
+  skip("X11 stuff", 9)
     unless $window -> window() -> can("get_xid");
 
   like($window -> window() -> get_xid(), qr/^\d+$/);
@@ -59,6 +59,15 @@ SKIP: {
 
     $display -> set_cursor_theme("just-testing", 23);
     like($display -> get_user_time(), qr/^\d+$/);
+  }
+
+  SKIP: {
+    skip '2.12 stuff', 1
+      unless Gtk2->CHECK_VERSION(2, 12, 0);
+
+    my $display = Gtk2::Gdk::Display -> get_default();
+
+    is($display -> get_startup_notification_id(), $ENV{DESKTOP_STARTUP_ID});
   }
 }
 

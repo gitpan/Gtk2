@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoContext.xs,v 1.13 2004/09/13 21:07:35 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoContext.xs,v 1.16 2007/06/17 12:55:57 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -151,5 +151,19 @@ void
 pango_context_set_matrix (context, matrix)
 	PangoContext *context
 	PangoMatrix_ornull *matrix
+
+#endif
+
+#if PANGO_CHECK_VERSION (1, 16, 0)
+
+void pango_context_set_base_gravity (PangoContext *context, PangoGravity gravity);
+
+PangoGravity pango_context_get_base_gravity (PangoContext *context);
+
+PangoGravity pango_context_get_gravity (PangoContext *context);
+
+void pango_context_set_gravity_hint (PangoContext *context, PangoGravityHint hint);
+
+PangoGravityHint pango_context_get_gravity_hint (PangoContext *context);
 
 #endif

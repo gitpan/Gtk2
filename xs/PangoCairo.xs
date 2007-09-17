@@ -3,46 +3,63 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.4.2.1 2006/11/19 20:00:47 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.10 2007/09/15 14:33:03 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 #include <cairo-perl.h>
+#include <gperl_marshal.h>
+
+/* ------------------------------------------------------------------------- */
+
+#if PANGO_CHECK_VERSION (1, 17, 0)
+
+static void
+gtk2perl_pango_cairo_shape_renderer_func (cairo_t        *cr,
+					  PangoAttrShape *attr,
+					  gboolean        do_path,
+					  gpointer        data)
+{
+	dGPERL_CALLBACK_MARSHAL_SP;
+	GPerlCallback *callback = (GPerlCallback *) data;
+
+	GPERL_CALLBACK_MARSHAL_INIT (callback);
+
+	ENTER;
+	SAVETMPS;
+
+	PUSHMARK (SP);
+
+	EXTEND (SP, 3);
+	PUSHs (sv_2mortal (newSVCairo (cr)));
+	PUSHs (sv_2mortal (newSVPangoAttribute (attr)));
+	PUSHs (sv_2mortal (newSVuv (do_path)));
+	if (callback->data)
+		XPUSHs (sv_2mortal (newSVsv (callback->data)));
+
+	PUTBACK;
+
+	call_sv (callback->func, G_DISCARD);
+
+	FREETMPS;
+	LEAVE;
+}
+
+#endif
+
+/* ------------------------------------------------------------------------- */
 
 MODULE = Gtk2::Pango::Cairo	PACKAGE = Gtk2::Pango::Cairo::FontMap	PREFIX = pango_cairo_font_map_
 
-BOOT:
-	gperl_set_isa ("Gtk2::Pango::Cairo::FontMap", "Gtk2::Pango::FontMap");
-
 # PangoFontMap *pango_cairo_font_map_new (void);
-SV *
-pango_cairo_font_map_new (class)
-    ALIAS:
-	Gtk2::Pango::Cairo::FontMap::get_default = 1
-    PREINIT:
-	PangoFontMap *fontmap;
-	HV *stash;
-    CODE:
-	switch (ix) {
-	    case 0:
-		fontmap = pango_cairo_font_map_new ();
-		RETVAL = newSVPangoFontMap_noinc (fontmap);
-		break;
+PangoFontMap_noinc * pango_cairo_font_map_new (class)
+    C_ARGS:
+	/* void */
 
-	    case 1:
-		fontmap = pango_cairo_font_map_get_default();
-		RETVAL = newSVPangoFontMap (fontmap);
-		break;
-
-	    default:
-		fontmap = NULL; stash = NULL; RETVAL = NULL;
-		g_assert_not_reached ();
-	}
-
-	stash = gperl_object_stash_from_type (PANGO_TYPE_CAIRO_FONT_MAP);
-	sv_bless (RETVAL, stash);
-    OUTPUT:
-	RETVAL
+# PangoFontMap *pango_cairo_font_map_get_default (void);
+PangoFontMap * pango_cairo_font_map_get_default (class)
+    C_ARGS:
+	/* void */
 
 void pango_cairo_font_map_set_resolution (PangoCairoFontMap *fontmap, double dpi);
 
@@ -63,6 +80,27 @@ pango_cairo_font_map_create_context (PangoCairoFontMap *fontmap)
 	sv_bless (RETVAL, stash);
     OUTPUT:
 	RETVAL
+
+#if PANGO_CHECK_VERSION (1, 18, 0)
+
+# PangoFontMap *pango_cairo_font_map_new_for_font_type (cairo_font_type_t fonttype);
+PangoFontMap_noinc * pango_cairo_font_map_new_for_font_type (class, cairo_font_type_t fonttype)
+    C_ARGS:
+	fonttype
+
+cairo_font_type_t pango_cairo_font_map_get_font_type (PangoCairoFontMap *fontmap);
+
+#endif
+
+# --------------------------------------------------------------------------- #
+
+MODULE = Gtk2::Pango::Cairo	PACKAGE = Gtk2::Pango::Cairo::Font	PREFIX = pango_cairo_font_
+
+#if PANGO_CHECK_VERSION (1, 18, 0)
+
+cairo_scaled_font_t *pango_cairo_font_get_scaled_font (PangoCairoFont *font);
+
+#endif
 
 # --------------------------------------------------------------------------- #
 
@@ -90,8 +128,9 @@ void pango_cairo_update_layout (cairo_t *cr, PangoLayout *layout);
 =cut
 void pango_cairo_show_glyph_string (cairo_t *cr, PangoFont *font, PangoGlyphString *glyphs);
 
-# FIXME: Need PangoLayoutLine support.
-# void pango_cairo_show_layout_line (cairo_t *cr, PangoLayoutLine *line);
+=for apidoc __function__
+=cut
+void pango_cairo_show_layout_line (cairo_t *cr, PangoLayoutLine *line);
 
 =for apidoc __function__
 =cut
@@ -101,8 +140,9 @@ void pango_cairo_show_layout (cairo_t *cr, PangoLayout *layout);
 =cut
 void pango_cairo_glyph_string_path (cairo_t *cr, PangoFont *font, PangoGlyphString *glyphs);
 
-# FIXME: Need PangoLayoutLine support.
-# void pango_cairo_layout_line_path (cairo_t *cr, PangoLayoutLine *line);
+=for apidoc __function__
+=cut
+void pango_cairo_layout_line_path (cairo_t *cr, PangoLayoutLine *line);
 
 =for apidoc __function__
 =cut
@@ -127,8 +167,12 @@ MODULE = Gtk2::Pango::Cairo	PACKAGE = Gtk2::Pango::Cairo::Context	PREFIX = pango
 BOOT:
 	gperl_set_isa ("Gtk2::Pango::Cairo::Context", "Gtk2::Pango::Context");
 
+=for apidoc __function__
+=cut
 void pango_cairo_context_set_font_options (PangoContext *context, const cairo_font_options_t *options);
 
+=for apidoc __function__
+=cut
 # const cairo_font_options_t *pango_cairo_context_get_font_options (PangoContext *context);
 const cairo_font_options_t *pango_cairo_context_get_font_options (PangoContext *context);
     CODE:
@@ -137,6 +181,42 @@ const cairo_font_options_t *pango_cairo_context_get_font_options (PangoContext *
     OUTPUT:
 	RETVAL
 
+=for apidoc __function__
+=cut
 void pango_cairo_context_set_resolution (PangoContext *context, double dpi);
 
+=for apidoc __function__
+=cut
 double pango_cairo_context_get_resolution (PangoContext *context);
+
+#if PANGO_CHECK_VERSION (1, 18, 0)
+
+=for apidoc __function__
+=cut
+# void pango_cairo_context_set_shape_renderer (PangoContext *context, PangoCairoShapeRendererFunc func, gpointer data, GDestroyNotify dnotify)
+void
+pango_cairo_context_set_shape_renderer (PangoContext *context, SV *func=NULL, SV *data=NULL)
+    PREINIT:
+	GPerlCallback *callback;
+	GDestroyNotify dnotify;
+    CODE:
+	if (func && SvOK (func)) {
+		callback = gperl_callback_new (func, data, 0, NULL, 0);
+		dnotify = (GDestroyNotify) gperl_callback_destroy;
+	} else {
+		callback = NULL;
+		dnotify = NULL;
+	}
+	pango_cairo_context_set_shape_renderer (
+		context,
+		gtk2perl_pango_cairo_shape_renderer_func,
+		callback,
+		dnotify);
+
+# Is this useful?  You can't use it to store away the old renderer while you
+# temporarily install your own, since when you call set_shape_renderer(), the
+# old renderer's destruction notification is executed.  So the stuff you got
+# from get_shape_renderer() is now garbage.
+# PangoCairoShapeRendererFunc pango_cairo_context_get_shape_renderer (PangoContext *context, gpointer *data)
+
+#endif

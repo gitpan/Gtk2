@@ -1,10 +1,10 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntryCompletion.t,v 1.11 2006/07/27 20:13:30 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntryCompletion.t,v 1.13 2007/09/15 14:32:59 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, "GtkEntryCompletion is new in 2.4"],
-	tests => 10;
+	tests => 12;
 
 sub match_func {
 	my ($completion, $key, $iter, $data) = @_;
@@ -71,6 +71,16 @@ SKIP: {
 
 	$completion->set_popup_single_match (TRUE);
 	is ($completion->get_popup_single_match, TRUE);
+}
+
+SKIP: {
+	skip 'new 2.12 stuff', 2
+		unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+	$completion->set_inline_selection (TRUE);
+	is ($completion->get_inline_selection, TRUE);
+
+	is ($completion->get_completion_prefix, undef);
 }
 
 __END__

@@ -4,10 +4,10 @@
 use strict;
 use warnings;
 use Gtk2::TestHelper
-  tests => 20,
+  tests => 22,
   at_least_version => [2, 10, 0, "Gtk2::StatusIcon is new in 2.10"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStatusIcon.t,v 1.5 2006/08/07 18:36:06 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStatusIcon.t,v 1.8 2007/09/15 14:33:00 kaffeetisch Exp $
 
 my $icon;
 
@@ -85,6 +85,9 @@ my $callback = sub {
 $menu -> popup(undef, undef, $callback, $icon, 0, 0);
 $menu -> popdown();
 
+# Make sure the convenient way of calling works, too.
+ok (defined Gtk2::StatusIcon::position_menu($menu, $icon));
+
 # --------------------------------------------------------------------------- #
 
 my ($screen, $area, $orientation) = $icon -> get_geometry();
@@ -95,6 +98,17 @@ SKIP: {
   isa_ok ($screen, "Gtk2::Gdk::Screen");
   isa_ok ($area, "Gtk2::Gdk::Rectangle");
   ok (defined $orientation);
+}
+
+# --------------------------------------------------------------------------- #
+
+SKIP: {
+  skip "new 2.12 stuff", 1
+    unless Gtk2 -> CHECK_VERSION(2, 12, 0);
+
+  my $screen = $icon -> get_screen();
+  isa_ok($screen, "Gtk2::Gdk::Screen");
+  $icon -> set_screen($screen);
 }
 
 __END__

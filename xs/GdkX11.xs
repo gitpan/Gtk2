@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkX11.xs,v 1.8 2005/10/15 16:14:22 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkX11.xs,v 1.10 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 #ifdef GDK_WINDOWING_X11
@@ -127,6 +127,12 @@ void gdk_x11_display_set_cursor_theme (GdkDisplay *display, const gchar *theme, 
 guint32 gdk_x11_display_get_user_time (GdkDisplay *display);
 
 #endif /* 2.8.0 */
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+const gchar *gdk_x11_display_get_startup_notification_id (GdkDisplay *display);
+
+#endif
 
 #endif /* GDK_WINDOWING_X11, GDK_TYPE_DISPLAY */
 

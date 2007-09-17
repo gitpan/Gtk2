@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.16.2.1 2006/11/08 18:42:39 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.19 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -187,13 +187,33 @@ void gtk_entry_set_completion (GtkEntry *entry, GtkEntryCompletion_ornull *compl
 
 GtkEntryCompletion_ornull *gtk_entry_get_completion (GtkEntry *entry);
 
-#endif
-
-#if GTK_CHECK_VERSION(2,4,0)
-
 void gtk_entry_set_alignment (GtkEntry *entry, gfloat xalign);
 
 gfloat gtk_entry_get_alignment (GtkEntry *entry);
+
+#endif
+
+#if GTK_CHECK_VERSION(2, 6, 0)
+
+gint gtk_entry_layout_index_to_text_index (GtkEntry *entry, gint layout_index)
+
+gint gtk_entry_text_index_to_layout_index (GtkEntry *entry, gint text_index)
+
+#endif
+
+#if GTK_CHECK_VERSION(2, 10, 0)
+
+void gtk_entry_set_inner_border (GtkEntry *entry, const GtkBorder_ornull *border);
+
+const GtkBorder_ornull * gtk_entry_get_inner_border (GtkEntry *entry);
+
+#endif
+
+#if GTK_CHECK_VERSION(2, 12, 0)
+
+void gtk_entry_set_cursor_hadjustment (GtkEntry *entry, GtkAdjustment_ornull *adjustment);
+
+GtkAdjustment_ornull* gtk_entry_get_cursor_hadjustment (GtkEntry *entry);
 
 #endif
 
@@ -226,19 +246,3 @@ void
 gtk_entry_set_editable (entry, editable)
 	GtkEntry * entry
 	gboolean   editable
-
-#if GTK_CHECK_VERSION(2, 6, 0)
-
-gint gtk_entry_layout_index_to_text_index (GtkEntry *entry, gint layout_index)
-
-gint gtk_entry_text_index_to_layout_index (GtkEntry *entry, gint text_index)
-
-#endif
-
-#if GTK_CHECK_VERSION(2, 10, 0)
-
-void gtk_entry_set_inner_border (GtkEntry *entry, const GtkBorder_ornull *border);
-
-const GtkBorder_ornull * gtk_entry_get_inner_border (GtkEntry *entry);
-
-#endif

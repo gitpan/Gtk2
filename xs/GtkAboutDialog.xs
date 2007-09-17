@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.10.4.1 2007/07/02 18:15:17 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.14 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -87,6 +87,23 @@ void gtk_show_about_dialog (class, GtkWindow_ornull * parent, first_property_nam
 			char * name = SvPV_nolen (ST (i));
 			SV * sv = ST (i + 1);
 
+			/* Evil swizzling for #345822 */
+			if (gtk_major_version > 2 ||
+			    (gtk_major_version == 2 && gtk_minor_version >= 11)) /* FIXME: 2.12 */
+			{
+				/* map name to program-name. */
+				if (strEQ (name, "name")) {
+					warn ("Deprecation warning: Use the "
+					      "\"program-name\" property instead "
+					      "of \"name\"");
+					name = "program-name";
+				}
+			} else {
+				/* older gtk+; allow modern code. */
+				if (gperl_str_eq (name, "program-name"))
+					name = "name";
+			}
+
 			pspec = g_object_class_find_property
 					(G_OBJECT_GET_CLASS (dialog), name);
 			if (! pspec) {
@@ -121,9 +138,45 @@ GtkWidget * gtk_about_dialog_new (class)
     C_ARGS:
 	/* void */
 
-const gchar_ornull * gtk_about_dialog_get_name (GtkAboutDialog * about);
+=for apidoc get_name __hide__
+=cut
 
-void gtk_about_dialog_set_name (GtkAboutDialog * about, const gchar_ornull * name);
+const gchar_ornull *
+gtk_about_dialog_get_program_name (GtkAboutDialog * about)
+    ALIAS:
+	get_name = 1
+    CODE:
+	if (ix == 1) {
+		warn ("Deprecation warning: use "
+		      "Gtk2::AboutDialog::get_program_name instead of "
+		      "get_name");
+	}
+#if GTK_CHECK_VERSION (2, 12, 0)
+	RETVAL = gtk_about_dialog_get_program_name (about);
+#else
+	RETVAL = gtk_about_dialog_get_name (about);
+#endif
+    OUTPUT:
+	RETVAL
+
+=for apidoc set_name __hide__
+=cut
+
+void
+gtk_about_dialog_set_program_name (GtkAboutDialog * about, const gchar_ornull * name)
+    ALIAS:
+	set_name = 1
+    CODE:
+	if (ix == 1) {
+		warn ("Deprecation warning: use "
+		      "Gtk2::AboutDialog::set_program_name instead of "
+		      "set_name");
+	}
+#if GTK_CHECK_VERSION (2, 12, 0)
+	gtk_about_dialog_set_program_name (about, name);
+#else
+	gtk_about_dialog_set_name (about, name);
+#endif
 
 const gchar_ornull * gtk_about_dialog_get_version (GtkAboutDialog * about);
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.38.4.2 2007/07/05 21:37:12 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.42 2007/08/13 19:10:55 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -417,7 +417,7 @@ gdk_pixbuf_new_from_file_at_scale (class, GPerlFilename filename, int width, int
 
 ###  GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data, GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample, int width, int height, int rowstride, GdkPixbufDestroyNotify destroy_fn, gpointer destroy_fn_data) 
 =for apidoc
-=for arg data (string of packed binary data) pixel data, usually made with pack()
+=for arg data (scalar) packed binary pixel data, usually made with pack()
 =for arg has_alpha true if the image data includes an alpha channel (opacity information).
 =for arg width in pixels.
 =for arg height in pixels.
@@ -523,7 +523,7 @@ gdk_pixbuf_new_from_xpm_data (class, ...)
 ## croaks on error
 ##  GdkPixbuf* gdk_pixbuf_new_from_inline (gint data_length, const guint8 *data, gboolean copy_pixels, GError **error) 
 =for apidoc __gerror__
-=for arg data (packed binary data) the format is special, see discussion
+=for arg data (scalar) packed binary data, the format is special, see discussion
 =for arg copy_pixels whether I<$data> should be copied, defaults to true
 
 Gtk+ ships with a tool called C<gdk-pixbuf-csource>, which turns any image
@@ -781,20 +781,16 @@ gdk_pixbuf_composite_color (src, dest, dest_x, dest_y, dest_width, dest_height, 
 	guint32 color1
 	guint32 color2
 
-## FIXME this can return NULL if there's not enough memory; the typemap doesn't
-##       handle that gracefully.
 ##  GdkPixbuf *gdk_pixbuf_scale_simple (const GdkPixbuf *src, int dest_width, int dest_height, GdkInterpType interp_type) 
-GdkPixbuf_noinc *
+GdkPixbuf_noinc_ornull *
 gdk_pixbuf_scale_simple (src, dest_width, dest_height, interp_type)
 	GdkPixbuf *src
 	int dest_width
 	int dest_height
 	GdkInterpType interp_type
 
-## FIXME this can return NULL if there's not enough memory; the typemap doesn't
-##       handle that gracefully.
 ##  GdkPixbuf *gdk_pixbuf_composite_color_simple (const GdkPixbuf *src, int dest_width, int dest_height, GdkInterpType interp_type, int overall_alpha, int check_size, guint32 color1, guint32 color2) 
-GdkPixbuf_noinc *
+GdkPixbuf_noinc_ornull *
 gdk_pixbuf_composite_color_simple (src, dest_width, dest_height, interp_type, overall_alpha, check_size, color1, color2)
 	GdkPixbuf *src
 	int dest_width
@@ -804,6 +800,12 @@ gdk_pixbuf_composite_color_simple (src, dest_width, dest_height, interp_type, ov
 	int check_size
 	guint32 color1
 	guint32 color2
+
+#if GTK_CHECK_VERSION (2, 11, 0)
+
+GdkPixbuf_noinc * gdk_pixbuf_apply_embedded_orientation (GdkPixbuf *src);
+
+#endif
 
 
 MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::PixbufAnimation	PREFIX = gdk_pixbuf_animation_

@@ -1,9 +1,9 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.12 2006/08/07 18:36:07 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.17 2007/09/15 14:33:00 kaffeetisch Exp $
 # vim: set ft=perl :
 
 use warnings;
 use strict;
-use Gtk2::TestHelper tests => 123;
+use Gtk2::TestHelper tests => 131;
 
 # we can't instantiate Gtk2::Widget, it's abstract.  use a DrawingArea instead.
 
@@ -392,7 +392,7 @@ SKIP: {
 
 	$widget->queue_resize_no_redraw;
 
-	ok(!$widget->can_activate_accel (23));
+	ok (!$widget->can_activate_accel (23));
 
 	my $label_one = Gtk2::Label->new ("_One");
 	my $label_two = Gtk2::Label->new ("_Two");
@@ -412,6 +412,40 @@ SKIP: {
 
 	$widget->input_shape_combine_mask ($bitmap, 23, 42);
 	$widget->input_shape_combine_mask (undef, 0, 0);
+}
+
+SKIP: {
+	skip "new 2.12 stuff", 8
+		unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+	ok (defined $widget->keynav_failed ('tab-backward'));
+
+	$widget->set_tooltip_window (undef);
+	is ($widget->get_tooltip_window, undef);
+
+	my $window = Gtk2::Window->new;
+	$widget->set_tooltip_window ($window);
+	is ($widget->get_tooltip_window, $window);
+
+	$widget->trigger_tooltip_query;
+
+	$widget->set_tooltip_text ('Bla');
+	is ($widget->get_tooltip_text, 'Bla');
+	$widget->set_tooltip_markup ('Bla');
+	is ($widget->get_tooltip_markup, 'Bla');
+
+	$widget->set_tooltip_text (undef);
+	is ($widget->get_tooltip_text, undef);
+	$widget->set_tooltip_markup (undef);
+	is ($widget->get_tooltip_markup, undef);
+
+	$widget->set_has_tooltip (FALSE);
+	is ($widget->get_has_tooltip, FALSE);
+
+	$widget->error_bell;
+
+	$widget->modify_cursor (Gtk2::Gdk::Color->new (0x0000, 0x0000, 0x0000),
+			        Gtk2::Gdk::Color->new (0xffff, 0xffff, 0xffff));
 }
 
 __END__

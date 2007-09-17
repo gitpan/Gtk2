@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolItem.t,v 1.4 2005/01/09 03:48:40 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolItem.t,v 1.6 2007/09/15 14:33:00 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -73,6 +73,16 @@ SKIP: {
         unless Gtk2->CHECK_VERSION (2, 6, 0);
 
     $tool_item->rebuild_menu;
+}
+
+SKIP: {
+    skip 'new 2.12 stuff', 0
+        unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+    $tool_item->set_tooltip_text ('Bla!');
+    $tool_item->set_tooltip_text (undef);
+    $tool_item->set_tooltip_markup ('<b>Bla!</b>');
+    $tool_item->set_tooltip_markup (undef);
 }
 
 __END__

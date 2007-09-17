@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 53;
+use Gtk2::TestHelper tests => 68;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.12 2005/02/26 16:28:24 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.17 2007/09/15 14:33:00 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Bla");
 my $context = $label -> create_pango_context();
@@ -92,6 +92,9 @@ is_deeply($attribute, {
   is_sentence_end => 0,
   Gtk2::Pango -> CHECK_VERSION(1, 4, 0) ?
     (backspace_deletes_character => 1) :
+    (),
+  Gtk2::Pango -> CHECK_VERSION(1, 18, 0) ?
+    (is_expandable_space => 0) :
     ()
 });
 
@@ -120,29 +123,58 @@ like($height, $number);
 
 like($layout -> get_line_count(), $number);
 
-my $iter = $layout -> get_iter();
-isa_ok($iter, "Gtk2::Pango::LayoutIter");
+{
+  my @lines = $layout -> get_lines();
+  isa_ok($lines[0], "Gtk2::Pango::LayoutLine");
+  is(scalar @lines, $layout -> get_line_count());
 
-foreach ($iter -> get_char_extents(),
-         $iter -> get_cluster_extents(),
-         $iter -> get_run_extents(),
-         $iter -> get_line_extents(),
-         $iter -> get_layout_extents()) {
-  isa_ok($_, "HASH");
+  my $line = $layout -> get_line(0);
+  isa_ok($line, "Gtk2::Pango::LayoutLine");
+
+  my ($outside, $index, $trailing) = $line -> x_to_index(23);
+  ok(defined $outside && defined $index && defined $trailing);
+  ok(defined $line -> index_to_x(0, TRUE));
+
+  my @ranges = $line -> get_x_ranges(0, 8000);
+  isa_ok($ranges[0], "ARRAY");
+  is(scalar @{$ranges[0]}, 2);
+
+  my ($ink, $logical);
+  ($ink, $logical) = $line -> get_extents();
+  isa_ok($ink, "HASH");
+  isa_ok($logical, "HASH");
+  ($ink, $logical) = $line -> get_pixel_extents();
+  isa_ok($ink, "HASH");
+  isa_ok($logical, "HASH");
 }
 
-my ($y0, $y1) = $iter -> get_line_yrange();
-like($y0, $number);
-like($y1, $number);
+{
+  my $iter = $layout -> get_iter();
+  isa_ok($iter, "Gtk2::Pango::LayoutIter");
 
-ok($iter -> next_run());
-ok($iter -> next_char());
-ok($iter -> next_cluster());
-ok(!$iter -> next_line());
-ok($iter -> at_last_line());
+  foreach ($iter -> get_char_extents(),
+           $iter -> get_cluster_extents(),
+           $iter -> get_run_extents(),
+           $iter -> get_line_extents(),
+           $iter -> get_layout_extents()) {
+    isa_ok($_, "HASH");
+  }
 
-like($iter -> get_index(), $number);
-like($iter -> get_baseline(), $number);
+  my ($y0, $y1) = $iter -> get_line_yrange();
+  like($y0, $number);
+  like($y1, $number);
+
+  ok($iter -> next_run());
+  ok($iter -> next_char());
+  ok($iter -> next_cluster());
+  ok(!$iter -> next_line());
+  ok($iter -> at_last_line());
+
+  like($iter -> get_index(), $number);
+  like($iter -> get_baseline(), $number);
+
+  isa_ok($iter -> get_line(), "Gtk2::Pango::LayoutLine");
+}
 
 SKIP: {
   skip("[sg]et_ellipsize are new in 1.6", 1)
@@ -150,6 +182,18 @@ SKIP: {
 
   $layout -> set_ellipsize("end");
   is($layout -> get_ellipsize(), "end");
+}
+
+SKIP: {
+  skip "1.16 stuff", 3
+    unless Gtk2::Pango -> CHECK_VERSION(1, 16, 0);
+
+
+  isa_ok($layout -> get_line_readonly(0), "Gtk2::Pango::LayoutLine");
+  my @lines = $layout -> get_lines_readonly();
+  is(scalar @lines, $layout -> get_line_count());
+  my $iter = $layout -> get_iter();
+  isa_ok($iter -> get_line_readonly(), "Gtk2::Pango::LayoutLine");
 }
 
 __END__

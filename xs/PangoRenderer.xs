@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoRenderer.xs,v 1.1 2005/04/02 17:03:47 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoRenderer.xs,v 1.3 2006/11/19 19:47:53 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -30,8 +30,7 @@ BOOT:
 
 void pango_renderer_draw_layout (PangoRenderer *renderer, PangoLayout *layout, int x, int y);
 
-# FIXME: Need PangoLayoutLine bindings.
-# void pango_renderer_draw_layout_line (PangoRenderer *renderer, PangoLayoutLine *line, int x, int y);
+void pango_renderer_draw_layout_line (PangoRenderer *renderer, PangoLayoutLine *line, int x, int y);
 
 # FIXME: We do have typemaps for PangoGlyphString, but no way to actually get
 #        one.  pango_shape() would be about the only function that returns one,
@@ -52,10 +51,9 @@ void pango_renderer_deactivate (PangoRenderer *renderer);
 
 void pango_renderer_part_changed (PangoRenderer *renderer, PangoRenderPart part);
 
-# FIXME: PangoColor not usable at the moment.  Maybe just bind it as an
-#        anonmous array reference?
-# void pango_renderer_set_color (PangoRenderer *renderer, PangoRenderPart part, const PangoColor_ornull *color);
-# PangoColor_ornull *pango_renderer_get_color (PangoRenderer *renderer, PangoRenderPart part);
+void pango_renderer_set_color (PangoRenderer *renderer, PangoRenderPart part, const PangoColor_ornull *color);
+
+PangoColor_ornull *pango_renderer_get_color (PangoRenderer *renderer, PangoRenderPart part);
 
 void pango_renderer_set_matrix (PangoRenderer *renderer, const PangoMatrix_ornull *matrix);
 

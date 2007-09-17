@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 12;
+use Gtk2::TestHelper tests => 15;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoContext.t,v 1.6 2004/09/13 21:07:34 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoContext.t,v 1.9 2007/06/17 12:55:56 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Bla");
 
@@ -45,6 +45,19 @@ SKIP: {
     unless (Gtk2::Pango -> CHECK_VERSION(1, 6, 0));
 
   isa_ok($context -> get_font_map(), "Gtk2::Pango::FontMap");
+}
+
+SKIP: {
+  skip("new 1.16 stuff", 3)
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 16, 0));
+
+  ok(defined $context -> get_gravity());
+
+  $context -> set_base_gravity("north");
+  is($context -> get_base_gravity(), "north");
+
+  $context -> set_gravity_hint("natural");
+  is($context -> get_gravity_hint(), "natural");
 }
 
 __END__

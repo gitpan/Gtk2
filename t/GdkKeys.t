@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 42;
+use Gtk2::TestHelper tests => 43;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkKeys.t,v 1.6 2004/05/11 17:41:13 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkKeys.t,v 1.8 2007/09/15 14:32:57 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 
@@ -73,6 +73,13 @@ like($entries[0] -> { key } -> { level }, qr/^\d+$/);
 
 ok(defined($map -> get_direction()));
 ok(defined(Gtk2::Gdk::Keymap -> get_direction()));
+
+SKIP: {
+  skip "new 2.12 stuff", 1
+    unless Gtk2 -> CHECK_VERSION(2, 12, 0);
+
+  ok(defined($map -> have_bidi_layouts()));
+}
 
 my $a = $Gtk2::Gdk::Keysyms{ a };
 my $A = $Gtk2::Gdk::Keysyms{ A };

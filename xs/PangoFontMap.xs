@@ -16,15 +16,12 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFontMap.xs,v 1.1 2004/10/20 17:43:01 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFontMap.xs,v 1.2 2007/07/07 17:22:06 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Pango::FontMap	PACKAGE = Gtk2::Pango::FontMap	PREFIX = pango_font_map_
-
-BOOT:
-	gperl_object_set_no_warn_unreg_subclass (PANGO_TYPE_FONT_MAP, TRUE);
 
 ##  PangoFont * pango_font_map_load_font (PangoFontMap *fontmap, PangoContext *context, const PangoFontDescription *desc)
 PangoFont_ornull *

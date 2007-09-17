@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.47 2006/05/20 21:11:47 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.50 2007/09/15 14:33:01 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -443,7 +443,7 @@ gdk_event_copy (event)
 =for apidoc Gtk2::Gdk::Event::set_time
 =for signature $event->set_time ($newtime)
 =for arg ... (hide)
-=for arg newtime (timestamp)
+=for arg newtime (integer) timestamp
 =cut
 
 # we'll doc this one below with get_time
@@ -940,6 +940,16 @@ y (GdkEvent * event, gdouble newvalue=0.0)
 		event->motion.y = newvalue;
     OUTPUT:
 	RETVAL
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+# void gdk_event_request_motions (GdkEventMotion *event);
+void
+request_motions (GdkEvent *event)
+    CODE:
+	gdk_event_request_motions ((GdkEventMotion *) event);
+
+#endif
 
 MODULE = Gtk2::Gdk::Event	PACKAGE = Gtk2::Gdk::Event::Button
 

@@ -16,12 +16,22 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextMark.xs,v 1.4 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextMark.xs,v 1.6 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::TextMark	PACKAGE = Gtk2::TextMark	PREFIX = gtk_text_mark_
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+## GtkTextMark * gtk_text_mark_new (const gchar *name, gboolean left_gravity)
+GtkTextMark_noinc *
+gtk_text_mark_new (class, const gchar_ornull *name, gboolean left_gravity)
+    C_ARGS:
+	name, left_gravity
+
+#endif
 
 ## void gtk_text_mark_set_visible (GtkTextMark *mark, gboolean setting)
 void

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.20 2005/11/12 21:08:01 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.21 2007/07/22 21:50:20 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -279,3 +279,8 @@ gdk_color_blue (color)
     OUTPUT:
     	RETVAL
 
+#if GTK_CHECK_VERSION (2, 11, 0)
+
+gchar_own * gdk_color_to_string (const GdkColor *color);
+
+#endif

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCairo.xs,v 1.4 2006/08/07 18:36:08 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCairo.xs,v 1.5 2006/11/19 19:47:53 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -13,9 +13,6 @@ MODULE = Gtk2::Gdk::Cairo	PACKAGE = Gtk2::Gdk::Cairo::Context	PREFIX = gdk_cairo
 
 BOOT:
 	gperl_set_isa ("Gtk2::Gdk::Cairo::Context", "Cairo::Context");
-	PERL_UNUSED_VAR (file); /* for older gtk+'s. */
-
-#if GTK_CHECK_VERSION (2, 8, 0)
 
 # cairo_t *gdk_cairo_create (GdkDrawable *drawable);
 SV *
@@ -56,8 +53,6 @@ gdk_cairo_rectangle (cairo_t *cr, ...)
 	}
 
 void gdk_cairo_region (cairo_t *cr, GdkRegion *region);
-
-#endif
 
 #if GTK_CHECK_VERSION (2, 10, 0)
 

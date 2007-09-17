@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolbar.t,v 1.8.10.1 2007/08/04 12:24:17 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolbar.t,v 1.9 2007/08/01 18:41:16 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper tests => 52;

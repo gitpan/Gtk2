@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDrawable.xs,v 1.18 2005/04/07 11:05:43 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDrawable.xs,v 1.19 2006/11/19 19:47:53 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -278,15 +278,14 @@ gdk_draw_pixbuf (drawable, gc, pixbuf, src_x, src_y, dest_x, dest_y, width, heig
 ##	gint y
 ##	PangoGlyphString *glyphs
 
- # FIXME need typemap PangoLayoutLine
-## ## void gdk_draw_layout_line (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, PangoLayoutLine *line)
-##void
-##gdk_draw_layout_line (drawable, gc, x, y, line)
-##	GdkDrawable *drawable
-##	GdkGC *gc
-##	gint x
-##	gint y
-##	PangoLayoutLine *line
+ ## void gdk_draw_layout_line (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, PangoLayoutLine *line)
+void
+gdk_draw_layout_line (drawable, gc, x, y, line)
+	GdkDrawable *drawable
+	GdkGC *gc
+	gint x
+	gint y
+	PangoLayoutLine *line
 
  ## void gdk_draw_layout (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, PangoLayout *layout)
 void
@@ -297,17 +296,16 @@ gdk_draw_layout (drawable, gc, x, y, layout)
 	gint y
 	PangoLayout *layout
 
- # FIXME need typemap for PangoLayoutLine
-## ## void gdk_draw_layout_line_with_colors (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, PangoLayoutLine *line, GdkColor *foreground, GdkColor *background)
-##void
-##gdk_draw_layout_line_with_colors (drawable, gc, x, y, line, foreground, background)
-##	GdkDrawable *drawable
-##	GdkGC *gc
-##	gint x
-##	gint y
-##	PangoLayoutLine *line
-##	GdkColor *foreground
-##	GdkColor *background
+ ## void gdk_draw_layout_line_with_colors (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, PangoLayoutLine *line, GdkColor *foreground, GdkColor *background)
+void
+gdk_draw_layout_line_with_colors (drawable, gc, x, y, line, foreground, background)
+	GdkDrawable *drawable
+	GdkGC *gc
+	gint x
+	gint y
+	PangoLayoutLine *line
+	GdkColor *foreground
+	GdkColor *background
 
  ## void gdk_draw_layout_with_colors (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, PangoLayout *layout, GdkColor *foreground, GdkColor *background)
 void

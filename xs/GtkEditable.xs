@@ -12,11 +12,11 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the 
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.14.14.1 2007/03/11 17:54:05 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEditable.xs,v 1.16 2007/07/08 14:49:14 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -59,6 +59,9 @@ gtk2perl_editable_insert_text_marshal (GClosure * closure,
 
 	GPERL_CLOSURE_MARSHAL_PUSH_INSTANCE (param_values);
 
+	/* string and position are cleaned up manually further down, so they
+	 * don't need sv_2mortal. */
+
 	/* new_text */
 	string = newSVGChar (g_value_get_string (param_values+1));
 	XPUSHs (string);
@@ -91,7 +94,7 @@ gtk2perl_editable_insert_text_marshal (GClosure * closure,
 		g_value_set_string ((GValue*)param_values+1, SvPV (sv, len));
 		g_value_set_int ((GValue*)param_values+2, len);
 		PUTBACK;
-		
+
 	} else if (count == 0) {
 		/* returned no values, then refresh string and position
 		 * params from the callback's args, which may have been
@@ -114,7 +117,7 @@ gtk2perl_editable_insert_text_marshal (GClosure * closure,
 	}
 
 	/*
-	 * clean up 
+	 * clean up
 	 */
 	SvREFCNT_dec (string);
 	SvREFCNT_dec (position);
@@ -177,7 +180,7 @@ gtk_editable_insert_text (editable, new_text, ...)
 	} else {
 		croak ("Usage: Gtk2::Editable::insert_text(editable, new_text, position)");
 	}
-		
+
 	gtk_editable_insert_text (editable, new_text,
 				  new_text_length, &position);
 	RETVAL = position;

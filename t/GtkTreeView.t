@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 143;
+use Gtk2::TestHelper tests => 160;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.27 2006/08/07 18:36:07 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.32 2007/09/15 14:33:00 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -117,6 +117,13 @@ SKIP: {
 	$view_column -> queue_resize();
 }
 
+SKIP: {
+	skip('new 2.12 stuff', 1)
+		unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+	is($view_column -> get_tree_view(), undef);
+}
+
 ###############################################################################
 
 my $cell_renderer = Gtk2::CellRendererText -> new();
@@ -189,6 +196,13 @@ $view -> insert_column_with_data_func(1,
 				      "Blub",
 				      Gtk2::CellRendererText -> new(),
 				      sub {});
+
+SKIP: {
+	skip('new 2.12 stuff', 1)
+		unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+	is($view_column_one -> get_tree_view(), $view);
+}
 
 $view -> move_column_after($view_column_one, $view_column_two);
 
@@ -364,13 +378,7 @@ SKIP: {
 	# FIXME: This doesn't actually invoke the handler.
 	$view -> set_search_position_func(sub { warn @_; }, "bla");
 	run_main sub { $view -> signal_emit("start_interactive_search") };
-
 	$view -> set_search_position_func(undef);
-}
-
-SKIP: {
-	skip("new 2.10 stuff", 3)
-		unless Gtk2 -> CHECK_VERSION(2, 9, 2);
 
 	$view -> set_rubber_banding(TRUE);
 	ok($view -> get_rubber_banding());
@@ -380,6 +388,64 @@ SKIP: {
 
 	$view -> set_enable_tree_lines(FALSE);
 	ok(!$view -> get_enable_tree_lines());
+}
+
+SKIP: {
+	skip "new 2.12 stuff", 15
+		unless Gtk2 -> CHECK_VERSION(2, 12, 0);
+
+	$view -> set_show_expanders(TRUE);
+	ok($view -> get_show_expanders());
+
+	$view -> set_level_indentation(23);
+	is($view -> get_level_indentation(), 23);
+
+	is_deeply([$view -> convert_widget_to_tree_coords(0, 0)], [0, 0]);
+	is_deeply([$view -> convert_tree_to_widget_coords(0, 0)], [0, 0]);
+	is_deeply([$view -> convert_widget_to_bin_window_coords(0, 0)], [0, 0]);
+	is_deeply([$view -> convert_bin_window_to_widget_coords(0, 0)], [0, 0]);
+	is_deeply([$view -> convert_tree_to_bin_window_coords(0, 0)], [0, 0]);
+	is_deeply([$view -> convert_bin_window_to_tree_coords(0, 0)], [0, 0]);
+
+        is($view -> is_rubber_banding_active(), FALSE);
+
+	$view -> append_column($view_column);
+
+	my $window = Gtk2::Window->new;
+	$window->set (tooltip_markup => "<b>Bla!</b>");
+
+	$window->signal_connect (query_tooltip => sub {
+		my ($window, $x, $y, $keyboard_mode, $tip) = @_;
+
+		my $path = Gtk2::TreePath -> new_from_indices(0);
+		$view->set_tooltip_row ($tip, $path);
+		$view->set_tooltip_cell ($tip, $path, $view_column, $cell_renderer);
+
+		my ($bx, $by, $model, $tpath, $iter) = $view->get_tooltip_context (0, 0, TRUE);
+		is ($bx, 0);
+		is ($by, 0);
+		isa_ok ($model, 'Gtk2::TreeModel');
+		isa_ok ($tpath, 'Gtk2::TreePath');
+		isa_ok ($iter, 'Gtk2::TreeIter');
+
+		$view->set_tooltip_column (1);
+		is ($view->get_tooltip_column, 1);
+
+		Glib::Idle->add (sub { Gtk2->main_quit; });
+
+		return TRUE;
+	});
+
+	$window->realize;
+
+	my $event = Gtk2::Gdk::Event->new ('motion-notify');
+	$event->window ($window->window);
+	Gtk2->main_do_event ($event);
+	Gtk2->main_do_event ($event);
+
+	Gtk2->main;
+
+	$view -> remove_column($view_column);
 }
 
 ###############################################################################

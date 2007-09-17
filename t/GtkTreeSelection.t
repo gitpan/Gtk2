@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeSelection.t,v 1.7.8.1 2007/03/17 14:58:34 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeSelection.t,v 1.8 2007/03/17 14:54:25 kaffeetisch Exp $
 
 ###############################################################################
 

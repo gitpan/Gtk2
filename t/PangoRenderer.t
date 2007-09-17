@@ -1,11 +1,11 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 3;
+use Gtk2::TestHelper tests => 5;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoRenderer.t,v 1.3 2005/09/05 19:00:29 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoRenderer.t,v 1.5 2006/11/19 19:47:53 kaffeetisch Exp $
 
 SKIP: {
-  skip("PangoRenderer is new in 1.8", 3)
+  skip("PangoRenderer is new in 1.8", 5)
     unless (Gtk2::Pango -> CHECK_VERSION(1, 8, 0));
 
   my $screen = Gtk2::Gdk::Screen -> get_default();
@@ -24,6 +24,7 @@ SKIP: {
 
   my $layout = $window -> create_pango_layout("Bla");
   $renderer -> draw_layout($layout, 0, 0);
+  $renderer -> draw_layout_line($layout -> get_line(0), 0, 0);
 
   $renderer -> draw_rectangle("foreground", 0, 0, 10, 10);
   $renderer -> draw_error_underline(0, 0, 10, 10);
@@ -37,6 +38,12 @@ SKIP: {
 
   $renderer -> draw_glyph($font, 0, 0, 0);
   $renderer -> part_changed("foreground");
+
+  $renderer -> set_color("foreground", undef);
+  is($renderer -> get_color("foreground"), undef);
+
+  $renderer -> set_color("background", [0xaaaa, 0xbbbb, 0xcccc]);
+  is_deeply($renderer -> get_color("background"), [0xaaaa, 0xbbbb, 0xcccc]);
 
   $renderer -> set_matrix(undef);
   is($renderer -> get_matrix(), undef);

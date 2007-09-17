@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 17, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelSort.t,v 1.7.4.2 2007/02/24 14:24:42 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelSort.t,v 1.9 2007/02/24 14:22:02 kaffeetisch Exp $
 
 my $list = Gtk2::ListStore -> new("Glib::Int");
 
@@ -58,5 +58,5 @@ ok ($@, 'new with no args is an error');
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

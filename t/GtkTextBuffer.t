@@ -3,7 +3,7 @@
 use strict;
 use Gtk2::TestHelper tests => 37;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextBuffer.t,v 1.10 2006/08/07 18:36:06 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextBuffer.t,v 1.12 2007/09/15 14:33:00 kaffeetisch Exp $
 
 my $table = Gtk2::TextTagTable -> new();
 
@@ -146,6 +146,15 @@ SKIP: {
 
   isa_ok($buffer -> get('copy-target-list'), 'Gtk2::TargetList');
   isa_ok($buffer -> get('paste-target-list'), 'Gtk2::TargetList');
+}
+
+SKIP: {
+  skip 'new 2.12 stuff', 0
+    unless Gtk2->CHECK_VERSION (2, 12, 0);
+
+  my $mark = Gtk2::TextMark -> new('bla', TRUE);
+  my $iter = $buffer -> get_end_iter();
+  $buffer -> add_mark($mark, $iter);
 }
 
 __END__

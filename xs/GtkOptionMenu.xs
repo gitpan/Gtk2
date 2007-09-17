@@ -16,12 +16,15 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkOptionMenu.xs,v 1.6 2003/10/12 17:57:30 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkOptionMenu.xs,v 1.7 2007/01/06 16:27:53 ebassi Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::OptionMenu	PACKAGE = Gtk2::OptionMenu	PREFIX = gtk_option_menu_
+
+=for deprecated_by Gtk2::ComboBox
+=cut
 
 GtkWidget *
 gtk_option_menu_new (class)

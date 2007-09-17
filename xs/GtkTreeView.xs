@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.40 2006/08/07 18:36:11 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.45 2007/09/15 14:33:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -856,3 +856,54 @@ gboolean gtk_tree_view_get_enable_tree_lines (GtkTreeView *tree_view);
 void gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view, gboolean enabled);
 
 #endif /* 2.10 */
+
+#if GTK_CHECK_VERSION (2, 12, 0)
+
+void gtk_tree_view_set_show_expanders (GtkTreeView *tree_view, gboolean enabled);
+
+gboolean gtk_tree_view_get_show_expanders (GtkTreeView *tree_view);
+
+void gtk_tree_view_set_level_indentation (GtkTreeView *tree_view, gint indentation);
+
+gint gtk_tree_view_get_level_indentation (GtkTreeView *tree_view);
+
+void gtk_tree_view_convert_widget_to_tree_coords (GtkTreeView *tree_view, gint wx, gint wy, OUTLIST gint tx, OUTLIST gint ty);
+
+void gtk_tree_view_convert_tree_to_widget_coords (GtkTreeView *tree_view, gint tx, gint ty, OUTLIST gint wx, OUTLIST gint wy);
+
+void gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view, gint wx, gint wy, OUTLIST gint bx, OUTLIST gint by);
+
+void gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view, gint bx, gint by, OUTLIST gint wx, OUTLIST gint wy);
+
+void gtk_tree_view_convert_tree_to_bin_window_coords (GtkTreeView *tree_view, gint tx, gint ty, OUTLIST gint bx, OUTLIST gint by);
+
+void gtk_tree_view_convert_bin_window_to_tree_coords (GtkTreeView *tree_view, gint bx, gint by, OUTLIST gint tx, OUTLIST gint ty);
+
+gboolean gtk_tree_view_is_rubber_banding_active (GtkTreeView *tree_view);
+
+void gtk_tree_view_set_tooltip_row (GtkTreeView *tree_view, GtkTooltip *tooltip, GtkTreePath *path);
+
+void gtk_tree_view_set_tooltip_cell (GtkTreeView *tree_view, GtkTooltip *tooltip, GtkTreePath *path, GtkTreeViewColumn *column, GtkCellRenderer *cell);
+
+# gboolean gtk_tree_view_get_tooltip_context (GtkTreeView *tree_view, gint *x, gint *y, gboolean keyboard_tip, GtkTreeModel **model, GtkTreePath **path, GtkTreeIter *iter);
+void
+gtk_tree_view_get_tooltip_context (GtkTreeView *tree_view, gint x, gint y, gboolean keyboard_tip)
+    PREINIT:
+	GtkTreeModel *model = NULL;
+	GtkTreePath *path = NULL;
+	GtkTreeIter iter = {0, };
+    PPCODE:
+	if (! gtk_tree_view_get_tooltip_context (tree_view, &x, &y, keyboard_tip, &model, &path, &iter))
+		XSRETURN_EMPTY;
+	EXTEND (sp, 5);
+	PUSHs (sv_2mortal (newSViv (x)));
+	PUSHs (sv_2mortal (newSViv (y)));
+	PUSHs (sv_2mortal (newSVGtkTreeModel (model)));
+	PUSHs (sv_2mortal (newSVGtkTreePath_own (path)));
+	PUSHs (sv_2mortal (newSVGtkTreeIter_copy (&iter)));
+
+void gtk_tree_view_set_tooltip_column (GtkTreeView *tree_view, gint column);
+
+gint gtk_tree_view_get_tooltip_column (GtkTreeView *tree_view);
+
+#endif /* 2.12 */

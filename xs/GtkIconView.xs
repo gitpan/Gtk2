@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconView.xs,v 1.7.6.2 2007/06/25 20:06:49 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconView.xs,v 1.11 2007/07/22 21:47:21 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -257,5 +257,36 @@ gtk_icon_view_get_dest_item_at_pos (icon_view, drag_x, drag_y)
 	PUSHs (sv_2mortal (newSVGtkIconViewDropPosition (pos)));
 
 GdkPixmap_noinc *gtk_icon_view_create_drag_icon (GtkIconView *icon_view, GtkTreePath *path);
+
+#endif /* 2.8.0 */
+
+#if GTK_CHECK_VERSION (2, 11, 0)
+
+void gtk_icon_view_convert_widget_to_bin_window_coords (GtkIconView *icon_view, gint wx, gint wy, OUTLIST gint bx, OUTLIST gint by);
+
+void gtk_icon_view_set_tooltip_item (GtkIconView *icon_view, GtkTooltip *tooltip, GtkTreePath *path);
+
+void gtk_icon_view_set_tooltip_cell (GtkIconView *icon_view, GtkTooltip *tooltip, GtkTreePath *path, GtkCellRenderer *cell);
+
+# gboolean gtk_icon_view_get_tooltip_context (GtkIconView *icon_view, gint *x, gint *y, gboolean keyboard_tip, GtkTreeModel **model, GtkTreePath **path, GtkTreeIter *iter);
+void
+gtk_icon_view_get_tooltip_context (GtkIconView *icon_view, gint x, gint y, gboolean keyboard_tip)
+    PREINIT:
+	GtkTreeModel *model = NULL;
+	GtkTreePath *path = NULL;
+	GtkTreeIter iter = {0, };
+    PPCODE:
+	if (! gtk_icon_view_get_tooltip_context (icon_view, &x, &y, keyboard_tip, &model, &path, &iter))
+		XSRETURN_EMPTY;
+	EXTEND (sp, 5);
+	PUSHs (sv_2mortal (newSViv (x)));
+	PUSHs (sv_2mortal (newSViv (y)));
+	PUSHs (sv_2mortal (newSVGtkTreeModel (model)));
+	PUSHs (sv_2mortal (newSVGtkTreePath_own (path)));
+	PUSHs (sv_2mortal (newSVGtkTreeIter_copy (&iter)));
+
+void gtk_icon_view_set_tooltip_column (GtkIconView *icon_view, gint column);
+
+gint gtk_icon_view_get_tooltip_column (GtkIconView *icon_view);
 
 #endif
