@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.31 2007/09/15 14:33:03 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.31.2.1 2007/10/14 19:46:23 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -494,7 +494,7 @@ pango_layout_get_lines_readonly (layout)
 #endif
 
 ##  PangoLayoutIter *pango_layout_get_iter (PangoLayout *layout)
-PangoLayoutIter *
+PangoLayoutIter_own *
 pango_layout_get_iter (layout)
 	PangoLayout *layout
 

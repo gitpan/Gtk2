@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 20;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDnd.t,v 1.10 2006/09/10 17:26:53 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDnd.t,v 1.10.4.1 2007/10/14 19:46:21 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();
@@ -75,10 +75,11 @@ SKIP: {
   }
 
   is($context -> dest_window(), $destination);
+  my $selection = $context -> get_selection();
   SKIP: {
-    skip "selection test; it seems to fail with Apple's X11", 1
-      if $^O eq 'darwin';
-    isa_ok($context -> get_selection(), "Gtk2::Gdk::Atom");
+    skip "selection test: get_selection returned undef", 1
+      unless defined $selection;
+    isa_ok($selection, "Gtk2::Gdk::Atom");
   }
 
   $context -> status(qw(move), 0);

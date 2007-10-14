@@ -15,10 +15,11 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.133 2007/09/16 17:35:11 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.133.2.1 2007/10/14 19:46:20 kaffeetisch Exp $
 #
 
-use 5.008;
+BEGIN { require 5.008; }
+
 use strict;
 use warnings;
 # use only standard modules here!  any non-standard module, or anything which is
