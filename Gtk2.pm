@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.110.2.1 2007/10/14 19:48:28 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.110.2.3 2007/11/10 13:21:56 kaffeetisch Exp $
 #
 
 package Gtk2;
@@ -35,7 +35,7 @@ eval "use Cairo;";
 
 require DynaLoader;
 
-our $VERSION = '1.161';
+our $VERSION = '1.162';
 
 our @ISA = qw(DynaLoader);
 
@@ -128,7 +128,7 @@ sub _do_connect {
       $flags,
       $handler) = @_;
 
-  my $func = $flags & qw/after/ ? 'signal_connect_after' : 'signal_connect';
+  my $func = ($flags & 'after') ? 'signal_connect_after' : 'signal_connect';
 
   # we get connect_object when we're supposed to call
   # signal_connect_object, which ensures that the data (an object)
