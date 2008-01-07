@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkNotebook.xs,v 1.19 2006/08/07 18:36:10 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkNotebook.xs,v 1.19.4.1 2007/12/16 18:57:31 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -353,7 +353,17 @@ gtk_notebook_set_menu_label_text (notebook, child, menu_text)
 
 ## void gtk_notebook_query_tab_label_packing (GtkNotebook *notebook, GtkWidget *child, gboolean *expand, gboolean *fill, GtkPackType *pack_type)
 void
-gtk_notebook_query_tab_label_packing (GtkNotebook * notebook, GtkWidget * child, OUTLIST gboolean expand, OUTLIST gboolean fill, OUTLIST GtkPackType pack_type)
+gtk_notebook_query_tab_label_packing (GtkNotebook * notebook, GtkWidget * child)
+    PREINIT:
+	gboolean expand;
+	gboolean fill;
+	GtkPackType pack_type;
+    PPCODE:
+	gtk_notebook_query_tab_label_packing (notebook, child, &expand, &fill, &pack_type);
+	EXTEND (SP, 3);
+	PUSHs (sv_2mortal (boolSV (expand)));
+	PUSHs (sv_2mortal (boolSV (fill)));
+	PUSHs (sv_2mortal (newSVGtkPackType (pack_type)));
 
 ## void gtk_notebook_set_tab_label_packing (GtkNotebook *notebook, GtkWidget *child, gboolean expand, gboolean fill, GtkPackType pack_type)
 void

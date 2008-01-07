@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkBox.xs,v 1.4 2003/09/22 00:04:25 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkBox.xs,v 1.4.22.1 2007/12/16 18:57:31 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -73,8 +73,21 @@ gtk_box_reorder_child (box, child, position)
 	GtkWidget *child
 	gint position
 
+# void gtk_box_query_child_packing (GtkBox * box, GtkWidget * child, gboolean &expand, gboolean &fill, guint &padding, GtkPackType &pack_type)
 void
-gtk_box_query_child_packing (GtkBox * box, GtkWidget * child, OUTLIST gboolean expand, OUTLIST gboolean fill, OUTLIST guint padding, OUTLIST GtkPackType pack_type)
+gtk_box_query_child_packing (GtkBox * box, GtkWidget * child)
+    PREINIT:
+	gboolean expand;
+	gboolean fill;
+	guint padding;
+	GtkPackType pack_type;
+    PPCODE:
+	gtk_box_query_child_packing (box, child, &expand, &fill, &padding, &pack_type);
+	EXTEND (SP, 4);
+	PUSHs (sv_2mortal (boolSV (expand)));
+	PUSHs (sv_2mortal (boolSV (fill)));
+	PUSHs (sv_2mortal (newSVuv (padding)));
+	PUSHs (sv_2mortal (newSVGtkPackType (pack_type)));
 
 void
 gtk_box_set_child_packing (box, child, expand, fill, padding, pack_type)

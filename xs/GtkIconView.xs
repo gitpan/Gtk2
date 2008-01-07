@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconView.xs,v 1.11 2007/07/22 21:47:21 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkIconView.xs,v 1.11.2.1 2007/12/16 18:57:31 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -238,7 +238,16 @@ gboolean gtk_icon_view_get_reorderable (GtkIconView *icon_view);
 void gtk_icon_view_set_drag_dest_item (GtkIconView *icon_view, GtkTreePath *path, GtkIconViewDropPosition pos);
 
 ## void gtk_icon_view_get_drag_dest_item (GtkIconView *icon_view, GtkTreePath **path, GtkIconViewDropPosition *pos);
-void gtk_icon_view_get_drag_dest_item (GtkIconView *icon_view, OUTLIST GtkTreePath *path, OUTLIST GtkIconViewDropPosition pos);
+void
+gtk_icon_view_get_drag_dest_item (GtkIconView *icon_view)
+    PREINIT:
+	GtkTreePath *path = NULL;
+	GtkIconViewDropPosition pos;
+    PPCODE:
+	gtk_icon_view_get_drag_dest_item (icon_view, &path, &pos);
+	EXTEND (SP, 2);
+	PUSHs (sv_2mortal (newSVGtkTreePath_own (path)));
+	PUSHs (sv_2mortal (newSVGtkIconViewDropPosition (pos)));
 
 ## gboolean gtk_icon_view_get_dest_item_at_pos (GtkIconView *icon_view, gint drag_x, gint drag_y, GtkTreePath **path, GtkIconViewDropPosition *pos);
 void

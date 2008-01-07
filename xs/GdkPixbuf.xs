@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.42 2007/08/13 19:10:55 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.42.2.1 2008/01/07 20:49:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -954,6 +954,13 @@ gdk_pixbuf_get_formats (class=NULL)
 #if GTK_CHECK_VERSION(2,4,0)
 
 ###  GdkPixbufFormat *gdk_pixbuf_get_file_info (const gchar *filename, gint *width, gint *height)
+=for apidoc
+=for signature (format, width, height) = $pixbuf->get_file_info ($filename)
+
+Parses enough of I<$filename> to determine and return the format and size.
+If the format is unknown or the file can't be opened, returns an empty list.
+
+=cut
 void gdk_pixbuf_get_file_info (class, filename)
 	GPerlFilename filename
     PREINIT:

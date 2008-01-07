@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.10 2007/09/15 14:33:03 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.10.2.1 2007/12/30 15:06:24 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -20,8 +20,8 @@ gtk2perl_pango_cairo_shape_renderer_func (cairo_t        *cr,
 					  gboolean        do_path,
 					  gpointer        data)
 {
-	dGPERL_CALLBACK_MARSHAL_SP;
 	GPerlCallback *callback = (GPerlCallback *) data;
+	dGPERL_CALLBACK_MARSHAL_SP;
 
 	GPERL_CALLBACK_MARSHAL_INIT (callback);
 

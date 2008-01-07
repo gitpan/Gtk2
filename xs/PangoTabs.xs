@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTabs.xs,v 1.10 2004/02/18 20:17:31 rwmcfa1 Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTabs.xs,v 1.10.16.1 2007/12/16 18:57:32 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -66,7 +66,16 @@ pango_tab_array_set_tab (tab_array, tab_index, alignment, location)
 	gint location
 
 ##  void pango_tab_array_get_tab (PangoTabArray *tab_array, gint tab_index, PangoTabAlign *alignment, gint *location) 
-void pango_tab_array_get_tab (PangoTabArray *tab_array, gint tab_index, OUTLIST PangoTabAlign alignment, OUTLIST gint location) 
+void
+pango_tab_array_get_tab (PangoTabArray *tab_array, gint tab_index) 
+    PREINIT:
+	PangoTabAlign alignment;
+	gint location;
+    PPCODE:
+	pango_tab_array_get_tab (tab_array, tab_index, &alignment, &location);
+	EXTEND (SP, 2);
+	PUSHs (sv_2mortal (newSVPangoTabAlign (alignment)));
+	PUSHs (sv_2mortal (newSViv (location)));
 
 ##  void pango_tab_array_get_tabs (PangoTabArray *tab_array, PangoTabAlign **alignments, gint **locations) 
 =for apidoc

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.19 2006/08/07 18:36:10 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.19.4.1 2007/12/16 18:57:31 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -73,10 +73,10 @@ MODULE = Gtk2::MessageDialog	PACKAGE = Gtk2::MessageDialog	PREFIX = gtk_message_
              }
              $self->destroy;
   });
-
-
+  $dialog->show_all;
 
 =cut
+
 
 =for position DESCRIPTION
 
@@ -92,7 +92,6 @@ consistent look and feel for your application.
 The easiest way to do a modal message dialog is to use C<< $dialog->run >>, which
 automatically makes your dialog modal and waits for the user to respond to it.
 You can also pass in the GTK_DIALOG_MODAL flag when creating the MessageDialog.
-
 
 =cut
 
