@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.110.2.4 2008/01/07 21:09:55 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.110.2.6 2008/01/09 21:08:55 kaffeetisch Exp $
 #
 
 package Gtk2;
@@ -29,13 +29,14 @@ use warnings;
 
 use Glib;
 
-# if the gtk+ we've been compiled against is at least as new as 2.8.0, we need
-# to import the Cairo module for the cairo glue in gtk+ and pango.
+# if the gtk+ we've been compiled against is at 2.8.0 or newer or if pango is
+# at 1.10.0 or newer, we need to import the Cairo module for the cairo glue in
+# gtk+ and pango.
 eval "use Cairo;";
 
 require DynaLoader;
 
-our $VERSION = '1.163';
+our $VERSION = '1.164';
 
 our @ISA = qw(DynaLoader);
 

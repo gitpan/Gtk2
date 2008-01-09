@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.31.2.1 2007/10/14 19:46:23 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.31.2.2 2008/01/08 20:03:25 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -513,7 +513,18 @@ int pango_layout_get_unknown_glyphs_count (PangoLayout *layout);
 MODULE = Gtk2::Pango::Layout	PACKAGE = Gtk2::Pango::LayoutLine	PREFIX = pango_layout_line_
 
 ##  gboolean pango_layout_line_x_to_index (PangoLayoutLine *line, int x_pos, int *index_, int *trailing)
-gboolean pango_layout_line_x_to_index (PangoLayoutLine *line, int x_pos, OUTLIST int index_, OUTLIST int trailing);
+void
+pango_layout_line_x_to_index (PangoLayoutLine *line, int x_pos)
+    PREINIT:
+	gboolean retval;
+	int index_;
+	int trailing;
+    PPCODE:
+	retval = pango_layout_line_x_to_index (line, x_pos, &index_, &trailing);
+	EXTEND (SP, 3);
+	PUSHs (sv_2mortal (boolSV (retval)));
+	PUSHs (sv_2mortal (newSViv (index_)));
+	PUSHs (sv_2mortal (newSViv (trailing)));
 
 ##  void pango_layout_line_index_to_x (PangoLayoutLine *line, int index_, gboolean trailing, int *x_pos)
 void pango_layout_line_index_to_x (PangoLayoutLine *line, int index_, gboolean trailing, OUTLIST int x_pos);
