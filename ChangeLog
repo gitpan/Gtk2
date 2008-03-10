@@ -1,12 +1,99 @@
+2008-03-10  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* Makefile.PL
+	* NEWS
+	* README
+	* copyright.pod: Stable release 1.180.
+
+2008-03-10  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkBuildable.t
+	* t/GtkBuilder.t
+	* t/GtkRecentAction.t
+	* t/GtkScaleButton.t
+	* t/GtkTooltip.t
+	* t/GtkVolumeButton.t
+	* t/PangoLayout.t
+	* t/PangoRenderer.t
+	* xs/GtkAboutDialog.xs
+	* xs/GtkBuildable.xs
+	* xs/PangoLayout.xs
+	* xs/PangoRenderer.xs: Make version checks refer to stable
+	releases.
+
+2008-02-24  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkTreeView.t: Fix remaining test failures.  (Patch by
+	Marc 'HE' Brockschmidt)
+
+2008-02-12  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* Makefile.PL
+	* NEWS
+	* README: Unstable release 1.173.
+
+2008-02-11  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GdkProperty.t
+	* t/GdkVisual.t
+	* t/GtkClipboard.t
+	* t/GtkTreeView.t: Fix test failures.
+
+2008-02-09  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/PangoLayout.t
+	* xs/PangoLayout.xs: Wrap pango_layout_set_height and
+	pango_layout_get_height.
+
+	* xs/PangoTypes.xs (Gtk2::Pango::extents_to_pixel): Change the
+	names of the arguments from "ink_rect, logical_rect" to
+	"inclusive, nearest" as suggested by upstream.
+
+2008-01-19  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/PangoLayout.t
+	* xs/PangoLayout.xs: Wrap pango_layout_iter_get_layout and make
+	use of pango_layout_iter_copy if available.
+
+	* t/PangoRenderer.t
+	* xs/PangoRenderer.xs: Wrap pango_renderer_get_layout and
+	pango_renderer_get_layout_line.
+
+	* t/GtkTreeView.t: Hopefully fix some test failures involving a
+	wrong number of tests run by having every callback with tests run
+	only once.
+
+2008-01-14  muppetman
+
+	* xs/GdkPixbuf.xs
+	* t/GdkPixbuf.t:  Add a NULL terminator to keep GdkPixbuf from
+	crashing on incomplete xpm data.  Add unit tests.  Patch from
+	Kevin Ryde.
+
+2008-01-12  muppetman
+
+	* xs/GdkRegion.xs
+	* t/GdkRegion.t:  Return copy of stack rectangle instead of just
+	a pointer, to avoid garbage values from get_clipbox().  Patch from
+	Kevin Ryde.
+
+	* xs/GtkStatusIcon.xs
+	* t/GtkStatusIcon.t:  Fix similar stack copy bug.
+
+2008-01-11  muppetman
+
+	* xs/GtkCellLayout.xs:  Fix usage message bug reported by Kevin Ryde.
+
 2008-01-09  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Gtk2.pm
+	* Makefile.PL
 	* NEWS
-	* README: Stable release 1.164.
+	* README: Unstable release 1.172.
 
 2008-01-09  Torsten Schoenfeld  <kaffeetisch@gmx.de>
-
-	Merge from HEAD:
 
 	* t/GdkVisual.t
 	* t/GdkX11.t
@@ -14,12 +101,26 @@
 	less conservative in what we expect or by simply testing less of
 	gtk+ itself.
 
-	* t/GdkCairo.t: Improve skip message on GdkCairo.t; don't claim
+2008-01-09  muppetman
+
+	* MANIFEST
+	* t/GtkBuildableIface.t
+	* xs/GtkBuildable.xs:  Allow perl code to implement GtkBuildableIface.
+
+	Lots of documentation.  Hide docs for the normal GtkBuildable
+	methods, as they are really only useful for GtkBuilder to call.
+	Add a new unit test for the iface stuff.
+
+	This change requires the deferral of class instantiation in
+	Glib::Type::register_object() if you are going to implement the
+	interface on a class derived from a class that already implements
+	that interface (e.g., if you want to implement Buildable on a
+	Widget).
+
+	* t/GdkCairo.t:  Improve skip message on GdkCairo.t; don't claim
 	Cairo is missing when the problem is actually an empty DISPLAY.
 
 2008-01-08  Torsten Schoenfeld  <kaffeetisch@gmx.de>
-
-	Merge from HEAD:
 
 	* xs/PangoLayout.xs: Work around what appears to be a bug in
 	ExtUtils::ParseXS' xsubpp (used by default in perl 5.10.0) for the
@@ -33,18 +134,114 @@
 	implies a new gtk+, but that's not necessarily the case.  So check
 	both independently and require Cairo if either is new enough.
 
-	* Makefile.PL
-	* README: Require Glib 1.163.
+2008-01-07  muppetman
 
-2008-01-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+	* examples/simplelist.pl:  Add a button to toggle reorderable columns.
 
+	* t/GdkDrawable.t:  Wait until the drawable is onscreen before
+	attempting to draw to it.  This fixes test failures related to
+	sync issues with some X servers.
+
+	* t/GtkTreeView.t:  Avoid an assertion failure in gtk+ by making
+	sure there's a node visible when testing get_visible_range().
+
+	* xs/GtkContainer.xs
+	* t/02.GtkContainer.t:  Bind, test, and document
+	gtk_container_forall().
+
+	* xs/GtkAssistant.xs
+	* t/GtkAssistant.t:  Bind and test accessors for the cancel,
+	forward, back, apply, close, and last buttons that live only
+	as public members of struct _GtkAssistant.  To avoid confusing
+	API with accessors that look like actions, these accessors
+	take the form $assistant->get_foo_button().
+
+	* xs/GtkCellLayout.xs
+	* t/GtkCellLayout.t:  Allow and test passing undef to clear the
+	cell layout's cell data func.
+
+	* xs/GtkCellLayout.xs
+	* t/GtkCellLayout.t:  Honor the semantics of set_attributes()
+	and clear all previous attributes.  Also allow passing an empty
+	key/val pair list.
+
+	* xs/GtkCellLayout.xs
+	* t/GtkCellLayoutIface.t
 	* Gtk2.pm
-	* NEWS
-	* README: Stable release 1.163.
+	* MANIFEST:  Allow perl code to implement GtkCellLayoutIface.
+	Includes a major doc update for Gtk2::CellLayout.
 
 2008-01-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
-	Merge from HEAD:
+	* CodeGen.pm
+	* gtk2perl.h
+	* xs/GdkEvent.xs
+	* xs/GdkGC.xs
+	* xs/GdkKeys.xs
+	* xs/GdkPixbuf.xs
+	* xs/GdkRegion.xs
+	* xs/GdkRgb.xs
+	* xs/GdkTypes.xs
+	* xs/GdkWindow.xs
+	* xs/GtkActionGroup.xs
+	* xs/GtkCellRenderer.xs
+	* xs/GtkEntry.xs
+	* xs/GtkFileFilter.xs
+	* xs/GtkIconTheme.xs
+	* xs/GtkItemFactory.xs
+	* xs/GtkLinkButton.xs
+	* xs/GtkMenu.xs
+	* xs/GtkMessageDialog.xs
+	* xs/GtkNotebook.xs
+	* xs/GtkRadioAction.xs
+	* xs/GtkRadioButton.xs
+	* xs/GtkRadioMenuItem.xs
+	* xs/GtkRadioToolButton.xs
+	* xs/GtkRc.xs
+	* xs/GtkRecentFilter.xs
+	* xs/GtkRecentManager.xs
+	* xs/GtkSelection.xs
+	* xs/GtkStock.xs
+	* xs/GtkTextBufferRichText.xs
+	* xs/GtkToolbar.xs
+	* xs/GtkTooltips.xs
+	* xs/GtkTreeModel.xs
+	* xs/GtkTreeModelFilter.xs
+	* xs/GtkTreeSelection.xs
+	* xs/GtkTreeSortable.xs
+	* xs/GtkTreeView.xs
+	* xs/GtkWindow.xs
+	* xs/PangoAttributes.xs
+	* xs/PangoCairo.xs
+	* xs/PangoLayout.xs: gperl_sv_defined was renamed to
+	gperl_sv_is_defined -- adjust callers.
+
+	* xs/GdkGC.xs
+	* xs/GdkKeys.xs
+	* xs/GdkRegion.xs
+	* xs/GdkRgb.xs
+	* xs/GdkTypes.xs
+	* xs/GdkWindow.xs
+	* xs/GtkActionGroup.xs
+	* xs/GtkEntry.xs
+	* xs/GtkFileFilter.xs
+	* xs/GtkIconTheme.xs
+	* xs/GtkItemFactory.xs
+	* xs/GtkRadioAction.xs
+	* xs/GtkRadioButton.xs
+	* xs/GtkRadioMenuItem.xs
+	* xs/GtkRadioToolButton.xs
+	* xs/GtkRecentFilter.xs
+	* xs/GtkRecentManager.xs
+	* xs/GtkSelection.xs
+	* xs/GtkStock.xs
+	* xs/GtkTreeModel.xs
+	* xs/GtkTreeModelFilter.xs
+	* xs/PangoAttributes.xs
+	* xs/PangoLayout.xs: Use the new macros gperl_sv_is_array_ref and
+	gperl_sv_is_hash_ref.
+
+2008-01-01  muppetman
 
 	* xs/GtkWidget.xs:  Doc fixes; the docs on
 	gtk_widget_get_size_request() actually belonged on
@@ -59,34 +256,18 @@
 
 2007-12-30  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
-	Merge from HEAD:
-
 	* xs/PangoCairo.xs (gtk2perl_pango_cairo_shape_renderer_func): Put
 	dGPERL_CALLBACK_MARSHAL_SP at the end of the list of declarations
 	to avoid a compilation failure on Win32.
 
 2007-12-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
-	Merge from HEAD:
+	* Gtk2.pm
+	* Makefile.PL
+	* NEWS
+	* README: Unstable release 1.171.
 
-	* t/GtkIconTheme.t (list_contexts test): Fix test failure.
-
-	* tools/genkeysyms.pl: Fix the SYNOPSIS example (from Debian
-	bug #422223).
-
-	* tools/genkeysyms.pl: Mention Gtk2::Gdk->keyval_from_name in the
-	DESCRIPTION section of Gtk2::Gdk::Keysyms, as suggested by Kevin
-	Ryde.
-
-	* xs/Gtk2.xs: gtk_check_version's return value recently acquired a
-	const, so add some casting to hush compiler warnings.
-
-	* xs/GtkMessageDialog.xs (SYNOPSIS): Add a show_all() call to the
-	non-modal dialog example.  (Spotted by Dave Howorth)
-
-	* xs/GtkTreeModel.xs (POD section DESCRIPTION): Include additional
-	information provided by Dave Howorth about the lifetime of
-	iterators.
+2007-12-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* xs/GdkDisplay.xs
 	* xs/GdkWindow.xs
@@ -107,55 +288,145 @@
 	gtk_scrolled_window_get_policy, pango_tab_array_get_tab.  (Fixes
 	bug #498334, reported by Quentin Sculo)
 
+	* CodeGen.pm
+	* gtk2perl.h
+	* xs/GdkEvent.xs
+	* xs/GdkGC.xs
+	* xs/GdkKeys.xs
+	* xs/GdkPixbuf.xs
+	* xs/GdkRegion.xs
+	* xs/GdkRgb.xs
+	* xs/GdkTypes.xs
+	* xs/GdkWindow.xs
+	* xs/GtkActionGroup.xs
+	* xs/GtkCellRenderer.xs
+	* xs/GtkEntry.xs
+	* xs/GtkFileFilter.xs
+	* xs/GtkIconTheme.xs
+	* xs/GtkItemFactory.xs
+	* xs/GtkLinkButton.xs
+	* xs/GtkMenu.xs
+	* xs/GtkMessageDialog.xs
+	* xs/GtkNotebook.xs
+	* xs/GtkRadioAction.xs
+	* xs/GtkRadioButton.xs
+	* xs/GtkRadioMenuItem.xs
+	* xs/GtkRadioToolButton.xs
+	* xs/GtkRc.xs
+	* xs/GtkRecentFilter.xs
+	* xs/GtkRecentManager.xs
+	* xs/GtkSelection.xs
+	* xs/GtkStock.xs
+	* xs/GtkTextBufferRichText.xs
+	* xs/GtkToolbar.xs
+	* xs/GtkTooltips.xs
+	* xs/GtkTreeModel.xs
+	* xs/GtkTreeModelFilter.xs
+	* xs/GtkTreeSelection.xs
+	* xs/GtkTreeSortable.xs
+	* xs/GtkTreeView.xs
+	* xs/GtkWindow.xs
+	* xs/PangoAttributes.xs
+	* xs/PangoCairo.xs
+	* xs/PangoLayout.xs: Use gperl_sv_defined instead of SvOK to check
+	for definedness.
+
+2007-12-09  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/Gtk2.xs: gtk_check_version's return value recently acquired a
+	const, so add some casting to hush compiler warnings.
+
+	* xs/GdkColor.xs: Make Gtk2::Gdk::Color::new take an optional
+	pixel value.  (Patch from Kevin Ryde)
+
 2007-12-08  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
-	Merge from HEAD:
-
 	* xs/GtkDialog.xs: Correct the response id mentioned in the docs
-	on delete-event.  (Patch by Kevin Ryde)
+	on delete-event.  (Patch from Kevin Ryde)
 
 	* AUTHORS: Add Kevin.
 
-2007-11-10  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+2007-11-18  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
-	* Gtk2.pm
-	* NEWS
-	* README: Stable release 1.162.
+	* tools/genkeysyms.pl: Mention Gtk2::Gdk->keyval_from_name in the
+	DESCRIPTION section of Gtk2::Gdk::Keysyms, as suggested by Kevin
+	Ryde.
+
+	* xs/GtkTreeModel.xs (POD section DESCRIPTION): Include additional
+	information provided by Dave Howorth about the lifetime of
+	iterators.
+
+2007-04-15  muppetman
+
+	* xs/GtkIMContext.xs
+	* xs/GtkIMContextSimple.xs
+	* xs/GtkIMMulticontext.xs
+	* t/GtkIMContext.t
+	* MANIFEST
+	* xs_files-2.0: Bindings for GtkIMContext, GtkIMContextSimple, and
+	GtkIMMulticontext, with tests.  gtk_im_context_simple_add_table is
+	not bound; it's unclear as to whether it's actually useful, and i
+	don't have a way to test it.
 
 2007-10-30  Torsten Schoenfeld  <kaffeetisch@gmx.de>
-
-	Merge from HEAD:
 
 	* Gtk2.pm (Gtk2::Builder::_do_connect): Don't use the qw//
 	operator to qoute a flag value as it seems to cause parse failures
 	on some perls.
 
-2007-10-14  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+2007-10-29  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Gtk2.pm
+	* Makefile.PL
 	* NEWS
-	* README: Stable release 1.161.
+	* README: Unstable release 1.170.
+
+2007-10-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkMessageDialog.xs (SYNOPSIS): Add a show_all() call to the
+	non-modal dialog example.  (Spotted by Dave Howorth)
+
+2007-10-21  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkIconTheme.t (list_contexts test): Fix test failure.
+
+2007-10-16  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* tools/genkeysyms.pl: Fix the SYNOPSIS example (from Debian
+	bug #422223).
 
 2007-10-14  Torsten Schoenfeld  <kaffeetisch@gmx.de>
-
-	Merge from HEAD:
 
 	* Makefile.PL: Use BEGIN { require 5.008; } instead of use 5.008;
 	so automatic CPAN testers know which perl version we need.
 
-	* t/GdkDnd.t: Handle get_selection() returning undef.
+2007-10-08  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* t/GtkPaned.t: Use SKIP instead of TODO for the unreliable resize
 	verification tests.  TODOs that pass look like failures.
+
+2007-10-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GdkDnd.t: Handle get_selection() returning undef.
+
+	* Makefile.PL: Tell EU::MM to put correct configure_requires and
+	no_index information into the generated META.yml file.
+
+2007-10-03  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/PangoLayout.xs: Fix leak in
+	Gtk2::Pango::Layout::get_iter.  (Reported by Quentin Sculo in
+	#482795)
+
+2007-09-24	kaffeetisch
+
+	* Makefile.PL: Prettify build output by summarizing what is done
+	instead of printing executed command lines.
 
 	* tools/genkeysyms.pl
 	* tools/podifyenums.pl: Don't put timestamps into generated files
 	so they don't get installed every single time even though there
 	are no real changes.
-
-	* xs/PangoLayout.xs: Fix leak in
-	Gtk2::Pango::Layout::get_iter.  (Reported by Quentin Sculo in
-	#482795)
 
 2007-09-16	kaffeetisch
 

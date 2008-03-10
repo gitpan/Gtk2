@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileFilter.xs,v 1.7 2005/01/30 02:17:30 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileFilter.xs,v 1.10 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -55,7 +55,7 @@ SvGtkFileFilterInfo (SV * sv)
 	SV ** svp;
 	GtkFileFilterInfo * info;
 
-	if (!sv || !SvOK (sv) || !SvROK (sv) || SvTYPE (SvRV (sv)) != SVt_PVHV)
+	if (!gperl_sv_is_hash_ref (sv))
 		croak ("invalid file filter info - expecting a hash reference");
 
 	hv = (HV*) SvRV (sv);

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRecentFilter.xs,v 1.4 2006/07/12 09:36:49 ebassi Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRecentFilter.xs,v 1.7 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -66,7 +66,7 @@ SvGtkRecentFilterInfo (SV *sv)
   SV **svp;
   GtkRecentFilterInfo *info;
 
-  if (!sv || !SvOK (sv) || !SvROK (sv) || SvTYPE (SvRV (sv)) != SVt_PVHV)
+  if (!gperl_sv_is_hash_ref (sv))
     croak ("invalid recent filter info - expecting a hash reference");
 
   hv = (HV *) SvRV (sv);

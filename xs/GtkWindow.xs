@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.42 2007/09/15 14:33:02 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.44 2008/01/07 19:54:50 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -209,7 +209,7 @@ gtk_window_set_geometry_hints (window, geometry_widget, geometry_ref, geom_mask_
 	GdkGeometry *geometry;
 	GdkWindowHints geom_mask;
     CODE:
-	if (! (geom_mask_sv && SvOK (geom_mask_sv))) {
+	if (!gperl_sv_is_defined (geom_mask_sv)) {
 		geometry = SvGdkGeometryReal (geometry_ref, &geom_mask);
 	} else {
 		geometry = SvGdkGeometry (geometry_ref);

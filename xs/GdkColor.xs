@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.21 2007/07/22 21:50:20 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkColor.xs,v 1.22 2007/12/09 14:56:51 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -186,19 +186,18 @@ saturation.  If you are used to dealing with colors on the range of 0 to
 =cut
 
 GdkColor_own *
-gdk_color_new (class, red, green, blue)
+gdk_color_new (class, red, green, blue, pixel=0)
 	guint16 red
 	guint16 green
 	guint16 blue
+	guint32 pixel
     PREINIT:
 	GdkColor c;
     CODE:
-	/* pixel==0 for unallocated color is not enforced by gdk, but
-	 * doing this hushes valgrind about using uninitialized values. */
-	c.pixel = 0;
 	c.red = red;
 	c.green = green;
 	c.blue = blue;
+	c.pixel = pixel;
 	RETVAL = gdk_color_copy (&c);
     OUTPUT:
 	RETVAL

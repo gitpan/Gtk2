@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRegion.xs,v 1.7 2006/02/05 04:29:01 pcg Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRegion.xs,v 1.11 2008/01/12 20:52:19 muppetman Exp $
  */
 #include "gtk2perl.h"
 #include "gperl_marshal.h"
@@ -84,7 +84,7 @@ gdk_region_polygon (class, points_ref, fill_rule)
 	AV *array;
 	SV **value;
     CODE:
-	if (! (SvRV (points_ref) && SvTYPE (SvRV (points_ref)) == SVt_PVAV))
+	if (!gperl_sv_is_array_ref (points_ref))
 		croak ("point list has to be a reference to an array");
 
 	array = (AV *) SvRV (points_ref);
@@ -92,9 +92,9 @@ gdk_region_polygon (class, points_ref, fill_rule)
 	points = g_new0 (GdkPoint, npoints);
 
 	for (i = 0; i < npoints; i++) {
-		if ((value = av_fetch (array, 2*i, 0)) && SvOK (*value))
+		if ((value = av_fetch (array, 2*i, 0)) && gperl_sv_is_defined (*value))
 			points[i].x = SvIV (*value);
-		if ((value = av_fetch (array, 2*i + 1, 0)) && SvOK (*value))
+		if ((value = av_fetch (array, 2*i + 1, 0)) && gperl_sv_is_defined (*value))
 			points[i].y = SvIV (*value);
 	}
 
@@ -116,7 +116,7 @@ gdk_region_rectangle (class, rectangle)
 ##  void gdk_region_destroy (GdkRegion *region) 
 
 ##  void gdk_region_get_clipbox (GdkRegion *region, GdkRectangle *rectangle) 
-GdkRectangle *
+GdkRectangle_copy *
 gdk_region_get_clipbox (region)
 	GdkRegion *region
     PREINIT:
@@ -229,7 +229,7 @@ gdk_region_spans_intersect_foreach (region, spans_ref, sorted, func, data=NULL)
 	SV **value;
 	GPerlCallback * callback;
     CODE:
-	if (! (SvRV (spans_ref) && SvTYPE (SvRV (spans_ref)) == SVt_PVAV))
+	if (!gperl_sv_is_array_ref (spans_ref))
 		croak ("span list has to be a reference to an array of GdkPoint's");
 
 	array = (AV *) SvRV (spans_ref);
@@ -237,11 +237,11 @@ gdk_region_spans_intersect_foreach (region, spans_ref, sorted, func, data=NULL)
 	spans = g_new0 (GdkSpan, n_spans);
 
 	for (i = 0; i < n_spans; i++) {
-		if ((value = av_fetch (array, 3*i, 0)) && SvOK (*value))
+		if ((value = av_fetch (array, 3*i, 0)) && gperl_sv_is_defined (*value))
 			spans[i].x = SvIV (*value);
-		if ((value = av_fetch (array, 3*i + 1, 0)) && SvOK (*value))
+		if ((value = av_fetch (array, 3*i + 1, 0)) && gperl_sv_is_defined (*value))
 			spans[i].y = SvIV (*value);
-		if ((value = av_fetch (array, 3*i + 2, 0)) && SvOK (*value))
+		if ((value = av_fetch (array, 3*i + 2, 0)) && gperl_sv_is_defined (*value))
 			spans[i].width = SvIV (*value);
 	}
 

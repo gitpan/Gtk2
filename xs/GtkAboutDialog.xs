@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.14 2007/09/15 14:33:02 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.15 2008/03/10 20:54:37 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -89,7 +89,7 @@ void gtk_show_about_dialog (class, GtkWindow_ornull * parent, first_property_nam
 
 			/* Evil swizzling for #345822 */
 			if (gtk_major_version > 2 ||
-			    (gtk_major_version == 2 && gtk_minor_version >= 11)) /* FIXME: 2.12 */
+			    (gtk_major_version == 2 && gtk_minor_version >= 12))
 			{
 				/* map name to program-name. */
 				if (strEQ (name, "name")) {

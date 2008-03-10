@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 68;
+use Gtk2::TestHelper tests => 71;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.17 2007/09/15 14:33:00 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.20 2008/03/10 20:54:36 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Bla");
 my $context = $label -> create_pango_context();
@@ -188,12 +188,28 @@ SKIP: {
   skip "1.16 stuff", 3
     unless Gtk2::Pango -> CHECK_VERSION(1, 16, 0);
 
-
   isa_ok($layout -> get_line_readonly(0), "Gtk2::Pango::LayoutLine");
   my @lines = $layout -> get_lines_readonly();
   is(scalar @lines, $layout -> get_line_count());
   my $iter = $layout -> get_iter();
   isa_ok($iter -> get_line_readonly(), "Gtk2::Pango::LayoutLine");
+}
+
+SKIP: {
+  skip 'new 1.20 stuff', 2
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 20, 0));
+
+  my $iter = $layout -> get_iter();
+  is($iter -> get_layout(), $layout);
+  isa_ok($iter -> copy(), 'Gtk2::Pango::LayoutIter');
+}
+
+SKIP: {
+  skip 'new 1.20 stuff', 1
+    unless (Gtk2::Pango -> CHECK_VERSION(1, 20, 0));
+
+  $layout -> set_height(23);
+  is($layout -> get_height(), 23);
 }
 
 __END__

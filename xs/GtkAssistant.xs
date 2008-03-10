@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAssistant.xs,v 1.1 2006/04/23 16:11:57 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAssistant.xs,v 1.2 2008/01/08 04:52:55 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -67,6 +67,30 @@ MODULE = Gtk2::Assistant	PACKAGE = Gtk2::Assistant	PREFIX = gtk_assistant_
 ##  /*< private >*/
 ##  GtkAssistantPrivate *priv;
 ##};
+GtkWidget_ornull *
+get_cancel_button (GtkAssistant * assistant)
+    ALIAS:
+	get_forward_button = 1
+	get_back_button = 2
+	get_apply_button = 3
+	get_close_button = 4
+	get_last_button = 5
+    CODE:
+	switch (ix) {
+	    case 0:	RETVAL = assistant->cancel;	break;
+	    case 1:	RETVAL = assistant->forward;	break;
+	    case 2:	RETVAL = assistant->back;	break;
+	    case 3:	RETVAL = assistant->apply;	break;
+	    case 4:	RETVAL = assistant->close;	break;
+	    case 5:	RETVAL = assistant->last;	break;
+
+	    default:
+		RETVAL = NULL;
+		g_assert_not_reached ();
+	}
+    OUTPUT:
+	RETVAL
+
 
 GtkWidget * gtk_assistant_new (class);
     C_ARGS:

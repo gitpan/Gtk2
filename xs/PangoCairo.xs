@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.10.2.1 2007/12/30 15:06:24 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.13 2008/01/07 19:54:50 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -200,7 +200,7 @@ pango_cairo_context_set_shape_renderer (PangoContext *context, SV *func=NULL, SV
 	GPerlCallback *callback;
 	GDestroyNotify dnotify;
     CODE:
-	if (func && SvOK (func)) {
+	if (gperl_sv_is_defined (func)) {
 		callback = gperl_callback_new (func, data, 0, NULL, 0);
 		dnotify = (GDestroyNotify) gperl_callback_destroy;
 	} else {

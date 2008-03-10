@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTypes.xs,v 1.10 2007/06/17 12:55:58 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoTypes.xs,v 1.11 2008/02/09 20:13:18 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -52,14 +52,14 @@ double pango_units_to_double (int i);
 
 =for apidoc __function__
 =cut
-##  void pango_extents_to_pixels (PangoRectangle *ink_rect, PangoRectangle *logical_rect)
+##  void pango_extents_to_pixels (PangoRectangle *inclusive, PangoRectangle *nearest)
 void
-pango_extents_to_pixels (PangoRectangle *ink_rect, PangoRectangle *logical_rect)
+pango_extents_to_pixels (PangoRectangle *inclusive, PangoRectangle *nearest)
     PPCODE:
-	pango_extents_to_pixels (ink_rect, logical_rect);
+	pango_extents_to_pixels (inclusive, nearest);
 	EXTEND (SP, 2);
-	PUSHs (sv_2mortal (newSVPangoRectangle (ink_rect)));
-	PUSHs (sv_2mortal (newSVPangoRectangle (logical_rect)));
+	PUSHs (sv_2mortal (newSVPangoRectangle (inclusive)));
+	PUSHs (sv_2mortal (newSVPangoRectangle (nearest)));
 
 #endif
 

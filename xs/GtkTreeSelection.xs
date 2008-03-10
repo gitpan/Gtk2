@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSelection.xs,v 1.17 2004/06/04 20:45:00 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSelection.xs,v 1.19 2008/01/07 19:54:50 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -135,7 +135,7 @@ gtk_tree_selection_get_user_data (selection)
 	GPerlCallback *callback = NULL;
     CODE:
 	callback = (GPerlCallback *) gtk_tree_selection_get_user_data (selection);
-	RETVAL = callback && callback->data && SvOK (callback->data) ?
+	RETVAL = callback && gperl_sv_is_defined (callback->data) ?
 	           callback->data :
 	           &PL_sv_undef;
     OUTPUT:

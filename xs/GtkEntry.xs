@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.19 2007/09/15 14:33:02 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.22 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -54,10 +54,10 @@ gtk2perl_border_unwrap (GType gtype, const char * package, SV * sv)
 	SV **value;
 	GtkBorder *border;
 
-	if (!SvOK (sv) || !SvRV (sv))
+	if (!gperl_sv_is_defined (sv) || !SvRV (sv))
 		return NULL;
 
-	if (SvTYPE (SvRV (sv)) != SVt_PVHV)
+	if (!gperl_sv_is_hash_ref (sv))
 		croak ("GtkBorder must be a hash reference with four keys: "
 		       "left, right, top, bottom");
 
@@ -66,19 +66,19 @@ gtk2perl_border_unwrap (GType gtype, const char * package, SV * sv)
 	border = gperl_alloc_temp (sizeof (GtkBorder));
 
 	value = hv_fetch (hv, "left", 4, 0);
-	if (value && SvOK (*value))
+	if (value && gperl_sv_is_defined (*value))
 		border->left = SvIV (*value);
 
 	value = hv_fetch (hv, "right", 5, 0);
-	if (value && SvOK (*value))
+	if (value && gperl_sv_is_defined (*value))
 		border->right = SvIV (*value);
 
 	value = hv_fetch (hv, "top", 3, 0);
-	if (value && SvOK (*value))
+	if (value && gperl_sv_is_defined (*value))
 		border->top = SvIV (*value);
 
 	value = hv_fetch (hv, "bottom", 6, 0);
-	if (value && SvOK (*value))
+	if (value && gperl_sv_is_defined (*value))
 		border->bottom = SvIV (*value);
 
 	return border;

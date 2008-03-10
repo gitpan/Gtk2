@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkKeys.xs,v 1.10 2007/09/15 14:33:01 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkKeys.xs,v 1.13 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -24,7 +24,7 @@
    NULL.  used as the first argument this allows a method to be invoked in two
    ways: as an object method and as a class static method. */
 typedef GdkKeymap GdkKeymap_orclass;
-#define SvGdkKeymap_orclass(sv) ((sv && SvOK (sv) && SvROK (sv)) ? SvGdkKeymap (sv) : NULL)
+#define SvGdkKeymap_orclass(sv) ((gperl_sv_is_defined (sv) && SvROK (sv)) ? SvGdkKeymap (sv) : NULL)
 
 static GdkKeymapKey *
 SvGdkKeymapKey (SV *sv)
@@ -33,18 +33,18 @@ SvGdkKeymapKey (SV *sv)
 	SV **value;
 	GdkKeymapKey *key;
 
-	if (! (sv && SvOK (sv) && SvROK (sv) && SvTYPE (SvRV (sv)) == SVt_PVHV))
+	if (!gperl_sv_is_hash_ref (sv))
 		croak ("GdkKeymapKey must be a hash reference");
 
 	key = gperl_alloc_temp (sizeof (GdkKeymapKey));
 
 	hv = (HV *) SvRV (sv);
 
-	if ((value = hv_fetch (hv, "keycode", 7, 0)) && SvOK (*value))
+	if ((value = hv_fetch (hv, "keycode", 7, 0)) && gperl_sv_is_defined (*value))
 		key->keycode = SvUV (*value);
-	if ((value = hv_fetch (hv, "group", 5, 0)) && SvOK (*value))
+	if ((value = hv_fetch (hv, "group", 5, 0)) && gperl_sv_is_defined (*value))
 		key->group = SvIV (*value);
-	if ((value = hv_fetch (hv, "level", 5, 0)) && SvOK (*value))
+	if ((value = hv_fetch (hv, "level", 5, 0)) && gperl_sv_is_defined (*value))
 		key->level = SvIV (*value);
 
 	return key;

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioAction.xs,v 1.8 2007/07/07 17:25:55 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioAction.xs,v 1.11 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -45,11 +45,10 @@ void gtk_radio_action_set_group (GtkRadioAction *action, SV *member_or_listref);
     CODE:
 	if (member_or_listref && SvTRUE (member_or_listref)) {
 		GtkRadioAction * member = NULL;
-		if (SvROK (member_or_listref) &&
-		    SvTYPE (SvRV (member_or_listref)) == SVt_PVAV) {
+		if (gperl_sv_is_array_ref (member_or_listref)) {
 			AV * av = (AV*) SvRV (member_or_listref);
 			SV ** svp = av_fetch (av, 0, 0);
-			if (svp && *svp && SvOK (*svp))
+			if (svp && gperl_sv_is_defined (*svp))
 				member = SvGtkRadioAction (*svp);
 		} else
 			member = SvGtkRadioAction_ornull (member_or_listref);

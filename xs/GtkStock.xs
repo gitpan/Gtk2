@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStock.xs,v 1.22 2005/09/18 15:07:22 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStock.xs,v 1.25 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -57,8 +57,7 @@ SvGtkStockItem (SV * sv)
 	SV ** svp;
 	GtkStockItem * item;
 
-	if (! (sv && SvOK (sv) && SvROK (sv) &&
-	       SvTYPE (SvRV (sv)) == SVt_PVHV))
+	if (!gperl_sv_is_hash_ref (sv))
 		croak ("malformed stock item; use a reference to a hash as a stock item");
 
 	hv = (HV*) SvRV (sv);

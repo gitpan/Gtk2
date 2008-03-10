@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBufferRichText.xs,v 1.2 2007/03/17 14:26:52 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTextBufferRichText.xs,v 1.4 2008/01/07 19:54:49 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -51,7 +51,7 @@ gtk2perl_text_buffer_serialize_func (GtkTextBuffer     *register_buffer,
         gperl_callback_invoke (callback, &value,
                                register_buffer, content_buffer, start, end);
         ret_sv = g_value_get_boxed (&value);
-        if (SvOK (ret_sv)) {
+        if (gperl_sv_is_defined (ret_sv)) {
                 data = (guint8 *) g_strdup (SvPV (ret_sv, (*length)));
         } else {
                 *length = 0;

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 160;
+use Gtk2::TestHelper tests => 115;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.32 2007/09/15 14:33:00 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.36 2008/02/24 14:16:48 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -304,8 +304,11 @@ ok(!$view -> row_expanded($path));
 $view -> expand_row($path, 0);
 ok($view -> row_expanded($path));
 
+my $call_count = 0;
 $view -> map_expanded_rows(sub {
 	my ($view, $path) = @_;
+
+	return if $call_count++;
 
 	isa_ok($view, "Gtk2::TreeView");
 	isa_ok($path, "Gtk2::TreePath");
@@ -362,13 +365,27 @@ SKIP: {
 	skip("new 2.8 stuff", 2)
 		unless Gtk2 -> CHECK_VERSION(2, 8, 0);
 
+        # get_visible_range() doesn't like to be called with no data and
+        # no columns; you get a failed assertion about the node being null
+        # in _gtk_tree_view_find_path().  So, add some data and a column. 
+        my $m = $view->get_model ();
+        $m->set ($m->append (undef), 0, $_)
+            foreach qw(one two three four five);
+        $view->insert_column_with_attributes
+                (0, "", Gtk2::CellRendererText->new, text => 0);
+        Gtk2->main_iteration () while Gtk2->events_pending ();
+
 	my ($start, $end) = $view -> get_visible_range();
         isa_ok($start, "Gtk2::TreePath");
         isa_ok($end, "Gtk2::TreePath");
+
+        # Remove this column to keep from confusing some of the later tests,
+        # which expect the view to have no columns.
+        $view->remove_column ($view->get_column (0));
 }
 
 SKIP: {
-	skip("new 2.10 stuff", 1)
+	skip("new 2.10 stuff", 4)
 		unless Gtk2 -> CHECK_VERSION(2, 10, 0);
 
 	my $entry = Gtk2::Entry -> new();
@@ -414,8 +431,12 @@ SKIP: {
 	my $window = Gtk2::Window->new;
 	$window->set (tooltip_markup => "<b>Bla!</b>");
 
+	my $times_tooltip_queried = 0;
+
 	$window->signal_connect (query_tooltip => sub {
 		my ($window, $x, $y, $keyboard_mode, $tip) = @_;
+
+		return TRUE if $times_tooltip_queried++;
 
 		my $path = Gtk2::TreePath -> new_from_indices(0);
 		$view->set_tooltip_row ($tip, $path);
@@ -517,8 +538,11 @@ $view->scroll_to_point (0, 0);
 $view->set_cursor_on_cell (Gtk2::TreePath->new ("1:1"), undef, undef, 0)
 	if Gtk2->CHECK_VERSION (2, 2, 0);
 
+my $invoke_count = 0;
 $view->signal_connect (button_press_event => sub {
 		my ($v, $e) = @_;
+
+		return if $invoke_count++;
 
 		my @res = $view->get_path_at_pos ($e->x, $e->y);
 		isa_ok ($res[0], 'Gtk2::TreePath', 'get_path_at_pos, path');

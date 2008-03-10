@@ -92,7 +92,7 @@ void gtk_tree_model_filter_set_modify_func (GtkTreeModelFilter *filter, SV * typ
 	GType * real_types = NULL;
 	gint n_columns;
     CODE:
-	if (SvROK (types) && SvTYPE (SvRV (types)) == SVt_PVAV) {
+	if (gperl_sv_is_array_ref (types)) {
 		gint i;
 		AV * av = (AV*) SvRV (types);
 		n_columns = av_len (av) + 1;
@@ -114,7 +114,7 @@ void gtk_tree_model_filter_set_modify_func (GtkTreeModelFilter *filter, SV * typ
 		n_columns = 1;
 		real_types = &it;
 	}
-	if (func && SvOK (func)) {
+	if (gperl_sv_is_defined (func)) {
 		GPerlCallback * callback;
 		GType param_types[4];
 		param_types[0] = GTK_TYPE_TREE_MODEL;

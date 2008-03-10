@@ -157,14 +157,14 @@ gtk_icon_theme_choose_icon (GtkIconTheme *icon_theme, SV *icon_names, gint size,
 	AV *av;
 	int length, i;
     CODE:
-	if (!SvRV (icon_names) || SvTYPE (SvRV (icon_names)) != SVt_PVAV)
+	if (!gperl_sv_is_array_ref (icon_names))
 		croak ("icon_names must be an array reference of icon names");
 	av = (AV *) SvRV (icon_names);
 	length = av_len (av) + 1;
 	names = g_new0 (gchar *, length + 1);
 	for (i = 0; i < length; i++) {
 		SV **sv = av_fetch (av, i, 0);
-		names[i] = sv && SvOK (*sv) ? SvPV_nolen (*sv) : "";
+		names[i] = sv && gperl_sv_is_defined (*sv) ? SvPV_nolen (*sv) : "";
 	}
 	names[length] = NULL;
 

@@ -2,10 +2,16 @@
 use strict;
 use Gtk2::TestHelper tests => 11;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDrawable.t,v 1.7 2006/11/19 19:47:53 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDrawable.t,v 1.8 2008/01/08 04:12:20 muppetman Exp $
 
 my $window = Gtk2::Window -> new();
-$window -> show();
+
+#
+# Force the window all the way to the screen, so that the realization and
+# mapping process completes before we continue.  Otherwise, we have issues
+# with X interactions on some servers.
+#
+$window -> show_now();
 
 my $win = $window -> window();
 
@@ -100,5 +106,5 @@ SKIP: {
 
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2008 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

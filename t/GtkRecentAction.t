@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 
-# $Id: GtkRecentAction.t,v 1.1 2007/06/16 15:39:39 kaffeetisch Exp $
+# $Id: GtkRecentAction.t,v 1.2 2008/03/10 20:54:35 kaffeetisch Exp $
 
 use Gtk2::TestHelper
-	at_least_version => [2, 11, 0, 'GtkRecentAtionc: new in 2.12'], # FIXME: 2.12
+	at_least_version => [2, 12, 0, 'GtkRecentAtionc: new in 2.12'],
 	tests => 1;
 
 

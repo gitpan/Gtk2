@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellRenderer.xs,v 1.30 2007/07/08 14:46:07 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellRenderer.xs,v 1.32 2008/01/07 19:54:49 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -270,7 +270,7 @@ gtk2perl_cell_renderer_start_editing (GtkCellRenderer      * cell,
 		SPAGAIN;
 
 		sv = POPs;
-		if (SvOK (sv)) {
+		if (gperl_sv_is_defined (sv)) {
 			editable = SvGtkCellEditable (sv);
 			/* if the object returned here was newly created by
 			 * the called code, then the wrapper (pointed to by

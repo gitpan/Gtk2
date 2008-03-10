@@ -18,7 +18,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/simplelist.pl,v 1.12 2004/03/28 22:52:29 rwmcfa1 Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/simplelist.pl,v 1.13 2008/01/08 04:08:54 muppetman Exp $
 #
 
 use strict;
@@ -148,6 +148,17 @@ $chk = Gtk2::CheckButton->new ('reorderable');
 $chk->set_active (0);
 $chk->signal_connect (toggled => sub {
 		$slist->set_reorderable ($_[0]->get_active);
+		});
+$vbox->pack_start ($chk, 0, 0, 0);
+$tooltips->set_tip ($chk, 'set whether the list is reorderable');
+
+# toggle the reorderable-ness of the columns
+$chk = Gtk2::CheckButton->new ('drag columns');
+$chk->set_active (0);
+$chk->signal_connect (toggled => sub {
+		foreach my $column ($slist->get_columns) {
+			$column->set_reorderable ($_[0]->get_active);
+		}
 		});
 $vbox->pack_start ($chk, 0, 0, 0);
 $tooltips->set_tip ($chk, 'set whether the list is reorderable');

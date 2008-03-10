@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.48.2.1 2007/12/16 18:57:32 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.52 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -194,10 +194,10 @@ iter_from_sv (GtkTreeIter * iter,
 	 * to return FALSE from the C vfuncs.  for anything else, it *must*
 	 * be an array reference or we croak with an informative message
 	 * (since that would be caused by a programming bug). */
-	if (sv && SvOK (sv)) {
+	if (gperl_sv_is_defined (sv)) {
 		SV ** svp;
 		AV * av;
-		if (!SvROK (sv) || SvTYPE (SvRV (sv)) != SVt_PVAV)
+		if (!gperl_sv_is_array_ref (sv))
 			croak ("expecting a reference to an ARRAY to describe "
 			       "a tree iter, not a %s",
 			       sv_reftype (SvRV (sv), 0));
@@ -257,7 +257,7 @@ gtk2perl_tree_model_get_path (GtkTreeModel *tree_model,
 	 * might croak.  FREETMPS will destroy the path, though, so we need
 	 * to copy it, first. */
 	PUTBACK;
-	if (sv && SvOK (sv))
+	if (gperl_sv_is_defined (sv))
 		ret = gtk_tree_path_copy (SvGtkTreePath (sv));
 	FREETMPS;
 	LEAVE;

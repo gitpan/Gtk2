@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLinkButton.xs,v 1.1 2006/04/25 19:10:24 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLinkButton.xs,v 1.3 2008/01/07 19:54:49 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -71,7 +71,7 @@ This means that there is no way to restore an old hook once you overwrote it.
 void
 gtk_link_button_set_uri_hook (class, SV *func, SV *data=NULL)
     CODE:
-        if (!SvOK (func)) {
+        if (!gperl_sv_is_defined (func)) {
 		gtk_link_button_set_uri_hook (NULL, NULL, NULL);
 	} else {
 		GPerlCallback * callback;

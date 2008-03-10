@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoAttributes.xs,v 1.5 2007/07/22 21:43:45 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoAttributes.xs,v 1.8 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -62,10 +62,10 @@ pango_color_unwrap (GType gtype,
 	AV * av;
 	SV ** v;
 
-	if (!sv || !SvOK (sv))
+	if (!gperl_sv_is_defined (sv))
 		return NULL;
 
-	if (!SvRV (sv) || SvTYPE (SvRV (sv)) != SVt_PVAV)
+	if (!gperl_sv_is_array_ref (sv))
 		croak ("a PangoColor must be an array reference with three values: "
 		       "red, green, and blue");
 
@@ -74,15 +74,15 @@ pango_color_unwrap (GType gtype,
 	av = (AV *) SvRV (sv);
 
 	v = av_fetch (av, 0, 0);
-	if (v && SvOK (*v))
+	if (v && gperl_sv_is_defined (*v))
 		color->red = SvUV (*v);
 
 	v = av_fetch (av, 1, 0);
-	if (v && SvOK (*v))
+	if (v && gperl_sv_is_defined (*v))
 		color->green = SvUV (*v);
 
 	v = av_fetch (av, 2, 0);
-	if (v && SvOK (*v))
+	if (v && gperl_sv_is_defined (*v))
 		color->blue = SvUV (*v);
 
 	return color;

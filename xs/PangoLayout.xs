@@ -16,12 +16,14 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.31.2.2 2008/01/08 20:03:25 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.39 2008/03/10 20:54:37 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 /* ------------------------------------------------------------------------- */
+
+#if !PANGO_CHECK_VERSION (1, 20, 0)
 
 static gpointer
 gtk2perl_pango_layout_iter_copy (gpointer boxed)
@@ -30,13 +32,19 @@ gtk2perl_pango_layout_iter_copy (gpointer boxed)
 	return boxed;
 }
 
+#endif
+
 GType
 gtk2perl_pango_layout_iter_get_type (void)
 {
 	static GType t = 0;
 	if (!t)
 		t = g_boxed_type_register_static ("PangoLayoutIter",
+#if PANGO_CHECK_VERSION (1, 20, 0)
+		      (GBoxedCopyFunc) pango_layout_iter_copy,
+#else
 		      (GBoxedCopyFunc) gtk2perl_pango_layout_iter_copy,
+#endif
 		      (GBoxedFreeFunc) pango_layout_iter_free);
 	return t;
 }
@@ -80,50 +88,50 @@ SvPangoRectangle (SV * sv)
 	PangoRectangle *rectangle;
 	SV ** v;
 
-	if (!sv || !SvOK (sv))
+	if (!gperl_sv_is_defined (sv))
 		return NULL;
-
-	if (!SvRV (sv) || !(SvTYPE (SvRV (sv)) == SVt_PVHV || SvTYPE (SvRV (sv)) == SVt_PVAV))
-		croak ("a PangoRectangle must be a reference to a hash or an array");
 
 	rectangle = gperl_alloc_temp (sizeof (PangoRectangle));
 
-	if (SvTYPE (SvRV (sv)) == SVt_PVHV) {
+	if (gperl_sv_is_hash_ref (sv)) {
 		HV * hv = (HV *) SvRV (sv);
 
 		v = hv_fetch (hv, "x", 1, 0);
-		if (v && SvOK (*v))
+		if (v && gperl_sv_is_defined (*v))
 			rectangle->x = SvIV (*v);
 
 		v = hv_fetch (hv, "y", 1, 0);
-		if (v && SvOK (*v))
+		if (v && gperl_sv_is_defined (*v))
 			rectangle->y = SvIV (*v);
 
 		v = hv_fetch (hv, "width", 5, 0);
-		if (v && SvOK (*v))
+		if (v && gperl_sv_is_defined (*v))
 			rectangle->width = SvIV (*v);
 
 		v = hv_fetch (hv, "height", 6, 0);
-		if (v && SvOK (*v))
+		if (v && gperl_sv_is_defined (*v))
 			rectangle->height = SvIV (*v);
-	} else {
+	} else if (gperl_sv_is_array_ref (sv)) {
 		AV * av = (AV *) SvRV (sv);
 
 		v = av_fetch (av, 0, 0);
-		if (v && SvOK (*v))
+		if (v && gperl_sv_is_defined (*v))
 			rectangle->x = SvIV (*v);
 
 		v = av_fetch (av, 1, 0);
-		if (v && SvOK (*v))
+		if (v && gperl_sv_is_defined (*v))
 			rectangle->y = SvIV (*v);
 
 		v = av_fetch (av, 2, 0);
-		if (v && SvOK (*v))
+		if (v && gperl_sv_is_defined (*v))
 			rectangle->width = SvIV (*v);
 
 		v = av_fetch (av, 3, 0);
-		if (v && SvOK (*v))
+		if (v && gperl_sv_is_defined (*v))
 			rectangle->height = SvIV (*v);
+	} else {
+		croak ("a PangoRectangle must be a reference to a hash "
+		       "or a reference to an array");
 	}
 
 	return rectangle;
@@ -508,6 +516,14 @@ int pango_layout_get_unknown_glyphs_count (PangoLayout *layout);
 
 #endif
 
+#if PANGO_CHECK_VERSION (1, 20, 0)
+
+void pango_layout_set_height (PangoLayout *layout, int height);
+
+int pango_layout_get_height (PangoLayout *layout);
+
+#endif
+
 # --------------------------------------------------------------------------- #
 
 MODULE = Gtk2::Pango::Layout	PACKAGE = Gtk2::Pango::LayoutLine	PREFIX = pango_layout_line_
@@ -691,3 +707,9 @@ void pango_layout_iter_get_line_yrange (PangoLayoutIter *iter, OUTLIST int y0_, 
 int
 pango_layout_iter_get_baseline (iter)
 	PangoLayoutIter *iter
+
+#if PANGO_CHECK_VERSION (1, 20, 0)
+
+PangoLayout * pango_layout_iter_get_layout (PangoLayoutIter *iter);
+
+#endif

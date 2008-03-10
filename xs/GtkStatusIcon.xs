@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStatusIcon.xs,v 1.7 2007/09/15 14:33:02 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStatusIcon.xs,v 1.8 2008/01/12 22:28:28 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -113,7 +113,7 @@ gtk_status_icon_get_geometry (GtkStatusIcon *status_icon)
 
 	EXTEND (sp, 3);
 	PUSHs (sv_2mortal (newSVGdkScreen (screen)));
-	PUSHs (sv_2mortal (newSVGdkRectangle (&area)));
+	PUSHs (sv_2mortal (newSVGdkRectangle_copy (&area)));
 	PUSHs (sv_2mortal (newSVGtkOrientation (orientation)));
 
 #if GTK_CHECK_VERSION (2, 12, 0)

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.19.4.1 2007/12/16 18:57:31 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.22 2008/01/07 19:54:49 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -111,7 +111,7 @@ gtk_message_dialog_new (class, parent, flags, type, buttons, format, ...)
 	GtkButtonsType buttons
 	SV * format
     CODE:
-	if (format && SvOK (format))
+	if (gperl_sv_is_defined (format))
 		/* the double-indirection is necessary to avoid % chars in the
 		 * message string being misinterpreted. */
 		RETVAL = gtk_message_dialog_new (
@@ -160,7 +160,7 @@ gtk_message_dialog_format_secondary_text (message_dialog, message_format, ...)
 	GtkMessageDialog *message_dialog
 	SV * message_format
     CODE:
-	if (message_format && SvOK (message_format))
+	if (gperl_sv_is_defined (message_format))
 		gtk_message_dialog_format_secondary_text (
 		  message_dialog,
 		  "%s",

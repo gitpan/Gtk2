@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.13 2005/01/02 17:45:21 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.16 2008/01/07 20:23:29 kaffeetisch Exp $
  */
  #include "gtk2perl.h"
 
@@ -51,7 +51,7 @@ SvGdkRgbCmap (SV *sv)
 	AV *av;
 	int length, i;
 
-	if (!SvOK (sv) || !SvRV (sv) || SvTYPE (SvRV (sv)) != SVt_PVAV)
+	if (!gperl_sv_is_array_ref (sv))
 		croak ("cmap must be an array reference");
 
 	av = (AV *) SvRV (sv);
@@ -65,7 +65,7 @@ SvGdkRgbCmap (SV *sv)
 
 	for (i = 0; i <= length; i++) {
 		SV **color = av_fetch (av, i, 0);
-		if (SvOK (*color))
+		if (color && gperl_sv_is_defined (*color))
 			cmap->colors[i] = SvIV (*color);
 	}
 

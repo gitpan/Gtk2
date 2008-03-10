@@ -3,9 +3,9 @@ use strict;
 use warnings;
 use Gtk2::TestHelper
   tests => 5,
-  at_least_version => [2, 11, 0, 'GtkScaleButton appeared in 2.12']; # FIXME: 2.12
+  at_least_version => [2, 12, 0, 'GtkScaleButton appeared in 2.12'];
 
-# $Id: GtkScaleButton.t,v 1.1 2007/06/16 12:39:24 kaffeetisch Exp $
+# $Id: GtkScaleButton.t,v 1.2 2008/03/10 20:54:36 kaffeetisch Exp $
 
 my $button;
 

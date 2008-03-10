@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.16 2004/02/27 03:54:23 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTooltips.xs,v 1.18 2008/01/07 19:54:50 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -49,7 +49,7 @@ gtk_tooltips_set_tip (tooltips, widget, tip_text, tip_private=NULL)
     PREINIT:
 	const gchar * real_tip_private = NULL;
     CODE:
-	if (tip_private && SvOK (tip_private))
+	if (gperl_sv_is_defined (tip_private))
 		real_tip_private = SvGChar (tip_private);
 	gtk_tooltips_set_tip (tooltips, widget, tip_text, real_tip_private);
 	/* gtk+'s widgets do not hold a reference on the tooltips object,

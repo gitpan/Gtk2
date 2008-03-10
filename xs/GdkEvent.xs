@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.50 2007/09/15 14:33:01 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.52 2008/01/07 19:54:49 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -631,7 +631,7 @@ gdk_event_handler_set (class, func, data=NULL)
 	GType params[1];
     CODE:
     	params[0] = GDK_TYPE_EVENT;
-	if (SvOK (func)) {
+	if (gperl_sv_is_defined (func)) {
 		callback = gperl_callback_new (func, data,
 		                               G_N_ELEMENTS (params),
 		                               params, 0);

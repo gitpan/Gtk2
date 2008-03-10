@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.22 2007/01/06 16:27:53 ebassi Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkItemFactory.xs,v 1.25 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -104,13 +104,13 @@ gtk2perl_translate_func (const gchar *path,
 #define HV_FETCH_AND_CHECK(_member, _sv) \
 	if (hv_exists (hv, #_member, strlen (#_member))) { \
 		value = hv_fetch (hv, #_member, strlen (#_member), FALSE); \
-		if (value && SvOK (*value)) \
+		if (value && gperl_sv_is_defined (*value)) \
 			entry->_member = _sv; \
 	}
 
 #define AV_FETCH_AND_CHECK(_index, _member, _sv) \
 	value = av_fetch (av, _index, 0); \
-	if (value && SvOK (*value)) \
+	if (value && gperl_sv_is_defined (*value)) \
 		entry->_member = _sv;
 
 GtkItemFactoryEntry *
@@ -119,12 +119,47 @@ SvGtkItemFactoryEntry (SV *data, SV **callback)
 	GtkItemFactoryEntry *entry = gperl_alloc_temp (sizeof (GtkItemFactoryEntry));
 	memset (entry, 0, sizeof (GtkItemFactoryEntry));
 
-	if (!(data && SvOK (data)))
+	if (!gperl_sv_is_defined (data))
 		return entry; /* fail silently if undef */
 
-	if ((!SvRV (data)) ||
-	    (SvTYPE (SvRV (data)) != SVt_PVHV && SvTYPE (SvRV (data)) != SVt_PVAV))
-		croak ("badly formed GtkItemFactoryEntry; use either list for for hash form:\n"
+	if (gperl_sv_is_hash_ref (data)) {
+		HV *hv = (HV *) SvRV (data);
+		SV **value;
+
+		HV_FETCH_AND_CHECK (path, SvGChar (*value));
+		HV_FETCH_AND_CHECK (accelerator, SvGChar (*value));
+
+		if (hv_exists (hv, "callback", 8)) {
+			value = hv_fetch (hv, "callback", 8, FALSE);
+
+			if (callback && value && gperl_sv_is_defined (*value)) {
+				*callback = *value;
+				entry->callback = gtk2perl_item_factory_item_activate;
+			}
+		}
+
+		HV_FETCH_AND_CHECK (callback_action, SvIV (*value));
+		HV_FETCH_AND_CHECK (item_type, SvGChar (*value));
+		HV_FETCH_AND_CHECK (extra_data, SvPOK (*value) ? SvGChar (*value) : NULL);
+	} else if (gperl_sv_is_array_ref (data)) {
+		AV *av = (AV *) SvRV (data);
+		SV **value;
+
+		AV_FETCH_AND_CHECK (0, path, SvGChar (*value));
+		AV_FETCH_AND_CHECK (1, accelerator, SvGChar (*value));
+
+		value = av_fetch (av, 2, 0);
+
+		if (callback && value && gperl_sv_is_defined (*value)) {
+			*callback = *value;
+			entry->callback = gtk2perl_item_factory_item_activate;
+		}
+
+		AV_FETCH_AND_CHECK (3, callback_action, SvIV (*value));
+		AV_FETCH_AND_CHECK (4, item_type, SvGChar (*value));
+		AV_FETCH_AND_CHECK (5, extra_data, SvPOK (*value) ? SvGChar (*value) : NULL);
+	} else {
+		croak ("badly formed GtkItemFactoryEntry; use either list or hash form:\n"
 		       "    list form:\n"
 		       "        [ path, accel, callback, action, type ]\n"
 		       "    hash form:\n"
@@ -137,43 +172,6 @@ SvGtkItemFactoryEntry (SV *data, SV **callback)
 		       "           extra_data      => $extra,   # optional\n"
 		       "         }\n"
 		       "  ");
-
-	if (SvTYPE (SvRV (data)) == SVt_PVHV) {
-		HV *hv = (HV *) SvRV (data);
-		SV **value;
-
-		HV_FETCH_AND_CHECK (path, SvGChar (*value));
-		HV_FETCH_AND_CHECK (accelerator, SvGChar (*value));
-
-		if (hv_exists (hv, "callback", 8)) {
-			value = hv_fetch (hv, "callback", 8, FALSE);
-
-			if (callback && value && SvOK (*value)) {
-				*callback = *value;
-				entry->callback = gtk2perl_item_factory_item_activate;
-			}
-		}
-
-		HV_FETCH_AND_CHECK (callback_action, SvIV (*value));
-		HV_FETCH_AND_CHECK (item_type, SvGChar (*value));
-		HV_FETCH_AND_CHECK (extra_data, SvPOK (*value) ? SvGChar (*value) : NULL);
-	} else if (SvTYPE (SvRV (data)) == SVt_PVAV) {
-		AV *av = (AV *) SvRV (data);
-		SV **value;
-
-		AV_FETCH_AND_CHECK (0, path, SvGChar (*value));
-		AV_FETCH_AND_CHECK (1, accelerator, SvGChar (*value));
-
-		value = av_fetch (av, 2, 0);
-
-		if (callback && value && SvOK (*value)) {
-			*callback = *value;
-			entry->callback = gtk2perl_item_factory_item_activate;
-		}
-
-		AV_FETCH_AND_CHECK (3, callback_action, SvIV (*value));
-		AV_FETCH_AND_CHECK (4, item_type, SvGChar (*value));
-		AV_FETCH_AND_CHECK (5, extra_data, SvPOK (*value) ? SvGChar (*value) : NULL);
 	}
 
 	return entry;
@@ -362,7 +360,7 @@ gtk_item_factory_popup (ifactory, x, y, mouse_button, time_, popup_data=NULL)
     PREINIT:
 	SV * real_popup_data = NULL;
     CODE:
-	if (popup_data && SvOK (popup_data))
+	if (gperl_sv_is_defined (popup_data))
 		real_popup_data = gperl_sv_copy (popup_data);
 	gtk_item_factory_popup_with_data (ifactory,
 	                                  real_popup_data, 

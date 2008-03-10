@@ -3,9 +3,9 @@ use strict;
 use warnings;
 use Gtk2::TestHelper
   tests => 37,
-  at_least_version => [2, 11, 0, 'GtkBuildable: it appeared in 2.12']; # FIXME: 2.12
+  at_least_version => [2, 12, 0, 'GtkBuildable: it appeared in 2.12'];
 
-# $Id: GtkBuilder.t,v 1.2 2007/07/02 17:53:45 kaffeetisch Exp $
+# $Id: GtkBuilder.t,v 1.3 2008/03/10 20:54:35 kaffeetisch Exp $
 
 my $builder;
 my $ui = <<EOD;

@@ -151,12 +151,14 @@ t/GtkAssistant.t
 t/GtkBin.t
 t/GtkBox.t
 t/GtkBuildable.t
+t/GtkBuildableIface.t
 t/GtkBuilder.t
 t/GtkButton.t
 t/GtkButtonBox.t
 t/GtkCalendar.t
 t/GtkCellEditable.t
 t/GtkCellLayout.t
+t/GtkCellLayoutIface.t
 t/GtkCellRenderer.t
 t/GtkCellRendererAccel.t
 t/GtkCellRendererCombo.t
@@ -209,6 +211,7 @@ t/GtkIconTheme.t
 t/GtkIconView.t
 t/GtkImage.t
 t/GtkImageMenuItem.t
+t/GtkIMContext.t
 t/GtkInputDialog.t
 t/GtkInvisible.t
 t/GtkItemFactory.t
@@ -421,6 +424,9 @@ xs/GtkIconTheme.xs
 xs/GtkIconView.xs
 xs/GtkImage.xs
 xs/GtkImageMenuItem.xs
+xs/GtkIMContext.xs
+xs/GtkIMContextSimple.xs
+xs/GtkIMMulticontext.xs
 xs/GtkInputDialog.xs
 xs/GtkInvisible.xs
 xs/GtkItem.xs

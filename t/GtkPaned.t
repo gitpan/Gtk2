@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use Gtk2::TestHelper tests => 9;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPaned.t,v 1.8.8.2 2008/01/09 20:29:48 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPaned.t,v 1.10 2008/01/09 20:28:36 kaffeetisch Exp $
 
 my $window = Gtk2::Window->new;
 my $hpaned = Gtk2::HPaned->new;

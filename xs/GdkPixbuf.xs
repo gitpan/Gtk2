@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2008 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.42.2.1 2008/01/07 20:49:29 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixbuf.xs,v 1.46 2008/01/15 05:21:52 muppetman Exp $
  */
 
 #include "gtk2perl.h"
@@ -92,7 +92,7 @@ SvGdkPixbufFormat (SV * sv)
 {
 	MAGIC *mg;
 
-	if (!sv || !SvOK (sv) || !SvROK (sv) || !(mg = mg_find (SvRV (sv), PERL_MAGIC_ext)))
+	if (!gperl_sv_is_defined (sv) || !SvROK (sv) || !(mg = mg_find (SvRV (sv), PERL_MAGIC_ext)))
 		return NULL;
 
 	return (GdkPixbufFormat *) mg->mg_ptr;
@@ -512,9 +512,14 @@ gdk_pixbuf_new_from_xpm_data (class, ...)
 	char ** lines;
 	int i;
     CODE:
-	lines = g_new (char *, items - 1);
+	/* Add a NULL terminator to protect against a segv if too few lines
+	 * are supplied.  GdkPixbuf's io-xpm.c's mem_buffer() recognizes that
+	 * as an end of data.  (Not documented, so far as i can tell, but
+	 * still a pretty good idea.) */
+	lines = g_new (char *, items - 1 + 1);
 	for (i = 1; i < items; i++)
 		lines[i-1] = SvPV_nolen (ST (i));
+	lines[i-1] = NULL;
 	RETVAL = gdk_pixbuf_new_from_xpm_data((const char**)lines);
 	g_free(lines);
     OUTPUT:

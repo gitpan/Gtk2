@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRc.xs,v 1.26 2006/08/27 11:56:24 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRc.xs,v 1.28 2008/01/07 19:54:49 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -196,14 +196,14 @@ name (style, new=NULL)
 		    case 0:
 			if (style->name)
 				g_free (style->name);
-			style->name = SvOK (new)
+			style->name = gperl_sv_is_defined (new)
 			            ? g_strdup (SvGChar (new))
 				    : NULL;
 			break;
 		    case 1:
 			if (style->font_desc)
 				pango_font_description_free (style->font_desc);
-			style->font_desc = SvOK (new)
+			style->font_desc = gperl_sv_is_defined (new)
 			                 ? SvPangoFontDescription (new)
 					 : NULL;
 			if (style->font_desc)

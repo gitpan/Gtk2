@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 5;
+use Gtk2::TestHelper tests => 7;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoRenderer.t,v 1.5 2006/11/19 19:47:53 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoRenderer.t,v 1.7 2008/03/10 20:54:36 kaffeetisch Exp $
 
 SKIP: {
   skip("PangoRenderer is new in 1.8", 5)
@@ -53,6 +53,16 @@ SKIP: {
   isa_ok($renderer -> get_matrix(), "Gtk2::Pango::Matrix");
 
   $renderer -> deactivate();
+
+  SKIP: {
+    skip 'new 1.20 stuff', 2
+      unless (Gtk2::Pango -> CHECK_VERSION(1, 20, 0));
+
+    # These always return undef unless called from inside a subclass' drawing
+    # function.  How do we test that?
+    is($renderer -> get_layout(), undef);
+    is($renderer -> get_layout_line(), undef);
+  }
 }
 
 __END__

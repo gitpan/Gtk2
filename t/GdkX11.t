@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 11;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkX11.t,v 1.9.2.1 2008/01/09 20:29:48 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkX11.t,v 1.10 2008/01/09 20:28:36 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();

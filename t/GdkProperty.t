@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 46;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkProperty.t,v 1.6 2004/05/15 19:03:30 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkProperty.t,v 1.7 2008/02/11 21:10:52 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();
@@ -65,16 +65,22 @@ is_deeply([Gtk2::Gdk -> text_property_to_utf8_list($string, Gtk2::Gdk::CHARS, "B
           [qw(Bla Bla Bla)]);
 
 ($atom, $format, @data) = Gtk2::Gdk -> string_to_compound_text("Bla");
-is($atom -> name(), "COMPOUND_TEXT");
-is($format, Gtk2::Gdk::CHARS);
-is(@data, 1);
-is($data[0], "Bla");
+SKIP: {
+  skip 'atom tests', 4 unless defined $atom;
+  is($atom -> name(), "COMPOUND_TEXT");
+  is($format, Gtk2::Gdk::CHARS);
+  is(@data, 1);
+  is($data[0], "Bla");
+}
 
 ($atom, $format, @data) = Gtk2::Gdk -> utf8_to_compound_text("Bla");
-is($atom -> name(), "COMPOUND_TEXT");
-is($format, Gtk2::Gdk::CHARS);
-is(@data, 1);
-is($data[0], "Bla");
+SKIP: {
+  skip 'atom tests', 4 unless defined $atom;
+  is($atom -> name(), "COMPOUND_TEXT");
+  is($format, Gtk2::Gdk::CHARS);
+  is(@data, 1);
+  is($data[0], "Bla");
+}
 
 SKIP: {
   skip("GdkDisplay is new 2.2", 10)

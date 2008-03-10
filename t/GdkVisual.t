@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 24;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkVisual.t,v 1.3.2.1 2008/01/09 20:29:48 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkVisual.t,v 1.5 2008/02/11 21:10:52 kaffeetisch Exp $
 
 my @depths = Gtk2::Gdk -> query_depths();
 like($depths[0], qr/^\d+$/);
@@ -20,13 +20,9 @@ isa_ok(my $visual = Gtk2::Gdk::Visual -> get_system(), "Gtk2::Gdk::Visual");
 isa_ok(Gtk2::Gdk::Visual -> get_best(), "Gtk2::Gdk::Visual");
 isa_ok(Gtk2::Gdk::Visual -> get_best_with_type($types[0]), "Gtk2::Gdk::Visual");
 SKIP: {
-  my $best = Gtk2::Gdk::Visual -> get_best_with_both($depths[0], $types[1]);
-  if (defined $best) {
-    isa_ok($best, "Gtk2::Gdk::Visual");
-  }
-  else {
-    ok(TRUE);
-  }
+  my $best = Gtk2::Gdk::Visual -> get_best_with_both($depths[0], $types[0]);
+  skip 'best test', 1 unless defined $best;
+  isa_ok($best, "Gtk2::Gdk::Visual");
 }
 
 SKIP: {

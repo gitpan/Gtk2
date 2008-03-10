@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.133.2.2 2008/01/08 20:03:21 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.143 2008/03/10 21:06:07 kaffeetisch Exp $
 #
 
 BEGIN { require 5.008; }
@@ -33,7 +33,7 @@ use Cwd;
 our %build_reqs = (
 	'perl-ExtUtils-Depends'   => '0.2',
 	'perl-ExtUtils-PkgConfig' => '1.03',
-	'perl-Glib'               => '1.163',
+	'perl-Glib'               => '1.180',
 	'perl-Cairo'              => '1.00',
 	'Gtk+'                    => '2.0.0',
 );
@@ -240,6 +240,9 @@ $gtk2->save_config ('build/IFiles.pm');
 our @exports;
 require 'Gtk2.exports';
 
+my $configure_requires =
+  Glib::MakeHelper->get_configure_requires_yaml(%PREREQ_PM);
+
 WriteMakefile(
     NAME          => 'Gtk2',
     VERSION_FROM  => 'Gtk2.pm', # finds $VERSION
@@ -249,7 +252,16 @@ WriteMakefile(
     MAN3PODS      => \%pod_files,
     FUNCLIST      => \@exports,
     DL_FUNCS      => { Gtk2 => [] },
+
     $gtk2->get_makefile_vars,
+
+    EXTRA_META    => qq/
+$configure_requires
+no_index:
+    directory:
+    - tools
+    - xs
+/,
 );
 
 =unstable
@@ -260,7 +272,7 @@ WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
    This is an unstable development release of Gtk2.  The API is not
    frozen and things are subject to change at any time.  Report any
    bugs to gtk-perl-list AT gnome DOT org as soon as possible.
-   Please use the 1.14x series for important work.
+   Please use the 1.16x series for important work.
 
 WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
 __EOW__
@@ -308,10 +320,12 @@ sub MY::postamble
 Makefile : ".join(" ", @xs_lists)."
 
 \$(INST_LIB)/\$(FULLEXT)/enums.pod : \$(BLIB_DONE) @used_maps @used_maps_pango tools/podifyenums.pl
-	\$(PERLRUNINST) -M\$(NAME) tools/podifyenums.pl \$(NAME) @used_maps @used_maps_pango > \$@
+	\$(NOECHO) \$(ECHO) Creating enum POD...
+	\$(NOECHO) \$(PERLRUNINST) -M\$(NAME) tools/podifyenums.pl \$(NAME) @used_maps @used_maps_pango > \$@
 
 build/stock_items.podi: \$(BLIB_DONE) tools/podifystockitems.pl
-	\$(PERLRUNINST) -M\$(NAME) tools/podifystockitems.pl > \$@
+	\$(NOECHO) \$(ECHO) Creating stock items POD...
+	\$(NOECHO) \$(PERLRUNINST) -M\$(NAME) tools/podifystockitems.pl > \$@
 
 build/FAQ.pod: tools/fetch_faq.pl
 	$^X \$<

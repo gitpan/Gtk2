@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioToolButton.xs,v 1.3 2004/02/22 19:57:34 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioToolButton.xs,v 1.6 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -12,12 +12,12 @@ static GSList *
 group_from_sv (SV * member_or_listref)
 {
 	GSList * group = NULL;
-	if (member_or_listref && SvOK (member_or_listref)) {
+	if (gperl_sv_is_defined (member_or_listref)) {
 		GtkRadioToolButton * member = NULL;
-		if (SvTYPE (SvRV (member_or_listref)) == SVt_PVAV) {
+		if (gperl_sv_is_array_ref (member_or_listref)) {
 			AV * av = (AV*) SvRV (member_or_listref);
 			SV ** svp = av_fetch (av, 0, FALSE);
-			if (svp && *svp && SvOK (*svp))
+			if (svp && gperl_sv_is_defined (*svp))
 				member = SvGtkRadioToolButton (*svp);
 		} else
 			member = SvGtkRadioToolButton_ornull (member_or_listref);

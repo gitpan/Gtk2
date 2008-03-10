@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenu.xs,v 1.23 2005/01/02 17:45:21 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenu.xs,v 1.25 2008/01/07 19:54:49 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -117,7 +117,7 @@ gtk_menu_popup (menu, parent_menu_shell, parent_menu_item, menu_pos_func, data, 
 	guint activate_time
 	###guint32 activate_time
     CODE:
-	if (! (menu_pos_func && SvOK (menu_pos_func))) {
+	if (!gperl_sv_is_defined (menu_pos_func)) {
 		gtk_menu_popup (menu, parent_menu_shell, parent_menu_item,
 		                NULL, NULL, button, activate_time);
 	} else {

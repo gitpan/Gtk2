@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.12 2006/12/30 15:40:58 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeSortable.xs,v 1.14 2008/01/07 19:54:50 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -406,7 +406,7 @@ gtk_tree_sortable_set_default_sort_func (sortable, sort_func, user_data=NULL)
 	SV * sort_func
 	SV * user_data
     CODE:
-	if (!sort_func || !SvOK (sort_func)) {
+	if (!gperl_sv_is_defined (sort_func)) {
 		gtk_tree_sortable_set_default_sort_func
 					(sortable, NULL, NULL, NULL);
 	} else {
@@ -447,7 +447,7 @@ DESTROY (code)
 	MAGIC *mg;
 	Gtk2PerlTreeIterCompareFunc *stuff;
     CODE:
-	if (!code || !SvOK (code) || !SvROK (code) || !(mg = mg_find (SvRV (code), PERL_MAGIC_ext)))
+	if (!gperl_sv_is_defined (code) || !SvROK (code) || !(mg = mg_find (SvRV (code), PERL_MAGIC_ext)))
 		return;
 
 	stuff = INT2PTR (Gtk2PerlTreeIterCompareFunc*, SvIV ((SV *) mg->mg_ptr));

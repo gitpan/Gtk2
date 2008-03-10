@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolbar.xs,v 1.18 2005/10/18 16:16:15 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolbar.xs,v 1.20 2008/01/07 19:54:50 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -43,7 +43,7 @@ typedef enum {
 	INSERT
 } WhichOp;
 
-#define SvGChar_ornull(sv)   ((sv) && SvOK((sv)) ? SvGChar ((sv)) : NULL)
+#define SvGChar_ornull(sv)   (gperl_sv_is_defined((sv)) ? SvGChar ((sv)) : NULL)
 
 static GtkWidget *
 gtk2perl_toolbar_insert_internal (GtkToolbar * toolbar,
@@ -175,7 +175,7 @@ gtk2perl_toolbar_insert_internal (GtkToolbar * toolbar,
 		default:
 			g_assert_not_reached ();
 	}
-	if (callback && SvOK (callback))
+	if (gperl_sv_is_defined (callback))
 		gperl_signal_connect (newSVGtkWidget (w), "clicked",
 		                      callback, user_data, 0);
 

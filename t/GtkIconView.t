@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.20 2007/09/16 17:34:23 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconView.t,v 1.21 2007/12/16 18:31:15 kaffeetisch Exp $
 #
 
 #########################
@@ -89,7 +89,7 @@ is ($iview->get_margin, 23);
 
 #$win->show_all;
 
-use constant ICON_COORD => 30;
+use constant ICON_COORD => 50;
 
 run_main sub {
     my $path = $iview->get_path_at_pos (ICON_COORD, ICON_COORD);

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioButton.xs,v 1.17 2007/07/07 17:25:55 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioButton.xs,v 1.20 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -97,15 +97,15 @@ gtk_radio_button_new (class, member_or_listref=NULL, label=NULL)
 	GSList         * group = NULL;
 	GtkRadioButton * member = NULL;
     CODE:
-	if( member_or_listref && SvOK (member_or_listref)
+	if( gperl_sv_is_defined (member_or_listref)
 	    && SvROK (member_or_listref)
 	    && SvRV (member_or_listref) != &PL_sv_undef )
 	{
-		if( SvTYPE(SvRV(member_or_listref)) == SVt_PVAV )
+		if( gperl_sv_is_array_ref (member_or_listref) )
 		{
 			AV * av = (AV*)SvRV(member_or_listref);
 			SV ** svp = av_fetch(av, 0, 0);
-			if( svp && SvOK(*svp) )
+			if( svp && gperl_sv_is_defined(*svp) )
 				member = SvGtkRadioButton(*svp);
 		}
 		else
@@ -155,13 +155,13 @@ gtk_radio_button_set_group (radio_button, member_or_listref)
 	GSList         * group = NULL;
 	GtkRadioButton * member = NULL;
     CODE:
-	if( member_or_listref && SvOK (member_or_listref) )
+	if( gperl_sv_is_defined (member_or_listref) )
 	{
-		if( SvTYPE(SvRV(member_or_listref)) == SVt_PVAV )
+		if( gperl_sv_is_array_ref (member_or_listref) )
 		{
 			AV * av = (AV*)SvRV(member_or_listref);
 			SV ** svp = av_fetch(av, 0, 0);
-			if( svp && SvOK(*svp) )
+			if( svp && gperl_sv_is_defined(*svp) )
 			{
 				member = SvGtkRadioButton(*svp);
 			}

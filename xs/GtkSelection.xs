@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.29 2006/10/03 15:49:15 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.32 2008/01/07 20:23:29 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -57,29 +57,27 @@ gtk2perl_read_gtk_target_entry (SV * sv,
 	SV ** s;
 	STRLEN len;
 
-	if ((!sv) || (!SvOK (sv)) || (!SvRV (sv)) || 
-	    (SvTYPE (SvRV (sv)) != SVt_PVHV && SvTYPE (SvRV(sv)) != SVt_PVAV))
+	if (gperl_sv_is_hash_ref (sv)) {
+		h = (HV*) SvRV (sv);
+		if ((s=hv_fetch (h, "target", 6, 0)) && gperl_sv_is_defined (*s))
+			e->target = SvPV (*s, len);
+		if ((s=hv_fetch (h, "flags", 5, 0)) && gperl_sv_is_defined (*s))
+			e->flags = SvGtkTargetFlags (*s);
+		if ((s=hv_fetch (h, "info", 4, 0)) && gperl_sv_is_defined (*s))
+			e->info = SvUV (*s);
+	} else if (gperl_sv_is_array_ref (sv)) {
+		a = (AV*)SvRV (sv);
+		if ((s=av_fetch (a, 0, 0)) && gperl_sv_is_defined (*s))
+			e->target = SvPV (*s, len);
+		if ((s=av_fetch (a, 1, 0)) && gperl_sv_is_defined (*s))
+			e->flags = SvGtkTargetFlags (*s);
+		if ((s=av_fetch (a, 2, 0)) && gperl_sv_is_defined (*s))
+			e->info = SvUV (*s);
+	} else {
 		croak ("a target entry must be a reference to a hash "
 		       "containing the keys 'target', 'flags', and 'info', "
 		       "or a reference to a three-element list containing "
 		       "the information in the order target, flags, info");
-
-	if (SvTYPE (SvRV (sv)) == SVt_PVHV) {
-		h = (HV*) SvRV (sv);
-		if ((s=hv_fetch (h, "target", 6, 0)) && SvOK (*s))
-			e->target = SvPV (*s, len);
-		if ((s=hv_fetch (h, "flags", 5, 0)) && SvOK (*s))
-			e->flags = SvGtkTargetFlags (*s);
-		if ((s=hv_fetch (h, "info", 4, 0)) && SvOK (*s))
-			e->info = SvUV (*s);
-	} else {
-		a = (AV*)SvRV (sv);
-		if ((s=av_fetch (a, 0, 0)) && SvOK (*s))
-			e->target = SvPV (*s, len);
-		if ((s=av_fetch (a, 1, 0)) && SvOK (*s))
-			e->flags = SvGtkTargetFlags (*s);
-		if ((s=av_fetch (a, 2, 0)) && SvOK (*s))
-			e->info = SvUV (*s);
 	}
 }
 

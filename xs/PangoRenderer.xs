@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoRenderer.xs,v 1.3 2006/11/19 19:47:53 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoRenderer.xs,v 1.5 2008/03/10 20:54:37 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -60,3 +60,11 @@ void pango_renderer_set_matrix (PangoRenderer *renderer, const PangoMatrix_ornul
 const PangoMatrix_ornull *pango_renderer_get_matrix (PangoRenderer *renderer);
 
 #endif /* 1.8.0 */
+
+#if PANGO_CHECK_VERSION (1, 20, 0)
+
+PangoLayout * pango_renderer_get_layout (PangoRenderer *renderer);
+
+PangoLayoutLine * pango_renderer_get_layout_line (PangoRenderer *renderer);
+
+#endif
