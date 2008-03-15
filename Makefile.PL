@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.143 2008/03/10 21:06:07 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.144 2008/03/14 22:11:04 kaffeetisch Exp $
 #
 
 BEGIN { require 5.008; }
@@ -257,10 +257,6 @@ WriteMakefile(
 
     EXTRA_META    => qq/
 $configure_requires
-no_index:
-    directory:
-    - tools
-    - xs
 /,
 );
 

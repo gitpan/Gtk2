@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Gtk2
-version:             1.180
+version:             1.181
 abstract:            Perl interface to the 2.x series of the Gimp Toolkit library
 license:             ~
 author:              ~
@@ -20,8 +20,3 @@ configure_requires:
    Glib: 1.180
    ExtUtils::PkgConfig: 1.03
    Cairo: 1.00
-
-no_index:
-    directory:
-    - tools
-    - xs
