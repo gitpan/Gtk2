@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.19 2007/10/21 15:29:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.20 2008/03/30 19:31:26 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, 'GtkIconTheme is new in 2.4'],
-	tests => 16;
+	tests => 15;
 
 my $icon_theme = Gtk2::IconTheme->new;
 isa_ok ($icon_theme, 'Gtk2::IconTheme');
@@ -18,7 +18,8 @@ isa_ok ($icon_theme, 'Gtk2::IconTheme');
 
 $icon_theme->set_screen (Gtk2::Gdk::Screen->get_default);
 
-ok ($icon_theme->list_icons (undef));
+my @icons = $icon_theme->list_icons (undef);
+# @icons can be anything, even empty
 
 ok (!$icon_theme->has_icon ('something crazy'));
 

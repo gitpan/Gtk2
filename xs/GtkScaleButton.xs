@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkScaleButton.xs,v 1.1 2007/06/16 12:39:25 kaffeetisch Exp $
+ * $Id: GtkScaleButton.xs,v 1.2 2008/03/30 19:23:33 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -11,7 +11,8 @@
 #define ICONS_FROM_STACK(offset, icons)					\
 	if (items > offset) {						\
 		int i;							\
-		icons = g_new0 (gchar *, items - offset);		\
+		/* icons is supposed to be NULL-terminated */		\
+		icons = g_new0 (gchar *, items - offset + 1);		\
 		for (i = offset; i < items; i++) {			\
 			icons[i - offset] = SvPV_nolen (ST (i));	\
 		}							\

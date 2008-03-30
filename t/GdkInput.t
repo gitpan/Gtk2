@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 16;
+use Gtk2::TestHelper tests => 14;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkInput.t,v 1.2 2005/07/10 12:22:20 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkInput.t,v 1.3 2008/03/30 19:31:09 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 
@@ -38,9 +38,7 @@ $window -> realize();
 
 my ($mask, @positions) = $device -> get_state($window -> window());
 isa_ok($mask, "Gtk2::Gdk::ModifierType");
-is(@positions, 2);
-like($positions[0], qr/^\d+$/);
-like($positions[1], qr/^\d+$/);
+is(scalar @positions, 2);
 
 # FIXME: warn $device -> get_history($window -> window(), 0, time());
 

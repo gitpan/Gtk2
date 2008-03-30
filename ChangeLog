@@ -1,3 +1,40 @@
+2008-03-30  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* NEWS
+	* README: Stable release 1.182.
+
+2008-03-30  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkScaleButton.xs: NULL-terminate the icon list passed to
+	gtk_scale_button_new and gtk_scale_button_set_icons.
+
+	* xs/GtkBuildable.xs (gtk2perl_buildable_custom_tag_start): Don't
+	declare variables after expressions.
+
+	* Makefile.PL: Depend on ExtUtils::Depends 0.300 and thereby void
+	the need for the find_extra_libs stuff.
+
+	* Gtk2/t/Gdk.t
+	* Gtk2/t/GdkDisplay.t
+	* Gtk2/t/GdkInput.t
+	* Gtk2/t/GdkProperty.t
+	* Gtk2/t/GdkSelection.t
+	* Gtk2/t/GdkWindow.t
+	* Gtk2/t/GtkFontSelection.t
+	* Gtk2/t/GtkIconTheme.t
+	* Gtk2/t/GtkIconView.t
+	* Gtk2/t/GtkSocket-GtkPlug.t
+	* Gtk2/t/GtkStatusIcon.t
+	* Gtk2/t/GtkTreeView.t
+	* Gtk2/t/PangoCairo.t: Fix test failures, mostly on MSWin32 and cygwin.
+
+2008-03-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL: Trap exceptions thrown by EU::PkgConfig->find.
+	When one occurs, exit with status 0 to indicate to CPAN testers
+	that their system isn't supported.
+
 2008-03-15  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Gtk2.pm

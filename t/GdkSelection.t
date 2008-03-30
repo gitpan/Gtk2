@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 20;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkSelection.t,v 1.3 2004/02/27 05:31:48 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkSelection.t,v 1.4 2008/03/30 19:31:12 kaffeetisch Exp $
 
 foreach (Gtk2::Gdk -> SELECTION_PRIMARY(),
          Gtk2::Gdk -> SELECTION_SECONDARY(),
@@ -44,10 +44,18 @@ SKIP: {
   is(Gtk2::Gdk::Selection -> owner_set_for_display($display, $window -> window(), $primary, 0, 0), 1);
   is(Gtk2::Gdk::Selection -> owner_get_for_display($display, $primary), $window -> window());
 
-  Gtk2::Gdk::Selection -> send_notify_for_display($display, $window -> window() -> get_xid(), $primary, $target, $property, 0);
+  if ($window -> window() -> can("get_xid")) {
+    Gtk2::Gdk::Selection -> send_notify_for_display(
+      $display, $window -> window() -> get_xid(),
+      $primary, $target, $property, 0);
+  }
 }
 
-Gtk2::Gdk::Selection -> send_notify($window -> window() -> get_xid(), $primary, $target, $property, 0);
+if ($window -> window() -> can("get_xid")) {
+  Gtk2::Gdk::Selection -> send_notify(
+    $window -> window() -> get_xid(),
+    $primary, $target, $property, 0);
+}
 
 # FIXME: warn Gtk2::Gdk::Selection -> property_get($window -> window());
 

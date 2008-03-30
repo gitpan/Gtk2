@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 9;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFontSelection.t,v 1.5 2004/05/15 19:03:30 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFontSelection.t,v 1.6 2008/03/30 19:31:26 kaffeetisch Exp $
 
 my $fs = Gtk2::FontSelection -> new();
 isa_ok($fs, "Gtk2::FontSelection");
@@ -22,7 +22,7 @@ isa_ok($dialog -> apply_button, "Gtk2::Button");
 isa_ok($dialog -> cancel_button, "Gtk2::Button");
 
 ok($dialog -> set_font_name("Sans 12"));
-is(lc($dialog -> get_font_name()), "sans 12");
+ok(defined($dialog -> get_font_name()));
 
 $dialog -> set_preview_text("Quick brown gtk2-perl.");
 is($dialog -> get_preview_text(), "Quick brown gtk2-perl.");

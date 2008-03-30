@@ -1,6 +1,6 @@
 #########################
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSocket-GtkPlug.t,v 1.3 2006/09/10 17:26:53 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSocket-GtkPlug.t,v 1.4 2008/03/30 19:31:33 kaffeetisch Exp $
 #
 
 #########################
@@ -49,6 +49,9 @@ use strict;
 use warnings;
 
 my $pid = fork;
+
+skip 'fork failed', 1 unless defined $pid;
+
 if( $pid < 0 )
 {
 	die "fork failed, no use trying";

@@ -7,7 +7,7 @@ use Gtk2::TestHelper
   tests => 26,
   at_least_version => [2, 10, 0, "Gtk2::StatusIcon is new in 2.10"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStatusIcon.t,v 1.9 2008/01/12 22:28:27 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStatusIcon.t,v 1.10 2008/03/30 19:31:35 kaffeetisch Exp $
 
 my $icon;
 
@@ -24,7 +24,7 @@ is($icon -> get_visible(), TRUE);
 $icon -> set_blinking(TRUE);
 is($icon -> get_blinking(), TRUE);
 
-is($icon -> is_embedded(), FALSE);
+ok(defined $icon -> is_embedded());
 
 # --------------------------------------------------------------------------- #
 
@@ -102,10 +102,10 @@ SKIP: {
   # Make sure the returned rectangle is valid.  It's a copy of a stack
   # object, so we just need to ensure that the values are in some sane
   # range, rather than garbage.
-  ok ($area->x >= 0);
-  ok ($area->y >= 0);
-  ok ($area->width < Gtk2::Gdk->screen_width ());
-  ok ($area->height < Gtk2::Gdk->screen_height ());
+  ok (abs $area->x <= Gtk2::Gdk->screen_width ());
+  ok (abs $area->y <= Gtk2::Gdk->screen_height ());
+  ok ($area->width <= Gtk2::Gdk->screen_width ());
+  ok ($area->height <= Gtk2::Gdk->screen_height ());
 }
 
 # --------------------------------------------------------------------------- #

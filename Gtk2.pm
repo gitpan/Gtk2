@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.119 2008/03/15 00:23:15 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.120 2008/03/30 19:49:43 kaffeetisch Exp $
 #
 
 package Gtk2;
@@ -36,7 +36,7 @@ eval "use Cairo;";
 
 require DynaLoader;
 
-our $VERSION = '1.181';
+our $VERSION = '1.182';
 
 our @ISA = qw(DynaLoader);
 

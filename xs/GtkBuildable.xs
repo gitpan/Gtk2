@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkBuildable.xs,v 1.3 2008/03/10 20:54:37 kaffeetisch Exp $
+ * $Id: GtkBuildable.xs,v 1.4 2008/03/30 19:25:16 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -420,10 +420,10 @@ gtk2perl_buildable_custom_tag_start (GtkBuildable  *buildable,
 {
 	gboolean ret = FALSE;
 
+	GET_METHOD_OR_DIE (buildable, "CUSTOM_TAG_START");
+
 	*data = NULL;
 	memset (parser, 0, sizeof (*parser));
-
-	GET_METHOD_OR_DIE (buildable, "CUSTOM_TAG_START");
 
 	{
 		SV * sv;

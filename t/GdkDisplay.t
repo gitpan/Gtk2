@@ -4,14 +4,19 @@ use Gtk2::TestHelper
   tests => 24,
   at_least_version => [2, 2, 0, "GdkDisplay is new in 2.2"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.14 2007/09/15 14:32:56 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplay.t,v 1.15 2008/03/30 19:31:07 kaffeetisch Exp $
 
-my $display = Gtk2::Gdk::Display -> open($ENV{DISPLAY});
+my $display = Gtk2::Gdk::Display -> get_default();
 isa_ok($display, "Gtk2::Gdk::Display");
 ok(defined($display -> get_name()));
 
-$display = Gtk2::Gdk::Display -> get_default();
-isa_ok($display, "Gtk2::Gdk::Display");
+SKIP: {
+  skip '$ENV{DISPLAY} is not set', 1
+    unless exists $ENV{DISPLAY};
+
+  isa_ok(Gtk2::Gdk::Display -> open($ENV{DISPLAY}),
+         "Gtk2::Gdk::Display");
+}
 
 like($display -> get_n_screens(), qr/^\d+$/);
 
@@ -57,7 +62,10 @@ SKIP: {
   like($width, qr/^\d+$/);
   like($height, qr/^\d+$/);
 
-  isa_ok($display -> get_default_group(), "Gtk2::Gdk::Window");
+  my $default_group = $display -> get_default_group();
+  skip 'no default group', 1
+    unless defined $default_group;
+  isa_ok($default_group, "Gtk2::Gdk::Window");
 }
 
 SKIP: {
