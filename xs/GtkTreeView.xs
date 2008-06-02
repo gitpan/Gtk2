@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.47 2008/01/07 19:54:50 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.48 2008/05/04 13:24:02 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -793,6 +793,9 @@ gtk_tree_view_set_row_separator_func (GtkTreeView *tree_view, SV * func, SV * da
 #if GTK_CHECK_VERSION (2, 8, 0)
 
 #gboolean gtk_tree_view_get_visible_range (GtkTreeView *tree_view, GtkTreePath **start_path, GtkTreePath **end_path);
+=for apidoc
+=for signature (start_path, end_path) = $tree_view->get_visible_range
+=cut
 void
 gtk_tree_view_get_visible_range (tree_view)
 	GtkTreeView *tree_view
@@ -886,6 +889,9 @@ void gtk_tree_view_set_tooltip_row (GtkTreeView *tree_view, GtkTooltip *tooltip,
 void gtk_tree_view_set_tooltip_cell (GtkTreeView *tree_view, GtkTooltip *tooltip, GtkTreePath *path, GtkTreeViewColumn *column, GtkCellRenderer *cell);
 
 # gboolean gtk_tree_view_get_tooltip_context (GtkTreeView *tree_view, gint *x, gint *y, gboolean keyboard_tip, GtkTreeModel **model, GtkTreePath **path, GtkTreeIter *iter);
+=for apidoc
+=for signature (x, y, model, path, iter) = $treeview->get_tooltip_context ($x, $y, $keyboard_tip)
+=cut
 void
 gtk_tree_view_get_tooltip_context (GtkTreeView *tree_view, gint x, gint y, gboolean keyboard_tip)
     PREINIT:

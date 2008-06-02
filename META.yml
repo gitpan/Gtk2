@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Gtk2
-version:             1.182
+version:             1.183
 abstract:            Perl interface to the 2.x series of the Gimp Toolkit library
 license:             ~
 author:              ~

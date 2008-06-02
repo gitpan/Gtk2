@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.18 2007/12/16 18:31:16 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.19 2008/04/20 17:02:28 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -32,7 +32,7 @@ BOOT:
 
 ##  GdkDisplay *gdk_display_open (const gchar *display_name) 
 GdkDisplay_ornull *
-gdk_display_open (class, const gchar * display_name)
+gdk_display_open (class, const gchar_ornull * display_name)
     C_ARGS:
 	display_name
 

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 46;
+use Gtk2::TestHelper tests => 49;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkProperty.t,v 1.8 2008/03/30 19:31:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkProperty.t,v 1.9 2008/05/22 21:39:59 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();
@@ -17,6 +17,15 @@ my $cardinal = Gtk2::Gdk::Atom -> new("CARDINAL");
 
 foreach ($name, $strut, $strut_partial, $string, $cardinal) {
   isa_ok($_, "Gtk2::Gdk::Atom");
+}
+
+{
+  my $h1 = Gtk2::Gdk::Atom->intern("hello");
+  my $h2 = Gtk2::Gdk::Atom->intern("hello");
+  my $w = Gtk2::Gdk::Atom->intern("world");
+  ok ($h1 == $h2);
+  ok ($h1 != $w);
+  ok (! ($h1 != $h2));
 }
 
 is($name -> name(), "WM_NAME");

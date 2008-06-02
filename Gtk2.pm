@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.120 2008/03/30 19:49:43 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.121.2.1 2008/06/02 09:16:21 kaffeetisch Exp $
 #
 
 package Gtk2;
@@ -36,7 +36,7 @@ eval "use Cairo;";
 
 require DynaLoader;
 
-our $VERSION = '1.182';
+our $VERSION = '1.183';
 
 our @ISA = qw(DynaLoader);
 
@@ -95,6 +95,7 @@ package Gtk2::Gdk::Atom;
 
 use overload
 	'==' => \&Gtk2::Gdk::Atom::eq,
+	'!=' => \&Gtk2::Gdk::Atom::ne,
 	fallback => 1;
 
 package Gtk2::CellLayout::DataFunc;

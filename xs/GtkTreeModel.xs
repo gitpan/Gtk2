@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.52 2008/01/07 20:23:29 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.54 2008/05/20 19:44:32 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -313,11 +313,13 @@ static gboolean
 gtk2perl_tree_model_iter_has_child (GtkTreeModel *tree_model,
                                     GtkTreeIter  *iter)
 {
+	SV *sv;
 	gboolean ret;
 	PREP (tree_model);
 	XPUSHs (sv_2mortal (sv_from_iter (iter)));
 	CALL ("ITER_HAS_CHILD", G_SCALAR);
-	ret = POPi;
+	sv = POPs;
+	ret = sv_2bool (sv);
 	FINISH;
 	return ret;
 }
@@ -565,13 +567,21 @@ An arbitrary integer value.
 
 =item o user_data2 (scalar)
 
-An arbitrary scalar.  Will not persist.  May be undef.
+An arbitrary reference.  Will not persist.  May be undef.
 
 =item o user_data3 (scalar)
 
-An arbitrary scalar.  Will not persist.  May be undef.
+An arbitrary reference.  Will not persist.  May be undef.
 
 =back
+
+The two references, if used, will generally be to data within the model,
+like a row array, or a node object in a tree or linked list.  Keeping the
+things referred to alive is the model's responsibility.  An iter doesn't
+make them persist, and if the things are destroyed then any iters still
+containing them will become invalid (and result in memory corruption if
+used).  An iter only has to remain valid until the model contents change, so
+generally anything internal to the model is fine.
 
 =head2 VIRTUAL METHODS
 

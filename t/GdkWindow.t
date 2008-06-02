@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 40;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.26 2008/03/30 19:31:13 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.27 2008/05/20 20:36:36 kaffeetisch Exp $
 
 my $attributes = {
   title => "Bla",
@@ -18,7 +18,7 @@ my $attributes = {
   colormap => Gtk2::Gdk::Colormap -> get_system(),
   window_type => "toplevel",
   cursor => Gtk2::Gdk::Cursor -> new("arrow"),
-  override_redirect => 0
+  override_redirect => ''
 };
 
 my $attributes_small = {

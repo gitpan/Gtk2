@@ -1,5 +1,6 @@
+#!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRecentManager.t,v 1.6 2007/07/10 16:40:41 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRecentManager.t,v 1.6.4.1 2008/05/31 18:07:05 kaffeetisch Exp $
 #
 
 #########################
@@ -51,6 +52,9 @@ SKIP: {
 	my $icon_uri  = 'file://' . $icon_file;
 
 	$manager->add_item($icon_uri);
+	# add_item() is asynchronous, so let the main loop spin for a while
+	run_main while !$manager->get_items;
+
 	ok($manager->has_item($icon_uri), 'check add item');
 
 	$manager->move_item($icon_uri, $icon_uri . '.bak');

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.23 2006/05/13 16:13:00 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.24 2008/05/22 21:39:59 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -66,8 +66,14 @@ gboolean
 eq (left, right, swap=FALSE)
 	GdkAtom left
 	GdkAtom right
+    ALIAS:
+	ne = 1
     CODE:
-	RETVAL = left == right;
+	switch (ix) {
+	    case 0: RETVAL = left == right; break;
+	    case 1: RETVAL = left != right; break;
+	    default: croak ("incorrect alias value encountered"); RETVAL = FALSE;
+	}
     OUTPUT:
 	RETVAL
 

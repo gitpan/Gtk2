@@ -1,3 +1,66 @@
+2008-06-02  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* NEWS
+	* README: Stable release 1.183.
+
+2008-06-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	Merge from HEAD:
+
+	* xs/GtkAdjustment.xs: Improve the documentation for the
+	accessors.  Patch by Kevin Ryde.
+
+	* xs/GtkWidget.xs: Document why signal_chain_from_overridden
+	doesn't quite work when used in a size-request handler.  Patch by
+	Kevin Ryde.
+
+2008-05-31  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	Merge from HEAD:
+
+	* t/GtkRecentChooser.t
+	* t/GtkRecentManager.t: Fix test failures due to the asynchronous
+	nature of the manager's add_item().
+
+2008-05-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* t/GdkProperty.t
+	* xs/GdkProperty.xs: Overload '!=' for GdkAtoms.  Patch by Kevin
+	Ryde.
+
+2008-05-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GdkWindow.xs: Add documentation for Gtk2::Gdk::Window::new.
+	Patch by Kevin Ryde.
+
+	* t/GdkWindow.t
+	* xs/GdkWindow.xs (SvGdkWindowAttrReal): Use sv_2bool instead of
+	SvUV to convert override_redirect values.
+
+	* t/GtkTreeModelIface.t
+	* xs/GtkTreeModel.xs (gtk2perl_tree_model_iter_has_child): Accept
+	all the usual boolean values for the return value of
+	ITER_HAS_CHILD.
+
+	* t/PangoLayout.t: Fix test failure on newer pango versions.
+
+2008-05-04  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkTreeView.xs: Describe the return values of
+	get_visible_range and get_tooltip_context.  Patch by Kevin Ryde.
+
+	* xs/GtkTreeModel.xs: In the POD section about tree iterators, add
+	a paragraph explaining how data put into iterators needs to be
+	kept alive by the model.  Patch by Kevin Ryde.
+
+2008-04-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GdkDisplay.t
+	* xs/GdkDisplay.xs: Allow undef for the display name parameter of
+	Gtk2::Gdk::Display::open.  Patch by Kevin Ryde.
+
 2008-03-30  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Gtk2.pm

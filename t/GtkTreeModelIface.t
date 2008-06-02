@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelIface.t,v 1.5 2005/10/05 19:13:07 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelIface.t,v 1.6 2008/05/20 19:44:32 kaffeetisch Exp $
 
 package CustomList;
 
@@ -180,7 +180,7 @@ sub ITER_HAS_CHILD {
 	isa_ok ($list, "CustomList", "ITER_HAS_CHILD");
 	ok ($iter->[0] == $list->{stamp}, "ITER_HAS_CHILD");
 
-	return FALSE;
+	return 'asdf';
 }
 
 sub ITER_N_CHILDREN {
@@ -374,7 +374,7 @@ isa_ok ($iter = $model->iter_children(undef), "Gtk2::TreeIter");
 isa_ok ($path = $model->get_path ($iter), "Gtk2::TreePath");
 is_deeply ([$path->get_indices], [0]);
 
-is ($model->iter_has_child ($iter), FALSE);
+is ($model->iter_has_child ($iter), TRUE);
 is ($model->iter_n_children ($iter), 0);
 
 isa_ok ($iter = $model->iter_nth_child (undef, 7), "Gtk2::TreeIter");
