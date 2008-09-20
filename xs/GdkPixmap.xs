@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.20 2006/08/07 18:36:08 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkPixmap.xs,v 1.21 2008/08/16 20:24:48 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -52,6 +52,17 @@ BOOT:
 	 * in its isa so that bitmaps can be used wherever pixmaps are
 	 * wanted.  otherwise, apps need to bless by hand. */
 	gperl_set_isa ("Gtk2::Gdk::Bitmap", "Gtk2::Gdk::Pixmap");
+
+=for position post_hierarchy
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Gdk::Drawable
+       +----Gtk2::Gdk::Pixmap
+            +----Gtk2::Gdk::Bitmap
+
+=cut
 
  ## GdkBitmap* gdk_bitmap_create_from_data (class, GdkDrawable *drawable, const gchar *data, gint width, gint height)
 ### intentionally switched to char instead of gchar

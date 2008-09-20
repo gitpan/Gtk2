@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w
 # vim: set filetype=perl :
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/02.GtkContainer.t,v 1.7 2008/01/08 04:21:35 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/02.GtkContainer.t,v 1.8 2008/08/11 14:56:54 kaffeetisch Exp $
 
-use Gtk2::TestHelper tests => 28;
+use Gtk2::TestHelper tests => 30;
 
 # we'll create some containers (windows and boxes are containers) and
 # mess around with some of the methods to make sure they do things.
@@ -20,6 +20,15 @@ ok (1, 'added a widget to the window');
 
 $window->set_focus_child($vbox);
 ok(1);
+
+SKIP: {
+	skip 'new 2.14 stuff', 2
+		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+	is ($window->get_focus_child, $vbox);
+	$window->set_focus_child (undef);
+	is ($window->get_focus_child, undef);
+}
 
 my $adjustment = Gtk2::Adjustment->new(0, 0, 100, 5, 10, 20);
 

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.13 2008/01/07 19:54:50 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.14 2008/08/16 20:24:48 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -166,6 +166,16 @@ MODULE = Gtk2::Pango::Cairo	PACKAGE = Gtk2::Pango::Cairo::Context	PREFIX = pango
 
 BOOT:
 	gperl_set_isa ("Gtk2::Pango::Cairo::Context", "Gtk2::Pango::Context");
+
+=for position post_hierarchy
+
+=head1 HIERARCHY
+
+  Glib::Object
+  +----Gtk2::Pango::Context
+       +----Gtk2::Pango::Cairo::Context
+
+=cut
 
 =for apidoc __function__
 =cut

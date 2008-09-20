@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 5;
+use Gtk2::TestHelper tests => 6;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMessageDialog.t,v 1.13 2006/08/07 18:36:04 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMessageDialog.t,v 1.14 2008/08/17 15:16:21 kaffeetisch Exp $
 
 my $dialog = Gtk2::MessageDialog -> new(undef,
                                         "destroy-with-parent",
@@ -58,12 +58,20 @@ SKIP: {
   $dialog -> format_secondary_markup(undef);
 }
 
+my $image = Gtk2::Label -> new(":-)");
+
 SKIP: {
   skip("new 2.10 stuff", 0)
     unless Gtk2->CHECK_VERSION (2, 10, 0);
 
-  my $image = Gtk2::Label -> new(":-)");
   $dialog -> set_image($image);
+}
+
+SKIP: {
+  skip 'new 2.14 stuff', 1
+    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+  is ($dialog -> get_image(), $image);
 }
 
 __END__

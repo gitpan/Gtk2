@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
 use Gtk2::TestHelper
-  tests => 18,
+  tests => 23,
   at_least_version => [2, 10, 0, "GtkPageSetup is new in 2.10"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPageSetup.t,v 1.4 2007/09/15 14:33:00 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPageSetup.t,v 1.6 2008/08/15 18:58:42 kaffeetisch Exp $
 
 my $setup = Gtk2::PageSetup -> new();
 isa_ok($setup, "Gtk2::PageSetup");
@@ -72,6 +72,43 @@ SKIP: {
   is($@, '');
   isa_ok($new_setup, 'Gtk2::PageSetup');
   is($new_setup -> get_top_margin('mm'), 23);
+
+  unlink $file;
+}
+
+SKIP: {
+  skip 'new 2.14 stuff', 5
+    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+  my $file = 'tmp.setup';
+
+  my $setup = Gtk2::PageSetup -> new();
+  $setup -> set_top_margin(23, 'mm');
+
+  $setup -> to_file($file);
+
+  my $key_file = Glib::KeyFile -> new();
+  my $group = undef;
+  $setup -> to_key_file($key_file, $group);
+
+  my $copy = Gtk2::PageSetup -> new();
+  eval {
+    $copy -> load_file($file);
+  };
+  is($@, '');
+  is($copy -> get_top_margin('mm'), 23);
+
+  eval {
+    $copy -> load_file('asdf');
+  };
+  ok(defined $@);
+
+  $copy = Gtk2::PageSetup -> new();
+  eval {
+    $copy -> load_key_file($key_file, $group);
+  };
+  is($@, '');
+  is($copy -> get_top_margin('mm'), 23);
 
   unlink $file;
 }

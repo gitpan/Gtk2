@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkContainer.xs,v 1.18 2008/01/08 04:21:34 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkContainer.xs,v 1.19 2008/08/11 14:56:54 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -188,7 +188,13 @@ gtk_container_unset_focus_chain (container)
 void
 gtk_container_set_focus_child (container, child)
 	GtkContainer *container
-	GtkWidget *child
+	GtkWidget_ornull *child
+
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14*/
+
+GtkWidget_ornull * gtk_container_get_focus_child (GtkContainer *container);
+
+#endif /* 2.14 */
 
 GtkAdjustment_ornull *
 gtk_container_get_focus_hadjustment (container)

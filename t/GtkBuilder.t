@@ -2,26 +2,25 @@
 use strict;
 use warnings;
 use Gtk2::TestHelper
-  tests => 37,
+  tests => 45,
   at_least_version => [2, 12, 0, 'GtkBuildable: it appeared in 2.12'];
 
-# $Id: GtkBuilder.t,v 1.3 2008/03/10 20:54:35 kaffeetisch Exp $
+# $Id: GtkBuilder.t,v 1.5 2008/08/07 21:41:44 kaffeetisch Exp $
 
 my $builder;
 my $ui = <<EOD;
 <interface>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0</property>
-    <property name="upper">10</property>
-    <property name="step-increment">2</property>
-    <property name="page-increment">3</property>
-    <property name="page-size">5</property>
-    <property name="value">1</property>
+    <property name="upper">5</property>
+    <property name="step-increment">1</property>
+    <property name="value">5</property>
   </object>
   <object class="GtkSpinButton" id="spinbutton1">
     <property name="visible">True</property>
     <property name="adjustment">adjustment1</property>
     <signal name="value-changed" handler="value_changed" object="adjustment1" after="yes"/>
+    <signal name="wrapped" handler="wrapped"/>
   </object>
 </interface>
 EOD
@@ -53,6 +52,37 @@ is ($builder->get_translation_domain, undef);
 $builder->set_translation_domain ('de');
 is ($builder->get_translation_domain, 'de');
 
+SKIP: {
+  skip 'new 2.14 stuff', 8
+    unless Gtk2->CHECK_VERSION (2, 13, 6); # FIXME: 2.14
+
+  my $builder = Gtk2::Builder->new;
+  eval {
+    ok ($builder->add_objects_from_file ($ui_file, qw/adjustment1 spinbutton1/));
+  };
+  is ($@, '');
+  ok (defined $builder->get_object ('adjustment1') &&
+      defined $builder->get_object ('spinbutton1'));
+
+  eval {
+    $builder->add_objects_from_file ('bla.ui', qw/adjustment1 spinbutton1/);
+  };
+  like ($@, qr/bla\.ui/);
+
+  $builder = Gtk2::Builder->new;
+  eval {
+    ok ($builder->add_objects_from_string ($ui, qw/adjustment1 spinbutton1/));
+  };
+  is ($@, '');
+  ok (defined $builder->get_object ('adjustment1') &&
+      defined $builder->get_object ('spinbutton1'));
+
+  eval {
+    $builder->add_objects_from_string ('<bla>', qw/adjustment1 spinbutton1/);
+  };
+  like ($@, qr/bla/);
+}
+
 unlink $ui_file;
 
 # --------------------------------------------------------------------------- #
@@ -81,6 +111,10 @@ $builder->connect_signals_full(sub {
       $flags,
       $data) = @_;
 
+  if ($signal_name ne 'value-changed') {
+    return;
+  }
+
   isa_ok ($builder, 'Gtk2::Builder');
   isa_ok ($object, 'Gtk2::SpinButton');
   is ($signal_name, 'value-changed');
@@ -89,27 +123,6 @@ $builder->connect_signals_full(sub {
   ok ($flags == [ qw/after swapped/ ]);
   is ($data, 'data');
 }, 'data');
-
-# --------------------------------------------------------------------------- #
-
-$ui = <<EOD;
-<interface>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">0</property>
-    <property name="upper">10</property>
-    <property name="step-increment">2</property>
-    <property name="page-increment">3</property>
-    <property name="page-size">5</property>
-    <property name="value">10</property>
-  </object>
-  <object class="GtkSpinButton" id="spinbutton1">
-    <property name="visible">True</property>
-    <property name="adjustment">adjustment1</property>
-    <signal name="value-changed" handler="value_changed" object="adjustment1" after="yes"/>
-    <signal name="wrapped" handler="wrapped"/>
-  </object>
-</interface>
-EOD
 
 # --------------------------------------------------------------------------- #
 

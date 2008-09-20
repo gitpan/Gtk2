@@ -1,5 +1,6 @@
+#!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkItemFactory.t,v 1.7 2006/07/07 22:14:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkItemFactory.t,v 1.8 2008/08/17 18:32:36 kaffeetisch Exp $
 #
 
 #########################
@@ -108,8 +109,23 @@ isa_ok( $fac->get_widget('<main>'), "Gtk2::Menu" );
 
 # is( Gtk2::ItemFactory->path_from_widget($fac->get_widget_by_action(2)),
 #     '<main>/Menu/Test 2' );
-isa_ok( $fac->get_widget_by_action(2), "Gtk2::Widget" );
-isa_ok( $fac->get_item_by_action(2), "Gtk2::MenuItem" );
+
+# sometimes, these can apparently return undef
+SKIP: {
+	my $widget = $fac->get_widget_by_action(2);
+	skip 'get_widget_by_action returned undef', 1
+		unless defined $widget;
+
+	isa_ok( $widget, "Gtk2::Widget" );
+}
+
+SKIP: {
+	my $item = $fac->get_item_by_action(2);
+	skip 'get_item_by_action returned undef', 1
+		unless defined $item;
+
+	isa_ok( $item, "Gtk2::MenuItem" );
+}
 
 my $skip_actions_tests = FALSE;
 

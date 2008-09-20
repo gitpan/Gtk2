@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelIface.t,v 1.6 2008/05/20 19:44:32 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeModelIface.t,v 1.13 2008/09/16 21:52:25 kaffeetisch Exp $
 
 package CustomList;
 
@@ -346,7 +346,7 @@ sub sort {
 
 package main;
 
-use Gtk2::TestHelper tests => 166, noinit => 1;
+use Gtk2::TestHelper tests => 179, noinit => 1;
 use strict;
 use warnings;
 
@@ -393,6 +393,24 @@ is ($model->get($iter, 1), '12th');
 $model->ref_node ($iter);
 $model->unref_node ($iter);
 
+{ my $signal_finished = 0;
+  my $len = @{$model->{data}};
+  my @array = (0 .. $len-1);
+  my $id = $model->signal_connect (rows_reordered => sub {
+                                     my ($s_model, $path, $iter, $aref) = @_;
+                                     is ($s_model, $model);
+                                     isa_ok ($path, "Gtk2::TreePath");
+                                     my @indices = $path->get_indices;
+                                     is_deeply (\@indices, []);
+                                     is ($iter, undef);
+                                     is_deeply ($aref, \@array);
+                                     $signal_finished = 1;
+                                   });
+  $model->rows_reordered (Gtk2::TreePath->new, undef, @array);
+  ok ($signal_finished, 'rows-reordered signal ran');
+  $model->signal_handler_disconnect ($id);
+}
+
 my $sorter_two = sub {
 	my ($list, $a, $b, $data) = @_;
 
@@ -437,5 +455,77 @@ ok ($model->has_default_sort_func);
 $model->sort(2);
 $model->sort(3);
 $model->sort(23);
+
+# Exercise Gtk2::TreeIter->set.
+{ my $myvar;
+  my $stamp = 123;
+  my $iter = Gtk2::TreeIter->new_from_arrayref ([$stamp, 999, \$stamp, undef]);
+  my $aref = [$stamp, 456, undef, \$myvar];
+  $iter->set ($aref);
+  is_deeply ($iter->to_arrayref($stamp), $aref,
+             'iter->set() from an array');
+}
+{ my $myvar;
+  my $stamp = 123;
+  my $iter = Gtk2::TreeIter->new_from_arrayref ([$stamp, 999, \$stamp, undef]);
+  my $aref = [$stamp, 456, undef, \$myvar];
+  my $other = Gtk2::TreeIter->new_from_arrayref ($aref);
+  $iter->set ($other);
+  is_deeply ($iter->to_arrayref($stamp), $other->to_arrayref($stamp),
+             'iter->set() from another iter');
+}
+
+###############################################################################
+
+package StackTestModel;
+use strict;
+use warnings;
+use Glib qw/TRUE FALSE/;
+
+use Glib::Object::Subclass
+  Glib::Object::,
+  interfaces => [ Gtk2::TreeModel::, Gtk2::TreeSortable:: ];
+
+our @ROW = (100,200,300,400,500,600,700,800,900,1000);
+
+sub grow_the_stack { 1 .. 500; };
+
+sub GET_N_COLUMNS {
+  my @list = grow_the_stack();
+  return scalar @ROW;
+}
+
+sub GET_COLUMN_TYPE { return 'Glib::String'; }
+
+sub GET_ITER { return [ 123, undef, undef, undef ]; }
+
+sub GET_VALUE {
+  my ($self, $iter, $col) = @_;
+  my @list = grow_the_stack();
+  return $ROW[$col];
+}
+
+sub GET_SORT_COLUMN_ID {
+  my @list = grow_the_stack();
+  return TRUE, 3, 'ascending';
+}
+
+package main;
+
+use strict;
+use warnings;
+
+$model = StackTestModel->new;
+is_deeply ([ $model->get ($model->get_iter_first) ],
+           [ @StackTestModel::ROW ],
+           '$model->get ($iter) does not result in stack corruption');
+
+is_deeply ([ $model->get ($model->get_iter_first, reverse 0 .. 9) ],
+           [ reverse @StackTestModel::ROW ],
+           '$model->get ($iter, @columns) does not result in stack corruption');
+
+is_deeply ([ $model->get_sort_column_id ],
+           [ 3, 'ascending' ],
+           '$model->get_sort_column_id does not result in stack corruption');
 
 # vim: set syntax=perl :

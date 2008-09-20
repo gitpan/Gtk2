@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.22 2008/01/07 19:54:49 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMessageDialog.xs,v 1.23 2008/08/17 15:16:21 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -182,3 +182,9 @@ gtk_message_dialog_format_secondary_markup (message_dialog, message)
 void gtk_message_dialog_set_image (GtkMessageDialog *dialog, GtkWidget *image);
 
 #endif
+
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+
+GtkWidget* gtk_message_dialog_get_image (GtkMessageDialog *dialog);
+
+#endif /* 2.14 */

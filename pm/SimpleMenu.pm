@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleMenu.pm,v 1.9 2005/10/14 03:51:26 muppetman Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleMenu.pm,v 1.10 2008/06/20 01:19:26 rwmcfa1 Exp $
 #
 
 package Gtk2::SimpleMenu;
@@ -201,19 +201,19 @@ application menus
 			callback => \&mode_callback,
 			callback_action => 4,
 			groupid => 1,
-		}
+		},
 		_Second => {
 			item_type => '<RadioItem>',
 			callback => \&mode_callback,
 			callback_action => 5,
 			groupid => 1,
-		}
+		},
 		_Third => {
 			item_type => '<RadioItem>',
 			callback => \&mode_callback,
 			callback_action => 6,
 			groupid => 1,
-		}
+		},
 	}
 	_Help => {
 		children => [

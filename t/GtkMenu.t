@@ -1,5 +1,6 @@
+#!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenu.t,v 1.9 2006/07/07 22:14:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenu.t,v 1.10 2008/08/17 15:11:34 kaffeetisch Exp $
 #
 
 #########################
@@ -7,7 +8,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 55;
+use Gtk2::TestHelper tests => 57;
 
 ok( my $menubar = Gtk2::MenuBar->new );
 
@@ -128,6 +129,18 @@ unless ($i_know_you) {
 	foreach (0 .. 3) {
 		ok (TRUE, 'faking pos. callback');
 	}
+}
+
+SKIP: {
+	skip 'new 2.14 stuff', 2
+		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+	my $menu = Gtk2::Menu->new;
+	$menu->set_accel_path ('<gtk2perl>/main/menu');
+	is ($menu->get_accel_path, '<gtk2perl>/main/menu');
+
+	$menu->set_monitor (0);
+	is ($menu->get_monitor, 0);
 }
 
 __END__

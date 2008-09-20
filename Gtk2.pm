@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.121.2.1 2008/06/02 09:16:21 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Gtk2.pm,v 1.129 2008/09/20 13:48:07 kaffeetisch Exp $
 #
 
 package Gtk2;
@@ -34,35 +34,12 @@ use Glib;
 # gtk+ and pango.
 eval "use Cairo;";
 
+use Exporter;
 require DynaLoader;
 
-our $VERSION = '1.183';
+our $VERSION = '1.200';
 
-our @ISA = qw(DynaLoader);
-
-sub import {
-	my $class = shift;
-
-	# threads' init needs to be called before the main init and we don't
-	# want to force the order those options are passed to us so we need to
-	# cache the choices in booleans and (optionally) do them in the corect
-	# order afterwards
-	my $init = 0;
-	my $threads_init = 0;
-
-	foreach (@_) {
-		if (/^-?init$/) {
-			$init = 1;
-		} elsif (/-?threads-init$/) {
-			$threads_init = 1;
-		} else {
-			$class->VERSION ($_);
-		}
-	}
-
-	Gtk2::Gdk::Threads->init if ($threads_init);
-	Gtk2->init if ($init);
-}
+our @ISA = qw(DynaLoader Exporter);
 
 # this is critical -- tell dynaloader to load the module so that its
 # symbols are available to all other modules.  without this, nobody
@@ -79,6 +56,40 @@ sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
 # now load the XS code.
 Gtk2->bootstrap ($VERSION);
+
+# %Gtk2::EXPORT_TAGS is filled from the constants-x.y files by the generated XS
+# code in build/constants.xs
+our @EXPORT_OK = map { @$_ } values %Gtk2::EXPORT_TAGS;
+$Gtk2::EXPORT_TAGS{all} = \@EXPORT_OK;
+
+sub import {
+	my $class = shift;
+
+	# threads' init needs to be called before the main init and we don't
+	# want to force the order those options are passed to us so we need to
+	# cache the choices in booleans and (optionally) do them in the corect
+	# order afterwards
+	my $init = 0;
+	my $threads_init = 0;
+
+	my @unknown_args = ($class);
+	foreach (@_) {
+		if (/^-?init$/) {
+			$init = 1;
+		} elsif (/-?threads-init$/) {
+			$threads_init = 1;
+		} else {
+			push @unknown_args, $_;
+		}
+	}
+
+	Gtk2::Gdk::Threads->init if ($threads_init);
+	Gtk2->init if ($init);
+
+	# call into Exporter for the unrecognized arguments; handles exporting
+	# and version checking
+	Gtk2->export_to_level (1, @unknown_args);
+}
 
 # Preloaded methods go here.
 
@@ -270,6 +281,23 @@ invoked as Gtk2::Gdk::Threads->init it should be done before Gtk2->init is
 called, if done by "use Gtk2 -init -threads-init" order does not matter.
 
 =back
+
+=head1 EXPORTS
+
+Gtk2 exports nothing by default, but some constants are available upon request.
+
+=over
+
+=item Tag: constants
+
+  GTK_PRIORITY_RESIZE
+  GDK_PRIORITY_EVENTS
+  GDK_PRIORITY_REDRAW
+  GDK_CURRENT_TIME
+
+=back
+
+See L<Glib> for other standard priority levels.
 
 =head1 SEE ALSO
 

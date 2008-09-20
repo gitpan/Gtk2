@@ -16,12 +16,61 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.44 2008/01/07 19:54:50 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.48 2008/08/23 15:06:17 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Window	PACKAGE = Gtk2::Window	PREFIX = gtk_window_
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+A Gtk2::Window is a top-level window displayed on the root window and
+interacting (or not) with the window manager.  It can be an
+application's main window, a dialog, or a temporary such as a popup
+splash window.
+
+=head2 Delete Event and Destroy
+
+The default action for a C<delete-event> (normally from the window
+manager close button) is to destroy the window with
+C<< $window->destroy >>.  In your main window you might want to exit
+the main loop when that happens.
+
+    $toplevel->signal_connect (destroy => sub { Gtk2->main_quit });
+
+If you install a handler for C<delete-event> and return true, meaning
+"don't propagate", you can do something other than destroy the window.
+For example
+
+    $toplevel->signal_connect (delete_event => sub {
+       if (any_unsaved_documents()) {
+         popup_ask_save_before_exit_dialog();
+         return 1;  # don't propagate to default destroy
+       }
+       return 0;  # do propagate
+    });
+
+In a dialog or secondary app window you might not want to destroy but
+instead just hide ready for later re-use.
+
+    $dialog->signal_connect
+      (delete_event => \&Gtk2::Widget::hide_on_delete);
+
+The choice between destroying or hiding is normally just a matter of
+memory saved against the time to re-create, and how likely the dialog
+might be needed again.  (However if you build windows with Glade it's
+not particularly easy to re-create them there, so you'll mostly want
+to just hide in that case.)
+
+A hidden toplevel window is still in
+C<< Gtk2::Window->list_toplevels >> and that's a good place to search
+for an existing window of a desired type to C<< $window->present >>
+again.
+
+=cut
 
 =for enum GtkWindowPosition
 =cut
@@ -678,6 +727,12 @@ gdouble gtk_window_get_opacity (GtkWindow *window);
 
 #endif
 
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+
+GtkWidget_ornull * gtk_window_get_default_widget (GtkWindow *window);
+
+#endif /* 2.14 */
+
 MODULE = Gtk2::Window	PACKAGE = Gtk2::WindowGroup	PREFIX = gtk_window_group_
 
 ## GtkWindowGroup * gtk_window_group_new (void)
@@ -697,6 +752,22 @@ void
 gtk_window_group_remove_window (window_group, window)
 	GtkWindowGroup * window_group
 	GtkWindow      * window
+
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+
+# GList * gtk_window_group_list_windows (GtkWindowGroup *window_group)
+void
+gtk_window_group_list_windows (GtkWindowGroup *window_group)
+    PREINIT:
+	GList *i, *list;
+    PPCODE:
+	list = gtk_window_group_list_windows (window_group);
+	for (i = list; i != NULL; i = i->next) {
+		XPUSHs (sv_2mortal (newSVGtkWindow (i->data)));
+	}
+	g_list_free (list);
+
+#endif /* 2.14 */
 
  ## er... dunno about these.
  ##

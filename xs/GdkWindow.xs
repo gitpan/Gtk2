@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.54 2008/05/20 20:36:36 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkWindow.xs,v 1.55 2008/08/16 19:26:50 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -909,6 +909,14 @@ void gdk_window_set_startup_id (GdkWindow *window, const gchar *startup_id);
 void gdk_window_set_composited (GdkWindow *window, gboolean composited);
 
 #endif
+
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+
+void gdk_window_redirect_to_drawable (GdkWindow *window, GdkDrawable *drawable, gint src_x, gint src_y, gint dest_x, gint dest_y, gint width, gint height);
+
+void gdk_window_remove_redirection (GdkWindow *window)
+
+#endif /* 2.14 */
 
 MODULE = Gtk2::Gdk::Window	PACKAGE = Gtk2::Gdk	PREFIX = gdk_
 

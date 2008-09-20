@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 17;
+use Gtk2::TestHelper tests => 19;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelGroup.t,v 1.15 2006/07/07 22:14:47 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelGroup.t,v 1.16 2008/08/05 19:51:21 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 
@@ -61,6 +61,14 @@ SKIP: {
 
 is($group -> disconnect($closure), 1);
 ok(not $group -> disconnect($closure));
+
+SKIP: {
+  skip 'new 2.14 stuff', 2
+    unless Gtk2->CHECK_VERSION (2, 13, 6); # FIXME: 2.14
+
+  is ($group->get_is_locked, FALSE);
+  ok (defined $group->get_modifier_mask);
+}
 
 __END__
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPlug.xs,v 1.10 2005/02/17 04:33:47 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPlug.xs,v 1.12 2008/08/17 16:03:39 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -46,9 +46,20 @@ gtk_plug_new (class, socket_id)
 
 ##GtkWidget * gtk_plug_new_for_display (GdkDisplay *display, GdkNativeWindow socket_id)
 GtkWidget *
-gtk_plug_new_for_display (display, socket_id)
-	GdkDisplay *display
-	GdkNativeWindow socket_id
+gtk_plug_new_for_display (...)
+    CODE:
+	if (items == 2) {
+		RETVAL = gtk_plug_new_for_display (
+			SvGdkDisplay (ST (0)), SvUV (ST (1)));
+	} else if (items == 3) {
+		RETVAL = gtk_plug_new_for_display (
+			SvGdkDisplay (ST (1)), SvUV (ST (2)));
+	} else {
+		RETVAL = NULL;
+		croak ("Usage: Gtk2::Plug->new_for_display(display, socket_id)");
+	}
+    OUTPUT:
+	RETVAL
 
 ## void gtk_plug_construct_for_disaplay (GtkPlug *plug, GdkDisplay * display, GdkNativeWindow socket_id)
 void
@@ -63,6 +74,14 @@ gtk_plug_construct_for_display (plug, display, socket_id)
 GdkNativeWindow
 gtk_plug_get_id (plug)
 	GtkPlug * plug
+
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+
+gboolean gtk_plug_get_embedded (GtkPlug *plug);
+
+GdkWindow_ornull* gtk_plug_get_socket_window (GtkPlug *plug);
+
+#endif /* 2.14 */
 
 ## void _gtk_plug_add_to_socket (GtkPlug *plug, GtkSocket *socket)
 ## void _gtk_plug_remove_from_socket (GtkPlug *plug, GtkSocket *socket)

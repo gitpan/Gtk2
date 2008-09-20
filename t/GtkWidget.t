@@ -1,11 +1,14 @@
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.17 2007/09/15 14:33:00 kaffeetisch Exp $
+#!/usr/bin/perl
 # vim: set ft=perl :
+#
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.20 2008/08/31 14:21:27 kaffeetisch Exp $
+#
 
 use warnings;
 use strict;
-use Gtk2::TestHelper tests => 131;
+use Gtk2::TestHelper tests => 134;
 
-# we can't instantiate Gtk2::Widget, it's abstract.  use a DrawingArea instead.
+# we can't instantiate Gtk2::Widget, it's abstract.  use a button instead.
 
 my $widget = Gtk2::Widget->new ('Gtk2::Button', label => 'Test');
 
@@ -446,6 +449,28 @@ SKIP: {
 
 	$widget->modify_cursor (Gtk2::Gdk::Color->new (0x0000, 0x0000, 0x0000),
 			        Gtk2::Gdk::Color->new (0xffff, 0xffff, 0xffff));
+}
+
+SKIP: {
+	skip 'new 2.14 stuff', 3
+		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+	my $widget = Gtk2::Label->new ('Bla');
+
+	is ($widget->get_snapshot (), undef);
+
+	my $window = Gtk2::Window->new ();
+	$window->add ($widget);
+	$window->show_all ();
+
+	isa_ok ($widget->get_snapshot (), 'Gtk2::Gdk::Pixmap');
+	isa_ok ($widget->get_snapshot (Gtk2::Gdk::Rectangle->new (0, 0, 1, 1)),
+		'Gtk2::Gdk::Pixmap');
+
+	$window->signal_connect(
+		delete_event => \&Gtk2::Widget::hide_on_delete);
+	$window->signal_emit(
+		delete_event => Gtk2::Gdk::Event->new ('key-press'));
 }
 
 __END__

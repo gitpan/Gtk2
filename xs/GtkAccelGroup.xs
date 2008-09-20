@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.23 2005/01/30 02:17:30 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.24 2008/08/05 19:51:21 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -153,6 +153,14 @@ gtk_accel_group_disconnect_key (accel_group, accel_key, accel_mods)
 # closure.  ... which means this function would be rather pointless at
 # the perl level.
 ## GtkAccelGroup* gtk_accel_group_from_accel_closure (GClosure *closure)
+
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+
+gboolean gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group);
+
+GdkModifierType gtk_accel_group_get_modifier_mask (GtkAccelGroup *accel_group);
+
+#endif
 
 MODULE = Gtk2::AccelGroup	PACKAGE = Gtk2::Accelerator	PREFIX = gtk_accelerator_
 

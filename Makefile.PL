@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.146 2008/03/30 19:27:35 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.149 2008/09/20 13:48:07 kaffeetisch Exp $
 #
 
 BEGIN { require 5.008; }
@@ -33,7 +33,7 @@ use Cwd;
 our %build_reqs = (
 	'perl-ExtUtils-Depends'   => '0.300',
 	'perl-ExtUtils-PkgConfig' => '1.030',
-	'perl-Glib'               => '1.180',
+	'perl-Glib'               => '1.200',
 	'perl-Cairo'              => '1.000',
 	'Gtk+'                    => '2.0.0',
 );
@@ -117,6 +117,20 @@ if (($gtk_version[0] > 2 || ($gtk_version[0] == 2 && $gtk_version[1] >= 8)) ||
 	}
 	$have_cairo = 1;
 }
+
+#
+# generate the constants wrappers
+#
+my @gtk_constants_lists =
+	Glib::MakeHelper->select_files_by_version ('constants', @gtk_version);
+my $gtk_constants_file = File::Spec->catfile ('build', 'constants.xs');
+Gtk2::CodeGen->generate_constants_wrappers (
+	prefix => 'Gtk2',
+	lists => \@gtk_constants_lists,
+	xs_file => $gtk_constants_file,
+	header => 'gtk2perl.h',
+        export_tag => 'constants');
+push @xs_files, $gtk_constants_file;
 
 #
 # create version macros for pango and atk
@@ -278,7 +292,7 @@ WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
    This is an unstable development release of Gtk2.  The API is not
    frozen and things are subject to change at any time.  Report any
    bugs to gtk-perl-list AT gnome DOT org as soon as possible.
-   Please use the 1.16x series for important work.
+   Please use the 1.18x series for important work.
 
 WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
 __EOW__

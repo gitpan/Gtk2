@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStatusIcon.xs,v 1.8 2008/01/12 22:28:28 muppetman Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStatusIcon.xs,v 1.9 2008/08/16 12:55:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -123,3 +123,9 @@ void gtk_status_icon_set_screen (GtkStatusIcon *status_icon, GdkScreen *screen);
 GdkScreen *gtk_status_icon_get_screen (GtkStatusIcon *status_icon);
 
 #endif
+
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+
+guint32 gtk_status_icon_get_x11_window_id (GtkStatusIcon *status_icon);
+
+#endif /* 2.14 */

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 12;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSpinButton.t,v 1.6 2006/01/18 19:04:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSpinButton.t,v 1.7 2008/09/06 20:11:04 kaffeetisch Exp $
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 
@@ -28,7 +28,7 @@ is_deeply([$spin -> get_range()], [0, 100]);
 
 $spin -> set_value(23.42);
 is($spin -> get_value_as_int(), 23);
-is($spin -> get_value(), 23.42);
+delta_ok($spin -> get_value(), 23.42);
 
 $spin -> set_update_policy("if-valid");
 is($spin -> get_update_policy(), "if-valid");

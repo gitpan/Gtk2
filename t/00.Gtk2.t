@@ -1,5 +1,6 @@
+#!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.21 2006/05/14 10:57:07 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/00.Gtk2.t,v 1.23 2008/06/22 12:28:03 kaffeetisch Exp $
 #
 
 use strict;
@@ -14,8 +15,8 @@ use warnings;
 
 # NOTE: this is the bootstrap test -- no Gtk2::TestHelper here!
 
-use Test::More tests => 35;
-BEGIN { use_ok('Gtk2') };
+use Test::More tests => 43;
+BEGIN { use_ok('Gtk2', ':constants') };
 
 #########################
 
@@ -42,6 +43,17 @@ is (Gtk2::MICRO_VERSION, $version[2], 'MICRO_VERSION');
 is (@version, 3, 'version info is three items long');
 ok (Gtk2::Pango->CHECK_VERSION(0,0,0), 'CHECK_VERSION pass');
 ok (!Gtk2::Pango->CHECK_VERSION(50,0,0), 'CHECK_VERSION fail');
+
+# Test the exported constants
+my @constants = qw/GDK_CURRENT_TIME
+                   GDK_PRIORITY_EVENTS
+                   GDK_PRIORITY_REDRAW
+                   GTK_PRIORITY_RESIZE/;
+my $number = qr/^\d+$/;
+foreach my $constant (@constants) {
+  like (eval "Gtk2::$constant", $number);
+  like (eval "$constant", $number);
+}
 
 SKIP:
 {

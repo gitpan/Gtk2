@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
 use Gtk2::TestHelper
-  tests => 15,
+  tests => 20,
   at_least_version => [2, 10, 0, 'GtkPrintSettings: it is new in 2.10'];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPrintSettings.t,v 1.4 2007/09/15 14:33:00 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPrintSettings.t,v 1.6 2008/08/15 19:44:16 kaffeetisch Exp $
 
 my $settings = Gtk2::PrintSettings -> new();
 isa_ok($settings, 'Gtk2::PrintSettings');
@@ -71,6 +71,43 @@ SKIP: {
   is($@, '');
   isa_ok($new_settings, 'Gtk2::PrintSettings');
   is($new_settings -> get($key), $value);
+
+  unlink $file;
+}
+
+SKIP: {
+  skip 'new 2.14 stuff', 5
+    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+  my $file = 'tmp.settings';
+
+  my $settings = Gtk2::PrintSettings -> new();
+  $settings -> set($key, $value);
+
+  $settings -> to_file($file);
+
+  my $key_file = Glib::KeyFile -> new();
+  my $group = undef;
+  $settings -> to_key_file($key_file, $group);
+
+  my $copy = Gtk2::PrintSettings -> new();
+  eval {
+    $copy -> load_file($file);
+  };
+  is($@, '');
+  is($copy -> get($key), $value);
+
+  eval {
+    $copy -> load_file('asdf');
+  };
+  ok(defined $@);
+
+  $copy = Gtk2::PrintSettings -> new();
+  eval {
+    $copy -> load_key_file($key_file, $group);
+  };
+  is($@, '');
+  is($copy -> get($key), $value);
 
   unlink $file;
 }

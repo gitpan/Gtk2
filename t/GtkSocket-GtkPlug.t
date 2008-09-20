@@ -1,12 +1,10 @@
-#########################
+#!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSocket-GtkPlug.t,v 1.4 2008/03/30 19:31:33 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSocket-GtkPlug.t,v 1.7 2008/08/17 16:03:39 kaffeetisch Exp $
 #
-
-#########################
 
 # ...despite patches that have been around for a long time, no win32
-use Gtk2::TestHelper tests => 4, nowin32 => 1;
+use Gtk2::TestHelper tests => 12, nowin32 => 1;
 
 SKIP: {
 
@@ -20,33 +18,15 @@ $win->add($socket);
 
 ok( my $id = $socket->get_id );
 
-my $str = "$^X -Mblib -e '\$id = $id;\n\n".<<EOL;
-use Gtk2;
+SKIP: {
+	skip 'new 2.14 stuff', 2
+		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
 
-Gtk2->init;
-
-\$plug = Gtk2::Plug->new($id);
-\$plug->set_border_width(10);
-
-\$btn = Gtk2::Button->new("gtk-quit");
-\$btn->signal_connect( "clicked" => sub {
-		Gtk2->main_quit;
-		1;
-	} );
-\$plug->add(\$btn);
-
-\$plug->show_all;
-
-Glib::Timeout->add( 100, sub {
-		\$btn->clicked;
-		0;
-	} );
-
-Gtk2->main;'
-EOL
-
-use strict;
-use warnings;
+	is( $socket->get_plug_window, undef );
+	$socket->signal_connect (plug_added => sub {
+		isa_ok( $socket->get_plug_window, 'Gtk2::Gdk::Window' );
+	});
+}
 
 my $pid = fork;
 
@@ -58,7 +38,23 @@ if( $pid < 0 )
 }
 if( $pid == 0 )
 {
-	exec($str);
+	exec("$^X -Mblib -e 'my \$id = $id;\n\n" . <<EOL);
+use Gtk2;
+
+Gtk2->init;
+
+my \$plug = Gtk2::Plug->new($id);
+
+my \$btn = Gtk2::Button->new("gtk-quit");
+\$btn->signal_connect("clicked" => sub { Gtk2->main_quit; 1; });
+\$plug->add(\$btn);
+
+\$plug->show_all;
+
+Glib::Idle->add(sub { \$btn->clicked; 0; });
+
+Gtk2->main;'
+EOL
 	exit 0;
 }
 else
@@ -72,6 +68,39 @@ else
 	ok( waitpid($pid, 0) );
 }
 
+}
+
+# Standalone GtkPlug tests.
+SKIP: {
+	my $id = 23;
+	my $display = Gtk2::Gdk::Display->get_default;
+
+	# Backwards compatibility tests
+	my $plug = Gtk2::Plug->new($id);
+	isa_ok( $plug, 'Gtk2::Plug' );
+
+	$plug->construct($id);
+	$plug->construct_for_display($display, $id);
+
+	ok( defined $plug->get_id );
+
+	skip 'new 2.14 stuff', 2
+		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+	is( $plug->get_embedded, FALSE );
+	is( $plug->get_socket_window, undef );
+}
+
+# Backwards compatibility tests.
+{
+	my $id = 23;
+	my $display = Gtk2::Gdk::Display->get_default;
+
+	isa_ok( Gtk2::Plug::new_for_display($display, $id),
+		'Gtk2::Plug' );
+
+	isa_ok( Gtk2::Plug->new_for_display($display, $id),
+		'Gtk2::Plug' );
 }
 
 __END__

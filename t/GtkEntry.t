@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 21;
+use Gtk2::TestHelper tests => 23;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntry.t,v 1.17 2007/09/15 14:32:59 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntry.t,v 1.18 2008/08/17 14:59:58 kaffeetisch Exp $
 
 my $entry = Gtk2::Entry -> new();
 isa_ok($entry, "Gtk2::Entry");
@@ -84,6 +84,19 @@ SKIP: {
   my $adj = Gtk2::Adjustment -> new(0.0, -1.0, 1.0, 0.1, 0.2, 0.5);
   $entry -> set_cursor_hadjustment($adj);
   is($entry -> get_cursor_hadjustment(), $adj);
+}
+
+SKIP: {
+  skip 'new 2.14 stuff', 2
+    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+  my $entry = Gtk2::Entry -> new();
+  $entry -> set_text("Bla");
+
+  is ($entry -> get_text_length(), 3);
+
+  $entry -> set_overwrite_mode(FALSE);
+  is ($entry -> get_overwrite_mode(), FALSE);
 }
 
 __END__

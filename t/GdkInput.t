@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 14;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkInput.t,v 1.3 2008/03/30 19:31:09 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkInput.t,v 1.4 2008/09/06 20:11:03 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 
@@ -42,7 +42,7 @@ is(scalar @positions, 2);
 
 # FIXME: warn $device -> get_history($window -> window(), 0, time());
 
-is($device -> get_axis("x", 1.23, 2, 3, 4), 1.23);
+delta_ok($device -> get_axis("x", 1.23, 2, 3, 4), 1.23);
 
 Gtk2::Gdk::Input -> set_extension_events($window -> window(), [qw/pointer-motion-mask/], "all");
 

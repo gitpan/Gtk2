@@ -2,6 +2,7 @@ api.pod
 AUTHORS
 ChangeLog
 CodeGen.pm
+constants-2.0
 copyright.pod
 devel.pod
 doctypes
@@ -89,6 +90,7 @@ MANIFEST.SKIP
 maps-2.0
 maps-2.10
 maps-2.12
+maps-2.14
 maps-2.2
 maps-2.4
 maps-2.6
@@ -162,6 +164,7 @@ t/GtkCellLayoutIface.t
 t/GtkCellRenderer.t
 t/GtkCellRendererAccel.t
 t/GtkCellRendererCombo.t
+t/GtkCellRendererIface-Chaining.t
 t/GtkCellRendererPixbuf.t
 t/GtkCellRendererProgress.t
 t/GtkCellRendererSpin.t
@@ -257,6 +260,7 @@ t/GtkScrolledWindow.t
 t/GtkSelection.t
 t/GtkSeparatorMenuItem.t
 t/GtkSeparatorToolItem.t
+t/GtkShow.t
 t/GtkSimpleList.t
 t/GtkSimpleMenu.t
 t/GtkSizeGroup.t
@@ -282,6 +286,7 @@ t/GtkToggleToolButton.t
 t/GtkToolbar.t
 t/GtkToolButton.t
 t/GtkToolItem.t
+t/GtkToolShell.t
 t/GtkTooltip.t
 t/GtkTooltips.t
 t/GtkTreeModel.t
@@ -318,6 +323,7 @@ t/PangoScript.t
 t/PangoTabs.t
 t/PangoTypes.t
 t/set-scroll-adjustments-signal.t
+t/version-checks.t
 TODO
 tools/fetch_faq.pl
 tools/genkeysyms.pl
@@ -476,6 +482,7 @@ xs/GtkScrolledWindow.xs
 xs/GtkSelection.xs
 xs/GtkSeparatorMenuItem.xs
 xs/GtkSeparatorToolItem.xs
+xs/GtkShow.xs
 xs/GtkSizeGroup.xs
 xs/GtkSocket.xs
 xs/GtkSpinButton.xs
@@ -499,6 +506,7 @@ xs/GtkToggleToolButton.xs
 xs/GtkToolbar.xs
 xs/GtkToolButton.xs
 xs/GtkToolItem.xs
+xs/GtkToolShell.xs
 xs/GtkTooltip.xs
 xs/GtkTooltips.xs
 xs/GtkTreeDnd.xs
@@ -538,6 +546,7 @@ xs/PangoTypes.xs
 xs_files-2.0
 xs_files-2.10
 xs_files-2.12
+xs_files-2.14
 xs_files-2.2
 xs_files-2.4
 xs_files-2.6

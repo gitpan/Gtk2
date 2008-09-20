@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 48, noinit => 1;
 
-# $Id: PangoMatrix.t,v 1.2 2007/06/17 12:55:56 kaffeetisch Exp $
+# $Id: PangoMatrix.t,v 1.3 2008/09/06 20:11:04 kaffeetisch Exp $
 
 SKIP: {
   skip("PangoMatrix is new in 1.6", 44)
@@ -10,12 +10,12 @@ SKIP: {
 
   my $matrix = Gtk2::Pango::Matrix -> new(2.3, 2.3, 2.3, 2.3, 2.3, 2.3);
   isa_ok($matrix, "Gtk2::Pango::Matrix");
-  is($matrix -> xx, 2.3);
-  is($matrix -> xy, 2.3);
-  is($matrix -> yx, 2.3);
-  is($matrix -> yy, 2.3);
-  is($matrix -> x0, 2.3);
-  is($matrix -> y0, 2.3);
+  delta_ok($matrix -> xx, 2.3);
+  delta_ok($matrix -> xy, 2.3);
+  delta_ok($matrix -> yx, 2.3);
+  delta_ok($matrix -> yy, 2.3);
+  delta_ok($matrix -> x0, 2.3);
+  delta_ok($matrix -> y0, 2.3);
 
   $matrix = Gtk2::Pango::Matrix -> new();
   isa_ok($matrix, "Gtk2::Pango::Matrix");
@@ -64,12 +64,12 @@ SKIP: {
   $matrix -> yy(2.3);
   $matrix -> x0(2.3);
   $matrix -> y0(2.3);
-  is($matrix -> xx, 2.3);
-  is($matrix -> xy, 2.3);
-  is($matrix -> yx, 2.3);
-  is($matrix -> yy, 2.3);
-  is($matrix -> x0, 2.3);
-  is($matrix -> y0, 2.3);
+  delta_ok($matrix -> xx, 2.3);
+  delta_ok($matrix -> xy, 2.3);
+  delta_ok($matrix -> yx, 2.3);
+  delta_ok($matrix -> yy, 2.3);
+  delta_ok($matrix -> x0, 2.3);
+  delta_ok($matrix -> y0, 2.3);
 }
 
 SKIP: {

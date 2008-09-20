@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.32 2008/01/07 20:23:29 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkSelection.xs,v 1.35 2008/08/31 14:13:06 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -338,7 +338,7 @@ MODULE = Gtk2::Selection	PACKAGE = Gtk2	PREFIX = gtk_
 =for object Gtk2::Selection
 =cut
 
-gboolean gtk_targets_include_text (class, first_target_atom, ...)
+gboolean gtk_targets_include_text (class, GdkAtom first_target_atom, ...)
     ALIAS:
         targets_include_uri = 1
     PREINIT:
@@ -348,7 +348,8 @@ gboolean gtk_targets_include_text (class, first_target_atom, ...)
     CODE:
         n_targets = items - 1;
         targets = g_new (GdkAtom, n_targets);
-        for (i = 1; i < items ; i++)
+	targets[0] = first_target_atom;
+        for (i = 2; i < items ; i++)
                 targets[i-1] = SvGdkAtom (ST (i));
         if (ix == 1)
                 RETVAL = gtk_targets_include_uri (targets, n_targets);
@@ -358,7 +359,7 @@ gboolean gtk_targets_include_text (class, first_target_atom, ...)
     OUTPUT:
         RETVAL
 
-gboolean gtk_targets_include_rich_text (class, GtkTextBuffer * buffer, first_target_atom, ...)
+gboolean gtk_targets_include_rich_text (class, GtkTextBuffer * buffer, GdkAtom first_target_atom, ...)
     PREINIT:
         GdkAtom * targets;
         gint n_targets;
@@ -366,14 +367,15 @@ gboolean gtk_targets_include_rich_text (class, GtkTextBuffer * buffer, first_tar
     CODE:
         n_targets = items - 2;
         targets = g_new (GdkAtom, n_targets);
-        for (i = 2; i < items ; i++)
+	targets[0] = first_target_atom;
+        for (i = 3; i < items ; i++)
                 targets[i-2] = SvGdkAtom (ST (i));
         RETVAL = gtk_targets_include_rich_text (targets, n_targets, buffer);
         g_free (targets);
     OUTPUT:
         RETVAL
 
-gboolean gtk_targets_include_image (class, gboolean writable, first_target_atom, ...)
+gboolean gtk_targets_include_image (class, gboolean writable, GdkAtom first_target_atom, ...)
     PREINIT:
         GdkAtom * targets;
         gint n_targets;
@@ -381,7 +383,8 @@ gboolean gtk_targets_include_image (class, gboolean writable, first_target_atom,
     CODE:
         n_targets = items - 2;
         targets = g_new (GdkAtom, n_targets);
-        for (i = 2; i < items ; i++)
+	targets[0] = first_target_atom;
+        for (i = 3; i < items ; i++)
                 targets[i-2] = SvGdkAtom (ST (i));
         RETVAL = gtk_targets_include_image (targets, n_targets, writable);
         g_free (targets);
@@ -392,27 +395,113 @@ gboolean gtk_targets_include_image (class, gboolean writable, first_target_atom,
 
 MODULE = Gtk2::Selection	PACKAGE = Gtk2::SelectionData	PREFIX = gtk_selection_data_
 
+=for apidoc Gtk2::SelectionData::selection __hide__
+=cut
+
+=for apidoc Gtk2::SelectionData::target __hide__
+=cut
+
+=for apidoc Gtk2::SelectionData::type __hide__
+=cut
+
+=for apidoc Gtk2::SelectionData::format __hide__
+=cut
+
+=for apidoc Gtk2::SelectionData::data __hide__
+=cut
+
+=for apidoc Gtk2::SelectionData::length __hide__
+=cut
+
+=for apidoc Gtk2::SelectionData::display __hide__
+=cut
+
+# GdkAtom gtk_selection_data_get_target (GtkSelectionData *selection_data);
+# GdkAtom gtk_selection_data_get_data_type (GtkSelectionData *selection_data);
+# gint gtk_selection_data_get_format (GtkSelectionData *selection_data);
+# const guchar *gtk_selection_data_get_data (GtkSelectionData *selection_data, gint *length);
+# GdkDisplay *gtk_selection_data_get_display (GtkSelectionData *selection_data);
 SV *
-selection (d)
+get_selection (d)
 	GtkSelectionData * d
     ALIAS:
-	Gtk2::SelectionData::target    = 1
-	Gtk2::SelectionData::type      = 2
-	Gtk2::SelectionData::format    = 3
-	Gtk2::SelectionData::data      = 4
-	Gtk2::SelectionData::length    = 5
-	Gtk2::SelectionData::display   = 6
+	Gtk2::SelectionData::selection     = 1
+	Gtk2::SelectionData::get_target    = 2
+	Gtk2::SelectionData::target        = 3
+	Gtk2::SelectionData::get_data_type = 4
+	Gtk2::SelectionData::type          = 5
+	Gtk2::SelectionData::get_format    = 6
+	Gtk2::SelectionData::format        = 7
+	Gtk2::SelectionData::get_data      = 8
+	Gtk2::SelectionData::data          = 9
+	Gtk2::SelectionData::get_length    = 10
+	Gtk2::SelectionData::length        = 11
+	Gtk2::SelectionData::get_display   = 12
+	Gtk2::SelectionData::display       = 13
     CODE:
 	switch (ix) {
-	    case 0: RETVAL = newSVGdkAtom (d->selection); break;
-	    case 1: RETVAL = newSVGdkAtom (d->target); break;
-	    case 2: RETVAL = newSVGdkAtom (d->type); break;
-	    case 3: RETVAL = newSViv (d->format); break;
-	    case 4: RETVAL = newSVpv ((char*)d->data, d->length); break;
-	    case 5: RETVAL = newSViv (d->length); break;
-#if GTK_CHECK_VERSION(2,2,0)
-	    case 6: RETVAL = newSVGdkDisplay (d->display); break;
-#endif
+	    case 0:
+	    case 1:
+		/* selection doesn't have an accessor yet. */
+		RETVAL = newSVGdkAtom (d->selection);
+		break;
+	    case 2:
+	    case 3:
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+		RETVAL = newSVGdkAtom (gtk_selection_data_get_target (d));
+#else
+		RETVAL = newSVGdkAtom (d->target);
+#endif /* 2.14 */
+		break;
+	    case 4:
+	    case 5:
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+		RETVAL = newSVGdkAtom (gtk_selection_data_get_data_type (d));
+#else
+		RETVAL = newSVGdkAtom (d->type);
+#endif /* 2.14 */
+		break;
+	    case 6:
+	    case 7:
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+		RETVAL = newSViv (gtk_selection_data_get_format (d));
+#else
+		RETVAL = newSViv (d->format);
+#endif /* 2.14 */
+		break;
+	    case 8:
+	    case 9:
+#if GTK_CHECK_VERSION (2, 13, 8) /* FIXME: 2.14 */
+	    {
+		gint length = gtk_selection_data_get_length (d);
+		const guchar *data = gtk_selection_data_get_data (d);
+		RETVAL = newSVpv ((const gchar *) data, length);
+	    }
+#else
+		RETVAL = newSVpv ((char*)d->data, d->length);
+#endif /* 2.14 */
+		break;
+	    case 10:
+	    case 11:
+#if GTK_CHECK_VERSION (2, 13, 8) /* FIXME: 2.14 */
+	    {
+		gint length = gtk_selection_data_get_length (d);
+		RETVAL = newSViv (length);
+	    }
+#else
+		RETVAL = newSViv (d->length);
+#endif /* 2.14 */
+		break;
+#if GTK_CHECK_VERSION(2, 2, 0)
+	    case 12:
+	    case 13:
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+		RETVAL = newSVGdkDisplay (gtk_selection_data_get_display (d));
+#else
+		RETVAL = newSVGdkDisplay (d->display);
+#endif /* 2.14 */
+		break;
+#endif /* 2.2 */
 	    default:
 		RETVAL = NULL;
 		g_assert_not_reached ();

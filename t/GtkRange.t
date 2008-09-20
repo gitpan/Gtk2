@@ -3,7 +3,7 @@
 use strict;
 use Gtk2::TestHelper tests => 10;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRange.t,v 1.10 2007/09/15 14:33:00 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRange.t,v 1.11 2008/09/06 20:11:04 kaffeetisch Exp $
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 
@@ -20,7 +20,7 @@ $range -> set_inverted(1);
 is($range -> get_inverted(), 1);
 
 $range -> set_value(23.42);
-is($range -> get_value(), 23.42);
+delta_ok($range -> get_value(), 23.42);
 
 $range -> set_increments(1, 5);
 $range -> set_range(0, 100);
@@ -47,7 +47,7 @@ SKIP: {
 	ok(!$range -> get_restrict_to_fill_level());
 
 	$range -> set_fill_level(0.23);
-	is($range -> get_fill_level(), 0.23);
+	delta_ok($range -> get_fill_level(), 0.23);
 }
 
 __END__

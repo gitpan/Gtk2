@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkProgressBar.t,v 1.7 2006/01/18 19:04:10 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkProgressBar.t,v 1.8 2008/09/06 20:11:03 kaffeetisch Exp $
 #
 
 #########################
@@ -32,7 +32,7 @@ foreach (@prog)
 	ok(1);
 
 	$_->set_fraction(0.23);
-	is( $_->get_fraction, 0.23 );
+	delta_ok( $_->get_fraction, 0.23 );
 
 	$_->set_text("Bla");
 	is( $_->get_text, "Bla" );
@@ -41,7 +41,7 @@ foreach (@prog)
 	ok( ! $_->get_text );
 
 	$_->set_pulse_step(0.42);
-	is( $_->get_pulse_step, 0.42 );
+	delta_ok( $_->get_pulse_step, 0.42 );
 }
 
 ok(1);

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCairo.xs,v 1.5 2006/11/19 19:47:53 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkCairo.xs,v 1.6 2008/08/07 22:14:32 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -32,8 +32,9 @@ void gdk_cairo_set_source_color (cairo_t *cr, GdkColor *color);
 void gdk_cairo_set_source_pixbuf (cairo_t *cr, GdkPixbuf *pixbuf, double pixbuf_x, double pixbuf_y);
 
 =for apidoc
-=for signature $cr->rectangle (rectangle)
-=for arg rectangle Gtk2::Gdk::Rectangle
+=for signature $cr->rectangle ($rectangle)
+=for arg rectangle (Gtk2::Gdk::Rectangle)
+=for arg ... (__hide__)
 =cut
 # void gdk_cairo_rectangle (cairo_t *cr, GdkRectangle *rectangle);
 void

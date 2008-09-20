@@ -1,5 +1,6 @@
+#!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolItem.t,v 1.6 2007/09/15 14:33:00 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolItem.t,v 1.7 2008/08/16 13:11:21 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -83,6 +84,13 @@ SKIP: {
     $tool_item->set_tooltip_text (undef);
     $tool_item->set_tooltip_markup ('<b>Bla!</b>');
     $tool_item->set_tooltip_markup (undef);
+}
+
+SKIP: {
+    skip 'new 2.14 stuff', 0
+        unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+    $tool_item->toolbar_reconfigured;
 }
 
 __END__

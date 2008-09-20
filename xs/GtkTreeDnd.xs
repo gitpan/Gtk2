@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeDnd.xs,v 1.9 2005/07/11 22:39:21 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeDnd.xs,v 1.11 2008/09/06 18:22:05 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -136,20 +136,33 @@ gtk_tree_drag_source_drag_data_delete (drag_source, path)
 	GtkTreeDragSource *drag_source
 	GtkTreePath *path
 
+=for apidoc
+=for signature selection_data = $drag_source->drag_data_get ($path, $selection_data)
+Get selection data from a drag source.  The data is written to $selection_data,
+or if $selection_data is not given then to a newly created Gtk2::SelectionData
+object with target type C<GTK_TREE_MODEL_ROW>.  On success the return is the
+given or new object, or on failure the return is undef.
+=cut
 ### gboolean gtk_tree_drag_source_drag_data_get (GtkTreeDragSource *drag_source, GtkTreePath *path, GtkSelectionData *selection_data)
-GtkSelectionData_copy *
-gtk_tree_drag_source_drag_data_get (drag_source, path)
-	GtkTreeDragSource *drag_source
-	GtkTreePath *path
+void
+gtk_tree_drag_source_drag_data_get (GtkTreeDragSource *drag_source, GtkTreePath *path, GtkSelectionData *selection_data = NULL)
     PREINIT:
-	GtkSelectionData selection_data;
-    CODE:
-	if (!gtk_tree_drag_source_drag_data_get (drag_source, path, 
-	                                         &selection_data))
-		XSRETURN_UNDEF;
-	RETVAL = &selection_data;
-    OUTPUT:
-	RETVAL
+	SV *ret = &PL_sv_undef;
+    PPCODE:
+	if (selection_data) {
+		if (gtk_tree_drag_source_drag_data_get (drag_source, path,
+		                                        selection_data))
+			ret = ST(2);
+	} else {
+		GtkSelectionData new_selection_data = { 0, };
+		new_selection_data.target
+		  = gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE);
+		new_selection_data.length = -1;
+		if (gtk_tree_drag_source_drag_data_get (drag_source, path,
+		                                        &new_selection_data))
+			ret = sv_2mortal (newSVGtkSelectionData_copy (&new_selection_data));
+	}
+	PUSHs (ret);
 
 MODULE = Gtk2::TreeDnd	PACKAGE = Gtk2::TreeDragDest	PREFIX = gtk_tree_drag_dest_
 

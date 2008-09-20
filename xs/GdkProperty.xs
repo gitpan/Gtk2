@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.24 2008/05/22 21:39:59 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkProperty.xs,v 1.25 2008/08/07 22:14:33 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -58,9 +58,11 @@
 
 MODULE = Gtk2::Gdk::Property	PACKAGE = Gtk2::Gdk::Atom	PREFIX = gdk_atom_
 
+=for apidoc ne __hide__
+=cut
+
 ## for easy comparisons of atoms
 =for apidoc __hide__
-=for arg swap (boolean)
 =cut
 gboolean
 eq (left, right, swap=FALSE)

@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w
 # vim: set ft=perl :
-use Gtk2::TestHelper tests => 95,
+use Gtk2::TestHelper tests => 115,
 	at_least_version => [2, 2, 0, "GtkClipboard didn't exist in 2.0.x"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkClipboard.t,v 1.13 2008/02/11 21:10:52 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkClipboard.t,v 1.16 2008/08/16 18:01:25 kaffeetisch Exp $
 
 my $clipboard;
 
@@ -88,71 +88,122 @@ SKIP: {
 }
 
 SKIP: {
-        skip "new stuff in 2.10", 6
+        skip "new stuff in 2.10", 7
                 unless Gtk2->CHECK_VERSION (2, 10, 0);
+
+	my $test_text = 'test test test';
 
 	my $buffer = Gtk2::TextBuffer->new;
 	$buffer->insert ($buffer->get_start_iter, 'bla!');
-	$buffer->register_serialize_format (
-		'text/rdf',
-		sub { warn "here"; return 'bla!'; });
 	$buffer->register_deserialize_format (
 		'text/rdf',
 		sub { warn "here"; $_[1]->insert ($_[2], 'bla!'); });
+
+	$clipboard->set_with_data (
+		sub {
+			my ($clipboard, $selection_data, $info, $data) = @_;
+			$selection_data->set (Gtk2::Gdk::Atom->new ('text/rdf'),
+					      8, $data);
+		},
+		sub {},
+		$test_text,
+		{target=>'text/rdf'});
 
 	$clipboard->request_rich_text ($buffer, sub {
 		# print "hello from the callback\n" . Dumper(\@_);
 		is ($_[0], $clipboard);
 		is ($_[1]->name, 'text/rdf');
-		is ($_[2], undef); # FIXME
-		is ($_[3], 'user data!');
-	}, 'user data!');
+		is ($_[2], $test_text);
+		is ($_[3], undef);
+	});
 
-	# FIXME
-	ok (!$clipboard->wait_is_rich_text_available ($buffer));
-	is ($clipboard->wait_for_rich_text ($buffer), undef);
+	ok ($clipboard->wait_is_rich_text_available ($buffer));
+
+	my ($data, $atom) = $clipboard->wait_for_rich_text ($buffer);
+	is ($data, $test_text);
+	is ($atom->name, 'text/rdf');
 }
 
-Glib::Timeout->add (200, sub {Gtk2->main_quit;1});
-Gtk2->main;
+SKIP: {
+	skip 'new uris stuff', 5
+		unless Gtk2->CHECK_VERSION (2, 13, 6); # FIXME: 2.14
+
+	my @uris = ('file:///foo/bar', 'file:///bar/foo');
+	$clipboard->set_with_data (
+		sub {
+			my ($clipboard, $selection_data, $info, $data) = @_;
+			$selection_data->set_uris (@$data);
+		},
+		sub {},
+		\@uris,
+		{target=>'text/uri-list'});
+
+	is ($clipboard->wait_is_uris_available, TRUE);
+
+	is_deeply ($clipboard->wait_for_uris, \@uris);
+	$clipboard->request_uris (sub {
+		my ($tmp_clipboard, $tmp_uris, $data) = @_;
+		is ($tmp_clipboard, $clipboard);
+		is_deeply ($tmp_uris, \@uris);
+		is ($data, undef);
+	});
+}
+
+run_main;
 
 #print "----------------------------------\n";
 
 $expect = 'whee';
 
+my $get_func_call_count = 0;
 sub get_func {
-	is ($_[0], $clipboard);
-	isa_ok ($_[1], 'Gtk2::SelectionData');
-	is ($_[2], 0);
-	ok ($_[3]);
+	return if ++$get_func_call_count == 3;
+
+	my ($cb, $sd, $info, $user_data_or_owner) = @_;
+
+	is ($cb, $clipboard);
+	isa_ok ($sd, 'Gtk2::SelectionData');
+	is ($info, 0);
+	ok (defined $user_data_or_owner);
 
 	# Tests for Gtk2::SelectionData:
 
-	$_[1]->set (Gtk2::Gdk->TARGET_STRING, 8, 'bla blub');
+	$sd->set (Gtk2::Gdk->TARGET_STRING, 8, 'bla blub');
 
-	is ($_[1]->selection->name, 'PRIMARY');
-	ok (defined $_[1]->target->name);
-	is ($_[1]->type->name, 'STRING');
-	is ($_[1]->format, 8);
-	is ($_[1]->data, 'bla blub');
-	is ($_[1]->length, 8);
+	is ($sd->get_selection ()->name, 'PRIMARY');
+	ok (defined $sd->get_target ()->name);
+	is ($sd->get_data_type ()->name, 'STRING');
+	is ($sd->get_format (), 8);
+	is ($sd->get_data (), 'bla blub');
+	is ($sd->get_length (), 8);
+
+	# Deprecated but provided for backwards compatibility
+	ok ($sd->selection () == $sd->get_selection ());
+	ok ($sd->target () == $sd->get_target ());
+	ok ($sd->type () == $sd->get_data_type ());
+	ok ($sd->format () == $sd->get_format ());
+	ok ($sd->data () eq $sd->get_data ());
+	ok ($sd->length () == $sd->get_length ());
 
 	SKIP: {
-		skip 'GdkDisplay is new in 2.2', 1
+		skip 'GdkDisplay is new in 2.2', 2
 			unless Gtk2->CHECK_VERSION (2, 2, 0);
 
-		isa_ok ($_[1]->display, 'Gtk2::Gdk::Display');
+		isa_ok ($sd->get_display (), 'Gtk2::Gdk::Display');
+
+		# Deprecated but provided for backwards compatibility
+		ok ($sd->display () == $sd->get_display ());
 	}
 
 	# FIXME: always empty and false?
-	# warn $_[1]->get_targets;
-	# warn $_[1]->targets_include_text;
+	# warn $sd->get_targets;
+	# warn $sd->targets_include_text;
 
-	$_[1]->set_text ($expect);
-	is ($_[1]->get_text, $expect);
+	$sd->set_text ($expect);
+	is ($sd->get_text, $expect);
 
-	is ($_[1]->data, $expect);
-	is ($_[1]->length, length ($expect));
+	is ($sd->data, $expect);
+	is ($sd->length, length ($expect));
 
 	SKIP: {
 		skip '2.6 stuff', 7
@@ -161,29 +212,29 @@ sub get_func {
 		# This won't work with a STRING selection, but I don't know
 		# what else to use, so we just check that both operations fail.
 		my $pixbuf = Gtk2::Gdk::Pixbuf->new ('rgb', FALSE, 8, 23, 42);
-		is ($_[1]->set_pixbuf ($pixbuf), FALSE);
-		is ($_[1]->get_pixbuf, undef);
+		is ($sd->set_pixbuf ($pixbuf), FALSE);
+		is ($sd->get_pixbuf, undef);
 
 		# Same here.
-		is ($_[1]->set_uris, FALSE);
-		is_deeply ([$_[1]->get_uris], []);
-		is ($_[1]->set_uris (qw(a b c)), FALSE);
-		is_deeply ([$_[1]->get_uris], []);
+		is ($sd->set_uris, FALSE);
+		is_deeply ([$sd->get_uris], []);
+		is ($sd->set_uris (qw(a b c)), FALSE);
+		is_deeply ([$sd->get_uris], []);
 
-		is ($_[1]->targets_include_image (TRUE), FALSE);
+		is ($sd->targets_include_image (TRUE), FALSE);
 	}
 
 	SKIP: {
 		skip '2.10 stuff', 2
 			unless Gtk2->CHECK_VERSION (2, 10, 0);
 
-		is ($_[1]->targets_include_uri, FALSE);
+		is ($sd->targets_include_uri, FALSE);
 
 		my $buffer = Gtk2::TextBuffer->new;
 		$buffer->register_deserialize_format (
 			'text/rdf',
-			sub { warn "here"; $_[1]->insert ($_[2], 'bla!'); });
-		is ($_[1]->targets_include_rich_text ($buffer), FALSE);
+			sub { warn "here"; $sd->insert ($info, 'bla!'); });
+		is ($sd->targets_include_rich_text ($buffer), FALSE);
 	}
 }
 
@@ -223,9 +274,7 @@ ok(1);
 
 $clipboard->request_contents (Gtk2::Gdk->SELECTION_TYPE_STRING,
 			      \&received_func, 'user data!');
-
-Glib::Timeout->add (200, sub {Gtk2->main_quit;1});
-Gtk2->main;
+run_main;
 
 my $widget = Gtk2::Window->new;
 $clipboard->set_with_owner (\&get_func, \&clear_func, $widget,
@@ -236,9 +285,7 @@ is ($clipboard->get_owner, $widget);
 
 $clipboard->request_contents (Gtk2::Gdk->SELECTION_TYPE_STRING,
                               \&received_func, 'user data!');
-
-Glib::Timeout->add (200, sub {Gtk2->main_quit;1});
-Gtk2->main;
+run_main;
 
 SKIP: {
 	skip "new 2.6 stuff", 0

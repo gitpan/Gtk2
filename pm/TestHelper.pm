@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/TestHelper.pm,v 1.12 2006/07/27 20:13:27 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/TestHelper.pm,v 1.13 2008/09/06 20:11:03 kaffeetisch Exp $
 #
 
 package Gtk2::TestHelper;
@@ -124,6 +124,13 @@ sub ginterfaces_ok {
 }
 
 
+# Inspired by Test::Number::Delta
+sub delta_ok ($$;$) {
+	my ($a, $b, $msg) = @_;
+	ok (abs ($a - $b) < 1e-6, $msg);
+}
+
+
 1;
 __END__
 
@@ -211,6 +218,13 @@ using Test::More's is().
 Verify that the GObject subclass I<GOBJECT_OR_PACKAGE>'s @ISA is set up properly
 with all of the GInterfaces that the type system claims it supports.  Something
 like an isa_ok() in steroids.
+
+=back
+
+=item delta_ok (A, B [, NAME])
+
+Checks that the absolute difference of the numbers A and B is smaller than
+1e-6.
 
 =back
 

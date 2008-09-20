@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.72.2.1 2008/06/01 14:01:25 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.77 2008/08/31 14:21:27 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -638,10 +638,30 @@ gboolean gtk_widget_event (GtkWidget * widget, GdkEvent	*event);
  #gint       gtk_widget_send_expose         (GtkWidget           *widget,
  #					   GdkEvent            *event);
 
+=for apidoc
+This function works by emitting an action signal nominated by the various
+widget subclasses.  The signal is normally called C<activate>, but it
+doesn't have to be.
+
+Currently if you make a widget subclass in Perl there's no way to
+nominate a signal to be emitted by C<< $widget->activate >>.  A signal
+merely named C<activate> is not automatically hooked up.
+=cut
 gboolean
 gtk_widget_activate (widget)
 	GtkWidget * widget
 
+=for apidoc
+This function works by emitting a setter signal nominated by the
+various widget types which have "native" scrolling.  The signal is
+normally called C<set-scroll-adjustments>, but it doesn't have to be.
+
+If you make a widget subclass in Perl and create a signal in it called
+C<set-scroll-adjustments> taking two Gtk2::Adjustment parameters then
+the subclassing automatically hooks that up to be emitted by
+C<< $widget->set_scroll_adjustments >>.  (Your "class closure" default
+handler code should then store the adjustment objects somewhere.)
+=cut
 gboolean
 gtk_widget_set_scroll_adjustments (widget, hadjustment, vadjustment)
 	GtkWidget     * widget
@@ -846,12 +866,17 @@ gtk_widget_translate_coordinates (GtkWidget *src_widget, GtkWidget *dest_widget,
 	PUSHs (sv_2mortal (newSViv (dest_x)));
 	PUSHs (sv_2mortal (newSViv (dest_y)));
 
+=for apidoc __function__
 
- # Hide widget and return TRUE.
- # intended for passing directly to g_signal_connect for handling
- # the delete event.  pointless in perl.
- #gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
+This is a helper function intended to be used as the callback for the
+C<delete-event> signal:
 
+  $wiget->signal_connect (
+    delete_event => \&Gtk2::Widget::hide_on_delete);
+
+=for arg ... other arguments ignored (event etc)
+=cut
+gboolean gtk_widget_hide_on_delete (GtkWidget *widget, ...);
 
  #/* Widget styles.
  # */
@@ -1192,3 +1217,9 @@ void gtk_widget_set_has_tooltip (GtkWidget *widget, gboolean has_tooltip);
 gboolean gtk_widget_get_has_tooltip (GtkWidget *widget);
 
 #endif
+
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+
+GdkPixmap_noinc_ornull * gtk_widget_get_snapshot (GtkWidget *widget,  GdkRectangle_ornull *clip_rect=NULL);
+
+#endif /* 2.14 */

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkTooltip.xs,v 1.3 2007/07/22 21:46:02 kaffeetisch Exp $
+ * $Id: GtkTooltip.xs,v 1.4 2008/08/16 13:01:10 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -25,3 +25,9 @@ void gtk_tooltip_set_tip_area (GtkTooltip *tooltip, GdkRectangle_ornull *rect);
 =for apidoc __function__
 =cut
 void gtk_tooltip_trigger_tooltip_query (GdkDisplay *display);
+
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+
+void gtk_tooltip_set_icon_from_icon_name (GtkTooltip *tooltip, const gchar *icon_name, GtkIconSize size);
+
+#endif /* 2.14 */

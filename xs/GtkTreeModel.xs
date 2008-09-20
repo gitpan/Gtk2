@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.54 2008/05/20 19:44:32 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeModel.xs,v 1.62 2008/09/16 21:21:14 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -42,6 +42,13 @@ gtk2perl_tree_model_rows_reordered_marshal (GClosure * closure,
 	int n_children, i;
 	dGPERL_CLOSURE_MARSHAL_ARGS;
 
+	/* If model is a Perl object then gtk_tree_model_iter_n_children()
+	   will call out to ITER_N_CHILDREN in the class, so do that before
+	   trying to build the stack here. */
+	model = g_value_get_object (param_values);
+	iter = g_value_get_boxed (param_values+2);
+	n_children = gtk_tree_model_iter_n_children (model, iter);
+
 	GPERL_CLOSURE_MARSHAL_INIT (closure, marshal_data);
 
 	PERL_UNUSED_VAR (return_value);
@@ -55,18 +62,15 @@ gtk2perl_tree_model_rows_reordered_marshal (GClosure * closure,
 
 	/* instance */
 	GPERL_CLOSURE_MARSHAL_PUSH_INSTANCE (param_values);
-	model = SvGtkTreeModel(instance);
 
 	/* treepath */
 	XPUSHs (sv_2mortal (gperl_sv_from_value (param_values+1)));
 
 	/* treeiter */
 	XPUSHs (sv_2mortal (gperl_sv_from_value (param_values+2)));
-	iter = g_value_get_boxed (param_values+2);
 
 	/* gint * new_order */
 	new_order = g_value_get_pointer (param_values+3);
-	n_children = gtk_tree_model_iter_n_children (model, iter);
 	av = newAV ();
 	av_extend (av, n_children-1);
 	for (i = 0; i < n_children; i++)
@@ -629,6 +633,18 @@ Optional.
 
 =cut
 
+=for position post_signals
+
+Note that currently in a Perl subclass of an object implementing
+C<Gtk2::TreeModel>, the class closure, ie. class default signal
+handler, for the C<rows-reordered> signal is called only with an
+integer address for the reorder array parameter, not a Perl arrayref
+like a handler installed with C<signal_connect> receives.  It works to
+C<signal_chain_from_overridden> with the address, but it's otherwise
+fairly useless and will likely change in the future.
+
+=cut
+
 =for apidoc __hide__
 =cut
 void
@@ -939,6 +955,30 @@ new_from_arrayref (class, SV * sv_iter)
 ## we get this from Glib::Boxed::DESTROY
 ## void gtk_tree_iter_free (GtkTreeIter *iter)
 
+=for apidoc
+Set the contents of $iter.  $from can be either another Gtk2::TreeIter
+or an "internal" arrayref form as above.
+
+Often you create a new iter instead of modifying an existing one, but
+C<set> lets you to implement things in the style of the C<remove>
+method of Gtk2::ListStore and Gtk2::TreeStore.
+
+A set can also explicitly invalidate an iter by zapping its stamp, so
+nobody can accidentally use it again.
+
+    $iter->set ([0,0,undef,undef]);
+
+=cut
+void
+set (GtkTreeIter *iter, SV *from)
+    CODE:
+	if (gperl_sv_is_array_ref (from)) {
+		iter_from_sv (iter, from);
+	} else {
+		GtkTreeIter *from_iter = SvGtkTreeIter (from);
+		memcpy (iter, from_iter, sizeof(*iter));
+	}
+
 
 MODULE = Gtk2::TreeModel	PACKAGE = Gtk2::TreeModel	PREFIX = gtk_tree_model_
 
@@ -1090,30 +1130,51 @@ gtk_tree_model_get (tree_model, iter, ...)
 	get_value = 1
     PREINIT:
 	int i;
-    PPCODE:
+    CODE:
+	/* we use CODE: instead of PPCODE: so we can handle the stack
+	 * ourselves. */
 	PERL_UNUSED_VAR (ix);
-	/* if column id's were passed, just return those columns */
-	if( items > 2 )
-	{
-		for (i = 2 ; i < items ; i++) {
+#define OFFSET 2
+	if (items > OFFSET) {
+		/* if column id's were passed, just return those columns */
+
+		/* the stack is big enough already due to the input arguments,
+		 * so we don't need to extend it.  nor do we need to care about
+		 * xsubs called by gtk_tree_model_get_value overwriting the
+		 * stuff we put on the stack. */
+		for (i = OFFSET ; i < items ; i++) {
 			GValue gvalue = {0, };
 			gtk_tree_model_get_value (tree_model, iter,
 			                          SvIV (ST (i)), &gvalue);
-			XPUSHs (sv_2mortal (gperl_sv_from_value (&gvalue)));
+			ST (i - OFFSET) = sv_2mortal (gperl_sv_from_value (&gvalue));
 			g_value_unset (&gvalue);
 		}
+		XSRETURN (items - OFFSET);
 	}
-	else
-	{
+#undef OFFSET
+
+	else {
 		/* otherwise return all of the columns */
-		for( i = 0; i < gtk_tree_model_get_n_columns(tree_model); i++ )
-		{
+
+		int n_columns = gtk_tree_model_get_n_columns (tree_model);
+		/* extend the stack so it can handle 'n_columns' items in
+		 * total.  the stack already contains 'items' elements so make
+		 * room for 'n_columns - items' more, move our local stack
+		 * pointer forward to the new end, and update the global stack
+		 * pointer.  this way, xsubs called by gtk_tree_model_get_value
+		 * don't overwrite what we put on the stack. */
+		SPAGAIN;
+		EXTEND (SP, n_columns - items);
+		SP += n_columns - items;
+		PUTBACK;
+		for (i = 0; i < n_columns; i++) {
 			GValue gvalue = {0, };
 			gtk_tree_model_get_value (tree_model, iter,
 			                          i, &gvalue);
-			XPUSHs (sv_2mortal (gperl_sv_from_value (&gvalue)));
+			ST (i) = sv_2mortal (gperl_sv_from_value (&gvalue));
 			g_value_unset (&gvalue);
 		}
+		XSRETURN (n_columns);
 	}
 
  ## va_list means nothing to a perl developer, it's a c-specific thing.

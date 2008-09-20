@@ -4,10 +4,10 @@
 use strict;
 use warnings;
 use Gtk2::TestHelper
-  tests => 26,
+  tests => 27,
   at_least_version => [2, 10, 0, "Gtk2::StatusIcon is new in 2.10"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStatusIcon.t,v 1.10 2008/03/30 19:31:35 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStatusIcon.t,v 1.11 2008/08/16 12:55:19 kaffeetisch Exp $
 
 my $icon;
 
@@ -117,6 +117,15 @@ SKIP: {
   my $screen = $icon -> get_screen();
   isa_ok($screen, "Gtk2::Gdk::Screen");
   $icon -> set_screen($screen);
+}
+
+# --------------------------------------------------------------------------- #
+
+SKIP: {
+  skip 'new 2.14 stuff', 1
+    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+  ok (defined $icon -> get_x11_window_id());
 }
 
 __END__

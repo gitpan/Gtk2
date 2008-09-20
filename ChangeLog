@@ -1,27 +1,456 @@
-2008-06-02  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+2008-09-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* Makefile.PL
+	* NEWS
+	* README: Stable release 1.200.
+
+2008-09-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* api.pod: Improve the explanation of callbacks and user data.
+	Patch by Kevin Ryde.
+
+2008-09-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkTreeModelIface.t
+	* xs/GtkTreeSortable.xs: Fix a stack handling bug in
+	Gtk2::TreeSortable::get_sort_column_id.
+
+	* t/GtkCellLayoutIface.t
+	* xs/GtkCellLayout.xs: Fix a stack handling bug in
+	Gtk2::CellLayout::get_cells.
+
+	* t/GtkTreeModelIface.t
+	* xs/GtkTreeModel.xs: Fix yet another stack handling bug in
+	Gtk2::TreeModel::get.  Patch by Kevin Ryde.
+
+2008-09-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Gtk2.pm
 	* NEWS
-	* README: Stable release 1.183.
+	* README: Unstable release 1.193.
+
+2008-09-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkTreeModelIface.t
+	* xs/GtkTreeModel.xs: The 2008-08-31 change broke the
+	explicit-columns case of Gtk2::TreeModel::get.  Fix it.  Test it.
+
+	* t/GtkLinkButton.t: Test that URI hooks can disconnect themselves
+	and modify the user data.  Patch by Kevin Ryde.
+
+	* t/GtkIconView.t: Fix test failure on older gtk+.
+
+2008-09-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	Fix some test failures related to floating point number
+	comparisons.
+
+	* pm/TestHelper.pm: Add delta_ok() for comparing floating point
+	numbers.
+
+	* t/GdkInput.t
+	* t/GtkProgressBar.t
+	* t/GtkRange.t
+	* t/GtkSpinButton.t
+	* t/PangoMatrix.t: Use delta_ok().
+
+	* t/GtkSimpleList.t: Simply don't use floating point numbers here.
+
+2008-09-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GdkPixbuf.t: If saving a pixbuf in 'jpeg' format is not
+	supported, try 'png'.  Patch by Flavio Poletti.  (RT #37135)
+
+	* t/version-checks.t: Don't use the '-init' import switch since it
+	might abort the test.  Use '-threads-init' instead, and properly
+	quote it.
+
+	* xs/GtkTreeDnd.xs: Use gdk_atom_intern instead of
+	gdk_atom_intern_static_string; the latter is only available in
+	gtk+ >= 2.10.
+
+2008-08-31  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* NEWS
+	* README: Unstable release 1.192.
+
+2008-08-31  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkLinkButton.t
+	* xs/GtkLinkButton.xs: Wrap gtk_link_button_set_visited and
+	gtk_link_button_get_visited.
+
+	* t/GtkTreeModelIface.t
+	* xs/GtkTreeModel.xs: Fix the stack handling in the xsub for
+	gtk_tree_model_get.  We need to call SPAGAIN before and PUTBACK
+	after code that modifies the local stack pointer (PUSHs and XPUSHs
+	for example).  Patch by Kevin Ryde.
+
+	* t/GtkWidget.t
+	* xs/GtkWidget.xs: Make Gtk2::Widget::hide_on_delete ignore excess
+	arguments so that it is actually usable.  Patch by Kevin Ryde.
+
+	* xs/GtkSelection.xs: gtk_selection_data_get_data was split up
+	into gtk_selection_data_get_data and
+	gtk_selection_data_get_length.  Update the wrappers accordingly.
+
+2008-08-23  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/PangoLayout.xs: Fix a leak in the wrapper of
+	pango_layout_line_get_x_ranges.  Patch by Kevin Ryde.
+
+	* t/GtkFileChooser.t
+	* t/GtkTreeView-Dnd.t: Improve the wording of the skip_all
+	messages.
+
+	* xs/GtkTreeDnd.xs: Change the wrapper for
+	gtk_tree_drag_source_drag_data_get so it also accepts a selection
+	data object that is to be filled in, instead of always just
+	returning a new one.  Patch by Kevin Ryde.
+
+	* t/GtkTreeView.t: Use separately created tree views for certain
+	parts of the test.  Properly test set_search_equal_func and
+	set_search_position_func.  Make the tests for the coordinate
+	converters and for the tooltip stuff more robust.
+
+	* xs/GtkWindow.xs: Use Gtk2::Widget::hide_on_delete in the POD.
+	Patch by Kevin Ryde.
+
+2008-08-18  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* NEWS
+	* README: Unstable release 1.191.
+
+2008-08-18  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkColorSelectionDialog.xs:
+	gtk_color_selection_dialog_get_color_selection is broken
+	currently, so make its use depend on gtk+ >= 2.13.7 (i.e. the next
+	version).  (See GNOME bug #548346)
+
+	* t/GtkTreeModelIface.t
+	* xs/GtkTreeModel.xs: Provide Gtk2::TreeIter::set for custom model
+	implementations to set the contents of an iter.  Patch by Kevin Ryde.
+
+2008-08-17  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkItemFactory.t: Fix test failures.
+
+	* t/GtkWidget.t
+	* xs/GtkWidget.xs: Wrap gtk_widget_hide_on_delete.
+
+	* xs/GtkWindow.xs: Fix small error in the description POD section.
+	Patch by Kevin Ryde.
+
+	* t/GtkScaleButton.t
+	* xs/GtkScaleButton.xs: Wrap gtk_scale_button_set_orientation and
+	gtk_scale_button_get_orientation.
+
+	* t/GtkSocket-GtkPlug.t
+	* xs/GtkPlug.xs: Fix the gtk_plug_new_for_display wrapper so it is
+	callable as Gtk2::Plug->new_for_display(display, socket_id).  For
+	backwards compatibility, also allow
+	Gtk2::Plug::new_for_display(display, socket_id).
+
+	* t/GtkSocket-GtkPlug.t
+	* xs/GtkPlug.xs: Wrap gtk_plug_get_embedded and
+	gtk_plug_get_socket_window.
+
+	* t/GtkMessageDialog.t
+	* xs/GtkMessageDialog.xs: Wrap gtk_message_dialog_get_image.
+
+	* t/GtkMenuItem.t
+	* xs/GtkMenuItem.xs: Wrap gtk_menu_item_get_accel_path.
+
+	* t/GtkMenu.t
+	* xs/GtkMenu.xs: Wrap gtk_menu_get_accel_path and
+	gtk_menu_get_monitor.
+
+	* xs/GtkHandleBox.xs: Use gtk_handle_box_get_child_detached if
+	available.
+
+	* t/GtkEntry.t
+	* xs/GtkEntry.xs: Wrap gtk_entry_set_overwrite_mode,
+	gtk_entry_get_overwrite_mode, and gtk_entry_get_text_length.
+
+	* t/GtkColorSelectionDialog.t
+	* xs/GtkColorSelectionDialog.xs: Wrap
+	gtk_color_selection_dialog_get_color_selection; deprecate
+	Gtk2::ColorSelectionDialog->colorsel.
+
+	* t/GtkCalendar.t
+	* xs/GtkCalendar.xs: Wrap gtk_calendar_get_detail_width_chars,
+	gtk_calendar_set_detail_width_chars,
+	gtk_calendar_get_detail_height_rows and
+	gtk_calendar_set_detail_height_rows.
+
+2008-08-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GdkPixmap.xs
+	* xs/GtkGC.xs
+	* xs/PangoCairo.xs: Add hierarchy sections to the unregistered
+	custom subclasses Gtk2::Gdk::Bitmap, Gtk2::GC, and
+	Gtk2::Pango::Cairo::Context.
+
+	* t/GdkWindow.t
+	* xs/GdkWindow.xs: Wrap gdk_window_redirect_to_drawable and
+	gdk_window_remove_redirection.
+
+	* t/GdkScreen.t
+	* xs/GdkScreen.xs: Wrap gdk_screen_get_monitor_height_mm,
+	gdk_screen_get_monitor_width_mm, and
+	gdk_screen_get_monitor_plug_name.
+
+	* t/GtkClipboard.t
+	* xs/GtkSelection.xs: Use gtk_selection_data_get_target,
+	gtk_selection_data_get_data_type, gtk_selection_data_get_format,
+	gtk_selection_data_get_data, and gtk_selection_data_get_display if
+	available to implement the accessors
+	Gtk2::SelectionData->get_[thing].  Deprecate
+	Gtk2::SelectionData->[thing].
+
+	* MANIFEST
+	* xs_files-2.14
+	* t/GtkShow.t
+	* xs/GtkShow.xs: Wrap gtk_show_uri.
+
+	* t/01.GtkWindow.t
+	* xs/GtkWindow.xs: Wrap gtk_window_get_default_widget and
+	gtk_window_group_list_windows.
+
+	* t/GtkWidget.t
+	* xs/GtkWidget.xs: Wrap gtk_widget_get_snapshot.
+
+	* MANIFEST
+	* maps-2.14
+	* xs_files-2.14
+	* t/GtkToolShell.t
+	* xs/GtkToolShell.xs: Wrap GtkToolShell.
+
+	* t/GtkToolItem.t
+	* xs/GtkToolItem.xs: Wrap gtk_tool_item_toolbar_reconfigured.
+
+	* t/GtkTooltip.t
+	* xs/GtkTooltip.xs: Wrap gtk_tooltip_set_icon_from_icon_name.
+
+	* t/GtkStatusIcon.t
+	* xs/GtkStatusIcon.xs: Wrap gtk_status_icon_get_x11_window_id.
+
+2008-08-15  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkSocket-GtkPlug.t
+	* xs/GtkSocket.xs: Wrap gtk_socket_get_plug_window.
+
+	* t/GtkScaleButton.t
+	* xs/GtkScaleButton.xs: Wrap gtk_scale_button_get_popup,
+	gtk_scale_button_get_plus_button, and
+	gtk_scale_button_get_minus_button.
+
+	* t/GtkPrintSettings.t
+	* xs/GtkPrintSettings.xs: Wrap gtk_print_settings_load_file and
+	gtk_print_settings_load_key_file.
+
+	* t/GtkPageSetup.t
+	* xs/GtkPageSetup.xs: Wrap gtk_page_setup_load_file and
+	gtk_page_setup_load_key_file.
+
+	* t/GtkIconTheme.t
+	* xs/GtkIconTheme.xs: Wrap gtk_icon_info_new_for_pixbuf.
+
+	* t/GtkLayout.t
+	* xs/GtkLayout.xs: Use gtk_layout_get_bin_window if available to
+	implement Gtk2::Layout->get_bin_window.  Deprecate
+	Gtk2::Layout->bin_window.
+
+2008-08-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkFontSelection.t
+	* xs/GtkFontSelection.xs: Wrap gtk_font_selection_get_face,
+	gtk_font_selection_get_face_list, gtk_font_selection_get_family,
+	gtk_font_selection_get_family_list,
+	gtk_font_selection_get_preview_entry, gtk_font_selection_get_size,
+	gtk_font_selection_get_size_entry, and
+	gtk_font_selection_get_size_list.  Use
+	gtk_font_selection_dialog_get_ok_button,
+	gtk_font_selection_dialog_get_apply_button, and
+	gtk_font_selection_dialog_get_cancel_button if available to
+	implement Gtk2::FontSelectionDialog->get_ok_button,
+	get_apply_button, and get_cancel_button.  Deprecate
+	Gtk2::FontSelectionDialog->ok_button, apply_button, and
+	cancel_button.
+
+	* t/GtkDialog.t
+	* xs/GtkDialog.xs: Use gtk_dialog_get_content_area and
+	gtk_dialog_get_action_area if available to implement
+	Gtk2::Dialog->get_content_area and Gtk2::Dialog->get_action_area,
+	and fallback to direct struct access otherwise.  Deprecate
+	Gtk2::Dialog->vbox and Gtk2::Dialog->action_area.
+
+2008-08-11  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/02.GtkContainer.t
+	* xs/GtkContainer.xs: Wrap gtk_container_get_focus_child.  Allow
+	undef for the focus child argument to
+	gtk_container_set_focus_child.
+
+	* t/GtkClipboard.t
+	* xs/GtkClipboard.xs: Wrap gtk_clipboard_request_uris,
+	gtk_clipboard_wait_for_uris, and
+	gtk_clipboard_wait_is_uris_available.  Also fix the rich text
+	tests.
+
+	* t/GtkCalendar.t
+	* xs/GtkCalendar.xs: Wrap gtk_calendar_set_detail_func.
+
+2008-08-08  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GdkCairo.xs
+	* xs/GdkProperty.xs
+	* xs/GtkBuilder.xs
+	* xs/GtkSelection.xs: Fix some POD glitches.
+
+2008-08-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkBuilder.t: Merge the UI definitions and, more importantly,
+	make it work correctly with newer gtk+.
+
+	* t/GtkBuilder.t
+	* xs/GtkBuilder.xs: Wrap gtk_builder_add_objects_from_file and
+	gtk_builder_add_objects_from_string.
+
+2008-08-05  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkAccelGroup.t
+	* xs/GtkAccelGroup.xs: Wrap gtk_accel_group_get_is_locked and
+	gtk_accel_group_get_modifier_mask.
+
+2008-08-03  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkTreeModel.xs (gtk2perl_tree_model_rows_reordered_marshal)
+	* t/GtkTreeModelIface.t: Fix marshaling of the rows-reordered
+	signal for custom Perl tree models.  Patch by Kevin Ryde.
+
+	* xs/GtkAboutDialog.xs: Don't define macros inside a MODULE
+	section.  Older xsubpp can't handle that.
+
+	* xs/GtkMenu.xs (gtk2perl_menu_position_func): The push_in return
+	value is a boolean, not an integer.  Marshal it accordingly.
+
+	* xs/GtkDialog.xs: Add documentation about closing dialogs, and
+	mention that class closures for the response signal receive
+	unconverted response ids.  Patch by Kevin Ryde.
+
+	* xs/GtkWindow.xs: Add a couple of words about the delete-event
+	signal and its relation to window destruction and hidden windows.
+	Patch by Kevin Ryde.
+
+	* xs/GtkTreeModel.xs: Document that class closures in Perl
+	subclasses for the rows-reordered signal receive an incorrect
+	reorder array parameter, unlike normal signal handlers.  Patch by
+	Kevin Ryde.
+
+2008-07-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkCellRenderer.xs
+	* t/GtkCellRendererIface-Chaining.t: In the fallback xsubs for the
+	GtkCellRenderer interface vfuncs, use a more robust approach for
+	chaining up to the parent.  Idea by Kevin Ryde.
+
+2008-07-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkWidget.xs: Document some aspects of Gtk2::Widget::activate
+	and set_scroll_adjustments that are relevant to Perl subclasses.
+	Patch by Kevin Ryde.
+
+2008-06-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* Makefile.PL
+	* MANIFEST
+	* NEWS
+	* README: Unstable release 1.190.
+
+2008-06-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkGC.xs: Refer to release 1.200 (instead of 1.180) in the
+	compatibility paragraph about Gtk2::GC->release.
+
+2008-06-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkClipboard.t: Fix test failure that's presumably due to
+	get_func being run more often than expected.  Also use
+	Gtk2::TestHelper's run_main to replace equivalent Glib::Timeout
+	constructs.
+
+2008-06-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* CodeGen.pm (generate_constants_wrappers): Also allow more than
+	one tab as a separator between constant name and converter.
+
+2008-06-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* CodeGen.pm: Add Gtk2::CodeGen->generate_constants_wrappers which
+	creates XSUBs for C constants.
+
+	* Makefile.PL: Use Gtk2::CodeGen->generate_constants_wrappers to
+	wrap constants specified in files named constants-x.y.
+
+	* Gtk2.pm
+	* t/version-checks.t: Use Exporter to handle version checking and
+	exporting.  Test.
+
+	* constants-2.0
+	* Gtk2.pm
+	* t/00.Gtk2.t: Export GTK_PRIORITY_RESIZE, GDK_PRIORITY_EVENTS,
+	and GDK_PRIORITY_REDRAW.
+
+	* constants-2.0
+	* Gtk2.pm
+	* t/00.Gtk2.t: Export GDK_CURRENT_TIME.
+
+2008-06-21  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkIconView.t: Fix test failures by not running certain
+	unreliable tests.  Also avoid running unnecessary main loops.
 
 2008-06-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
-
-	Merge from HEAD:
-
-	* xs/GtkAdjustment.xs: Improve the documentation for the
-	accessors.  Patch by Kevin Ryde.
 
 	* xs/GtkWidget.xs: Document why signal_chain_from_overridden
 	doesn't quite work when used in a size-request handler.  Patch by
 	Kevin Ryde.
 
-2008-05-31  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+	* xs/GtkGC.xs
+	* t/GtkGC.t: Automatically handle releasing of GCs returned by
+	Gtk2::GC->get.  Patch by muppet, idea and initial implementation
+	by Kevin Ryde.
 
-	Merge from HEAD:
+	* xs/GdkEvent.xs (gtk2perl_gdk_event_set_state)
+	(gtk2perl_gdk_event_set_time): Handle the new GDK_DAMAGE type.
+
+	* t/GdkEvent.t: Provide Gtk2::Gdk::Event::GrabBroken::implicit and
+	grab_window accessors.  Patch by Kevin Ryde.
+
+	* xs/GtkAdjustment.xs: Improve the documentation for the
+	accessors.  Patch by Kevin Ryde.
+
+2008-05-31  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* t/GtkRecentChooser.t
 	* t/GtkRecentManager.t: Fix test failures due to the asynchronous
 	nature of the manager's add_item().
+
+2008-05-23  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkTreeModelFilter.t
+	* xs/GtkTreeModelFilter.xs: Fix the marshalling of modify
+	callbacks.  Technically, this is an API change since an input
+	argument turned into a return value.  The previous version was not
+	usable, however, so nothing should be affected by this.  If this
+	change does break your code, please let us know.  Patch by Kevin
+	Ryde.
 
 2008-05-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 

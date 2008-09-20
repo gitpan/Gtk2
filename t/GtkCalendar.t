@@ -1,5 +1,6 @@
+#!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCalendar.t,v 1.4 2004/01/17 15:52:31 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCalendar.t,v 1.6 2008/08/17 14:42:47 kaffeetisch Exp $
 #
 
 #########################
@@ -7,7 +8,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 11, noinit => 1;
+use Gtk2::TestHelper tests => 18;
 
 ok( my $cal = Gtk2::Calendar->new );
 
@@ -44,7 +45,39 @@ $cal->display_options ([qw/show-day-names no-month-change/]);
 $cal->set_display_options ([qw/show-day-names no-month-change/]);
 ok ($cal->get_display_options == [qw/show-day-names no-month-change/]);
 
-1;
+SKIP: {
+	skip 'new 2.14 stuff', 7
+		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+
+	my $cal = Gtk2::Calendar->new;
+
+	my $number = qr/\A\d+\z/;
+	my $called = 0;
+	$cal->set_detail_func(sub {
+		my ($tmp_cal, $year, $month, $day, $data) = @_;
+
+		unless ($called++) {
+			is ($tmp_cal, $cal);
+			like ($year, $number);
+			like ($month, $number);
+			like ($day, $number);
+			is ($data, undef);
+		}
+
+		return '<b>bla</b>';
+	});
+
+	my $window = Gtk2::Window->new;
+	$window->add ($cal);
+	$window->show_all;
+	$window->hide;
+
+	$cal->set_detail_height_rows (3);
+	is ($cal->get_detail_height_rows, 3);
+
+	$cal->set_detail_width_chars (5);
+	is ($cal->get_detail_width_chars, 5);
+}
 
 __END__
 

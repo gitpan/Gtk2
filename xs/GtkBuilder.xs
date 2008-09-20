@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkBuilder.xs,v 1.5 2007/07/08 18:18:24 kaffeetisch Exp $
+ * $Id: GtkBuilder.xs,v 1.7 2008/08/07 22:14:34 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -177,3 +177,57 @@ const gchar_ornull * gtk_builder_get_translation_domain (GtkBuilder *builder);
 # GType gtk_builder_get_type_from_name (GtkBuilder *builder, const char *type_name);
 # gboolean gtk_builder_value_from_string (GParamSpec *pspec, const gchar *string, GValue *value);
 # gboolean gtk_builder_value_from_string_type (GType type, const gchar *string, GValue *value);
+
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+
+=for apidoc __hide__
+=cut
+# guint gtk_builder_add_objects_from_file (GtkBuilder *builder, const gchar *filename, gchar **object_ids, GError **error);
+guint
+gtk_builder_add_objects_from_file (GtkBuilder *builder, const gchar *filename, gchar *first_object_id, ...)
+    PREINIT:
+	gchar **object_ids = NULL;
+	GError *error = NULL;
+	int i;
+    CODE:
+#define FIRST_ITEM 2
+	object_ids = g_new0 (gchar *, items - FIRST_ITEM + 1); /* NULL-terminate */
+	object_ids[0] = first_object_id;
+	for (i = FIRST_ITEM + 1; i < items; i++) {
+		object_ids[i - FIRST_ITEM] = SvGChar (ST (i));
+	}
+	RETVAL = gtk_builder_add_objects_from_file (
+	       	   builder, filename, object_ids, &error);
+	if (!RETVAL) {
+		gperl_croak_gerror (NULL, error);
+	}
+	g_free (object_ids);
+#undef FIRST_ITEM
+    OUTPUT:
+	RETVAL
+
+# guint gtk_builder_add_objects_from_string (GtkBuilder *builder, const gchar *buffer, gsize length, gchar **object_ids, GError **error);
+guint
+gtk_builder_add_objects_from_string (GtkBuilder *builder, const gchar *buffer, gchar *first_object_id, ...)
+    PREINIT:
+	gchar **object_ids = NULL;
+	GError *error = NULL;
+	int i;
+    CODE:
+#define FIRST_ITEM 2
+	object_ids = g_new0 (gchar *, items - FIRST_ITEM + 1); /* NULL-terminate */
+	object_ids[0] = first_object_id;
+	for (i = FIRST_ITEM + 1; i < items; i++) {
+		object_ids[i - FIRST_ITEM] = SvGChar (ST (i));
+	}
+	RETVAL = gtk_builder_add_objects_from_string (
+	       	   builder, buffer, sv_len (ST (1)), object_ids, &error);
+	if (!RETVAL) {
+		gperl_croak_gerror (NULL, error);
+	}
+	g_free (object_ids);
+#undef FIRST_ITEM
+    OUTPUT:
+	RETVAL
+
+#endif

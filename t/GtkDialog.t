@@ -1,6 +1,7 @@
+#!/usr/bin/perl
 # vim: set syntax=perl :
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDialog.t,v 1.7 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDialog.t,v 1.8 2008/08/13 20:08:02 kaffeetisch Exp $
 #
 
 #########################
@@ -8,7 +9,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 22;
+use Gtk2::TestHelper tests => 26;
 
 ok( my $win = Gtk2::Window->new('toplevel') );
 
@@ -86,6 +87,16 @@ SKIP: {
 
 	is( $d3->get_response_for_widget (($d3->action_area->get_children)[1]), 44 );
 }
+
+# 2.14 introduced accessors for the struct members vbox and action_area.  we
+# provide them under the new name for all versions of gtk+ by using direct
+# struct access on older versions.  for compatibility, we continue to provide
+# the old names.
+isa_ok ($d3->get_action_area, 'Gtk2::HButtonBox');
+isa_ok ($d3->get_content_area, 'Gtk2::VBox');
+
+ok ($d3->action_area == $d3->get_action_area);
+ok ($d3->vbox == $d3->get_content_area);
 
 __END__
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.39 2008/03/10 20:54:37 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoLayout.xs,v 1.40 2008/08/23 20:13:18 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -563,6 +563,7 @@ pango_layout_line_get_x_ranges (line, start_index, end_index)
 		av_push (av, newSViv (ranges[i + 1]));
 		PUSHs (sv_2mortal (newRV_noinc ((SV *) av)));
 	}
+	g_free (ranges);
 
 
 ####  void pango_layout_line_get_extents (PangoLayoutLine *line, PangoRectangle *ink_rect, PangoRectangle *logical_rect)

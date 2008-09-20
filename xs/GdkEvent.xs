@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.52 2008/01/07 19:54:49 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.54 2008/06/01 12:42:52 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -183,6 +183,9 @@ gtk2perl_gdk_event_set_state (GdkEvent * event,
 #if GTK_CHECK_VERSION (2, 8, 0)
 		    case GDK_GRAB_BROKEN:
 #endif
+#if GTK_CHECK_VERSION (2, 13, 1) /* FIXME: 2.14 */
+		    case GDK_DAMAGE:
+#endif
 			/* no state field */
 			break;
 		}
@@ -254,6 +257,9 @@ gtk2perl_gdk_event_set_time (GdkEvent * event,
 		     case GDK_SETTING:
 #if GTK_CHECK_VERSION (2, 8, 0)
 		     case GDK_GRAB_BROKEN:
+#endif
+#if GTK_CHECK_VERSION (2, 13, 1) /* FIXME: 2.14 */
+		    case GDK_DAMAGE:
 #endif
 			/* no time */
 			break;
@@ -1849,6 +1855,34 @@ keyboard (GdkEvent * event, gboolean newvalue=0)
 
 	if (items == 2 && newvalue != RETVAL)
 		event->grab_broken.keyboard = newvalue;
+    OUTPUT:
+	RETVAL
+
+gboolean
+implicit (GdkEvent * event, gboolean newvalue=0)
+    CODE:
+	RETVAL = event->grab_broken.implicit;
+
+	if (items == 2 && newvalue != RETVAL)
+		event->grab_broken.implicit = newvalue;
+    OUTPUT:
+	RETVAL
+
+=for apidoc
+When you set a window into a GrabBroken event make sure you keep a
+reference to it for as long as that event object or any copies exist,
+because the event doesn't add its own reference.
+=cut
+GdkWindow_ornull *
+grab_window (GdkEvent * event, GdkWindow_ornull * newvalue=NULL)
+    CODE:
+	RETVAL = event->grab_broken.grab_window;
+
+	/* GdkEventGrabBroken doesn't hold a ref on grab_window, so
+	 * just plonk the new value in, unlike for any.window above.
+         */
+	if (items == 2 && newvalue != RETVAL)
+		event->grab_broken.grab_window = newvalue;
     OUTPUT:
 	RETVAL
 

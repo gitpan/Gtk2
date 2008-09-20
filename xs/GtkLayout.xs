@@ -16,19 +16,29 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLayout.xs,v 1.8 2006/11/04 13:36:42 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLayout.xs,v 1.9 2008/08/15 18:46:17 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Layout	PACKAGE = Gtk2::Layout	PREFIX = gtk_layout_
 
-## layout->bin_window
+=for apidoc bin_window __hide__
+=cut
+
+## GdkWindow* gtk_layout_get_bin_window (GtkLayout *layout)
 GdkWindow_ornull *
-bin_window (layout)
+get_bin_window (layout)
 	GtkLayout * layout
+    ALIAS:
+	bin_window = 1
     CODE:
+	PERL_UNUSED_VAR (ix);
+#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14*/
+	RETVAL = gtk_layout_get_bin_window (layout);
+#else
 	RETVAL = layout->bin_window;
+#endif /* 2.14 */
     OUTPUT:
 	RETVAL
 

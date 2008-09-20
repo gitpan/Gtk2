@@ -3,10 +3,26 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.15 2008/03/10 20:54:37 kaffeetisch Exp $
+ * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAboutDialog.xs,v 1.16 2008/08/03 16:17:34 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
+
+#define GETTER(into)							\
+	{								\
+		if (!(into))						\
+			XSRETURN_EMPTY;					\
+		for (i = 0; (into)[i] != NULL; i++)			\
+			XPUSHs (sv_2mortal (newSVGChar ((into)[i])));	\
+	}
+
+#define SETTER(outof)						\
+	{							\
+		gint num = items - 1;				\
+		(outof) = g_new0 (gchar *, num + 30);		\
+		for (i = 0; i < num; i++)			\
+			(outof)[i] = SvGChar (ST (1 + i));	\
+	}
 
 static GPerlCallback *
 gtk2perl_about_dialog_activate_link_func_create (SV * func, SV * data)
@@ -209,22 +225,6 @@ void gtk_about_dialog_set_website (GtkAboutDialog * about, const gchar_ornull * 
 const gchar_ornull * gtk_about_dialog_get_website_label (GtkAboutDialog * about);
 
 void gtk_about_dialog_set_website_label (GtkAboutDialog * about, const gchar_ornull * website_label);
-
-#define GETTER(into)							\
-	{								\
-		if (!(into))						\
-			XSRETURN_EMPTY;					\
-		for (i = 0; (into)[i] != NULL; i++)			\
-			XPUSHs (sv_2mortal (newSVGChar ((into)[i])));	\
-	}
-
-#define SETTER(outof)						\
-	{							\
-		gint num = items - 1;				\
-		(outof) = g_new0 (gchar *, num + 30);		\
-		for (i = 0; i < num; i++)			\
-			(outof)[i] = SvGChar (ST (1 + i));	\
-	}
 
 ##const gchar * const * gtk_about_dialog_get_authors (GtkAboutDialog * about);
 void

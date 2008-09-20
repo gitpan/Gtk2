@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 15,
   at_least_version => [2, 10, 0, "GtkRecentChooser"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRecentChooser.t,v 1.3.4.1 2008/05/31 18:07:04 kaffeetisch Exp $
+# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRecentChooser.t,v 1.4 2008/05/31 18:06:18 kaffeetisch Exp $
 
 unlink "./test.xbel"; # in case of an aborted run
 my $manager = Glib::Object::new("Gtk2::RecentManager", filename => "./test.xbel");
