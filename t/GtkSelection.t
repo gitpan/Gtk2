@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 16;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSelection.t,v 1.9 2006/08/07 18:36:06 kaffeetisch Exp $
+# $Id: GtkSelection.t,v 1.10 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $list = Gtk2::TargetList -> new();
 isa_ok($list, "Gtk2::TargetList");

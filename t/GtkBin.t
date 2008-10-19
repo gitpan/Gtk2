@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 2;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkBin.t,v 1.7 2006/09/10 17:30:24 kaffeetisch Exp $
+# $Id: GtkBin.t,v 1.8 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $container = Gtk2::Container -> new(Gtk2::Window::);
 my $label = Gtk2::Label -> new("Bla");

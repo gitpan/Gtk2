@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPageSetup.xs,v 1.4 2008/08/15 18:54:13 kaffeetisch Exp $
+ * $Id: GtkPageSetup.xs,v 1.6 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -97,7 +97,7 @@ void gtk_page_setup_to_key_file (GtkPageSetup *setup, GKeyFile *key_file, const 
 
 #endif
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14*/
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 =for apidoc __gerror__
 =cut

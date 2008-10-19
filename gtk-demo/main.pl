@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk-demo/main.pl,v 1.15 2005/04/02 17:03:45 kaffeetisch Exp $
+# $Id: main.pl,v 1.16 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 our $PROGDIR = $0;

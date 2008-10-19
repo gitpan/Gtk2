@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkHandleBox.xs,v 1.9 2008/08/17 15:02:11 kaffeetisch Exp $
+ * $Id: GtkHandleBox.xs,v 1.11 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -73,7 +73,7 @@ gboolean
 gtk_handle_box_get_child_detached (handle_box)
 	GtkHandleBox * handle_box
     CODE:
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 	RETVAL = gtk_handle_box_get_child_detached (handle_box);
 #else
 	RETVAL = handle_box->child_detached;

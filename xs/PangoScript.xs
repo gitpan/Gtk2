@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoScript.xs,v 1.3 2005/07/11 22:39:21 kaffeetisch Exp $
+ * $Id: PangoScript.xs,v 1.4 2008/10/05 12:49:36 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

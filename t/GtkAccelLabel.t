@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 4;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelLabel.t,v 1.6 2007/03/17 14:54:25 kaffeetisch Exp $
+# $Id: GtkAccelLabel.t,v 1.7 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $button = Gtk2::Button -> new("Blub");
 

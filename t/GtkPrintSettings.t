@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 20,
   at_least_version => [2, 10, 0, 'GtkPrintSettings: it is new in 2.10'];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkPrintSettings.t,v 1.6 2008/08/15 19:44:16 kaffeetisch Exp $
+# $Id: GtkPrintSettings.t,v 1.8 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $settings = Gtk2::PrintSettings -> new();
 isa_ok($settings, 'Gtk2::PrintSettings');
@@ -77,7 +77,7 @@ SKIP: {
 
 SKIP: {
   skip 'new 2.14 stuff', 5
-    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+    unless Gtk2->CHECK_VERSION(2, 14, 0);
 
   my $file = 'tmp.settings';
 

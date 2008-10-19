@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 8;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoScript.t,v 1.2 2004/10/30 17:13:23 kaffeetisch Exp $
+# $Id: PangoScript.t,v 1.3 2008/10/05 12:49:35 kaffeetisch Exp $
 
 SKIP: {
   skip("PangoScript is new in 1.4", 8)

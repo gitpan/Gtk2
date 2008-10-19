@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 19;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellEditable.t,v 1.2 2004/03/04 01:35:57 kaffeetisch Exp $
+# $Id: GtkCellEditable.t,v 1.3 2008/10/05 12:49:34 kaffeetisch Exp $
 
 package EditableTest;
 

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRadioToolButton.xs,v 1.6 2008/01/07 20:23:29 kaffeetisch Exp $
+ * $Id: GtkRadioToolButton.xs,v 1.7 2008/10/05 12:49:35 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

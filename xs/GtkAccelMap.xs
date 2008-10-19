@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelMap.xs,v 1.8 2005/04/07 11:05:43 kaffeetisch Exp $
+ * $Id: GtkAccelMap.xs,v 1.9 2008/10/05 12:49:35 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

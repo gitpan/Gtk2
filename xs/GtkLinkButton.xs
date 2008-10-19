@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLinkButton.xs,v 1.4 2008/08/31 18:43:25 kaffeetisch Exp $
+ * $Id: GtkLinkButton.xs,v 1.6 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -82,7 +82,7 @@ gtk_link_button_set_uri_hook (class, SV *func, SV *data=NULL)
 			 (GDestroyNotify) gperl_callback_destroy);
 	}
 
-#if GTK_CHECK_VERSION (2, 13, 7) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 gboolean gtk_link_button_get_visited (GtkLinkButton *link_button);
 

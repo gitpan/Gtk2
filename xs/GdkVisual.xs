@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkVisual.xs,v 1.2 2004/05/15 19:03:30 kaffeetisch Exp $
+ * $Id: GdkVisual.xs,v 1.3 2008/10/05 12:49:35 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

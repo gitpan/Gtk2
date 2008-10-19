@@ -4,9 +4,9 @@ use Gtk2::TestHelper tests => 10;
 
 use utf8; # for the umlaut test
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEditable.t,v 1.2 2007/03/11 17:50:13 kaffeetisch Exp $
+# $Id: GtkEditable.t,v 1.4 2008/10/18 22:29:29 kaffeetisch Exp $
 
-my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
+my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 0);
 my $spin = Gtk2::SpinButton -> new($adjustment, 0.2, 1);
 isa_ok($spin, "Gtk2::Editable");
 

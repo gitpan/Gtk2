@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # vim: set filetype=perl :
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/02.GtkContainer.t,v 1.8 2008/08/11 14:56:54 kaffeetisch Exp $
+# $Id: 02.GtkContainer.t,v 1.10 2008/10/18 22:24:19 kaffeetisch Exp $
 
 use Gtk2::TestHelper tests => 30;
 
@@ -23,7 +23,7 @@ ok(1);
 
 SKIP: {
 	skip 'new 2.14 stuff', 2
-		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+		unless Gtk2->CHECK_VERSION(2, 14, 0);
 
 	is ($window->get_focus_child, $vbox);
 	$window->set_focus_child (undef);

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFileChooserDialog.xs,v 1.5 2004/03/17 03:52:25 muppetman Exp $
+ * $Id: GtkFileChooserDialog.xs,v 1.6 2008/10/05 12:49:35 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

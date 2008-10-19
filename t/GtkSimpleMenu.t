@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSimpleMenu.t,v 1.3 2004/02/03 00:21:24 rwmcfa1 Exp $
+# $Id: GtkSimpleMenu.t,v 1.4 2008/10/05 12:49:35 kaffeetisch Exp $
 #
 
 #########################

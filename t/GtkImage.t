@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkImage.t,v 1.8 2007/12/16 18:31:16 kaffeetisch Exp $
+# $Id: GtkImage.t,v 1.9 2008/10/05 12:49:35 kaffeetisch Exp $
 #
 
 #########################

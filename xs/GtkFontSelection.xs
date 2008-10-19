@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkFontSelection.xs,v 1.12 2008/08/13 20:56:29 kaffeetisch Exp $
+ * $Id: GtkFontSelection.xs,v 1.14 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -56,7 +56,7 @@ const gchar *
 gtk_font_selection_get_preview_text (fontsel)
 	GtkFontSelection * fontsel
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14*/
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 # We don't own the face, so no _noinc.
 PangoFontFace * gtk_font_selection_get_face (GtkFontSelection *fontsel);
@@ -110,7 +110,7 @@ get_ok_button (fsd)
 	{
 	case 0:
 	case 1:
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14*/
+#if GTK_CHECK_VERSION (2, 14, 0)
 		RETVAL = gtk_font_selection_dialog_get_ok_button (fsd);
 #else
 		RETVAL = fsd->ok_button;
@@ -118,7 +118,7 @@ get_ok_button (fsd)
 		break;
 	case 2:
 	case 3:
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14*/
+#if GTK_CHECK_VERSION (2, 14, 0)
 		RETVAL = gtk_font_selection_dialog_get_apply_button (fsd);
 #else
 		RETVAL = fsd->apply_button;
@@ -126,7 +126,7 @@ get_ok_button (fsd)
 		break;
 	case 4:
 	case 5:
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14*/
+#if GTK_CHECK_VERSION (2, 14, 0)
 		RETVAL = gtk_font_selection_dialog_get_cancel_button (fsd);
 #else
 		RETVAL = fsd->cancel_button;

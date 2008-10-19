@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkStatusIcon.xs,v 1.9 2008/08/16 12:55:19 kaffeetisch Exp $
+ * $Id: GtkStatusIcon.xs,v 1.12 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -93,7 +93,11 @@ gtk_status_icon_position_menu (GtkMenu *menu, ...)
 		icon = SvGtkStatusIcon (ST (3));
 	} else
 		icon = SvGtkStatusIcon (ST (1));
+	/* PUTBACK/SPAGAIN because gtk_status_icon_position_menu() calls out
+	   to menu->size_request, which may be a perl class closure */
+	PUTBACK;
 	gtk_status_icon_position_menu (menu, &x, &y, &push_in, icon);
+	SPAGAIN;
 	EXTEND (sp, 3);
 	PUSHs (sv_2mortal (newSViv (x)));
 	PUSHs (sv_2mortal (newSViv (y)));
@@ -124,7 +128,7 @@ GdkScreen *gtk_status_icon_get_screen (GtkStatusIcon *status_icon);
 
 #endif
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 guint32 gtk_status_icon_get_x11_window_id (GtkStatusIcon *status_icon);
 

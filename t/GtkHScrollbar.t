@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 2, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkHScrollbar.t,v 1.5 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Id: GtkHScrollbar.t,v 1.6 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 

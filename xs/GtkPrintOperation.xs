@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkPrintOperation.xs,v 1.1 2006/06/20 16:49:17 kaffeetisch Exp $
+ * $Id: GtkPrintOperation.xs,v 1.2 2008/10/05 12:49:35 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

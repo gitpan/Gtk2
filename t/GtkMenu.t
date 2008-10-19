@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenu.t,v 1.10 2008/08/17 15:11:34 kaffeetisch Exp $
+# $Id: GtkMenu.t,v 1.12 2008/10/18 22:24:19 kaffeetisch Exp $
 #
 
 #########################
@@ -133,7 +133,7 @@ unless ($i_know_you) {
 
 SKIP: {
 	skip 'new 2.14 stuff', 2
-		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+		unless Gtk2->CHECK_VERSION(2, 14, 0);
 
 	my $menu = Gtk2::Menu->new;
 	$menu->set_accel_path ('<gtk2perl>/main/menu');

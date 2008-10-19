@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/TestHelper.pm,v 1.13 2008/09/06 20:11:03 kaffeetisch Exp $
+# $Id: TestHelper.pm,v 1.14 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 package Gtk2::TestHelper;

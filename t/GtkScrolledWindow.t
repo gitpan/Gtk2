@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 10;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkScrolledWindow.t,v 1.10 2006/08/07 18:36:05 kaffeetisch Exp $
+# $Id: GtkScrolledWindow.t,v 1.11 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $window = Gtk2::ScrolledWindow -> new();
 isa_ok($window, "Gtk2::ScrolledWindow");

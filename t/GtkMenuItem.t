@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 14;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenuItem.t,v 1.10 2008/08/17 15:13:32 kaffeetisch Exp $
+# $Id: GtkMenuItem.t,v 1.12 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $item = Gtk2::MenuItem -> new();
 isa_ok($item, "Gtk2::MenuItem");
@@ -59,7 +59,7 @@ $item -> toggle_size_allocate(23);
 
 SKIP: {
   skip 'new 2.14 stuff', 1
-    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+    unless Gtk2->CHECK_VERSION(2, 14, 0);
 
   my $item = Gtk2::MenuItem -> new();
   $item -> set_accel_path('<bla>/bla/bla');

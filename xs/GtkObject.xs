@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkObject.xs,v 1.17 2006/01/16 22:28:25 kaffeetisch Exp $
+ * $Id: GtkObject.xs,v 1.19 2008/10/18 15:09:31 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -50,12 +50,16 @@ SV *
 gtk2perl_new_gtkobject (GtkObject * object)
 {
 #ifdef NOISY
-	warn ("gtk2perl_new_gtkobject (%s(%p)[%d])\n",
-	      G_OBJECT_TYPE_NAME (object),
-	      object,
-	      G_OBJECT (object)->ref_count);
-	g_signal_connect (object, "destroy", G_CALLBACK (destroy_notify), NULL);
-	g_object_weak_ref (object, weak_ref, NULL);
+	if (object) {
+		warn ("gtk2perl_new_gtkobject (%s(%p)[%d])\n",
+		      G_OBJECT_TYPE_NAME (object),
+		      object,
+		      G_OBJECT (object)->ref_count);
+		g_signal_connect (object, "destroy", G_CALLBACK (destroy_notify), NULL);
+		g_object_weak_ref (G_OBJECT (object), weak_ref, NULL);
+	} else {
+		warn ("gtk2perl_new_gtkobject (NULL)\n");
+	}
 #endif
 	/* always sink the object.  if it's not floating, then nothing
 	 * happens and we get a ref.  if it is floating, then the

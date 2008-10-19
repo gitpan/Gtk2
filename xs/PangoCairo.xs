@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoCairo.xs,v 1.14 2008/08/16 20:24:48 kaffeetisch Exp $
+ * $Id: PangoCairo.xs,v 1.15 2008/10/05 12:49:36 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

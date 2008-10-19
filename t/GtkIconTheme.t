@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkIconTheme.t,v 1.21 2008/08/15 18:48:34 kaffeetisch Exp $
+# $Id: GtkIconTheme.t,v 1.23 2008/10/18 22:24:19 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -97,7 +97,7 @@ ok (!$icon_theme->rescan_if_needed);
 
 SKIP: {
   skip 'new 2.14 stuff', 2
-    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+    unless Gtk2->CHECK_VERSION(2, 14, 0);
 
   my $pixbuf = $icon_theme->load_icon ('stock_edit', 24, 'use-builtin');
   isa_ok (Gtk2::IconInfo->new_for_pixbuf ($icon_theme, $pixbuf),

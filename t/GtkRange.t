@@ -3,7 +3,7 @@
 use strict;
 use Gtk2::TestHelper tests => 10;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRange.t,v 1.11 2008/09/06 20:11:04 kaffeetisch Exp $
+# $Id: GtkRange.t,v 1.12 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 

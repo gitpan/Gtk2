@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 9, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFrame.t,v 1.5 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Id: GtkFrame.t,v 1.6 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $frame = Gtk2::Frame -> new();
 isa_ok($frame, "Gtk2::Frame");

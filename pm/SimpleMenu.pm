@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleMenu.pm,v 1.10 2008/06/20 01:19:26 rwmcfa1 Exp $
+# $Id: SimpleMenu.pm,v 1.11 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 package Gtk2::SimpleMenu;

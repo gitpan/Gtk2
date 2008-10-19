@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 7;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoRenderer.t,v 1.7 2008/03/10 20:54:36 kaffeetisch Exp $
+# $Id: PangoRenderer.t,v 1.8 2008/10/05 12:49:35 kaffeetisch Exp $
 
 SKIP: {
   skip("PangoRenderer is new in 1.8", 5)

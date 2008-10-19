@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/thread_usage.pl,v 1.4 2004/06/23 01:00:15 rwmcfa1 Exp $
+# $Id: thread_usage.pl,v 1.5 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 # -rm
 #

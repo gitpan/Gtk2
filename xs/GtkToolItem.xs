@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkToolItem.xs,v 1.7 2008/08/16 13:11:23 kaffeetisch Exp $
+ * $Id: GtkToolItem.xs,v 1.9 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -76,7 +76,7 @@ void gtk_tool_item_set_tooltip_markup (GtkToolItem *tool_item, const gchar_ornul
 
 #endif
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 void gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item);
 

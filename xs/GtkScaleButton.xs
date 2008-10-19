@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkScaleButton.xs,v 1.4 2008/08/17 16:32:11 kaffeetisch Exp $
+ * $Id: GtkScaleButton.xs,v 1.5 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -50,7 +50,7 @@ GtkAdjustment * gtk_scale_button_get_adjustment (GtkScaleButton *button);
 
 void gtk_scale_button_set_adjustment (GtkScaleButton *button, GtkAdjustment *adjustment);
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14*/
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 GtkWidget * gtk_scale_button_get_popup (GtkScaleButton *button);
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeDnd.xs,v 1.11 2008/09/06 18:22:05 kaffeetisch Exp $
+ * $Id: GtkTreeDnd.xs,v 1.14 2008/10/18 21:51:28 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -148,7 +148,7 @@ void
 gtk_tree_drag_source_drag_data_get (GtkTreeDragSource *drag_source, GtkTreePath *path, GtkSelectionData *selection_data = NULL)
     PREINIT:
 	SV *ret = &PL_sv_undef;
-    PPCODE:
+    CODE:
 	if (selection_data) {
 		if (gtk_tree_drag_source_drag_data_get (drag_source, path,
 		                                        selection_data))
@@ -162,7 +162,8 @@ gtk_tree_drag_source_drag_data_get (GtkTreeDragSource *drag_source, GtkTreePath 
 		                                        &new_selection_data))
 			ret = sv_2mortal (newSVGtkSelectionData_copy (&new_selection_data));
 	}
-	PUSHs (ret);
+	ST(0) = ret;
+	XSRETURN(1);
 
 MODULE = Gtk2::TreeDnd	PACKAGE = Gtk2::TreeDragDest	PREFIX = gtk_tree_drag_dest_
 
@@ -206,6 +207,8 @@ gtk_tree_set_row_drag_data (selection_data, tree_model, path)
 
 ## gboolean gtk_tree_get_row_drag_data (GtkSelectionData *selection_data, GtkTreeModel **tree_model, GtkTreePath **path)
 =for apidoc
+If $selection_data is not of target type GTK_TREE_MODEL_ROW then the return is
+an empty list.
 =for signature (tree_model, path) = $selection_data->get_row_drag_data
 =cut
 void

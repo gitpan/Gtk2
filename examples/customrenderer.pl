@@ -24,7 +24,7 @@ TextView subclass which implements the CellEditable GInterface.
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/examples/customrenderer.pl,v 1.3 2005/01/07 21:31:59 kaffeetisch Exp $
+# $Id: customrenderer.pl,v 1.4 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 use strict;

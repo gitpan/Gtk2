@@ -4,7 +4,7 @@ use strict;
 use Test::More;
 use Gtk2;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/Gdk.t,v 1.19 2008/03/30 19:31:01 kaffeetisch Exp $
+# $Id: Gdk.t,v 1.20 2008/10/05 12:49:34 kaffeetisch Exp $
 
 use Config;
 my $have_threads = $Config{usethreads};

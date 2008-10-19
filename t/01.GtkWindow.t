@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/01.GtkWindow.t,v 1.39 2008/08/16 15:23:22 kaffeetisch Exp $
+# $Id: 01.GtkWindow.t,v 1.41 2008/10/18 22:24:19 kaffeetisch Exp $
 #
 
 #########################
@@ -369,7 +369,7 @@ SKIP: {
 
 SKIP: {
 	skip 'new 2.14 stuff', 4
-		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+		unless Gtk2->CHECK_VERSION(2, 14, 0);
 
 	my $window = Gtk2::Window->new ();
 	is ($window->get_default_widget (), undef);

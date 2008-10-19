@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkActionGroup.t,v 1.8 2007/06/17 19:25:25 kaffeetisch Exp $
+# $Id: GtkActionGroup.t,v 1.9 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper

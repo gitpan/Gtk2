@@ -3,11 +3,11 @@ use strict;
 use warnings;
 use Gtk2::TestHelper
   tests => 1,
-  at_least_version => [2, 13, 6, 'GtkShow is new in 2.14'], # FIXME: 2.14
+  at_least_version => [2, 14, 0, 'GtkShow is new in 2.14'],
   skip_all => 'can only test interactively',
   ;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkShow.t,v 1.1 2008/08/16 16:10:42 kaffeetisch Exp $
+# $Id: GtkShow.t,v 1.3 2008/10/18 22:24:19 kaffeetisch Exp $
 
 eval {
   Gtk2::show_uri(undef, 'http://www.gnome.org');

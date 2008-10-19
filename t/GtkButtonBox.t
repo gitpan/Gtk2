@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkButtonBox.t,v 1.9 2007/03/17 14:54:25 kaffeetisch Exp $
+# $Id: GtkButtonBox.t,v 1.10 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $box = Gtk2::VButtonBox -> new();
 isa_ok($box, "Gtk2::ButtonBox");

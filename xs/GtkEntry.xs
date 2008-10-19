@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkEntry.xs,v 1.23 2008/08/17 14:59:58 kaffeetisch Exp $
+ * $Id: GtkEntry.xs,v 1.25 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -217,7 +217,7 @@ GtkAdjustment_ornull* gtk_entry_get_cursor_hadjustment (GtkEntry *entry);
 
 #endif
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 void gtk_entry_set_overwrite_mode (GtkEntry *entry, gboolean overwrite);
 

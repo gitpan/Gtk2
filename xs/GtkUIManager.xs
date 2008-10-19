@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkUIManager.xs,v 1.4 2004/03/08 02:58:07 rwmcfa1 Exp $
+ * $Id: GtkUIManager.xs,v 1.5 2008/10/05 12:49:35 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

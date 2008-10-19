@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkDisplay.xs,v 1.19 2008/04/20 17:02:28 kaffeetisch Exp $
+ * $Id: GdkDisplay.xs,v 1.20 2008/10/05 12:49:35 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 

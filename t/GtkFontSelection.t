@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 22;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFontSelection.t,v 1.7 2008/08/13 20:56:25 kaffeetisch Exp $
+# $Id: GtkFontSelection.t,v 1.9 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $fs = Gtk2::FontSelection -> new();
 isa_ok($fs, "Gtk2::FontSelection");
@@ -36,7 +36,7 @@ is($dialog -> get_preview_text(), "Quick brown gtk2-perl.");
 
 SKIP: {
   skip 'new 2.14 stuff', 8
-    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+    unless Gtk2->CHECK_VERSION(2, 14, 0);
 
   isa_ok($fs -> get_face(), 'Gtk2::Pango::FontFace');
   isa_ok($fs -> get_face_list(), 'Gtk2::Widget');

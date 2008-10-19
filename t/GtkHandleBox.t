@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkHandleBox.t,v 1.3 2004/01/10 17:41:59 rwmcfa1 Exp $
+# $Id: GtkHandleBox.t,v 1.4 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 #########################

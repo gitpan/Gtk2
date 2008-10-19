@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 9, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoTypes.t,v 1.7 2007/06/17 12:55:56 kaffeetisch Exp $
+# $Id: PangoTypes.t,v 1.8 2008/10/05 12:49:35 kaffeetisch Exp $
 
 SKIP: {
   skip("find_base_dir is new in 1.4", 1)

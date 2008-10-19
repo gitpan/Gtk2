@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkLayout.xs,v 1.9 2008/08/15 18:46:17 kaffeetisch Exp $
+ * $Id: GtkLayout.xs,v 1.11 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -34,7 +34,7 @@ get_bin_window (layout)
 	bin_window = 1
     CODE:
 	PERL_UNUSED_VAR (ix);
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14*/
+#if GTK_CHECK_VERSION (2, 14, 0)
 	RETVAL = gtk_layout_get_bin_window (layout);
 #else
 	RETVAL = layout->bin_window;

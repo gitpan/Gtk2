@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkBuilder.xs,v 1.7 2008/08/07 22:14:34 kaffeetisch Exp $
+ * $Id: GtkBuilder.xs,v 1.8 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -178,7 +178,7 @@ const gchar_ornull * gtk_builder_get_translation_domain (GtkBuilder *builder);
 # gboolean gtk_builder_value_from_string (GParamSpec *pspec, const gchar *string, GValue *value);
 # gboolean gtk_builder_value_from_string_type (GType type, const gchar *string, GValue *value);
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 =for apidoc __hide__
 =cut

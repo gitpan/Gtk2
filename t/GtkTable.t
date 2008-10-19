@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 5;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTable.t,v 1.6 2007/03/17 14:54:25 kaffeetisch Exp $
+# $Id: GtkTable.t,v 1.7 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $table = Gtk2::Table -> new(5, 5, 1);
 

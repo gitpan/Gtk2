@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/SimpleList.pm,v 1.29 2006/10/03 15:49:15 kaffeetisch Exp $
+# $Id: SimpleList.pm,v 1.30 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 #########################

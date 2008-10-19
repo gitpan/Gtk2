@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   at_least_version => [2, 6, 0, "GdkPango is new in 2.6"],
   tests => 14;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkPango.t,v 1.4 2007/09/15 14:32:59 kaffeetisch Exp $
+# $Id: GdkPango.t,v 1.5 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $screen = Gtk2::Gdk::Screen -> get_default();
 

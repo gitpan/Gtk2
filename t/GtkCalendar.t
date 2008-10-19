@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCalendar.t,v 1.6 2008/08/17 14:42:47 kaffeetisch Exp $
+# $Id: GtkCalendar.t,v 1.8 2008/10/18 22:24:19 kaffeetisch Exp $
 #
 
 #########################
@@ -47,7 +47,7 @@ ok ($cal->get_display_options == [qw/show-day-names no-month-change/]);
 
 SKIP: {
 	skip 'new 2.14 stuff', 7
-		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+		unless Gtk2->CHECK_VERSION(2, 14, 0);
 
 	my $cal = Gtk2::Calendar->new;
 

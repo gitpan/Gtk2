@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRecentManager.t,v 1.7 2008/05/31 18:06:18 kaffeetisch Exp $
+# $Id: GtkRecentManager.t,v 1.8 2008/10/05 12:49:35 kaffeetisch Exp $
 #
 
 #########################

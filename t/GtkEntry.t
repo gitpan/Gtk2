@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 23;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntry.t,v 1.18 2008/08/17 14:59:58 kaffeetisch Exp $
+# $Id: GtkEntry.t,v 1.20 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $entry = Gtk2::Entry -> new();
 isa_ok($entry, "Gtk2::Entry");
@@ -88,7 +88,7 @@ SKIP: {
 
 SKIP: {
   skip 'new 2.14 stuff', 2
-    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+    unless Gtk2->CHECK_VERSION(2, 14, 0);
 
   my $entry = Gtk2::Entry -> new();
   $entry -> set_text("Bla");

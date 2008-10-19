@@ -18,7 +18,7 @@
  *
  * THIS IS A PRIVATE HEADER FOR USE ONLY IN Gtk2 ITSELF.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl-private.h,v 1.3 2006/10/17 20:20:37 kaffeetisch Exp $
+ * $Id: gtk2perl-private.h,v 1.4 2008/10/05 12:49:34 kaffeetisch Exp $
  */
 
 #ifndef _GTK2PERL_PRIVATE_H_

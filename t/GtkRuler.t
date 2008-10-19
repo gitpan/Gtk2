@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRuler.t,v 1.5 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Id: GtkRuler.t,v 1.6 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $ruler = Gtk2::VRuler -> new();
 isa_ok($ruler, "Gtk2::Ruler");

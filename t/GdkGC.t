@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 35;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkGC.t,v 1.7 2005/10/10 20:13:14 kaffeetisch Exp $
+# $Id: GdkGC.t,v 1.8 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $black = Gtk2::Gdk::Color -> new(0, 0, 0);
 

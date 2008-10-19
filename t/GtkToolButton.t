@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolButton.t,v 1.5 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Id: GtkToolButton.t,v 1.6 2008/10/05 12:49:35 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 2;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextTag.t,v 1.4 2007/03/17 14:54:25 kaffeetisch Exp $
+# $Id: GtkTextTag.t,v 1.5 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $tag = Gtk2::TextTag -> new("bla");
 isa_ok($tag, "Gtk2::TextTag");

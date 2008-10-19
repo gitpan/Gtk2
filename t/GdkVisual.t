@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 24;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkVisual.t,v 1.5 2008/02/11 21:10:52 kaffeetisch Exp $
+# $Id: GdkVisual.t,v 1.6 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my @depths = Gtk2::Gdk -> query_depths();
 like($depths[0], qr/^\d+$/);

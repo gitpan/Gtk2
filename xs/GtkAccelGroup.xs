@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAccelGroup.xs,v 1.24 2008/08/05 19:51:21 kaffeetisch Exp $
+ * $Id: GtkAccelGroup.xs,v 1.26 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -154,7 +154,7 @@ gtk_accel_group_disconnect_key (accel_group, accel_key, accel_mods)
 # the perl level.
 ## GtkAccelGroup* gtk_accel_group_from_accel_closure (GClosure *closure)
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 gboolean gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group);
 

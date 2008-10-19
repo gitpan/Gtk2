@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkEntryCompletion.t,v 1.13 2007/09/15 14:32:59 kaffeetisch Exp $
+# $Id: GtkEntryCompletion.t,v 1.14 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper

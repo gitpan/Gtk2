@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileFilter.t,v 1.5 2005/01/30 02:17:29 muppetman Exp $
+# $Id: GtkFileFilter.t,v 1.6 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper

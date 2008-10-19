@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/Pango.pm,v 1.6 2004/01/25 06:19:02 muppetman Exp $
+# $Id: Pango.pm,v 1.7 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 package Gtk2::Pango;

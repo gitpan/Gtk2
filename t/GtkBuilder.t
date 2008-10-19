@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   tests => 45,
   at_least_version => [2, 12, 0, 'GtkBuildable: it appeared in 2.12'];
 
-# $Id: GtkBuilder.t,v 1.5 2008/08/07 21:41:44 kaffeetisch Exp $
+# $Id: GtkBuilder.t,v 1.6 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $builder;
 my $ui = <<EOD;
@@ -54,7 +54,7 @@ is ($builder->get_translation_domain, 'de');
 
 SKIP: {
   skip 'new 2.14 stuff', 8
-    unless Gtk2->CHECK_VERSION (2, 13, 6); # FIXME: 2.14
+    unless Gtk2->CHECK_VERSION (2, 14, 0);
 
   my $builder = Gtk2::Builder->new;
   eval {

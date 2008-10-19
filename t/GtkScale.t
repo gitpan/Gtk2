@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 6;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkScale.t,v 1.8 2004/03/21 04:38:32 muppetman Exp $
+# $Id: GtkScale.t,v 1.9 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # vim: set syntax=perl :
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkDialog.t,v 1.8 2008/08/13 20:08:02 kaffeetisch Exp $
+# $Id: GtkDialog.t,v 1.9 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 #########################

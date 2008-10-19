@@ -4,10 +4,10 @@
 use strict;
 use warnings;
 use Gtk2::TestHelper
-  tests => 27,
+  tests => 30,
   at_least_version => [2, 10, 0, "Gtk2::StatusIcon is new in 2.10"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStatusIcon.t,v 1.11 2008/08/16 12:55:19 kaffeetisch Exp $
+# $Id: GtkStatusIcon.t,v 1.14 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $icon;
 
@@ -86,7 +86,13 @@ $menu -> popup(undef, undef, $callback, $icon, 0, 0);
 $menu -> popdown();
 
 # Make sure the convenient way of calling works, too.
-ok (defined Gtk2::StatusIcon::position_menu($menu, $icon));
+{ my @ret = Gtk2::StatusIcon::position_menu($menu, $icon);
+  is (scalar @ret, 3);
+  my ($x, $y, $pushed_in) = @ret;
+  like($x, qr/^\d+$/);
+  like($y, qr/^\d+$/);
+  like($pushed_in, qr/^[01]$/); # boolean
+}
 
 # --------------------------------------------------------------------------- #
 
@@ -123,7 +129,7 @@ SKIP: {
 
 SKIP: {
   skip 'new 2.14 stuff', 1
-    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+    unless Gtk2->CHECK_VERSION(2, 14, 0);
 
   ok (defined $icon -> get_x11_window_id());
 }

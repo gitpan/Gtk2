@@ -1,4 +1,4 @@
-Gtk2 version 1.200
+Gtk2 version 1.201
 ==================
 
 Perl bindings to the 2.x series of the Gtk+ graphical user interface library.
@@ -101,4 +101,4 @@ You should have received a copy of the GNU Library General Public License along
 with this library; if not, write to the Free Software Foundation, Inc., 59
 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 
-# $Id: README,v 1.96 2008/09/20 13:48:07 kaffeetisch Exp $
+# $Id: README,v 1.97 2008/10/19 18:11:26 kaffeetisch Exp $

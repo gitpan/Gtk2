@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 4,
   at_least_version => [2, 2, 0, "GdkDisplayManager is new in 2.2"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDisplayManager.t,v 1.2 2004/02/03 22:27:20 kaffeetisch Exp $
+# $Id: GdkDisplayManager.t,v 1.3 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $manager = Gtk2::Gdk::DisplayManager -> get();
 isa_ok($manager, "Gtk2::Gdk::DisplayManager");

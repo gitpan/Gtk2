@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 7, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextMark.t,v 1.4 2007/09/15 14:33:00 kaffeetisch Exp $
+# $Id: GtkTextMark.t,v 1.5 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $buffer = Gtk2::TextBuffer -> new();
 my $iter = $buffer -> get_start_iter();

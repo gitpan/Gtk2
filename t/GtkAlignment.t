@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 2, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAlignment.t,v 1.8 2004/03/21 04:38:32 muppetman Exp $
+# $Id: GtkAlignment.t,v 1.9 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $alignment = Gtk2::Alignment -> new(2.3, 4.2, 7, 13);
 isa_ok($alignment, "Gtk2::Alignment");

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkProgressBar.t,v 1.8 2008/09/06 20:11:03 kaffeetisch Exp $
+# $Id: GtkProgressBar.t,v 1.9 2008/10/05 12:49:35 kaffeetisch Exp $
 #
 
 #########################

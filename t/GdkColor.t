@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkColor.t,v 1.6 2007/09/15 14:32:56 kaffeetisch Exp $
+# $Id: GdkColor.t,v 1.7 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 #########################

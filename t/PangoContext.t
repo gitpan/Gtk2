@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 15;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoContext.t,v 1.9 2007/06/17 12:55:56 kaffeetisch Exp $
+# $Id: PangoContext.t,v 1.10 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Bla");
 

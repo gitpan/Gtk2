@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   tests => 9,
   at_least_version => [2, 12, 0, 'GtkScaleButton appeared in 2.12'];
 
-# $Id: GtkScaleButton.t,v 1.4 2008/08/17 16:32:11 kaffeetisch Exp $
+# $Id: GtkScaleButton.t,v 1.5 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $button;
 
@@ -27,7 +27,7 @@ is ($button->get_adjustment, $adj);
 
 SKIP: {
   skip 'new 2.14 stuff', 4
-    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+    unless Gtk2->CHECK_VERSION(2, 14, 0);
 
   isa_ok ($button->get_popup (), 'Gtk2::Widget');
   isa_ok ($button->get_plus_button (), 'Gtk2::Widget');

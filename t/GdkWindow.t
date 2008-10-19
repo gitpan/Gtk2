@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 40;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkWindow.t,v 1.28 2008/08/16 19:26:50 kaffeetisch Exp $
+# $Id: GdkWindow.t,v 1.30 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $attributes = {
   title => "Bla",
@@ -308,7 +308,7 @@ SKIP: {
 
 SKIP: {
   skip 'new 2.14 stuff', 0
-    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+    unless Gtk2->CHECK_VERSION(2, 14, 0);
 
   $window -> redirect_to_drawable($window_two, 0, 0, 0, 0, 10, 10);
   $window -> remove_redirection();

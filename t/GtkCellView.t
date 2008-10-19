@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkCellView.t,v 1.8 2006/01/24 20:00:29 kaffeetisch Exp $
+# $Id: GtkCellView.t,v 1.9 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 #########################

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenu.xs,v 1.27 2008/08/17 15:11:35 kaffeetisch Exp $
+ * $Id: GtkMenu.xs,v 1.29 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -265,7 +265,7 @@ gtk_menu_get_for_attach_widget (class, widget)
 
 #endif
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 const gchar* gtk_menu_get_accel_path (GtkMenu *menu);
 

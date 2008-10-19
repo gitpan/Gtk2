@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkRgb.xs,v 1.16 2008/01/07 20:23:29 kaffeetisch Exp $
+ * $Id: GdkRgb.xs,v 1.18 2008/10/05 21:34:44 kaffeetisch Exp $
  */
  #include "gtk2perl.h"
 
@@ -42,6 +42,7 @@ SvImageDataPointer (SV * sv)
 		       "an integer pointing to the underlying C image data "
 		       "buffer");
 	/* not reached */
+	return NULL;
 }
 
 static GdkRgbCmap *

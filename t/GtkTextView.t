@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 45;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTextView.t,v 1.9 2005/01/10 06:27:35 muppetman Exp $
+# $Id: GtkTextView.t,v 1.10 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 my $buffer = Gtk2::TextBuffer -> new();

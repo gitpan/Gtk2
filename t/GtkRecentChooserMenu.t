@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 5,
   at_least_version => [2, 10, 0, "GtkRecentChooserMenu"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRecentChooserMenu.t,v 1.1 2006/07/12 15:38:56 kaffeetisch Exp $
+# $Id: GtkRecentChooserMenu.t,v 1.2 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $manager = Gtk2::RecentManager -> new();
 

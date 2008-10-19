@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 19;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileSelection.t,v 1.5 2004/02/20 21:38:46 kaffeetisch Exp $
+# $Id: GtkFileSelection.t,v 1.6 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $fs = Gtk2::FileSelection -> new("Bla");
 isa_ok($fs, "Gtk2::FileSelection");

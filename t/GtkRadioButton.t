@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRadioButton.t,v 1.4 2006/04/23 14:18:38 kaffeetisch Exp $
+# $Id: GtkRadioButton.t,v 1.5 2008/10/05 12:49:35 kaffeetisch Exp $
 #
 
 #########################

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkInvisible.t,v 1.5 2004/02/27 05:31:48 muppetman Exp $
+# $Id: GtkInvisible.t,v 1.6 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $invisible = Gtk2::Invisible -> new();
 isa_ok($invisible, "Gtk2::Invisible");

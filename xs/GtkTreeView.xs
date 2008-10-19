@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkTreeView.xs,v 1.48 2008/05/04 13:24:02 kaffeetisch Exp $
+ * $Id: GtkTreeView.xs,v 1.50 2008/10/18 21:44:47 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -899,8 +899,12 @@ gtk_tree_view_get_tooltip_context (GtkTreeView *tree_view, gint x, gint y, gbool
 	GtkTreePath *path = NULL;
 	GtkTreeIter iter = {0, };
     PPCODE:
+	/* PUTBACK/SPAGAIN because gtk_tree_view_get_tooltip_context() calls
+	   out to its model get_iter(), which may be perl */
+	PUTBACK;
 	if (! gtk_tree_view_get_tooltip_context (tree_view, &x, &y, keyboard_tip, &model, &path, &iter))
 		XSRETURN_EMPTY;
+	SPAGAIN;
 	EXTEND (sp, 5);
 	PUSHs (sv_2mortal (newSViv (x)));
 	PUSHs (sv_2mortal (newSViv (y)));

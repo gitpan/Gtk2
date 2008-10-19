@@ -1,6 +1,6 @@
 # vim: set filetype=perl :
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkEvent.t,v 1.24 2008/06/01 12:39:48 kaffeetisch Exp $
+# $Id: GdkEvent.t,v 1.25 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 #########################

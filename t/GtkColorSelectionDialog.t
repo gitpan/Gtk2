@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 6;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkColorSelectionDialog.t,v 1.5 2008/08/17 14:56:23 kaffeetisch Exp $
+# $Id: GtkColorSelectionDialog.t,v 1.6 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $dialog = Gtk2::ColorSelectionDialog -> new("Bla");
 isa_ok($dialog, "Gtk2::ColorSelectionDialog");

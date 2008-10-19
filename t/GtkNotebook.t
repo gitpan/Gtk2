@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkNotebook.t,v 1.9 2006/08/07 18:36:04 kaffeetisch Exp $
+# $Id: GtkNotebook.t,v 1.10 2008/10/05 12:49:35 kaffeetisch Exp $
 #
 
 #########################

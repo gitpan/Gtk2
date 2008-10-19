@@ -2,9 +2,9 @@
 use strict;
 use Gtk2::TestHelper tests => 12;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkSpinButton.t,v 1.7 2008/09/06 20:11:04 kaffeetisch Exp $
+# $Id: GtkSpinButton.t,v 1.9 2008/10/18 22:29:29 kaffeetisch Exp $
 
-my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
+my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 0);
 
 my $spin = Gtk2::SpinButton -> new($adjustment, 0.2, 1);
 isa_ok($spin, "Gtk2::SpinButton");

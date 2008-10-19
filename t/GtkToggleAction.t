@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToggleAction.t,v 1.3 2004/03/17 03:52:24 muppetman Exp $
+# $Id: GtkToggleAction.t,v 1.4 2008/10/05 12:49:35 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper

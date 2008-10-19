@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/PangoFontMap.xs,v 1.2 2007/07/07 17:22:06 kaffeetisch Exp $
+ * $Id: PangoFontMap.xs,v 1.3 2008/10/05 12:49:36 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

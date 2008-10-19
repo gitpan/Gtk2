@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkButton.t,v 1.13 2006/08/07 18:36:03 kaffeetisch Exp $
+# $Id: GtkButton.t,v 1.14 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 #########################

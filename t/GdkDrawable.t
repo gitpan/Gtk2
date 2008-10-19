@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 11;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkDrawable.t,v 1.8 2008/01/08 04:12:20 muppetman Exp $
+# $Id: GdkDrawable.t,v 1.9 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 

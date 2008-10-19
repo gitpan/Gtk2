@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkFileChooserDialog.t,v 1.6 2006/01/18 19:04:10 kaffeetisch Exp $
+# $Id: GtkFileChooserDialog.t,v 1.7 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper

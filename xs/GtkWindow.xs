@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWindow.xs,v 1.48 2008/08/23 15:06:17 kaffeetisch Exp $
+ * $Id: GtkWindow.xs,v 1.50 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -727,7 +727,7 @@ gdouble gtk_window_get_opacity (GtkWindow *window);
 
 #endif
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 GtkWidget_ornull * gtk_window_get_default_widget (GtkWindow *window);
 
@@ -753,7 +753,7 @@ gtk_window_group_remove_window (window_group, window)
 	GtkWindowGroup * window_group
 	GtkWindow      * window
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 # GList * gtk_window_group_list_windows (GtkWindowGroup *window_group)
 void

@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAboutDialog.t,v 1.10 2007/09/15 14:32:59 kaffeetisch Exp $
+# $Id: GtkAboutDialog.t,v 1.11 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 #########################

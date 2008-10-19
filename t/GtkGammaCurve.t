@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkGammaCurve.t,v 1.2 2004/01/10 04:43:38 kaffeetisch Exp $
+# $Id: GtkGammaCurve.t,v 1.3 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 #########################

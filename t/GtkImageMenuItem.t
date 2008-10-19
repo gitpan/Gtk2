@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 7;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkImageMenuItem.t,v 1.6 2004/02/20 21:38:46 kaffeetisch Exp $
+# $Id: GtkImageMenuItem.t,v 1.7 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $item = Gtk2::ImageMenuItem -> new();
 isa_ok($item, "Gtk2::ImageMenuItem");

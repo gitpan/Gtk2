@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GdkEvent.xs,v 1.54 2008/06/01 12:42:52 kaffeetisch Exp $
+ * $Id: GdkEvent.xs,v 1.56 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -183,7 +183,7 @@ gtk2perl_gdk_event_set_state (GdkEvent * event,
 #if GTK_CHECK_VERSION (2, 8, 0)
 		    case GDK_GRAB_BROKEN:
 #endif
-#if GTK_CHECK_VERSION (2, 13, 1) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 		    case GDK_DAMAGE:
 #endif
 			/* no state field */
@@ -258,7 +258,7 @@ gtk2perl_gdk_event_set_time (GdkEvent * event,
 #if GTK_CHECK_VERSION (2, 8, 0)
 		     case GDK_GRAB_BROKEN:
 #endif
-#if GTK_CHECK_VERSION (2, 13, 1) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 		    case GDK_DAMAGE:
 #endif
 			/* no time */

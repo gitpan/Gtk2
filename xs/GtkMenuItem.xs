@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkMenuItem.xs,v 1.13 2008/08/17 15:13:36 kaffeetisch Exp $
+ * $Id: GtkMenuItem.xs,v 1.15 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -147,7 +147,7 @@ gtk_menu_item_set_accel_path (menu_item, accel_path)
 
  ##void _gtk_menu_item_refresh_accel_path (GtkMenuItem *menu_item, const gchar *prefix, GtkAccelGroup *accel_group, gboolean group_changed)
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 const gchar* gtk_menu_item_get_accel_path (GtkMenuItem *menu_item);
 

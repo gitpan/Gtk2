@@ -3,7 +3,7 @@
 use Gtk2::TestHelper tests => 115,
 	at_least_version => [2, 2, 0, "GtkClipboard didn't exist in 2.0.x"];
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkClipboard.t,v 1.16 2008/08/16 18:01:25 kaffeetisch Exp $
+# $Id: GtkClipboard.t,v 1.18 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $clipboard;
 
@@ -126,7 +126,7 @@ SKIP: {
 
 SKIP: {
 	skip 'new uris stuff', 5
-		unless Gtk2->CHECK_VERSION (2, 13, 6); # FIXME: 2.14
+		unless Gtk2->CHECK_VERSION (2, 14, 0);
 
 	my @uris = ('file:///foo/bar', 'file:///bar/foo');
 	$clipboard->set_with_data (

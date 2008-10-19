@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 9, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkStock.t,v 1.11 2005/10/05 19:13:07 kaffeetisch Exp $
+# $Id: GtkStock.t,v 1.12 2008/10/05 12:49:35 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 

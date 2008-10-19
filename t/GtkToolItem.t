@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolItem.t,v 1.7 2008/08/16 13:11:21 kaffeetisch Exp $
+# $Id: GtkToolItem.t,v 1.9 2008/10/18 22:24:19 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper
@@ -88,7 +88,7 @@ SKIP: {
 
 SKIP: {
     skip 'new 2.14 stuff', 0
-        unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+        unless Gtk2->CHECK_VERSION(2, 14, 0);
 
     $tool_item->toolbar_reconfigured;
 }

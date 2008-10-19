@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/Makefile.PL,v 1.149 2008/09/20 13:48:07 kaffeetisch Exp $
+# $Id: Makefile.PL,v 1.151 2008/10/19 17:38:39 kaffeetisch Exp $
 #
 
 BEGIN { require 5.008; }
@@ -264,7 +264,7 @@ $gtk2->save_config ('build/IFiles.pm');
 our @exports;
 require 'Gtk2.exports';
 
-my $configure_requires =
+my $configure_requires_yaml =
   Glib::MakeHelper->get_configure_requires_yaml(%PREREQ_PM);
 
 WriteMakefile(
@@ -279,9 +279,9 @@ WriteMakefile(
 
     $gtk2->get_makefile_vars,
 
-    EXTRA_META    => qq/
-$configure_requires
-/,
+    $ExtUtils::MakeMaker::VERSION >= 6.46
+      ? (META_MERGE => { configure_requires => \%PREREQ_PM })
+      : (EXTRA_META => $configure_requires_yaml),
 );
 
 =unstable

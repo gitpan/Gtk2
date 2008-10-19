@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 7;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoFontset.t,v 1.1 2004/04/19 19:20:52 kaffeetisch Exp $
+# $Id: PangoFontset.t,v 1.2 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Bla");
 my $context = $label -> create_pango_context();

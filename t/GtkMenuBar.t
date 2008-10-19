@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3, noinit => 1;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenuBar.t,v 1.7 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Id: GtkMenuBar.t,v 1.8 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $bar = Gtk2::MenuBar -> new();
 isa_ok($bar, "Gtk2::MenuBar");

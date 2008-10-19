@@ -18,7 +18,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
  * 
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/gtk2perl.h,v 1.46 2008/01/07 19:54:48 kaffeetisch Exp $
+ * $Id: gtk2perl.h,v 1.47 2008/10/05 12:49:34 kaffeetisch Exp $
  */
 
 #ifndef _GTK2PERL_H_

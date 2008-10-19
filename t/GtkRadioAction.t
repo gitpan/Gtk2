@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkRadioAction.t,v 1.7 2006/08/07 18:36:05 kaffeetisch Exp $
+# $Id: GtkRadioAction.t,v 1.8 2008/10/05 12:49:35 kaffeetisch Exp $
 #
 
 use Gtk2::TestHelper

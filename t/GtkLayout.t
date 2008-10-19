@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 9;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkLayout.t,v 1.7 2008/08/15 18:46:17 kaffeetisch Exp $
+# $Id: GtkLayout.t,v 1.8 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $layout = Gtk2::Layout -> new();
 isa_ok($layout, "Gtk2::Layout");

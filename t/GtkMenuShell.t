@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMenuShell.t,v 1.9 2005/09/18 15:07:22 kaffeetisch Exp $
+# $Id: GtkMenuShell.t,v 1.10 2008/10/05 12:49:35 kaffeetisch Exp $
 
 my $shell = Gtk2::Menu -> new();
 isa_ok($shell, "Gtk2::MenuShell");

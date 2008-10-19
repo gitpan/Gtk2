@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkGC.xs,v 1.4 2008/08/16 20:24:48 kaffeetisch Exp $
+ * $Id: GtkGC.xs,v 1.6 2008/10/18 15:42:24 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -72,6 +72,8 @@ returned. If not, a new L<Gtk2::Gdk::GC> is created.
 =for apidoc
 =for signature gc = Gtk2::GC->get ($depth, $colormap, $values)
 =for arg values (Gtk2::Gdk::GCValues) Values to match
+C<$values> is a hashref with keys and values as per
+C<< Gtk2::Gdk::GC->new >> (see L<Gtk2::Gdk::GC>).
 =cut
 SV *
 gtk_gc_get (class, depth, colormap, values)

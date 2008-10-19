@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 24;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkAccelMap.t,v 1.9 2005/10/05 19:13:07 kaffeetisch Exp $
+# $Id: GtkAccelMap.t,v 1.10 2008/10/05 12:49:34 kaffeetisch Exp $
 
 use Gtk2::Gdk::Keysyms;
 

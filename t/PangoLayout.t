@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 71;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/PangoLayout.t,v 1.21 2008/05/20 19:31:42 kaffeetisch Exp $
+# $Id: PangoLayout.t,v 1.23 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $label = Gtk2::Label -> new("Bla");
 my $context = $label -> create_pango_context();
@@ -88,7 +88,7 @@ is_deeply($attribute, {
   is_word_start => 1,
   is_word_end => 0,
   is_sentence_boundary =>
-    (Gtk2::Pango -> CHECK_VERSION(1, 21, 1) ? 1 : 0), # FIXME: 1.22
+    (Gtk2::Pango -> CHECK_VERSION(1, 22, 0) ? 1 : 0),
   is_sentence_start => 1,
   is_sentence_end => 0,
   Gtk2::Pango -> CHECK_VERSION(1, 4, 0) ?

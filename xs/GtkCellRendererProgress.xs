@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkCellRendererProgress.xs,v 1.1 2005/01/02 16:25:51 kaffeetisch Exp $
+ * $Id: GtkCellRendererProgress.xs,v 1.2 2008/10/05 12:49:35 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

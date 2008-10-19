@@ -3,10 +3,10 @@ use strict;
 use warnings;
 use Gtk2::TestHelper
   tests => 5,
-  at_least_version => [2, 13, 6, 'GtkToolShell is new in 2.14'], # FIXME: 2.14
+  at_least_version => [2, 14, 0, 'GtkToolShell is new in 2.14'],
   ;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkToolShell.t,v 1.1 2008/08/16 13:54:13 kaffeetisch Exp $
+# $Id: GtkToolShell.t,v 1.3 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $toolbar = Gtk2::Toolbar->new ();
 isa_ok ($toolbar, 'Gtk2::ToolShell');

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 6;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GdkPixmap.t,v 1.5 2006/08/07 18:36:02 kaffeetisch Exp $
+# $Id: GdkPixmap.t,v 1.6 2008/10/05 12:49:34 kaffeetisch Exp $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkAction.xs,v 1.10 2007/09/15 14:33:02 kaffeetisch Exp $
+ * $Id: GtkAction.xs,v 1.12 2008/10/18 14:31:18 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"
@@ -43,7 +43,13 @@ void gtk_action_get_proxies (GtkAction *action);
 	GSList * i;
     PPCODE:
 	for (i = gtk_action_get_proxies (action) ; i != NULL ; i = i->next)
-		XPUSHs (sv_2mortal (newSVGtkWidget (i->data)));
+		/* We can't use newSVGtkWidget here because it always sinks the
+		 * widget.  gtk_action_get_proxies might return floating
+		 * widgets though, and with newSVGtkWidget we would end up
+		 * owning them.  When the SV wrapper then goes out of scope,
+		 * the widgets would be destroyed -- and GtkAction would hold
+		 * on to dangling pointers. */
+		XPUSHs (sv_2mortal (gperl_new_object (G_OBJECT (i->data), FALSE)));
 
 void gtk_action_connect_accelerator (GtkAction *action);
 

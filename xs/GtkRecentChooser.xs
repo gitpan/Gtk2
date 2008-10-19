@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkRecentChooser.xs,v 1.3 2006/07/12 09:36:49 ebassi Exp $
+ * $Id: GtkRecentChooser.xs,v 1.4 2008/10/05 12:49:35 kaffeetisch Exp $
  */
 
 #include "gtk2perl.h"

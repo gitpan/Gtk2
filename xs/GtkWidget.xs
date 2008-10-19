@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/xs/GtkWidget.xs,v 1.77 2008/08/31 14:21:27 kaffeetisch Exp $
+ * $Id: GtkWidget.xs,v 1.80 2008/10/18 22:24:19 kaffeetisch Exp $
  */
 #include "gtk2perl.h"
 
@@ -148,6 +148,15 @@ window (widget, new=NULL)
     CLEANUP:
 	if (RETVAL) g_object_unref (RETVAL);
 
+=for apidoc
+Return the currently desired width and height of $widget.  Basically
+this is the result from the last C<size_request> call on $widget, and
+therefore may not be up-to-date if $widget has asked for a resize but
+its container parent has not yet called C<size_request>.
+
+The returned requisition object points into $widget and can only be
+used as long as $widget exists.
+=cut
 GtkRequisition *
 requisition (widget)
 	GtkWidget * widget
@@ -157,9 +166,12 @@ requisition (widget)
 	RETVAL
 
 =for apidoc
-=for signature allocation = $widget->allocation
-Returns I<$widget>'s current allocated size as a read-only rectangle; the
-allocated size is not necessarily the same as the requested size.
+Return the current allocated size and position of $widget within its
+parent widget.  The allocated size is not necessarily the same as the
+requested size.
+
+The returned rect object points into $widget and can only be used as
+long as $widget exists.
 =cut
 GdkRectangle *
 allocation (widget)
@@ -1218,7 +1230,7 @@ gboolean gtk_widget_get_has_tooltip (GtkWidget *widget);
 
 #endif
 
-#if GTK_CHECK_VERSION (2, 13, 6) /* FIXME: 2.14 */
+#if GTK_CHECK_VERSION (2, 14, 0)
 
 GdkPixmap_noinc_ornull * gtk_widget_get_snapshot (GtkWidget *widget,  GdkRectangle_ornull *clip_rect=NULL);
 

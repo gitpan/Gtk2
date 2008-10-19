@@ -1,5 +1,5 @@
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/pm/Helper.pm,v 1.6 2005/03/22 20:11:56 joered Exp $
+# $Id: Helper.pm,v 1.7 2008/10/05 12:49:34 kaffeetisch Exp $
 #
 
 package Gtk2::Helper;

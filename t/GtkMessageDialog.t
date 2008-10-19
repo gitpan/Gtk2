@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 6;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkMessageDialog.t,v 1.14 2008/08/17 15:16:21 kaffeetisch Exp $
+# $Id: GtkMessageDialog.t,v 1.16 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $dialog = Gtk2::MessageDialog -> new(undef,
                                         "destroy-with-parent",
@@ -69,7 +69,7 @@ SKIP: {
 
 SKIP: {
   skip 'new 2.14 stuff', 1
-    unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+    unless Gtk2->CHECK_VERSION(2, 14, 0);
 
   is ($dialog -> get_image(), $image);
 }

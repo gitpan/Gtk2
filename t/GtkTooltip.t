@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 1,
   at_least_version => [2, 12, 0, "GtkTooltip appeared in 2.12"];
 
-# $Id: GtkTooltip.t,v 1.5 2008/08/16 13:01:09 kaffeetisch Exp $
+# $Id: GtkTooltip.t,v 1.6 2008/10/18 22:24:19 kaffeetisch Exp $
 
 my $window = Gtk2::Window->new;
 $window->set (tooltip_markup => "<b>Bla!</b>");
@@ -31,7 +31,7 @@ $window->signal_connect (query_tooltip => sub {
 
  SKIP: {
     skip 'new 2.14 stuff', 0
-      unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+      unless Gtk2->CHECK_VERSION(2, 14, 0);
 
     $tip->set_icon_from_icon_name ("gtk-open", "menu");
   }

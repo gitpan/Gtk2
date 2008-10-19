@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # vim: set ft=perl :
 #
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkWidget.t,v 1.20 2008/08/31 14:21:27 kaffeetisch Exp $
+# $Id: GtkWidget.t,v 1.22 2008/10/18 22:24:19 kaffeetisch Exp $
 #
 
 use warnings;
@@ -453,7 +453,7 @@ SKIP: {
 
 SKIP: {
 	skip 'new 2.14 stuff', 3
-		unless Gtk2->CHECK_VERSION(2, 13, 6); # FIXME: 2.14
+		unless Gtk2->CHECK_VERSION(2, 14, 0);
 
 	my $widget = Gtk2::Label->new ('Bla');
 

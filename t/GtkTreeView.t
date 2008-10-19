@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 123;
 
-# $Header: /cvsroot/gtk2-perl/gtk2-perl-xs/Gtk2/t/GtkTreeView.t,v 1.38 2008/08/23 16:43:58 kaffeetisch Exp $
+# $Id: GtkTreeView.t,v 1.41 2008/10/05 20:53:30 kaffeetisch Exp $
 
 ###############################################################################
 
@@ -326,7 +326,10 @@ ok(!$view -> row_expanded($path));
 ###############################################################################
 
 # set_search_equal_func
-{
+SKIP: {
+	skip 'set_search_equal_func test; need set_search_entry', 5
+		unless Gtk2 -> CHECK_VERSION(2, 10, 0);
+
 	my ($window, $view, $model) = setup();
 
 	my $been_here = 0;
@@ -353,7 +356,7 @@ ok(!$view -> row_expanded($path));
 
 # set_search_position_func
 SKIP: {
-	skip("new 2.10 stuff", 0)
+	skip("new 2.10 stuff", 3)
 		unless Gtk2 -> CHECK_VERSION(2, 10, 0);
 
 	my ($window, $view, $model) = setup();
