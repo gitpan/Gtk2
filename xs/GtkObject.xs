@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkObject.xs,v 1.19 2008/10/18 15:09:31 kaffeetisch Exp $
+ * $Id: GtkObject.xs 2062 2008-10-18 15:09:31Z tsch $
  */
 
 #include "gtk2perl.h"

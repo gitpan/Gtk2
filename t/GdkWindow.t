@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 40;
 
-# $Id: GdkWindow.t,v 1.30 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: GdkWindow.t 2067 2008-10-18 22:24:19Z tsch $
 
 my $attributes = {
   title => "Bla",

@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 14,
   at_least_version => [2, 10, 0, "GtkRecentChooserDialog"];
 
-# $Id: GtkRecentChooserDialog.t,v 1.2 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkRecentChooserDialog.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $window = Gtk2::Window -> new();
 my $manager = Gtk2::RecentManager -> new();

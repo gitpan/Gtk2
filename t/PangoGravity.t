@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 4, noinit => 1;
 
-# $Id: PangoGravity.t,v 1.3 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: PangoGravity.t 2054 2008-10-05 12:49:36Z tsch $
 
 SKIP: {
   skip "PangoGravity", 4

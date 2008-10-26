@@ -18,7 +18,7 @@
  *
  * THIS IS A PRIVATE HEADER FOR USE ONLY IN Gtk2 ITSELF.
  *
- * $Id: gtk2perl-private.h,v 1.4 2008/10/05 12:49:34 kaffeetisch Exp $
+ * $Id: gtk2perl-private.h 2054 2008-10-05 12:49:36Z tsch $
  */
 
 #ifndef _GTK2PERL_PRIVATE_H_

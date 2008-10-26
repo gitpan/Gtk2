@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkTreeViewColumn.xs,v 1.33 2008/10/18 21:44:47 kaffeetisch Exp $
+ * $Id: GtkTreeViewColumn.xs 2064 2008-10-18 21:44:47Z tsch $
  */
 
 #include "gtk2perl.h"

@@ -1,5 +1,5 @@
 #
-# $Id: GtkRadioButton.t,v 1.5 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkRadioButton.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 #########################

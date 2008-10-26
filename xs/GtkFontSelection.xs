@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkFontSelection.xs,v 1.14 2008/10/18 22:24:19 kaffeetisch Exp $
+ * $Id: GtkFontSelection.xs 2067 2008-10-18 22:24:19Z tsch $
  */
 
 #include "gtk2perl.h"

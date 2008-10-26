@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 73, noinit => 1;
 
-# $Id: GtkTreeModel.t,v 1.7 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkTreeModel.t 2054 2008-10-05 12:49:36Z tsch $
 
 ###############################################################################
 

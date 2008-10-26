@@ -7,7 +7,7 @@ use Gtk2::TestHelper
   skip_all => 'can only test interactively',
   ;
 
-# $Id: GtkShow.t,v 1.3 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: GtkShow.t 2067 2008-10-18 22:24:19Z tsch $
 
 eval {
   Gtk2::show_uri(undef, 'http://www.gnome.org');

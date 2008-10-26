@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkCellRenderer.xs,v 1.34 2008/10/05 12:49:35 kaffeetisch Exp $
+ * $Id: GtkCellRenderer.xs 2054 2008-10-05 12:49:36Z tsch $
  */
 
 #include "gtk2perl.h"

@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   tests => 7,
   at_least_version => [2, 12, 0, 'GtkBuildable: it appeared in 2.12'];
 
-# $Id: GtkBuildable.t,v 1.2 2008/03/10 20:54:35 kaffeetisch Exp $
+# $Id: GtkBuildable.t 1904 2008-03-10 20:54:37Z tsch $
 
 # --------------------------------------------------------------------------- #
 

@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkMenu.xs,v 1.29 2008/10/18 22:24:19 kaffeetisch Exp $
+ * $Id: GtkMenu.xs 2067 2008-10-18 22:24:19Z tsch $
  */
 
 #include "gtk2perl.h"

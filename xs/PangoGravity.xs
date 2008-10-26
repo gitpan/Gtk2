@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: PangoGravity.xs,v 1.1 2007/02/25 14:47:57 kaffeetisch Exp $
+ * $Id: PangoGravity.xs 1727 2007-02-25 14:47:57Z tsch $
  */
 
 #include "gtk2perl.h"

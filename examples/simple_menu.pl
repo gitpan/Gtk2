@@ -17,7 +17,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Id: simple_menu.pl,v 1.5 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: simple_menu.pl 2054 2008-10-05 12:49:36Z tsch $
 #
 # r.m.
 # 

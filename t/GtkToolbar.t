@@ -1,5 +1,5 @@
 #
-# $Id: GtkToolbar.t,v 1.10 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkToolbar.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 use Gtk2::TestHelper tests => 52;

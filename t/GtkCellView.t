@@ -1,5 +1,5 @@
 #
-# $Id: GtkCellView.t,v 1.9 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkCellView.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 #########################

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id: GtkCellRendererIface-Chaining.t,v 1.1 2008/07/13 16:34:17 kaffeetisch Exp $
+# $Id: GtkCellRendererIface-Chaining.t 1955 2008-07-13 16:34:18Z tsch $
 
 use Gtk2::TestHelper tests => 3;
 

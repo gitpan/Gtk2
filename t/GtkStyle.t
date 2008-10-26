@@ -3,7 +3,7 @@
 use strict;
 use Gtk2::TestHelper tests => 113;
 
-# $Id: GtkStyle.t,v 1.10 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkStyle.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();

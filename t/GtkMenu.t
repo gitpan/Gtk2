@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkMenu.t,v 1.12 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: GtkMenu.t 2067 2008-10-18 22:24:19Z tsch $
 #
 
 #########################

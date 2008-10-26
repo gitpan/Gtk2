@@ -1,5 +1,5 @@
 #
-# $Id: GtkLabel.t,v 1.11 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkLabel.t 2054 2008-10-05 12:49:36Z tsch $
 #
 # TODO: 
 #	(set|get)_attributes

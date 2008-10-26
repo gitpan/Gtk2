@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 1;
 
-# $Id: GtkInputDialog.t,v 1.5 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkInputDialog.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $dialog = Gtk2::InputDialog -> new();
 isa_ok($dialog, "Gtk2::InputDialog");

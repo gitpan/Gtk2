@@ -3,7 +3,7 @@
 use strict;
 use Gtk2::TestHelper tests => 44, noinit => 1;
 
-# $Id: GtkTreeStore.t,v 1.16 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkTreeStore.t 2054 2008-10-05 12:49:36Z tsch $
 
 ###############################################################################
 

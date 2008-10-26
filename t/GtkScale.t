@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 6;
 
-# $Id: GtkScale.t,v 1.9 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkScale.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 

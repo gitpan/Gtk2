@@ -18,7 +18,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Id: genmaps.pl,v 1.2 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: genmaps.pl 2054 2008-10-05 12:49:36Z tsch $
 #
 
 

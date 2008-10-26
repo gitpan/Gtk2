@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 93, noinit => 1;
 
-# $Id: GtkTextIter.t,v 1.14 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkTextIter.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $model = Gtk2::TextBuffer->new;
 my $tag = $model->create_tag ("indent", indent => 5);

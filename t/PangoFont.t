@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 57;
 
-# $Id: PangoFont.t,v 1.15 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: PangoFont.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $description = Gtk2::Pango::FontDescription -> new();
 isa_ok($description, "Gtk2::Pango::FontDescription");

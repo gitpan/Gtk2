@@ -1,5 +1,5 @@
 #
-# $Id: GtkCombo.t,v 1.3 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkCombo.t 2054 2008-10-05 12:49:36Z tsch $
 #
 # Pretty much complete
 #

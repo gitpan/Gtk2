@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkItemFactory.t,v 1.9 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkItemFactory.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 #########################

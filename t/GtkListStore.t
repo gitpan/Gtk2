@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use Gtk2::TestHelper tests => 47;
 
-# $Id: GtkListStore.t,v 1.23 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkListStore.t 2054 2008-10-05 12:49:36Z tsch $
 
 ###############################################################################
 

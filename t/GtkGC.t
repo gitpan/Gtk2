@@ -5,7 +5,7 @@ use Gtk2::TestHelper tests => 3;
 
 use Scalar::Util;
 
-# $Id: GtkGC.t,v 1.3 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkGC.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $black = Gtk2::Gdk::Color -> new(0, 0, 0);
 my $colormap = Gtk2::Gdk::Colormap -> get_system();

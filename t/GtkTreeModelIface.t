@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: GtkTreeModelIface.t,v 1.14 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkTreeModelIface.t 2054 2008-10-05 12:49:36Z tsch $
 
 package CustomList;
 

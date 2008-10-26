@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: 01.GtkWindow.t,v 1.41 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: 01.GtkWindow.t 2067 2008-10-18 22:24:19Z tsch $
 #
 
 #########################

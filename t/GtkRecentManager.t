@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkRecentManager.t,v 1.8 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkRecentManager.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 #########################

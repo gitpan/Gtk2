@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 4;
 
-# $Id: GtkAccelLabel.t,v 1.7 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkAccelLabel.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $button = Gtk2::Button -> new("Blub");
 

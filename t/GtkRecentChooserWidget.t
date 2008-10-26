@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 4,
   at_least_version => [2, 10, 0, "GtkRecentChooserWidget"];
 
-# $Id: GtkRecentChooserWidget.t,v 1.2 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkRecentChooserWidget.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $manager = Gtk2::RecentManager -> new();
 

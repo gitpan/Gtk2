@@ -1,5 +1,5 @@
 #
-# $Id: GtkCurve.t,v 1.2 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkCurve.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 #########################

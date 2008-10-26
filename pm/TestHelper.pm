@@ -1,5 +1,5 @@
 #
-# $Id: TestHelper.pm,v 1.14 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: TestHelper.pm 2054 2008-10-05 12:49:36Z tsch $
 #
 
 package Gtk2::TestHelper;

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # vim: set ft=perl :
 #
-# $Id: GtkWidget.t,v 1.22 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: GtkWidget.t 2067 2008-10-18 22:24:19Z tsch $
 #
 
 use warnings;

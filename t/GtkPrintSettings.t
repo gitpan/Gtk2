@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 20,
   at_least_version => [2, 10, 0, 'GtkPrintSettings: it is new in 2.10'];
 
-# $Id: GtkPrintSettings.t,v 1.8 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: GtkPrintSettings.t 2067 2008-10-18 22:24:19Z tsch $
 
 my $settings = Gtk2::PrintSettings -> new();
 isa_ok($settings, 'Gtk2::PrintSettings');

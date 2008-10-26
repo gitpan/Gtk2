@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 14;
 
-# $Id: GdkInput.t,v 1.5 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GdkInput.t 2054 2008-10-05 12:49:36Z tsch $
 
 use Gtk2::Gdk::Keysyms;
 

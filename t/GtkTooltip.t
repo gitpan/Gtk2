@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 1,
   at_least_version => [2, 12, 0, "GtkTooltip appeared in 2.12"];
 
-# $Id: GtkTooltip.t,v 1.6 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: GtkTooltip.t 2067 2008-10-18 22:24:19Z tsch $
 
 my $window = Gtk2::Window->new;
 $window->set (tooltip_markup => "<b>Bla!</b>");

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3;
 
-# $Id: GtkOptionMenu.t,v 1.5 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkOptionMenu.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $option_menu = Gtk2::OptionMenu -> new();
 isa_ok($option_menu, "Gtk2::OptionMenu");

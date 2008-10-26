@@ -1,5 +1,5 @@
 #
-# $Id: GtkSimpleMenu.t,v 1.4 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkSimpleMenu.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 #########################

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkPrintOperation.xs,v 1.2 2008/10/05 12:49:35 kaffeetisch Exp $
+ * $Id: GtkPrintOperation.xs 2054 2008-10-05 12:49:36Z tsch $
  */
 
 #include "gtk2perl.h"

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3;
 
-# $Id: GtkMenuShell.t,v 1.10 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkMenuShell.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $shell = Gtk2::Menu -> new();
 isa_ok($shell, "Gtk2::MenuShell");

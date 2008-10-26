@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Id: main.pl,v 1.16 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: main.pl 2054 2008-10-05 12:49:36Z tsch $
 #
 
 our $PROGDIR = $0;

@@ -20,7 +20,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Id: plug.pl,v 1.5 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: plug.pl 2054 2008-10-05 12:49:36Z tsch $
 #
 
 # this was originally gtk-2.2.1/examples/buttonbox/buttonbox.c

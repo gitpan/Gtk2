@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3, noinit => 1;
 
-# $Id: GtkVButtonBox.t,v 1.7 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkVButtonBox.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $box = Gtk2::VButtonBox -> new();
 isa_ok($box, "Gtk2::VButtonBox");

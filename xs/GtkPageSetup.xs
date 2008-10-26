@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkPageSetup.xs,v 1.6 2008/10/18 22:24:19 kaffeetisch Exp $
+ * $Id: GtkPageSetup.xs 2067 2008-10-18 22:24:19Z tsch $
  */
 
 #include "gtk2perl.h"

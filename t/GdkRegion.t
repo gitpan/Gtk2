@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 22, noinit => 1;
 
-# $Id: GdkRegion.t,v 1.7 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GdkRegion.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $rectangle_one = Gtk2::Gdk::Rectangle -> new(23, 42, 10, 10);
 my $rectangle_two = Gtk2::Gdk::Rectangle -> new(23, 42, 15, 15);

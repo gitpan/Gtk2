@@ -25,7 +25,7 @@ to use this object, then go ahead, but remember the gpl.
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Id: cellrenderer_popup.pl,v 1.11 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: cellrenderer_popup.pl 2054 2008-10-05 12:49:36Z tsch $
 #
 
 # we require things from 1.04.

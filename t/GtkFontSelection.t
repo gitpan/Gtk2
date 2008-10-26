@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 22;
 
-# $Id: GtkFontSelection.t,v 1.9 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: GtkFontSelection.t 2067 2008-10-18 22:24:19Z tsch $
 
 my $fs = Gtk2::FontSelection -> new();
 isa_ok($fs, "Gtk2::FontSelection");

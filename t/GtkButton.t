@@ -1,5 +1,5 @@
 #
-# $Id: GtkButton.t,v 1.14 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkButton.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 #########################

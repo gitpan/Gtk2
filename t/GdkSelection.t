@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 20;
 
-# $Id: GdkSelection.t,v 1.5 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GdkSelection.t 2054 2008-10-05 12:49:36Z tsch $
 
 foreach (Gtk2::Gdk -> SELECTION_PRIMARY(),
          Gtk2::Gdk -> SELECTION_SECONDARY(),

@@ -1,5 +1,5 @@
 #
-# $Id: SimpleMenu.pm,v 1.11 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: SimpleMenu.pm 2054 2008-10-05 12:49:36Z tsch $
 #
 
 package Gtk2::SimpleMenu;

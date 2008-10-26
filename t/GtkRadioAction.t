@@ -1,5 +1,5 @@
 #
-# $Id: GtkRadioAction.t,v 1.8 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkRadioAction.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 use Gtk2::TestHelper

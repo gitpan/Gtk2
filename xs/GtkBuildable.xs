@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkBuildable.xs,v 1.4 2008/03/30 19:25:16 kaffeetisch Exp $
+ * $Id: GtkBuildable.xs 1913 2008-03-30 19:25:16Z tsch $
  */
 
 #include "gtk2perl.h"

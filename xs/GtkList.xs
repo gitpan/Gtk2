@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkList.xs,v 1.12 2008/10/05 12:49:35 kaffeetisch Exp $
+ * $Id: GtkList.xs 2054 2008-10-05 12:49:36Z tsch $
  *
  * NOTE: GtkList and GtkListItem are deprecated and only included b/c GtkCombo
  * still makes use of them, they are subject to removal at any point so you

@@ -1,5 +1,5 @@
 #
-# $Id: GtkAboutDialog.t,v 1.11 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkAboutDialog.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 #########################

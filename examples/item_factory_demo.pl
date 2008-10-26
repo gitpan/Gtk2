@@ -19,7 +19,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 #
-# $Id: item_factory_demo.pl,v 1.4 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: item_factory_demo.pl 2054 2008-10-05 12:49:36Z tsch $
 #
 
 # based strongly on a script by gavin brown posted on the gtk-perl mailling

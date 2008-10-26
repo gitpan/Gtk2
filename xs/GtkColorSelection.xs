@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkColorSelection.xs,v 1.13 2008/10/05 12:49:35 kaffeetisch Exp $
+ * $Id: GtkColorSelection.xs 2054 2008-10-05 12:49:36Z tsch $
  */
 
 #include "gtk2perl.h"

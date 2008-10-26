@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkSocket-GtkPlug.t,v 1.9 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: GtkSocket-GtkPlug.t 2067 2008-10-18 22:24:19Z tsch $
 #
 
 # ...despite patches that have been around for a long time, no win32

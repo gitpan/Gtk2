@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 2, noinit => 1;
 
-# $Id: GtkFixed.t,v 1.6 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkFixed.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $fixed = Gtk2::Fixed -> new();
 isa_ok($fixed, "Gtk2::Fixed");

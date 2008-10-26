@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: 00.Gtk2.t,v 1.25 2008/10/05 20:45:32 kaffeetisch Exp $
+# $Id: 00.Gtk2.t 2055 2008-10-05 20:45:32Z tsch $
 #
 
 use strict;

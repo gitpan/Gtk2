@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Id: Makefile.PL,v 1.151 2008/10/19 17:38:39 kaffeetisch Exp $
+# $Id: Makefile.PL 2070 2008-10-19 17:38:39Z tsch $
 #
 
 BEGIN { require 5.008; }

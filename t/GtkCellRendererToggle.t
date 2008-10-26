@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3, noinit => 1;
 
-# $Id: GtkCellRendererToggle.t,v 1.2 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkCellRendererToggle.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $toggle = Gtk2::CellRendererToggle -> new();
 isa_ok($toggle, "Gtk2::CellRendererToggle");

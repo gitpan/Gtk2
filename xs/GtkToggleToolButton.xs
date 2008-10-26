@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkToggleToolButton.xs,v 1.5 2008/10/05 12:49:35 kaffeetisch Exp $
+ * $Id: GtkToggleToolButton.xs 2054 2008-10-05 12:49:36Z tsch $
  */
 
 #include "gtk2perl.h"

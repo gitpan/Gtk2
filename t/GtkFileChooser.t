@@ -1,5 +1,5 @@
 #
-# $Id: GtkFileChooser.t,v 1.31 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkFileChooser.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 use Gtk2::TestHelper

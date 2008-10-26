@@ -1,5 +1,5 @@
 #
-# $Id: GtkTooltips.t,v 1.3 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkTooltips.t 2054 2008-10-05 12:49:36Z tsch $
 #
 
 #########################

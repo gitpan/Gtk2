@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 5, noinit => 1;
 
-# $Id: GtkTextTagTable.t,v 1.3 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkTextTagTable.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $table = Gtk2::TextTagTable -> new();
 isa_ok($table, "Gtk2::TextTagTable");

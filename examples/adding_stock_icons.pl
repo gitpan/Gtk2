@@ -6,7 +6,7 @@
 # 
 # -rm
 # 
-# $Id: adding_stock_icons.pl,v 1.3 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: adding_stock_icons.pl 2054 2008-10-05 12:49:36Z tsch $
 #
 
 use strict;

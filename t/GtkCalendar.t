@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkCalendar.t,v 1.8 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: GtkCalendar.t 2067 2008-10-18 22:24:19Z tsch $
 #
 
 #########################

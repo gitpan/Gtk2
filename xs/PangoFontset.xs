@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: PangoFontset.xs,v 1.3 2008/10/05 12:49:36 kaffeetisch Exp $
+ * $Id: PangoFontset.xs 2054 2008-10-05 12:49:36Z tsch $
  */
 
 #include "gtk2perl.h"

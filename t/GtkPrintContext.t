@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 10,
   at_least_version => [2, 10, 0, "GtkPrintContext is new in 2.10"];
 
-# $Id: GtkPrintContext.t,v 1.3 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkPrintContext.t 2054 2008-10-05 12:49:36Z tsch $
 
 # I hope that signal will always fire ...
 

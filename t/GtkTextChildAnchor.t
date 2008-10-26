@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3;
 
-# $Id: GtkTextChildAnchor.t,v 1.4 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkTextChildAnchor.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $buffer = Gtk2::TextBuffer -> new();
 my $view = Gtk2::TextView -> new_with_buffer($buffer);

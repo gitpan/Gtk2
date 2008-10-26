@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkAccelMap.xs,v 1.9 2008/10/05 12:49:35 kaffeetisch Exp $
+ * $Id: GtkAccelMap.xs 2054 2008-10-05 12:49:36Z tsch $
  */
 
 #include "gtk2perl.h"

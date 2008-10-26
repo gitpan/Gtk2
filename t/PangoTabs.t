@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 6, noinit => 1;
 
-# $Id: PangoTabs.t,v 1.8 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: PangoTabs.t 2054 2008-10-05 12:49:36Z tsch $
 
 SKIP: {
   skip("PangoTabs was broken prior to 1.3.3", 6)

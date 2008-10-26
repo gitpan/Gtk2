@@ -21,7 +21,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Id: scribble.pl,v 1.11 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: scribble.pl 2054 2008-10-05 12:49:36Z tsch $
 #
 
 # this was originally gtk-2.2.0/examples/scribble-simple/scribble-simple.c

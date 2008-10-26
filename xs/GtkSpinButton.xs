@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkSpinButton.xs,v 1.10 2008/10/05 12:49:35 kaffeetisch Exp $
+ * $Id: GtkSpinButton.xs 2054 2008-10-05 12:49:36Z tsch $
  */
 
 #include "gtk2perl.h"

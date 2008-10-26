@@ -3,7 +3,7 @@
 use strict;
 use Gtk2::TestHelper tests => 37;
 
-# $Id: GtkTextBuffer.t,v 1.13 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkTextBuffer.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $table = Gtk2::TextTagTable -> new();
 

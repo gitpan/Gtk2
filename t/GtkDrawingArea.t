@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 1, noinit => 1;
 
-# $Id: GtkDrawingArea.t,v 1.6 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkDrawingArea.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $area = Gtk2::DrawingArea -> new();
 isa_ok($area, "Gtk2::DrawingArea");

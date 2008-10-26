@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 6;
 
-# $Id: GtkDnd.t,v 1.17 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkDnd.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $button = Gtk2::Button -> new("Bla");
 my $window = Gtk2::Window -> new();

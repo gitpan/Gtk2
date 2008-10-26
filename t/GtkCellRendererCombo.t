@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 1, noinit => 1,
   at_least_version => [2, 6, 0, "GtkCellRendererCombo is new in 2.6"];
 
-# $Id: GtkCellRendererCombo.t,v 1.2 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkCellRendererCombo.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $text = Gtk2::CellRendererCombo -> new();
 isa_ok($text, "Gtk2::CellRendererCombo");

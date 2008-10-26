@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 13,
   at_least_version => [2, 10, 0, "GtkRecentFilter"];
 
-# $Id: GtkRecentFilter.t,v 1.2 2008/10/05 12:49:35 kaffeetisch Exp $
+# $Id: GtkRecentFilter.t 2054 2008-10-05 12:49:36Z tsch $
 
 my $filter = Gtk2::RecentFilter -> new();
 isa_ok($filter, "Gtk2::RecentFilter");

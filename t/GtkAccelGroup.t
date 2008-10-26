@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 19;
 
-# $Id: GtkAccelGroup.t,v 1.18 2008/10/18 22:24:19 kaffeetisch Exp $
+# $Id: GtkAccelGroup.t 2067 2008-10-18 22:24:19Z tsch $
 
 use Gtk2::Gdk::Keysyms;
 

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkVolumeButton.xs,v 1.1 2007/06/16 12:39:26 kaffeetisch Exp $
+ * $Id: GtkVolumeButton.xs 1744 2007-06-16 12:39:26Z tsch $
  */
 
 #include "gtk2perl.h"

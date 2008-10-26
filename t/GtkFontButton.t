@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: GtkFontButton.t,v 1.6 2008/10/05 12:49:34 kaffeetisch Exp $
+# $Id: GtkFontButton.t 2054 2008-10-05 12:49:36Z tsch $
 
 use Gtk2::TestHelper
 	tests => 12,

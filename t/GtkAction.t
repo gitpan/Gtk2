@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkAction.t,v 1.14 2008/10/18 14:31:15 kaffeetisch Exp $
+# $Id: GtkAction.t 2061 2008-10-18 14:31:18Z tsch $
 #
 
 use Gtk2::TestHelper
