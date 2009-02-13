@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkTreeModel.xs 2054 2008-10-05 12:49:36Z tsch $
+ * $Id: GtkTreeModel.xs 2101 2008-12-30 14:49:00Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -1317,8 +1317,11 @@ gtk_tree_model_unref_node (tree_model, iter)
 ## void gtk_tree_model_foreach (GtkTreeModel *model, GtkTreeModelForeachFunc func, gpointer user_data)
 =for apidoc
 =for arg func (subroutine)
-Call I<$func> on each row in I<$model>.  I<$func> gets the tree path and iter
-of the current row; if I<$func> returns true, the tree ceases to be walked,
+Call I<$func> on each row in I<$model> as
+
+    bool = &$func ($model, $path, $iter, $user_data)
+
+If I<$func> returns true, the tree ceases to be walked,
 and C<< $treemodel->foreach >> returns.
 =cut
 void

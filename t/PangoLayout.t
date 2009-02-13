@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 71;
+use Gtk2::TestHelper tests => 72;
 
-# $Id: PangoLayout.t 2067 2008-10-18 22:24:19Z tsch $
+# $Id: PangoLayout.t 2102 2009-01-01 16:32:32Z tsch $
 
 my $label = Gtk2::Label -> new("Bla");
 my $context = $label -> create_pango_context();
@@ -57,7 +57,12 @@ is($layout -> get_justify(), 1);
 
 my $attributes = $layout -> get_attributes();
 isa_ok($attributes, "Gtk2::Pango::AttrList");
-$layout -> set_attributes($attributes);
+
+my $copy = $attributes -> copy();
+$layout -> set_attributes(undef);
+is($layout -> get_attributes(), undef);
+
+$layout -> set_attributes($copy);
 
 SKIP: {
   skip("[sg]et_auto_dir are new in 1.3.5", 1)

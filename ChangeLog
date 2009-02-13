@@ -1,3 +1,91 @@
+2009-02-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* NEWS
+	* README: Stable release 1.203.
+
+2009-02-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkIconView.xs: Fix stack handling bugs in
+	Gtk2::IconView::get_item_at_pos(), get_dest_item_at_pos(), and
+	get_tooltip_context().  Patch by Kevin Ryde.
+
+2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkRecentChooser.t
+	* t/GtkRecentManager.t: Use Gtk2->main_iteration instead of
+	Gtk2::TestHelper's run_main to spin the main loop.  This avoids
+	hangs on some machines.  Patch by Jeffrey Ratcliffe.
+
+2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkIconTheme.t: Skip tests that rely on the presence of a
+	stock icon if that icon isn't present.
+
+2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GdkEvent.t: Fix a skip count.
+
+2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkAction.t: Use an activatable widget for testing the proxy
+	stuff.  Recent gtk+ versions enforce this.
+
+2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GdkPixbufLoader.t: Don't use an auto-detecting pixbuf loader
+	since that's broken for PPM images in at least gtk+ >= 2.14.3 (see
+	GNOME #570780).
+
+2009-01-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/Gtk2.xs
+	* xs/GtkWindow.xs: Use Gtk2::EVENT_STOP and EVENT_PROPAGATE in the
+	synopsis for Gtk2::Window and in the docs for
+	Gtk2::key_snooper_install.  Patch by Kevin Ryde.
+
+2009-01-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/PangoLayout.t
+	* xs/PangoLayout.xs: Allow passing undef to
+	Gtk2::Pango::Layout::set_attributes().  Patch by Emmanuel
+	Rodriguez.  (RT #42079)
+
+2008-12-30  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkTreeModel.xs: Document the signature of the callback used
+	by Gtk2::TreeModel::foreach.  Patch by Kevin Ryde.
+
+2008-12-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkEntryCompletion.t
+	* xs/GtkEntryCompletion.xs: In Gtk2::EntryCompletion::set_model,
+	allow undef for the model parameter.  (#562682)
+
+2008-12-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkEntryCompletion.xs: Fix a leak in
+	Gtk2::EntryCompletion::new.  (#562682)
+
+2008-11-15  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkSocket-GtkPlug.t: Correct skip count for the case of
+	finding no "blib" directory.
+
+2008-11-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkCellRenderer.t
+	* xs/GtkCellRenderer.xs: Fix the stack handling in
+	Gtk2::CellRenderer::get_size().  Patch by Kevin Ryde.
+
+2008-11-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	Merge from trunk:
+
+	* xs/GtkBuildable.xs: Mention in the POD that chaining up to the
+	parent does not work yet for custom Gtk2::Buildable
+	implementations.  Patch by Kevin Ryde.
+
 2008-10-26  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Gtk2.pm

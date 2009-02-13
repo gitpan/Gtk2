@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkRecentManager.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id: GtkRecentManager.t 2130 2009-02-06 14:07:26Z tsch $
 #
 
 #########################
@@ -53,7 +53,7 @@ SKIP: {
 
 	$manager->add_item($icon_uri);
 	# add_item() is asynchronous, so let the main loop spin for a while
-	run_main while !$manager->get_items;
+	Gtk2->main_iteration while !$manager->get_items;
 
 	ok($manager->has_item($icon_uri), 'check add item');
 

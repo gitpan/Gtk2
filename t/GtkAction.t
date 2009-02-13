@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkAction.t 2061 2008-10-18 14:31:18Z tsch $
+# $Id: GtkAction.t 2123 2009-02-06 13:33:24Z tsch $
 #
 
 use Gtk2::TestHelper
@@ -40,7 +40,7 @@ isa_ok ($widget, 'Gtk2::ToolItem');
 my @proxies = $action->get_proxies;
 is (@proxies, 1);
 
-my $proxy = Gtk2::Statusbar->new;
+my $proxy = Gtk2::Button->new;
 $action->connect_proxy ($proxy);
 @proxies = $action->get_proxies;
 is (@proxies, 2);

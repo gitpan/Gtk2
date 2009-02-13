@@ -17,7 +17,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
 # Boston, MA  02111-1307  USA.
 #
-# $Id: GdkPixbufLoader.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id: GdkPixbufLoader.t 2121 2009-02-06 13:06:16Z tsch $
 
 use strict;
 use warnings;
@@ -40,7 +40,11 @@ sub make_ppm_data {
 
 # now, let's test!
 
-my $loader = Gtk2::Gdk::PixbufLoader->new;
+# Automatic detection of the image type seems to be broken in some versions of
+# gtk+; see <http://bugzilla.gnome.org/show_bug.cgi?id=570780>.  So we don't
+# use an auto-detecting loader here.
+my $loader = Gtk2::Gdk::PixbufLoader->new_with_mime_type (
+                 'image/x-portable-pixmap');
 isa_ok ($loader, 'Glib::Object');
 isa_ok ($loader, 'Gtk2::Gdk::PixbufLoader');
 $loader->write (make_ppm_data (10, 15));
@@ -89,7 +93,8 @@ SKIP: {
 
     # set_size can be used to do load-time scaling.
 
-    $loader = Gtk2::Gdk::PixbufLoader->new;
+    $loader = Gtk2::Gdk::PixbufLoader->new_with_mime_type (
+                  'image/x-portable-pixmap');
     $loader->set_size (48, 32);
     $loader->write (make_ppm_data (96, 64));
     $loader->close;

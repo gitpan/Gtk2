@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 15,
   at_least_version => [2, 10, 0, "GtkRecentChooser"];
 
-# $Id: GtkRecentChooser.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id: GtkRecentChooser.t 2130 2009-02-06 14:07:26Z tsch $
 
 unlink "./test.xbel"; # in case of an aborted run
 my $manager = Glib::Object::new("Gtk2::RecentManager", filename => "./test.xbel");
@@ -50,7 +50,7 @@ $manager -> add_item($uri_one);
 $manager -> add_item($uri_two);
 
 # add_item() is asynchronous, so let the main loop spin for a while
-run_main while !$manager->get_items;
+Gtk2->main_iteration while !$manager->get_items;
 
 $chooser -> set_select_multiple(FALSE);
 

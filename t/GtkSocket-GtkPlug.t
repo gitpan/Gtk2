@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkSocket-GtkPlug.t 2067 2008-10-18 22:24:19Z tsch $
+# $Id: GtkSocket-GtkPlug.t 2088 2008-11-15 14:05:15Z tsch $
 #
 
 # ...despite patches that have been around for a long time, no win32
@@ -8,7 +8,7 @@ use Gtk2::TestHelper tests => 12, nowin32 => 1;
 
 SKIP: {
 
-skip "blib can't be found", 4
+skip "blib can't be found", 6
 	unless -d "blib";
 
 ok( my $win = Gtk2::Window->new );

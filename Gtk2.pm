@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Id: Gtk2.pm 2078 2008-10-26 17:58:19Z tsch $
+# $Id: Gtk2.pm 2144 2009-02-13 16:19:12Z tsch $
 #
 
 package Gtk2;
@@ -37,7 +37,7 @@ eval "use Cairo;";
 use Exporter;
 require DynaLoader;
 
-our $VERSION = '1.202';
+our $VERSION = '1.203';
 
 our @ISA = qw(DynaLoader Exporter);
 

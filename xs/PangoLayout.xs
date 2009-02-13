@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: PangoLayout.xs 2054 2008-10-05 12:49:36Z tsch $
+ * $Id: PangoLayout.xs 2102 2009-01-01 16:32:32Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -192,10 +192,10 @@ pango_layout_get_context (layout)
 void
 pango_layout_set_attributes (layout, attrs)
 	PangoLayout *layout
-	PangoAttrList *attrs
+	PangoAttrList_ornull *attrs
 
 ##  PangoAttrList *pango_layout_get_attributes (PangoLayout *layout) 
-PangoAttrList *
+PangoAttrList_ornull *
 pango_layout_get_attributes (layout)
 	PangoLayout *layout
 

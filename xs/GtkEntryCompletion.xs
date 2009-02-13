@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkEntryCompletion.xs 2054 2008-10-05 12:49:36Z tsch $
+ * $Id: GtkEntryCompletion.xs 2099 2008-12-16 19:37:15Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -34,8 +34,9 @@ gtk2perl_entry_completion_match_func (GtkEntryCompletion *completion,
 
 MODULE = Gtk2::EntryCompletion	PACKAGE = Gtk2::EntryCompletion	PREFIX = gtk_entry_completion_
 
+# GtkEntryCompletion is a direct GObject descendent, so we need _noinc.
 
-GtkEntryCompletion *gtk_entry_completion_new (class)
+GtkEntryCompletion_noinc *gtk_entry_completion_new (class)
     C_ARGS:
 	/*void*/
 
@@ -43,7 +44,7 @@ GtkEntryCompletion *gtk_entry_completion_new (class)
 GtkWidget *gtk_entry_completion_get_entry (GtkEntryCompletion *entry);
 
 
-void gtk_entry_completion_set_model (GtkEntryCompletion *completion, GtkTreeModel *model);
+void gtk_entry_completion_set_model (GtkEntryCompletion *completion, GtkTreeModel_ornull *model);
 
 GtkTreeModel *gtk_entry_completion_get_model (GtkEntryCompletion *completion);
 

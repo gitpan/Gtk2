@@ -1,5 +1,5 @@
 #
-# $Id: GtkEntryCompletion.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id: GtkEntryCompletion.t 2099 2008-12-16 19:37:15Z tsch $
 #
 
 use Gtk2::TestHelper
@@ -25,6 +25,8 @@ $entry->set_completion ($completion);
 
 is ($completion->get_entry, $entry);
 
+
+$completion->set_model (undef);
 
 my $model = Gtk2::ListStore->new ('Glib::String');
 $completion->set_model ($model);

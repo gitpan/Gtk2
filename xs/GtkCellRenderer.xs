@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkCellRenderer.xs 2054 2008-10-05 12:49:36Z tsch $
+ * $Id: GtkCellRenderer.xs 2085 2008-11-01 16:28:51Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -508,8 +508,10 @@ gtk_cell_renderer_get_size (cell, widget, cell_area)
 	gint width;
 	gint height;
     PPCODE:
+	PUTBACK;
 	gtk_cell_renderer_get_size(cell, widget, cell_area,
 		&x_offset, &y_offset, &width, &height);
+	SPAGAIN;
 	EXTEND(SP,4);
 	PUSHs(sv_2mortal(newSViv(x_offset)));
 	PUSHs(sv_2mortal(newSViv(y_offset)));

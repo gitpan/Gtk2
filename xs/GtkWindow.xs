@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkWindow.xs 2067 2008-10-18 22:24:19Z tsch $
+ * $Id: GtkWindow.xs 2104 2009-01-01 21:42:06Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -48,9 +48,10 @@ For example
     $toplevel->signal_connect (delete_event => sub {
        if (any_unsaved_documents()) {
          popup_ask_save_before_exit_dialog();
-         return 1;  # don't propagate to default destroy
+         return Gtk2::EVENT_STOP;  # don't go to default destroy
+       } else {
+         return Gtk2::EVENT_PROPAGATE;
        }
-       return 0;  # do propagate
     });
 
 In a dialog or secondary app window you might not want to destroy but

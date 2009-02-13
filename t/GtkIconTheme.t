@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkIconTheme.t 2067 2008-10-18 22:24:19Z tsch $
+# $Id: GtkIconTheme.t 2128 2009-02-06 13:52:33Z tsch $
 #
 
 use Gtk2::TestHelper
@@ -98,6 +98,9 @@ ok (!$icon_theme->rescan_if_needed);
 SKIP: {
   skip 'new 2.14 stuff', 2
     unless Gtk2->CHECK_VERSION(2, 14, 0);
+
+  skip 'unable to find the stock_edit icon', 2
+    unless defined $icon_theme->lookup_icon ('stock_edit', 24, 'use-builtin');
 
   my $pixbuf = $icon_theme->load_icon ('stock_edit', 24, 'use-builtin');
   isa_ok (Gtk2::IconInfo->new_for_pixbuf ($icon_theme, $pixbuf),
