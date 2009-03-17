@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 7;
+use Gtk2::TestHelper tests => 11;
 
-# $Id: GtkImageMenuItem.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id: GtkImageMenuItem.t 2157 2009-03-17 18:21:36Z tsch $
 
 my $item = Gtk2::ImageMenuItem -> new();
 isa_ok($item, "Gtk2::ImageMenuItem");
@@ -26,6 +26,29 @@ my $image = Gtk2::Image -> new_from_stock("gtk-quit", "menu");
 
 $item -> set_image($image);
 is($item -> get_image(), $image);
+
+SKIP: {
+	skip 'use_stock methods', 4
+		unless Gtk2->CHECK_VERSION(2, 16, 0);
+
+	# Get an item from a stock and test the getter/setter
+	my $from_stock = Gtk2::ImageMenuItem -> new_from_stock("gtk-yes");
+	is($from_stock -> get_use_stock(), TRUE);
+	$from_stock -> set_use_stock(FALSE);
+	is($from_stock -> get_use_stock(), FALSE);
+
+
+	# Get an item WITHOUT a stock and test the getter/setter
+	my $with_label = Gtk2::ImageMenuItem -> new_with_label("Fake");
+	is($with_label -> get_use_stock(), FALSE);
+	$with_label -> set_use_stock(TRUE);
+	is($with_label -> get_use_stock(), TRUE);
+
+	# Add an accelator (applies only to stock items). Can't be verified, at least
+	# the method call is tested for a crash
+	my $with_accelartor = Gtk2::ImageMenuItem -> new_from_stock("gtk-no");
+	$from_stock -> set_accel_group(Gtk2::AccelGroup -> new());
+}
 
 __END__
 

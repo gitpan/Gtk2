@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2009 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkStyle.xs 2054 2008-10-05 12:49:36Z tsch $
+ * $Id: GtkStyle.xs 2158 2009-03-17 18:42:54Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -570,5 +570,80 @@ gtk_style_lookup_color (GtkStyle *style, const gchar *color_name)
         RETVAL = &color;
     OUTPUT:
         RETVAL
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 16, 0)
+
+=for apidoc
+=for signature list = $style->get (widget_package, ...)
+=for signature list = $style->get_style_property (widget_package, ...)
+=for arg widget_package (string) widget package name (ex: 'Gtk2::TreeView')
+=for arg ... (list) list of property names
+
+Fetch and return the values for the style properties named in I<...> for a
+widget of type I<widget_package>.  I<get_style_property> is an alias for
+I<get>.
+
+B<Note>: The I<get> method shadows I<Glib::Object::get>. This shouldn't be a
+problem since I<Gtk2::Style> defines no properties (as of gtk+ 2.16).  If you
+have a class that's derived from Gtk2::Style and adds a property or if a new
+version of gtk+ adds a property to I<Gtk2::Style>, the property can be accessed
+with I<get_property> which still resolves to I<Glib::Object::get_property>:
+
+	my $value = $style->get_property('property');
+
+=cut
+void
+gtk_style_get (style, widget_package, ...)
+	GtkStyle *style
+	const char *widget_package
+    ALIAS:
+	get_style_property = 1
+    PREINIT:
+	int i;
+	GType widget_type;
+	gpointer class;
+    CODE:
+	/* Use CODE: instead of PPCODE: so we can handle the stack ourselves in
+	 * order to avoid that xsubs called by gtk_style_get_style_property
+	 * overwrite what we put on the stack. */
+
+	PERL_UNUSED_VAR (ix);
+
+	widget_type = gperl_type_from_package (widget_package);
+	if (widget_type == 0)
+		croak ("package %s is not registered with GPerl", widget_package);
+
+	if (! g_type_is_a (widget_type, GTK_TYPE_WIDGET))
+		croak ("%s is not a subclass of Gtk2::Widget", widget_package);
+
+
+	class = g_type_class_ref (widget_type);
+	if (class == NULL)
+		croak ("can't find type class for type %s", widget_package);
+
+	for (i = 2 ; i < items ; i++) {
+		GValue value = {0, };
+		gchar *name = SvGChar (ST (i));
+		GParamSpec *pspec =
+			gtk_widget_class_find_style_property (class, name);
+
+		if (pspec) {
+			g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+			gtk_style_get_style_property (style, widget_type, name, &value);
+			ST (i - 2) = sv_2mortal (gperl_sv_from_value (&value));
+			g_value_unset (&value);
+		}
+		else {
+			g_type_class_unref (class);
+			croak ("type %s does not support style property '%s'",
+			       widget_package, name);
+		}
+	}
+
+	g_type_class_unref (class);
+
+	XSRETURN (items - 2);
 
 #endif

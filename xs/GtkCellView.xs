@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkCellView.xs 2054 2008-10-05 12:49:36Z tsch $
+ * $Id: GtkCellView.xs 2157 2009-03-17 18:21:36Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -29,7 +29,7 @@ GtkWidget * gtk_cell_view_new_with_pixbuf (class, pixbuf)
     C_ARGS:
 	pixbuf
 
-void gtk_cell_view_set_model (GtkCellView * cell_view, GtkTreeModel * model);
+void gtk_cell_view_set_model (GtkCellView * cell_view, GtkTreeModel_ornull * model);
 
 void gtk_cell_view_set_displayed_row (GtkCellView * cell_view, GtkTreePath * path);
 
@@ -66,3 +66,9 @@ gtk_cell_view_get_cell_renderers (GtkCellView * cellview);
 	}
 	else
 		XSRETURN_EMPTY;
+
+#if GTK_CHECK_VERSION (2, 16, 0)
+
+GtkTreeModel_ornull * gtk_cell_view_get_model (GtkCellView * cellview);
+
+#endif /* 2.16 */

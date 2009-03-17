@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: GtkTreeModelIface.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id: GtkTreeModelIface.t 2154 2009-03-08 18:40:43Z tsch $
 
 package CustomList;
 
@@ -346,7 +346,7 @@ sub sort {
 
 package main;
 
-use Gtk2::TestHelper tests => 179, noinit => 1;
+use Gtk2::TestHelper tests => 180, noinit => 1;
 use strict;
 use warnings;
 
@@ -455,6 +455,9 @@ ok ($model->has_default_sort_func);
 $model->sort(2);
 $model->sort(3);
 $model->sort(23);
+
+# This should result in a call to FINALIZE_INSTANCE
+$model = undef;
 
 # Exercise Gtk2::TreeIter->set.
 { my $myvar;

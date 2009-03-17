@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkStatusIcon.xs 2067 2008-10-18 22:24:19Z tsch $
+ * $Id: GtkStatusIcon.xs 2157 2009-03-17 18:21:36Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -133,3 +133,23 @@ GdkScreen *gtk_status_icon_get_screen (GtkStatusIcon *status_icon);
 guint32 gtk_status_icon_get_x11_window_id (GtkStatusIcon *status_icon);
 
 #endif /* 2.14 */
+
+#if GTK_CHECK_VERSION (2, 16, 0)
+
+void gtk_status_icon_set_has_tooltip (GtkStatusIcon *status_icon, gboolean has_tooltip);
+
+gboolean gtk_status_icon_get_has_tooltip (GtkStatusIcon *status_icon);
+
+gchar_own_ornull *gtk_status_icon_get_tooltip_markup (GtkStatusIcon *status_icon);
+
+gchar_own_ornull *gtk_status_icon_get_tooltip_text (GtkStatusIcon *status_icon);
+
+#Unlike the corresponding methods in GtkWidget, these setters use plain char instead of gchar.
+#However I expect that is an error or oversight and the char and gchar types are supposedly
+#equivalent anyway. Also using gchar lets me use the _ornull.
+
+void gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,  const gchar_ornull *text);
+
+void gtk_status_icon_set_tooltip_markup (GtkStatusIcon *status_icon, const gchar_ornull *markup);
+
+#endif /* 2.16 */

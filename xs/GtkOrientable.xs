@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2009 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -15,23 +15,15 @@
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA  02111-1307  USA.
- *
- * $Id: GtkIMMulticontext.xs 2157 2009-03-17 18:21:36Z tsch $
  */
 
 #include "gtk2perl.h"
 
-MODULE = Gtk2::IMMultiContext	PACKAGE = Gtk2::IMMulticontext	PREFIX = gtk_im_multicontext_
+MODULE = Gtk2::Orientable	PACKAGE = Gtk2::Orientable	PREFIX = gtk_orientable_
 
-GtkIMContext_noinc * gtk_im_multicontext_new (class)
-    C_ARGS:
-        /*void*/
+=for object Gtk2::Orientable - Interface for flippable widgets
+=cut
 
-void gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context, GtkMenuShell *menushell);
+GtkOrientation gtk_orientable_get_orientation (GtkOrientable *orientable);
 
-
-#if GTK_CHECK_VERSION (2, 16, 0)
-
-const char* gtk_im_multicontext_get_context_id (GtkIMMulticontext *context);
-
-#endif /* 2.16 */
+void gtk_orientable_set_orientation (GtkOrientable *orientable, GtkOrientation orientation);

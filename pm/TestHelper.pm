@@ -1,5 +1,5 @@
 #
-# $Id: TestHelper.pm 2054 2008-10-05 12:49:36Z tsch $
+# $Id: TestHelper.pm 2148 2009-02-22 16:46:43Z tsch $
 #
 
 package Gtk2::TestHelper;
@@ -218,8 +218,6 @@ using Test::More's is().
 Verify that the GObject subclass I<GOBJECT_OR_PACKAGE>'s @ISA is set up properly
 with all of the GInterfaces that the type system claims it supports.  Something
 like an isa_ok() in steroids.
-
-=back
 
 =item delta_ok (A, B [, NAME])
 

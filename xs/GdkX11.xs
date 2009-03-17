@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005, 2009 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GdkX11.xs 2054 2008-10-05 12:49:36Z tsch $
+ * $Id: GdkX11.xs 2131 2009-02-06 14:10:48Z tsch $
  */
 #include "gtk2perl.h"
 #ifdef GDK_WINDOWING_X11
@@ -27,7 +27,7 @@
  * there is no typemap for Display*, Screen*, etc, and indeed no perl-side
  * functions to manipulate them, so they are out for the time being.
  *
- * XID/XWINDOW is treated as UV.
+ * XID/XWINDOW/XATOM is treated as UV.
  *
  * all XS blocks are wrapped in #ifdef GDK_WINDOWING_X11 to make sure this
  * stuff doesn't exist when wrapping gdk compiled for other backends.
@@ -174,5 +174,30 @@ const char* gdk_x11_screen_get_window_manager_name (GdkScreen *screen);
 gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen, GdkAtom property);
 
 #endif /* 2.2.0 */
+
+#endif /* GDK_WINDOWING_X11 */
+
+# --------------------------------------------------------------------------- #
+
+MODULE = Gtk2::Gdk::X11	PACKAGE = Gtk2::Gdk::Atom	PREFIX = gdk_x11_atom_
+
+#ifdef GDK_WINDOWING_X11
+
+#if GTK_CHECK_VERSION (2, 2, 0)
+
+UV
+to_xatom_for_display (GdkAtom atom, GdkDisplay *display)
+    CODE:
+	RETVAL = gdk_x11_atom_to_xatom_for_display(display, atom);
+    OUTPUT:
+	RETVAL
+
+#endif /* 2.2.0 */
+
+#ifndef GDK_MULTIHEAD_SAFE
+
+UV gdk_x11_atom_to_xatom (GdkAtom atom);
+
+#endif /* GDK_MULTIHEAD_SAFE */
 
 #endif /* GDK_WINDOWING_X11 */

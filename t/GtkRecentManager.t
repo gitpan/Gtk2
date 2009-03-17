@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkRecentManager.t 2130 2009-02-06 14:07:26Z tsch $
+# $Id: GtkRecentManager.t 2129 2009-02-06 14:06:40Z tsch $
 #
 
 #########################

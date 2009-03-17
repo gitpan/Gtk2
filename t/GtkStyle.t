@@ -1,9 +1,10 @@
 #!/usr/bin/perl -w
 # vim: set ft=perl expandtab shiftwidth=2 softtabstop=2 :
 use strict;
-use Gtk2::TestHelper tests => 113;
+use Gtk2::TestHelper tests => 125;
+use Carp;
 
-# $Id: GtkStyle.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id: GtkStyle.t 2158 2009-03-17 18:42:54Z tsch $
 
 my $window = Gtk2::Window -> new();
 $window -> realize();
@@ -133,7 +134,138 @@ SKIP: {
   ok (1);
 }
 
+SKIP: {
+  skip("get is new in 2.16", 13)
+    unless (Gtk2->CHECK_VERSION(2, 16, 0));
+
+  # Test different properties (gint, gboolean, gchar* and GObject)
+  my $treeview = Gtk2::TreeView -> new();
+
+  # get gboolean
+  is (
+    $style -> get('Gtk2::TreeView', 'allow-rules'),
+    $treeview -> style_get_property('allow-rules'),
+    "get_property gboolean"
+  );
+
+  # get gint
+  is (
+    $style -> get('Gtk2::TreeView', 'expander-size'),
+    $treeview -> style_get_property('expander-size'),
+    "get_property gint"
+  );
+
+  # get gchar*
+  is (
+    $style -> get('Gtk2::TreeView', 'grid_line-pattern'),
+    $treeview -> style_get_property('grid_line-pattern'),
+    "get_property gchar*"
+  );
+
+  # get GObject (a color)
+  is (
+    $style -> get('Gtk2::TreeView', 'even-row-color'),
+    $treeview -> style_get_property('even-row-color'),
+    "get_property GObject*"
+  );
+
+
+
+  # Get multiple properties simultaneously
+  my @properties = $style -> get('Gtk2::TreeView', 'expander-size', 'even-row-color', 'grid_line-pattern');
+  is_deeply (
+    \@properties,
+    [
+      $treeview -> style_get_property('expander-size'),
+      $treeview -> style_get_property('even-row-color'),
+      $treeview -> style_get_property('grid_line-pattern'),
+    ],
+    'get multiple properties',
+  );
+
+
+
+  # Test the get_style_property alias
+  is (
+    $style -> get_style_property('Gtk2::TreeView', 'even-row-color'),
+    $style -> get('Gtk2::TreeView', 'even-row-color'),
+    "get_style_property alias"
+  );
+
+
+
+  # Make sure that Glib::GObject::get() and Gtk2::Style::get() can coexist.
+  my $custom_style = Custom::Style -> new();
+  is ($custom_style -> Glib::Object::get('perl-string'), 'empty');
+  is ($custom_style -> get_property('perl-string'), 'empty');
+  is ($custom_style -> get('Gtk2::Button', 'image-spacing'), 2);
+
+
+
+  # Test for bad usage
+  # Bad class
+  test_die(
+    sub { $style -> get('wrong::class', 'border'); },
+    qr/^package wrong::class is not registered with GPerl/
+  );
+
+  # Non existing property
+  test_die(
+    sub { $style -> get('Gtk2::Button', 'image-spacing', 'perl-var', 'default-border'); },
+    qr/^type Gtk2::Button does not support style property 'perl-var'/
+  );
+
+  # Not a Gtk2::Widget
+  test_die(
+    sub { $style -> get('Glib::Object', 'prop'); },
+    qr/^Glib::Object is not a subclass of Gtk2::Widget/
+  );
+}
+
+
+# Test that an error is thrown
+sub test_die {
+  my ($code, $regexp) = @_;
+  croak "usage(code, regexp)" unless ref $code eq 'CODE';
+
+  my $passed = FALSE;
+  eval {
+    $code->();
+  };
+  if (my $error = $@) {
+    if ($error =~ /$regexp/) {
+      $passed = TRUE;
+    }
+    else {
+      diag("Expected $regexp but got $error");
+    }
+  }
+
+  return Test::More->builder->ok($passed);
+}
+
+
+#
+# Used to test if Gtk2::Style::get() conflicts with Glib::GObject::get(). A new
+# package is needed because as of gtk+ 2.16, Gtk2::Style defines no properties.
+#
+package Custom::Style;
+
+use Glib::Object::Subclass 'Gtk2::Style' =>
+
+	properties => [
+		Glib::ParamSpec->string(
+			'perl-string',
+			'Test string',
+			'A test string.',
+			'empty',
+			['readable', 'writable'],
+		),
+	],
+;
+
+
 __END__
 
-Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2009 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

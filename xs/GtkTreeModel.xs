@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkTreeModel.xs 2101 2008-12-30 14:49:00Z tsch $
+ * $Id: GtkTreeModel.xs 2147 2009-02-22 16:12:47Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -1108,7 +1108,7 @@ gtk_tree_model_get_path (tree_model, iter)
 
 =for apidoc get_value
 =for arg ... of column indices
-Alias for L<get|list = $tree_model-E<gt>get ($iter, ...)>.
+Alias for L<get|/"$tree_model-E<gt>B<get> ($iter, ...)">.
 =cut
 
 =for apidoc

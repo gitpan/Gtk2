@@ -15,7 +15,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Id: Makefile.PL 2070 2008-10-19 17:38:39Z tsch $
+# $Id: Makefile.PL 2159 2009-03-17 18:44:16Z tsch $
 #
 
 BEGIN { require 5.008; }
@@ -33,7 +33,8 @@ use Cwd;
 our %build_reqs = (
 	'perl-ExtUtils-Depends'   => '0.300',
 	'perl-ExtUtils-PkgConfig' => '1.030',
-	'perl-Glib'               => '1.200',
+	'perl-Glib'               => '1.220',
+	'perl-Pango'              => '1.220',
 	'perl-Cairo'              => '1.000',
 	'Gtk+'                    => '2.0.0',
 );
@@ -42,6 +43,7 @@ our %PREREQ_PM = (
 	'ExtUtils::Depends'   => $build_reqs{'perl-ExtUtils-Depends'},
 	'ExtUtils::PkgConfig' => $build_reqs{'perl-ExtUtils-PkgConfig'},
 	'Glib'                => $build_reqs{'perl-Glib'},
+	'Pango'               => $build_reqs{'perl-Pango'},
 );
 
 # Writing a fake Makefile ensures that CPAN will pick up the correct
@@ -50,6 +52,7 @@ unless (eval "use ExtUtils::Depends '$build_reqs{'perl-ExtUtils-Depends'}';"
            . "use ExtUtils::PkgConfig '$build_reqs{'perl-ExtUtils-PkgConfig'}';"
            . "use Glib '$build_reqs{'perl-Glib'}';"
            . "use Glib::MakeHelper;" # for do_pod_files()
+           . "use Pango '$build_reqs{'perl-Pango'}';"
            . "1") {
 	warn "$@\n";
 	WriteMakefile(
@@ -69,20 +72,18 @@ mkdir 'build', 0777;
 # look for our packages.  if they can't be found, warn and exit with status 0
 # to indicate to CPAN testers that their system isn't supported.
 #
-my (%pkgcfg_gtk, %pkgcfg_pango);
+my %pkgcfg_gtk;
 unless (eval { %pkgcfg_gtk = ExtUtils::PkgConfig->find ("gtk+-2.0 >= $build_reqs{'Gtk+'}");
-               %pkgcfg_pango = ExtUtils::PkgConfig->find ('pango');
-               1; })
+                1; })
 {
 	warn $@;
 	exit 0;
 }
 
 #
-# retrieve gtk's and pango's version
+# retrieve gtk's version
 #
 my @gtk_version = split /\./, $pkgcfg_gtk{modversion};
-my @pango_version = split /\./, $pkgcfg_pango{modversion};
 
 #
 # decide what files to use in the build based on the version we found.
@@ -90,7 +91,6 @@ my @pango_version = split /\./, $pkgcfg_pango{modversion};
 our @xs_files = ();
 our @xs_lists = (
 	Glib::MakeHelper->select_files_by_version ("xs_files", @gtk_version),
-	Glib::MakeHelper->select_files_by_version ("xs_files_pango", @pango_version),
 );
 foreach my $filename (@xs_lists) {
 	my @names = Glib::MakeHelper->read_source_list_file ($filename);
@@ -102,10 +102,9 @@ if ($target =~ /x11/) {
 	push @xs_files, 'xs/GdkX11.xs';
 }
 
-# if gtk+ >= 2.8 or pango >= 1.10, we depend on Cairo
+# if gtk+ >= 2.8, we depend on Cairo
 my $have_cairo = 0;
-if (($gtk_version[0] > 2 || ($gtk_version[0] == 2 && $gtk_version[1] >= 8)) ||
-    ($pango_version[0] > 1 || ($pango_version[0] == 1 && $pango_version[1] >= 10))) {
+if ($gtk_version[0] > 2 || ($gtk_version[0] == 2 && $gtk_version[1] >= 8)) {
 	$PREREQ_PM{Cairo} = $build_reqs{'perl-Cairo'};
 	unless (eval "use Cairo '$build_reqs{'perl-Cairo'}'; 1;") {
 		warn "$@\n";
@@ -133,11 +132,10 @@ Gtk2::CodeGen->generate_constants_wrappers (
 push @xs_files, $gtk_constants_file;
 
 #
-# create version macros for pango and atk
+# create version macros for atk
 #
 ExtUtils::PkgConfig->write_version_macros(
 	"build/gtk2perl-versions.h",
-	pango => "PANGO",
 	atk => "ATK",
 );
 
@@ -215,12 +213,16 @@ if (grep /enable[-_]faq/i, @ARGV)
 #
 # all possible maps must be available at xsubpp time, as xsubpp processes
 # all code, even inside #ifdefs.
+#
+# For backwards compatibility, the pango maps must be included so that the
+# Gtk2::Pango::* names are registered with Glib.  These maps have special types
+# (GObjectAlias, for example) that are handled by our own Gtk2::CodeGen.
+#
 Gtk2::CodeGen->parse_maps ('gtk2perl', input => [<maps-[0-9]\.[0-9]*>,
                                                  <maps_pango-[0-9]\.[0-9]*>]);
 # but for enums.pod, we only want to document the stuff we can actually
 # query from this target library.
 our @used_maps = Glib::MakeHelper->select_files_by_version ("maps", @gtk_version);
-our @used_maps_pango = Glib::MakeHelper->select_files_by_version ("maps_pango", @pango_version);
 
 # one more command generates code to boot all the various extra XS modules.
 # we need this because we have lots of XS files without corresponding PMs to
@@ -238,7 +240,10 @@ system "$^X tools/genkeysyms.pl >\"build/Keysyms.pm\""; # the "" are essential f
 # will chain from this one.
 #
 
-my @deps = $have_cairo ? qw/Glib Cairo/ : qw/Glib/;
+my @deps = qw/Glib Pango/;
+if ($have_cairo) {
+  push @deps, qw/Cairo/;
+}
 our $gtk2 = ExtUtils::Depends->new ('Gtk2', @deps);
 
 # Glib added -I. for us, but we'll need to add -I./build so we can get to
@@ -251,8 +256,7 @@ $gtk2->add_xs (@xs_files);
 my $cwd = cwd();
 $gtk2->add_typemaps (map {File::Spec->catfile($cwd,$_)}
 		     'build/gtk2perl.typemap',
-                     'gdk.typemap', 'gtk.typemap', 'pango.typemap'
-		     );
+                     'gdk.typemap', 'gtk.typemap');
 
 $gtk2->install (qw(gtk2perl.h
                    build/gtk2perl-autogen.h
@@ -264,9 +268,6 @@ $gtk2->save_config ('build/IFiles.pm');
 our @exports;
 require 'Gtk2.exports';
 
-my $configure_requires_yaml =
-  Glib::MakeHelper->get_configure_requires_yaml(%PREREQ_PM);
-
 WriteMakefile(
     NAME          => 'Gtk2',
     VERSION_FROM  => 'Gtk2.pm', # finds $VERSION
@@ -277,11 +278,12 @@ WriteMakefile(
     FUNCLIST      => \@exports,
     DL_FUNCS      => { Gtk2 => [] },
 
-    $gtk2->get_makefile_vars,
+    META_MERGE    => {
+      configure_requires => \%PREREQ_PM,
+      no_index           => { directory => [qw/tools xs/] },
+    },
 
-    $ExtUtils::MakeMaker::VERSION >= 6.46
-      ? (META_MERGE => { configure_requires => \%PREREQ_PM })
-      : (EXTRA_META => $configure_requires_yaml),
+    $gtk2->get_makefile_vars,
 );
 
 =unstable
@@ -292,7 +294,7 @@ WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
    This is an unstable development release of Gtk2.  The API is not
    frozen and things are subject to change at any time.  Report any
    bugs to gtk-perl-list AT gnome DOT org as soon as possible.
-   Please use the 1.18x series for important work.
+   Please use the 1.20x series for important work.
 
 WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
 __EOW__
@@ -321,6 +323,7 @@ __EOW__
 sub MY::postamble
 {
 	my $text = "POD_DEPENDS=build/stock_items.podi\n\n"
+	         . Glib::MakeHelper->postamble_precompiled_headers (qw/gtk2perl.h/)
 		 . Glib::MakeHelper->postamble_clean ()
 	         . Glib::MakeHelper->postamble_docs_full (
 			DEPENDS => $gtk2,
@@ -334,14 +337,15 @@ sub MY::postamble
 			'PERL_EXTUTILS_PKGCONFIG' => 
 				$build_reqs{'perl-ExtUtils-PkgConfig'},
 			'PERL_GLIB' => $build_reqs{'perl-Glib'},
+			'PERL_PANGO' => $build_reqs{'perl-Pango'},
 	           )
 	         . " 
 # rebuild the makefile if the file lists change
 Makefile : ".join(" ", @xs_lists)."
 
-\$(INST_LIB)/\$(FULLEXT)/enums.pod : \$(BLIB_DONE) @used_maps @used_maps_pango tools/podifyenums.pl
+\$(INST_LIB)/\$(FULLEXT)/enums.pod : \$(BLIB_DONE) @used_maps tools/podifyenums.pl
 	\$(NOECHO) \$(ECHO) Creating enum POD...
-	\$(NOECHO) \$(PERLRUNINST) -M\$(NAME) tools/podifyenums.pl \$(NAME) @used_maps @used_maps_pango > \$@
+	\$(NOECHO) \$(PERLRUNINST) -M\$(NAME) tools/podifyenums.pl \$(NAME) @used_maps > \$@
 
 build/stock_items.podi: \$(BLIB_DONE) tools/podifystockitems.pl
 	\$(NOECHO) \$(ECHO) Creating stock items POD...

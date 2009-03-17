@@ -1,5 +1,5 @@
 #
-# $Id: GtkEntryCompletion.t 2099 2008-12-16 19:37:15Z tsch $
+# $Id: GtkEntryCompletion.t 2098 2008-12-16 19:36:25Z tsch $
 #
 
 use Gtk2::TestHelper

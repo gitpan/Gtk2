@@ -1,14 +1,170 @@
+2009-03-17  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* Makefile.PL
+	* NEWS
+	* README: Stable release 1.220.
+
+2009-03-17  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkStyle.t
+	* xs/GtkStyle.xs: Adapt to the rename of gtk_style_get_property to
+	gtk_style_get_style_property.  Make
+	Gtk2::Style::get_style_property an alias for Gtk2::Style::get.
+
+2009-03-17  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkCellView.t
+	* t/GtkEntry.t
+	* t/GtkIMContext.t
+	* t/GtkImageMenuItem.t
+	* t/GtkOrientable.t
+	* t/GtkPrintSettings.t
+	* t/GtkStatusIcon.t
+	* t/GtkStyle.t
+	* xs/GtkCellView.xs
+	* xs/GtkEntry.xs
+	* xs/GtkIMMulticontext.xs
+	* xs/GtkImageMenuItem.xs
+	* xs/GtkPrintOperation.xs
+	* xs/GtkPrintSettings.xs
+	* xs/GtkSelection.xs
+	* xs/GtkStatusIcon.xs
+	* xs/GtkStyle.xs: Change all versions checks to refer to stable
+	releases only.
+
+2009-03-08  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* Makefile
+	* NEWS
+	* README: Unstable release 1.212.
+
+2009-03-08  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkHBox.t: Test that widgets packed into a box are completely
+	freed upon removal even if they previously appeared as a callback
+	argument.  This is a test for a recent memory leak fix in Glib.
+
+	* t/GtkTreeModelIface.t: The leak fix mentioned above causes this
+	test to correctly run FINALIZE_INSTANCE now, so adjust the test
+	plan.
+
+2009-03-08  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkTreeModelFilter.t
+	* xs/GtkTreeModelFilter.xs: Take ownership of objects returned by
+	gtk_tree_model_filter_new to avoid leaking them.  Patch by
+	Kevin Ryde.
+
+2009-03-08  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkStyle.t
+	* xs/GtkStyle.xs: Remove the get_property() alias for
+	Gtk2::Style::get() so that calling get_property() on a Gtk2::Style
+	resolves to Glib::Object::get_property().
+
+2009-03-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkAccelGroup.xs: Remove two FIXME comments which turned out
+	to be incorrect.  Patch by Kevin Ryde.
+
+2009-02-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GdkKeys.t: Skip most tests if we can't find a key entry to
+	test against.
+
+2009-02-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/00.Gtk2.t: Don't fail if there is no valid DISPLAY.
+
+2009-02-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* pm/TestHelper.pm
+	* pm/Helper.pm
+	* Gtk2.pm: Fix more POD errors.
+
+2009-02-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/Gtk2.xs
+	* xs/GtkTreeModel.xs
+	* xs/GtkWidget.xs
+	* xs/GtkWindow.xs: Fix POD errors reported by podchecker.
+
+2009-02-21  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkStyle.t
+	* xs/GtkStyle.xs: Wrap the gtk_style_get() family of methods as
+	Gtk2::Style::get(), and make Gtk2::Style::get_property() an alias
+	for get().  Patch by Emmanuel Rodriguez.
+
 2009-02-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Gtk2.pm
 	* NEWS
-	* README: Stable release 1.203.
+	* README: Unstable release 1.211.
+
+2009-02-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL: Require Glib 1.212 for the precompiled headers
+	stuff.  Print the stability warning.
+
+2009-02-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* gtk2perl.h: Remove the definitions for the custom pango GTypes.
+	They now come from pango-perl.h.
 
 2009-02-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* xs/GtkIconView.xs: Fix stack handling bugs in
 	Gtk2::IconView::get_item_at_pos(), get_dest_item_at_pos(), and
 	get_tooltip_context().  Patch by Kevin Ryde.
+
+2009-02-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkBindings.xs (gtk2perl_binding_set_get_type): To make the
+	doc generator happy, register our custom GtkBindingSet GType under
+	the name "GtkBindingSet".
+
+2009-02-11  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* constants-2.0
+	* gtk2perl.h
+	* Gtk2.pm
+	* MANIFEST
+	* maps-2.0
+	* xs_files-2.0
+	* t/GtkBindings.t
+	* xs/GtkBindings.xs: Wrap the GtkBindings stuff.  Patch by
+	Kevin Ryde.
+
+2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* MANIFEST
+	* maps-2.16
+	* xs_files-2.16
+	* t/GtkOrientable.t
+	* xs/GtkOrientable.xs: Wrap the new GtkOrientable interface.  No
+	support for implementing it in Perl subclasses yet.  Patch by
+	Emmanuel Rodriguez.
+
+2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkEntry.t: Test Gtk2::Entry->get_icon_storage_type.
+
+2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkEntry.t
+	* xs/GtkEntry.xs: Track the recent upstream function renaming:
+	gtk_entry_get_pixbuf → gtk_entry_get_icon_pixbuf,
+	gtk_entry_get_stock → gtk_entry_get_icon_stock, and
+	gtk_entry_get_storage_type → gtk_entry_get_icon_storage_type.
+
+2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GdkX11.xs: Call the atom arg for
+	Gtk2::Gdk::Atom->to_xatom_for_display "atom" for clarity in the
+	generated POD.  Patch by Kevin Ryde.
 
 2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
@@ -21,6 +177,12 @@
 
 	* t/GtkIconTheme.t: Skip tests that rely on the presence of a
 	stock icon if that icon isn't present.
+
+2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/pango-compat.t: Don't use Gtk2::Pango::Cairo::FontMap in the
+	compatibility checks as it isn't available in all pango versions
+	and I don't want to fiddle with version checks.
 
 2009-02-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
@@ -37,19 +199,111 @@
 	since that's broken for PPM images in at least gtk+ >= 2.14.3 (see
 	GNOME #570780).
 
+2009-01-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GdkX11.t
+	* xs/GdkX11.xs: Wrap gdk_x11_atom_to_xatom and
+	gdk_x11_atom_to_xatom_for_display.  Patch by chris.  (GNOME
+	#566884)
+
+2009-01-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkCellRenderer.t
+	* xs/GtkCellRenderer.xs: In gtk2perl_cell_renderer_start_editing,
+	make sure we return an object with a floating reference as is
+	expected of a start_editing vfunc.  In the xsub for
+	gtk_cell_renderer_start_editing and in the fallback START_EDITING
+	xsub, make sure we sink any floating reference on the created cell
+	editable in order to comply with the usual rule of not passing
+	floating references on to Perl code.  Patch by Kevin Ryde.
+
+2009-01-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkBuildable.xs: Declare all private functions as 'static' so
+	that they aren't exported.
+
+2009-01-19  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkSelection.xs: Fix the definition of the accessor macros
+	for older gtk+.  Patch by Kevin Ryde.
+
+2009-01-18  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* xs/GtkSelection.xs: Use gtk_selection_data_get_selection when
+	available.  Also introduce convenience defines for the other
+	GtkSelectionData accessors.  Patch by Emmanuel Rodriguez and
+	muppet.
+
+2009-01-18  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkPrintSettings.t
+	* xs/GtkPrintSettings.xs: Wrap new API.  Patch by Emmanuel
+	Rodriguez.
+
+2009-01-18  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkPrintOperation.t
+	* xs/GtkPrintOperation.xs: Wrap new API.  Patch by Emmanuel
+	Rodriguez.
+
+2009-01-18  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL: Use Glib::MakeHelper to create a
+	'precompiled-headers' target that precompiles gtk2perl.h.  This
+	speeds up the compilation of Gtk2 by 36% on my machine.
+
+2009-01-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* AUTHORS
+	* t/GtkStatusIcon.t
+	* xs/GtkStatusIcon.xs: Wrap new GtkStatusIcon API.  Patch by
+	Chris Sincock.
+
+2009-01-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkIMContext.t
+	* xs/GtkIMMulticontext.xs: Wrap
+	gtk_im_multicontext_get_context_id.  Patch by Emmanuel Rodriguez.
+
+2009-01-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkImageMenuItem.t
+	* xs/GtkImageMenuItem.xs: Wrap new GtkImageMenuItem API.  Patch by
+	Emmanuel Rodriguez.
+
+2009-01-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkCellView.t
+	* xs/GtkCellView.xs: Allow undef for the model in
+	Gtk2::CellView::set_model.
+
+2009-01-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/GtkCellView.t
+	* xs/GtkCellView.xs: Wrap gtk_cell_view_get_model.  Patch by
+	Emmanuel Rodriguez.
+
+2009-01-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* AUTHORS
+	* MANIFEST
+	* maps-2.16 (added)
+	* t/GtkEntry.t
+	* xs/GtkEntry.xs: Wrap the new GtkEntry API.  Patch by
+	Emmanuel Rodriguez.
+
+2009-01-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm: In the Gtk2::Pango compatibility code, avoid warnings
+	about names that are used only once by checking for definedness
+	before creating aliases.
+
 2009-01-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* xs/Gtk2.xs
 	* xs/GtkWindow.xs: Use Gtk2::EVENT_STOP and EVENT_PROPAGATE in the
 	synopsis for Gtk2::Window and in the docs for
 	Gtk2::key_snooper_install.  Patch by Kevin Ryde.
-
-2009-01-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
-
-	* t/PangoLayout.t
-	* xs/PangoLayout.xs: Allow passing undef to
-	Gtk2::Pango::Layout::set_attributes().  Patch by Emmanuel
-	Rodriguez.  (RT #42079)
 
 2008-12-30  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
@@ -67,10 +321,93 @@
 	* xs/GtkEntryCompletion.xs: Fix a leak in
 	Gtk2::EntryCompletion::new.  (#562682)
 
+2008-11-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/00.Gtk2.t
+	* xs/Gtk2.xs: Wrap gtk_get_option_group.
+
+2008-11-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm:
+	* NEWS:
+	* README: Unstable release 1.210.
+
+2008-11-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL: Unconditionally use META_MERGE.  Tell the CPAN
+	indexer to ignore the directories "tools" and "xs".
+
+2008-11-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm: Link to Pango.
+
+2008-11-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL
+	* README: Update Pango requirement to 1.210.
+
+2008-11-15  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	Use the standalone Pango module.
+
+	* CodeGen.pm: Add handlers for 'Alias' variants of most types.
+
+	* maps_pango-1.0
+	* maps_pango-1.4
+	* maps_pango-1.6
+	* maps_pango-1.8
+	* maps_pango-1.10
+	* maps_pango-1.16
+	* maps_pango-1.18: Use the above to register Gtk2::Pango::* type
+	aliases.
+
+	* gtk2perl.h: Include pango-perl.h
+
+	* Gtk2.pm: Use Pango.  Set up package aliases under Gtk2::Pango::
+	for the things that now live under Pango::.
+
+	* xs/Gtk2.xs: Remove unneeded pango stuff.  Make the doc generator
+	create stub Gtk2::Pango::* POD pages that explain the situation
+	and link to the relevant Pango::* docs.
+
+	* MANIFEST
+	* t/pango-compat.t (added): Add some tests that try to ensure
+	backwards compatibility in ways not tested by the existing
+	t/Pango*.t tests.
+
+	* doctypes
+	* Makefile.PL: Remove unneeded pango stuff.
+
+	* MANIFEST
+	* pango.typemap (deleted)
+	* xs/PangoAttributes.xs (deleted)
+	* xs/PangoCairo.xs (deleted)
+	* xs/PangoContext.xs (deleted)
+	* xs/PangoFontMap.xs (deleted)
+	* xs/PangoFontset.xs (deleted)
+	* xs/PangoFont.xs (deleted)
+	* xs/PangoGravity.xs (deleted)
+	* xs/PangoLayout.xs (deleted)
+	* xs/PangoMatrix.xs (deleted)
+	* xs/PangoRenderer.xs (deleted)
+	* xs/PangoScript.xs (deleted)
+	* xs/PangoTabs.xs (deleted)
+	* xs/PangoTypes.xs (deleted)
+	* xs_files_pango-1.0 (deleted)
+	* xs_files_pango-1.6 (deleted)
+	* xs_files_pango-1.10 (deleted)
+	* xs_files_pango-1.16 (deleted): Remove now unneeded files.
+
 2008-11-15  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* t/GtkSocket-GtkPlug.t: Correct skip count for the case of
 	finding no "blib" directory.
+
+2008-11-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Gtk2.pm
+	* xs/GtkWidget.xs: Add constants Gtk2::EVENT_STOP and
+	EVENT_PROPAGATE for use in event handlers.  Patch by Kevin Ryde.
 
 2008-11-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
@@ -80,7 +417,9 @@
 
 2008-11-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
-	Merge from trunk:
+	* xs/GtkCellRenderer.xs: Hush compiler warning.
+
+2008-11-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* xs/GtkBuildable.xs: Mention in the POD that chaining up to the
 	parent does not work yet for custom Gtk2::Buildable

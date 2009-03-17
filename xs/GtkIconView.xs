@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkIconView.xs 2138 2009-02-13 15:34:13Z tsch $
+ * $Id: GtkIconView.xs 2137 2009-02-13 15:31:35Z tsch $
  */
 #include "gtk2perl.h"
 

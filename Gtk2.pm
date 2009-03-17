@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Id: Gtk2.pm 2144 2009-02-13 16:19:12Z tsch $
+# $Id: Gtk2.pm 2159 2009-03-17 18:44:16Z tsch $
 #
 
 package Gtk2;
@@ -28,6 +28,42 @@ use strict;
 use warnings;
 
 use Glib;
+use Pango;
+
+# Backwards compatibility: create Gtk2::Pango aliases for everything in Pango
+# that was originally in Gtk2::Pango.
+{
+  no strict 'refs';
+  my @pango_keys = qw(
+    AttrBackground:: AttrColor:: AttrFallback:: AttrFamily:: AttrFontDesc::
+    AttrForeground:: AttrGravity:: AttrGravityHint:: Attribute:: AttrInt::
+    AttrIterator:: AttrLanguage:: AttrLetterSpacing:: AttrList:: AttrRise::
+    AttrScale:: AttrShape:: AttrSize:: AttrStretch:: AttrStrikethrough::
+    AttrStrikethroughColor:: AttrString:: AttrStyle:: AttrUnderline::
+    AttrUnderlineColor:: AttrVariant:: AttrWeight:: Cairo:: Color:: Context::
+    Font:: FontDescription:: FontFace:: FontFamily:: FontMap:: FontMask::
+    FontMetrics:: Fontset:: GlyphString:: Gravity:: Language:: Layout::
+    LayoutIter:: LayoutLine:: Matrix:: Renderer:: Script:: ScriptIter::
+    TabArray::
+
+    extents_to_pixels find_base_dir parse_markup pixels scale scale_large
+    scale_medium scale_small scale_x_large scale_x_small scale_xx_large
+    scale_xx_small units_from_double units_to_double
+
+    PANGO_PIXELS
+
+    CHECK_VERSION GET_VERSION_INFO VERSION
+
+    ISA
+  );
+  foreach my $key (@pango_keys) {
+    # Avoid warnings about names that are used only once by checking for
+    # definedness here.
+    if (defined *{'Pango::' . $key}) {
+      *{'Gtk2::Pango::' . $key} = *{'Pango::' . $key};
+    }
+  }
+}
 
 # if the gtk+ we've been compiled against is at 2.8.0 or newer or if pango is
 # at 1.10.0 or newer, we need to import the Cairo module for the cairo glue in
@@ -37,7 +73,7 @@ eval "use Cairo;";
 use Exporter;
 require DynaLoader;
 
-our $VERSION = '1.203';
+our $VERSION = '1.220';
 
 our @ISA = qw(DynaLoader Exporter);
 
@@ -61,6 +97,21 @@ Gtk2->bootstrap ($VERSION);
 # code in build/constants.xs
 our @EXPORT_OK = map { @$_ } values %Gtk2::EXPORT_TAGS;
 $Gtk2::EXPORT_TAGS{all} = \@EXPORT_OK;
+
+# Names "STOP" and "PROPAGATE" here are per the GtkWidget event signal
+# descriptions.  In some other flavours of signals the jargon is "handled"
+# instead of "stop".  "Handled" matches g_signal_accumulator_true_handled(),
+# though that function doesn't rate a mention in the Gtk docs.  There's
+# nothing fixed in the idea of "true means cease emission" (whether it's
+# called "stop" or "handled").  You can just as easily have false for cease
+# (the way the underlying GSignalAccumulator func in fact operates).  The
+# upshot being don't want to attempt to be too universal with the names
+# here; "EVENT" is meant to hint at the context or signal flavour they're
+# for use with.
+use constant {
+  EVENT_STOP      => 1,
+  EVENT_PROPAGATE => !1,
+};
 
 sub import {
 	my $class = shift;
@@ -291,6 +342,14 @@ Gtk2 exports nothing by default, but some constants are available upon request.
 =item Tag: constants
 
   GTK_PRIORITY_RESIZE
+
+  GTK_PATH_PRIO_LOWEST
+  GTK_PATH_PRIO_GTK
+  GTK_PATH_PRIO_APPLICATION
+  GTK_PATH_PRIO_THEME
+  GTK_PATH_PRIO_RC
+  GTK_PATH_PRIO_HIGHEST
+
   GDK_PRIORITY_EVENTS
   GDK_PRIORITY_REDRAW
   GDK_CURRENT_TIME
@@ -301,7 +360,7 @@ See L<Glib> for other standard priority levels.
 
 =head1 SEE ALSO
 
-L<perl>(1), L<Glib>(3pm).
+L<perl>(1), L<Glib>(3pm), L<Pango>(3pm).
 
 L<Gtk2::Gdk::Keysyms>(3pm) contains a hash of key codes, culled from
 gdk/gdkkeysyms.h
@@ -330,6 +389,8 @@ http://gtk2-perl.sourceforge.net/doc/binding_howto.pod.html, ties it all
 together.
 
 =head1 AUTHORS
+
+=encoding utf8
 
 The gtk2-perl team:
 

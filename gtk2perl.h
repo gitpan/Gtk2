@@ -1,6 +1,6 @@
 /*
  * 
- * Copyright (C) 2003-2004 by the gtk2-perl team (see the file AUTHORS for the
+ * Copyright (C) 2003-2009 by the gtk2-perl team (see the file AUTHORS for the
  * full list)
  * 
  * This library is free software; you can redistribute it and/or modify it
@@ -18,53 +18,28 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
  * 
  *
- * $Id: gtk2perl.h 2054 2008-10-05 12:49:36Z tsch $
+ * $Id: gtk2perl.h 2139 2009-02-13 15:35:29Z tsch $
  */
 
 #ifndef _GTK2PERL_H_
 #define _GTK2PERL_H_
 
 #include <gperl.h>
+#include <pango-perl.h>
 #include <gtk/gtk.h>
 
 #include "gtk2perl-versions.h"
+
+/* custom GType for GtkBindingSet */
+#ifndef GTK_TYPE_BINDING_SET
+# define GTK_TYPE_BINDING_SET	(gtk2perl_binding_set_get_type ())
+  GType gtk2perl_binding_set_get_type (void) G_GNUC_CONST;
+#endif
 
 /* custom GType for GdkRegion */
 #ifndef GDK_TYPE_REGION
 # define GDK_TYPE_REGION (gtk2perl_gdk_region_get_type ())
   GType gtk2perl_gdk_region_get_type (void) G_GNUC_CONST;
-#endif
-
-/* custom GType for PangoAttribute */
-#ifndef PANGO_TYPE_ATTRIBUTE
-# define PANGO_TYPE_ATTRIBUTE (gtk2perl_pango_attribute_get_type ())
-  GType gtk2perl_pango_attribute_get_type (void) G_GNUC_CONST;
-#endif
-
-/* custom GType for PangoAttrIter */
-#ifndef PANGO_TYPE_ATTR_ITERATOR
-# define PANGO_TYPE_ATTR_ITERATOR (gtk2perl_pango_attr_iterator_get_type ())
-  GType gtk2perl_pango_attr_iterator_get_type (void) G_GNUC_CONST;
-#endif
-
-/* custom GType for PangoLayoutIter */
-#ifndef PANGO_TYPE_LAYOUT_ITER
-# define PANGO_TYPE_LAYOUT_ITER (gtk2perl_pango_layout_iter_get_type ())
-  GType gtk2perl_pango_layout_iter_get_type (void) G_GNUC_CONST;
-#endif
-
-/* custom GType for PangoLayoutLine */
-#ifndef PANGO_TYPE_LAYOUT_LINE
-# define PANGO_TYPE_LAYOUT_LINE (gtk2perl_pango_layout_line_get_type ())
-  GType gtk2perl_pango_layout_line_get_type (void) G_GNUC_CONST;
-#endif
-
-/* custom GType for PangoScriptIter */
-#if PANGO_CHECK_VERSION (1, 4, 0)
-# ifndef PANGO_TYPE_SCRIPT_ITER
-#  define PANGO_TYPE_SCRIPT_ITER (gtk2perl_pango_script_iter_get_type ())
-   GType gtk2perl_pango_script_iter_get_type (void) G_GNUC_CONST;
-# endif
 #endif
 
 #include "gtk2perl-autogen.h"

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkBuildable.xs 2082 2008-11-01 14:15:00Z tsch $
+ * $Id: GtkBuildable.xs 2117 2009-01-20 19:21:53Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -158,7 +158,7 @@ gtk2perl_buildable_parser_end_element (GMarkupParseContext *context,
 
 /* Called for character data */
 /* text is not nul-terminated */
-void
+static void
 gtk2perl_buildable_parser_text (GMarkupParseContext *context,
 				const gchar         *text,
 				gsize                text_len,  
@@ -183,7 +183,7 @@ gtk2perl_buildable_parser_text (GMarkupParseContext *context,
  * this includes comments and processing instructions.
  */
 /* text is not nul-terminated. */
-void
+static void
 gtk2perl_buildable_parser_passthrough (GMarkupParseContext *context,
 				       const gchar         *passthrough_text,
 				       gsize                text_len,  
@@ -206,7 +206,7 @@ gtk2perl_buildable_parser_passthrough (GMarkupParseContext *context,
 /* Called on error, including one set by other
  * methods in the vtable. The GError should not be freed.
  */
-void
+static void
 gtk2perl_buildable_parser_error (GMarkupParseContext *context,
 				 GError              *error,
 				 gpointer             user_data)

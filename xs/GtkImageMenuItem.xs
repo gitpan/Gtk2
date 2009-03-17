@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkImageMenuItem.xs 2054 2008-10-05 12:49:36Z tsch $
+ * $Id: GtkImageMenuItem.xs 2157 2009-03-17 18:21:36Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -61,4 +61,26 @@ gtk_image_menu_item_set_image (image_menu_item, image)
 GtkWidget *
 gtk_image_menu_item_get_image (image_menu_item)
 	GtkImageMenuItem * image_menu_item
+
+
+#if GTK_CHECK_VERSION (2, 16, 0)
+
+## gboolean gtk_image_menu_item_get_use_stock (GtkImageMenuItem *image_menu_item);
+gboolean
+gtk_image_menu_item_get_use_stock (image_menu_item)
+	GtkImageMenuItem * image_menu_item
+
+## void gtk_image_menu_item_set_use_stock (GtkImageMenuItem *image_menu_item, gboolean use_stock);
+void
+gtk_image_menu_item_set_use_stock (image_menu_item, use_stock)
+	GtkImageMenuItem * image_menu_item
+	gboolean           use_stock
+
+## void gtk_image_menu_item_set_accel_group (GtkImageMenuItem *image_menu_item, GtkAccelGroup *accel_group);
+void
+gtk_image_menu_item_set_accel_group (image_menu_item, accel_group)
+	GtkImageMenuItem * image_menu_item
+	GtkAccelGroup    * accel_group
+
+#endif /* 2.16 */
 

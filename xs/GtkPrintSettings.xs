@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkPrintSettings.xs 2067 2008-10-18 22:24:19Z tsch $
+ * $Id: GtkPrintSettings.xs 2157 2009-03-17 18:21:36Z tsch $
  */
 
 #include "gtk2perl.h"
@@ -120,3 +120,17 @@ gtk_print_settings_load_key_file (GtkPrintSettings *settings, GKeyFile *key_file
 		gperl_croak_gerror (NULL, error);
 
 #endif /* 2.14 */
+
+#if GTK_CHECK_VERSION (2, 16, 0)
+
+gdouble gtk_print_settings_get_printer_lpi (GtkPrintSettings *settings);
+
+gint gtk_print_settings_get_resolution_x (GtkPrintSettings *settings);
+
+gint gtk_print_settings_get_resolution_y (GtkPrintSettings *settings);
+
+void gtk_print_settings_set_printer_lpi  (GtkPrintSettings *settings, gdouble lpi);
+
+void gtk_print_settings_set_resolution_xy (GtkPrintSettings *settings, gint resolution_x, gint resolution_y);
+
+#endif /* 2.16 */

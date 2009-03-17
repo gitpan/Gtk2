@@ -1,5 +1,6 @@
+#!/usr/bin/perl
 #
-# $Id: GtkCellView.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id: GtkCellView.t 2157 2009-03-17 18:21:36Z tsch $
 #
 
 #########################
@@ -12,7 +13,7 @@
 use strict;
 use warnings;
 
-use Gtk2::TestHelper tests => 10,
+use Gtk2::TestHelper tests => 12,
     at_least_version => [2, 6, 0, "GtkCellView is new in 2.6"],
     ;
 
@@ -40,8 +41,21 @@ isa_ok ($cview = Gtk2::CellView->new_with_pixbuf
 my $model = create_store ();
 fill_store ($model, get_pixbufs ($win));
 
-ok (eval { $cview->set_model ($model); 1; }, '$cview->set_model');
-# there is no get, or property???
+ok (eval { $cview->set_model (undef);
+           $cview->set_model ($model);
+           1; },
+    '$cview->set_model');
+
+SKIP: {
+	skip 'new 2.16 stuff', 2
+		unless Gtk2->CHECK_VERSION(2, 16, 0);
+
+	$cview->set_model (undef);
+	is($cview->get_model(), undef, '$cview->get_model with undef');
+
+	$cview->set_model ($model);
+	is($cview->get_model(), $model, '$cview->get_model');
+}
 
 my $treepath = Gtk2::TreePath->new_from_string ('0');
 $cview->set_displayed_row ($treepath);
