@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # vim: set syntax=perl :
 #
-# $Id: GtkDialog.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 #
 
 #########################

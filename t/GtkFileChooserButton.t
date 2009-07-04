@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 9,
   at_least_version => [2, 6, 0, "GtkFileChooserButton is new in 2.6"];
 
-# $Id: GtkFileChooserButton.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $dialog = Gtk2::FileChooserDialog -> new("Urgs", undef, "open",
                                             "gtk-cancel" => "cancel",

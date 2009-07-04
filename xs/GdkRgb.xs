@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GdkRgb.xs 2059 2008-10-05 21:34:44Z tsch $
+ * $Id$
  */
  #include "gtk2perl.h"
 

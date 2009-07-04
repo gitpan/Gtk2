@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 3, noinit => 1;
 
-# $Id: GtkEventBox.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $box = Gtk2::EventBox -> new();
 isa_ok($box, "Gtk2::EventBox");

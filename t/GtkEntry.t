@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 61;
 
-# $Id: GtkEntry.t 2157 2009-03-17 18:21:36Z tsch $
+# $Id$
 
 my $entry = Gtk2::Entry -> new();
 isa_ok($entry, "Gtk2::Entry");

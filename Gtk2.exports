@@ -16,7 +16,7 @@
 # along with this library; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
 #
-# $Id: Gtk2.exports 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 #
 
 @exports = qw(
@@ -31,7 +31,6 @@ newSVGdkGeometry
 newSVGdkPixbufFormat
 newSVGtkTargetEntry
 newSVGtkTargetList
-newSVPangoRectangle
 SvGdkAtom
 SvGdkGCValues
 SvGdkGeometry
@@ -39,6 +38,5 @@ SvGdkGeometryReal
 SvGdkPixbufFormat
 SvGtkTargetEntry
 SvGtkTargetList
-SvPangoRectangle
 );
 1;

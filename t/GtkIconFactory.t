@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 24;
 
-# $Id: GtkIconFactory.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $pixbuf = Gtk2::Gdk::Pixbuf -> new("rgb", 0, 8, 10, 10);
 my $style = Gtk2::Style -> new();

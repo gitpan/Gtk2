@@ -3,7 +3,7 @@
 use strict;
 use Gtk2::TestHelper tests => 10;
 
-# $Id: GtkRange.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 10);
 

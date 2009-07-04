@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id: GtkRecentAction.t 1904 2008-03-10 20:54:37Z tsch $
+# $Id$
 
 use Gtk2::TestHelper
 	at_least_version => [2, 12, 0, 'GtkRecentAtionc: new in 2.12'],

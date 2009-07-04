@@ -1,5 +1,5 @@
 #
-# $Id: TestHelper.pm 2148 2009-02-22 16:46:43Z tsch $
+# $Id$
 #
 
 package Gtk2::TestHelper;

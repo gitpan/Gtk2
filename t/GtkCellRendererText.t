@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 1, noinit => 1;
 
-# $Id: GtkCellRendererText.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $text = Gtk2::CellRendererText -> new();
 isa_ok($text, "Gtk2::CellRendererText");

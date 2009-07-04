@@ -1,6 +1,6 @@
 # vim: set filetype=perl :
 #
-# $Id: GdkEvent.t 2124 2009-02-06 13:34:15Z tsch $
+# $Id$
 #
 
 #########################

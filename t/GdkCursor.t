@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 8;
 
-# $Id: GdkCursor.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $cursor = Gtk2::Gdk::Cursor -> new("watch");
 isa_ok($cursor, "Gtk2::Gdk::Cursor");

@@ -14,7 +14,7 @@ if (! (UNIVERSAL::can("Gtk2::Gdk::Cairo::Context", "create") &&
   plan tests => 2;
 }
 
-# $Id: GdkCairo.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $window = Gtk2::Window -> new();
 $window -> realize();

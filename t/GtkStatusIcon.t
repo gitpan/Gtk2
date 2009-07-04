@@ -7,7 +7,7 @@ use Gtk2::TestHelper
   tests => 36,
   at_least_version => [2, 10, 0, "Gtk2::StatusIcon is new in 2.10"];
 
-# $Id: GtkStatusIcon.t 2157 2009-03-17 18:21:36Z tsch $
+# $Id$
 
 my $icon;
 

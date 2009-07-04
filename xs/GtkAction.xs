@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkAction.xs 2061 2008-10-18 14:31:18Z tsch $
+ * $Id$
  */
 
 #include "gtk2perl.h"

@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkTooltip.xs 2067 2008-10-18 22:24:19Z tsch $
+ * $Id$
  */
 
 #include "gtk2perl.h"

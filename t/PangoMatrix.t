@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 48, noinit => 1;
 
-# $Id: PangoMatrix.t 2033 2008-09-06 20:11:04Z tsch $
+# $Id$
 
 SKIP: {
   skip("PangoMatrix is new in 1.6", 44)

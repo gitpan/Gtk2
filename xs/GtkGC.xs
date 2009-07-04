@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkGC.xs 2063 2008-10-18 15:42:24Z tsch $
+ * $Id$
  */
 
 #include "gtk2perl.h"

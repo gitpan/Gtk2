@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 19;
 
-# $Id: GtkCellEditable.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 package EditableTest;
 

@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 5,
   at_least_version => [2, 6, 0, "GtkMenuToolButton is new in 2.6"];
 
-# $Id: GtkMenuToolButton.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $label = Gtk2::Label -> new("Urgs");
 

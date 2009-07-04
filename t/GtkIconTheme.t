@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkIconTheme.t 2127 2009-02-06 13:51:38Z tsch $
+# $Id$
 #
 
 use Gtk2::TestHelper

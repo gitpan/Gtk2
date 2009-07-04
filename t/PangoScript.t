@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 8;
 
-# $Id: PangoScript.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 SKIP: {
   skip("PangoScript is new in 1.4", 8)

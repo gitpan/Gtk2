@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkBuildable.xs 2117 2009-01-20 19:21:53Z tsch $
+ * $Id$
  */
 
 #include "gtk2perl.h"

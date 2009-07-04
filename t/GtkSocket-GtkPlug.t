@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkSocket-GtkPlug.t 2087 2008-11-15 14:03:39Z tsch $
+# $Id$
 #
 
 # ...despite patches that have been around for a long time, no win32

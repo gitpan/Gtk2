@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 1, noinit => 1;
 
-# $Id: GtkCellRendererPixbuf.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $pixbuf = Gtk2::CellRendererPixbuf -> new();
 isa_ok($pixbuf, "Gtk2::CellRendererPixbuf");

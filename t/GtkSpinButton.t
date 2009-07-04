@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 12;
 
-# $Id: GtkSpinButton.t 2068 2008-10-18 22:29:29Z tsch $
+# $Id$
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 0);
 

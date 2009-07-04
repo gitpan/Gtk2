@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 6;
 
-# $Id: GtkMessageDialog.t 2067 2008-10-18 22:24:19Z tsch $
+# $Id$
 
 my $dialog = Gtk2::MessageDialog -> new(undef,
                                         "destroy-with-parent",

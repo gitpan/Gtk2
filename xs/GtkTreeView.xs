@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkTreeView.xs 2076 2008-10-26 10:35:22Z tsch $
+ * $Id$
  */
 
 #include "gtk2perl.h"

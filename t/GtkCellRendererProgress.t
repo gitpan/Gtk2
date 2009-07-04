@@ -4,7 +4,7 @@ use Gtk2::TestHelper
   tests => 1, noinit => 1,
   at_least_version => [2, 6, 0, "GtkCellRendererProgress is new in 2.6"];
 
-# $Id: GtkCellRendererProgress.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $text = Gtk2::CellRendererProgress -> new();
 isa_ok($text, "Gtk2::CellRendererProgress");

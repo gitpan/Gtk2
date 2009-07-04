@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkEntryCompletion.xs 2098 2008-12-16 19:36:25Z tsch $
+ * $Id$
  */
 
 #include "gtk2perl.h"

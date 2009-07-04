@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 41;
 
-# $Id: GtkRc.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $button = Gtk2::Button -> new("Bla");
 my $font = Gtk2::Pango::FontDescription -> from_string("Sans 12");

@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 45;
 
-# $Id: GtkTextView.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $window = Gtk2::Window -> new();
 my $buffer = Gtk2::TextBuffer -> new();

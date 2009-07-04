@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   tests => 1,
   at_least_version => [2, 12, 0, 'GtkVolumeButton appeared in 2.12'];
 
-# $Id: GtkVolumeButton.t 1904 2008-03-10 20:54:37Z tsch $
+# $Id$
 
 my $button = Gtk2::VolumeButton->new;
 isa_ok ($button, 'Gtk2::VolumeButton');

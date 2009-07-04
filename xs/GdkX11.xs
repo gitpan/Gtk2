@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GdkX11.xs 2131 2009-02-06 14:10:48Z tsch $
+ * $Id$
  */
 #include "gtk2perl.h"
 #ifdef GDK_WINDOWING_X11

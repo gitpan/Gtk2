@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: GtkToolItem.t 2067 2008-10-18 22:24:19Z tsch $
+# $Id$
 #
 
 use Gtk2::TestHelper

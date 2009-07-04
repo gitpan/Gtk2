@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: GtkCellRenderer.t 2118 2009-01-20 19:47:19Z tsch $
+# $Id$
 
 use Gtk2::TestHelper tests => 20;
 use strict;

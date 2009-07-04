@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   tests => 45,
   at_least_version => [2, 12, 0, 'GtkBuildable: it appeared in 2.12'];
 
-# $Id: GtkBuilder.t 2067 2008-10-18 22:24:19Z tsch $
+# $Id$
 
 my $builder;
 my $ui = <<EOD;

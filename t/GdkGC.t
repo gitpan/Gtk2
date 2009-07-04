@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 35;
 
-# $Id: GdkGC.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $black = Gtk2::Gdk::Color -> new(0, 0, 0);
 

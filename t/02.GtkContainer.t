@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # vim: set filetype=perl :
 
-# $Id: 02.GtkContainer.t 2067 2008-10-18 22:24:19Z tsch $
+# $Id$
 
 use Gtk2::TestHelper tests => 30;
 

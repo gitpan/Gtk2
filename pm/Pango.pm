@@ -1,5 +1,5 @@
 #
-# $Id: Pango.pm 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 #
 
 package Gtk2::Pango;

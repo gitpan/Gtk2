@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #
-# $Id: thread_usage.pl 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 #
 # -rm
 #

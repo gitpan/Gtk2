@@ -4,7 +4,7 @@ use Gtk2::TestHelper tests => 10;
 
 use utf8; # for the umlaut test
 
-# $Id: GtkEditable.t 2068 2008-10-18 22:29:29Z tsch $
+# $Id$
 
 my $adjustment = Gtk2::Adjustment -> new(0, 0, 100, 1, 5, 0);
 my $spin = Gtk2::SpinButton -> new($adjustment, 0.2, 1);

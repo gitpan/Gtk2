@@ -3,7 +3,7 @@
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
- * $Id: GtkTreeModel.xs 2147 2009-02-22 16:12:47Z tsch $
+ * $Id$
  */
 
 #include "gtk2perl.h"

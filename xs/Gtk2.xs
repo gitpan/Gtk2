@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: Gtk2.xs 2147 2009-02-22 16:12:47Z tsch $
+ * $Id$
  */
 
 #include "gtk2perl.h"

@@ -18,7 +18,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307  USA.
  * 
  *
- * $Id: gtk2perl.h 2139 2009-02-13 15:35:29Z tsch $
+ * $Id$
  */
 
 #ifndef _GTK2PERL_H_

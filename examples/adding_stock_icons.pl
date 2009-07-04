@@ -6,7 +6,7 @@
 # 
 # -rm
 # 
-# $Id: adding_stock_icons.pl 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 #
 
 use strict;

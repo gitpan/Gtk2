@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkGammaCurve.xs 2054 2008-10-05 12:49:36Z tsch $
+ * $Id$
  */
 
 #include "gtk2perl.h"

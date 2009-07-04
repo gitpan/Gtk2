@@ -16,7 +16,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
  * Boston, MA  02111-1307  USA.
  *
- * $Id: GtkStyle.xs 2158 2009-03-17 18:42:54Z tsch $
+ * $Id$
  */
 
 #include "gtk2perl.h"

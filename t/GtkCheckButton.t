@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 8;
 
-# $Id: GtkCheckButton.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $button = Gtk2::CheckButton -> new();
 isa_ok($button, "Gtk2::CheckButton");

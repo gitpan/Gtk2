@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 12;
 
-# $Id: GtkColorSelection.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $selection = Gtk2::ColorSelection -> new();
 isa_ok($selection, "Gtk2::ColorSelection");

@@ -17,7 +17,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330, 
 # Boston, MA  02111-1307  USA.
 #
-# $Id: GdkPixbufLoader.t 2120 2009-02-06 13:04:55Z tsch $
+# $Id$
 
 use strict;
 use warnings;

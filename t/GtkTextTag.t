@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 2;
 
-# $Id: GtkTextTag.t 2054 2008-10-05 12:49:36Z tsch $
+# $Id$
 
 my $tag = Gtk2::TextTag -> new("bla");
 isa_ok($tag, "Gtk2::TextTag");

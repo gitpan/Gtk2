@@ -2,7 +2,7 @@
 use strict;
 use Gtk2::TestHelper tests => 49;
 
-# $Id: GdkProperty.t 2069 2008-10-19 10:49:55Z tsch $
+# $Id$
 
 my $window = Gtk2::Window -> new();
 $window -> realize();

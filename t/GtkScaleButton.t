@@ -5,7 +5,7 @@ use Gtk2::TestHelper
   tests => 9,
   at_least_version => [2, 12, 0, 'GtkScaleButton appeared in 2.12'];
 
-# $Id: GtkScaleButton.t 2067 2008-10-18 22:24:19Z tsch $
+# $Id$
 
 my $button;
 
