@@ -229,6 +229,7 @@ isa_ok($view -> get_background_area($path, $view_column_two), "Gtk2::Gdk::Rectan
 isa_ok($view -> get_background_area(undef, $view_column_two), "Gtk2::Gdk::Rectangle");
 isa_ok($view -> get_background_area($path, undef), "Gtk2::Gdk::Rectangle");
 
+$view -> expand_all();
 $view -> set_cursor(Gtk2::TreePath -> new("1:0"), $view_column_one, 0);
 is(($view -> get_cursor())[0] -> to_string(), "1:0");
 is(($view -> get_cursor())[1], $view_column_one);
@@ -614,6 +615,7 @@ SKIP: {
 	skip("set_cursor_on_cell is new in 2.2.x", 2)
 		unless Gtk2->CHECK_VERSION (2, 2, 0);
 
+	$view -> expand_all();
 	$view -> set_cursor_on_cell(Gtk2::TreePath -> new("1:1"),
 				    $view_column,
 				    $cell_renderer,

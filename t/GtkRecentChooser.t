@@ -42,8 +42,8 @@ $chooser -> set_sort_func(sub { warn join ", ", @_; });
 # --------------------------------------------------------------------------- #
 
 use Cwd qw(cwd);
-my $uri_one = "file://" . cwd() . "/" . $0;
-my $uri_two = "file://" . $^X;
+my $uri_one = Glib::filename_to_uri(cwd() . "/" . $0, undef);
+my $uri_two = Glib::filename_to_uri($^X, undef);
 
 $manager -> purge_items();
 $manager -> add_item($uri_one);
@@ -71,8 +71,9 @@ $chooser -> set_select_multiple(TRUE);
 $chooser -> select_all();
 $chooser -> unselect_all();
 
-is_deeply([$chooser -> get_uris()], [$uri_two, $uri_one]);
-is_deeply([map { $_ -> get_uri() } $chooser -> get_items()], [$uri_two, $uri_one]);
+my @expected_uris = sort ($uri_two, $uri_one);
+is_deeply([sort $chooser -> get_uris()], \@expected_uris);
+is_deeply([sort map { $_ -> get_uri() } $chooser -> get_items()], \@expected_uris);
 
 my $filter_one = Gtk2::RecentFilter -> new();
 my $filter_two = Gtk2::RecentFilter -> new();
