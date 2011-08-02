@@ -1,32 +1,33 @@
---- #YAML:1.0
-name:               Gtk2
-version:            1.223
-abstract:           Perl interface to the 2.x series of the Gimp Toolkit library
-author:  []
-license:            unknown
-distribution_type:  module
-configure_requires:
-    Cairo:                1.000
-    ExtUtils::Depends:    0.300
-    ExtUtils::MakeMaker:  0
-    ExtUtils::PkgConfig:  1.030
-    Glib:                 1.220
-    Pango:                1.220
+---
+abstract: 'Perl interface to the 2.x series of the Gimp Toolkit library'
+author:
+  - unknown
 build_requires:
-    ExtUtils::MakeMaker:  0
-requires:
-    Cairo:                1.000
-    ExtUtils::Depends:    0.300
-    ExtUtils::PkgConfig:  1.030
-    Glib:                 1.220
-    Pango:                1.220
-no_index:
-    directory:
-        - t
-        - inc
-        - tools
-        - xs
-generated_by:       ExtUtils::MakeMaker version 6.56
+  ExtUtils::MakeMaker: 0
+configure_requires:
+  Cairo: 1.000
+  ExtUtils::Depends: 0.300
+  ExtUtils::MakeMaker: 0
+  ExtUtils::PkgConfig: 1.030
+  Glib: 1.220
+  Pango: 1.220
+dynamic_config: 1
+generated_by: 'ExtUtils::MakeMaker version 6.58, CPAN::Meta::Converter version 2.110930001'
+license: unknown
 meta-spec:
-    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
-    version:  1.4
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Gtk2
+no_index:
+  directory:
+    - t
+    - inc
+    - tools
+    - xs
+requires:
+  Cairo: 1.000
+  ExtUtils::Depends: 0.300
+  ExtUtils::PkgConfig: 1.030
+  Glib: 1.220
+  Pango: 1.220
+version: 1.224
