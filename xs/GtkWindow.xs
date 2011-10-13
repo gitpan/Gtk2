@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006, 2009 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -237,16 +237,14 @@ gtk_window_get_gravity (window)
 	GtkWindow * window
 
 =for apidoc
-
 =for signature $window->set_geometry_hints ($geometry_widget, $geometry)
 =for signature $window->set_geometry_hints ($geometry_widget, $geometry, $geom_mask)
-
-=for arg geometry (Gtk2::Gdk::Geometry)
+=for arg geometry_ref (__hide__)
+=for arg geom_mask_sv (__hide__)
+=for arg geometry (scalar) Gtk2::Gdk::Geometry or hashref
 =for arg geom_mask (Gtk2::Gdk::WindowHints) optional, usually inferred from I<$geometry>
-
-The geom_mask argument, describing which fields in the geometry are valid, is
-optional.  If omitted it will be inferred from the geometry itself.
-
+See L<C<Gtk2::Gdk::Window::set_geometry_hints>|Gtk2::Gdk::Window/$window-E<gt>B<set_geometry_hints> ($geometry)>
+on the $geometry and $geom_mask arguments.
 =cut
 ## void gtk_window_set_geometry_hints (GtkWindow *window, GtkWidget *geometry_widget, GdkGeometry *geometry, GdkWindowHints geom_mask)
 void
@@ -692,7 +690,7 @@ const gchar_ornull * gtk_window_get_icon_name (GtkWindow  *window);
 ##  void gtk_window_set_default_icon_name (const gchar *name);
 void
 gtk_window_set_default_icon_name (class, name)
-	const gchar *name
+	const gchar_ornull *name
     C_ARGS:
 	name
 
@@ -734,6 +732,34 @@ GtkWidget_ornull * gtk_window_get_default_widget (GtkWindow *window);
 
 #endif /* 2.14 */
 
+#if GTK_CHECK_VERSION (2, 16, 0)
+
+=for apidoc
+Gets the value set by C<< Gtk2::Window->set_default_icon_name >>.
+=cut
+## gchar * gtk_window_get_icon_name (void)
+const gchar_ornull *
+gtk_window_get_default_icon_name (class);
+    C_ARGS: /* void */
+
+#endif /* 2.16 */
+
+#if GTK_CHECK_VERSION (2, 20, 0)
+
+GtkWindowType gtk_window_get_window_type (GtkWindow *window);
+
+void gtk_window_set_mnemonics_visible (GtkWindow *window, gboolean setting);
+
+gboolean gtk_window_get_mnemonics_visible (GtkWindow *window);
+
+#endif /* 2.20 */
+
+#if GTK_CHECK_VERSION (2, 22, 0)
+
+gboolean gtk_window_has_group (GtkWindow *window);
+
+#endif /* 2.22 */
+
 MODULE = Gtk2::Window	PACKAGE = Gtk2::WindowGroup	PREFIX = gtk_window_group_
 
 ## GtkWindowGroup * gtk_window_group_new (void)
@@ -769,6 +795,12 @@ gtk_window_group_list_windows (GtkWindowGroup *window_group)
 	g_list_free (list);
 
 #endif /* 2.14 */
+
+#if GTK_CHECK_VERSION (2, 22, 0)
+
+GtkWidget * gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
+
+#endif /* 2.22 */
 
  ## er... dunno about these.
  ##

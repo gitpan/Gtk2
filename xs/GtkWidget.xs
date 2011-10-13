@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006, 2009, 2010 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
@@ -62,8 +62,6 @@ _INSTALL_OVERRIDES (const char * package)
     }
 }
 
-
-
 MODULE = Gtk2::Widget	PACKAGE = Gtk2::Requisition
 
 gint
@@ -118,17 +116,6 @@ types.)
 
     Gtk2::EVENT_STOP         # true
     Gtk2::EVENT_PROPAGATE    # false
-
-=cut
-
-=for position post_signals
-
-Note that currently signal_chain_from_overridden doesn't work from a
-size-request class closure, because the Gtk2::Requisition parameter
-you pass ends up getting copied, so changes made to it by the
-superclass are lost.  You can still write a class closure for
-size-request, but you'll have to calculate the desired size by
-yourself, you can't chain up to ask your superclass what it thinks.
 
 =cut
 
@@ -642,8 +629,8 @@ gtk_widget_remove_accelerator (widget, accel_group, accel_key, accel_mods)
 void
 gtk_widget_set_accel_path (widget, accel_path, accel_group)
 	GtkWidget     * widget
-	const gchar   * accel_path
-	GtkAccelGroup * accel_group
+	const gchar_ornull   * accel_path
+	GtkAccelGroup_ornull * accel_group
 
  #GList*     gtk_widget_list_accel_closures (GtkWidget	       *widget);
 
@@ -823,9 +810,7 @@ GdkExtensionMode
 gtk_widget_get_extension_events (widget)
 	GtkWidget	*widget
 
-## allow NULL for those crazy folks who call get_toplevel before a
-## widget has been added to a container
-GtkWidget_ornull *
+GtkWidget *
 gtk_widget_get_toplevel	(widget)
 	GtkWidget * widget
 
@@ -937,9 +922,9 @@ PangoContext *
 gtk_widget_get_pango_context (GtkWidget *widget)
 
 PangoLayout_noinc *
-gtk_widget_create_pango_layout (widget, text)
+gtk_widget_create_pango_layout (widget, text=NULL)
 	GtkWidget   * widget
-        const gchar *text
+        const gchar_ornull *text
 
  ### may return NULL if stockid isn't known.... but then, it will
  ### croak on converting unknown stock ids, too.
@@ -956,7 +941,7 @@ gtk_widget_render_icon (widget, stock_id, size, detail=NULL)
 
 void gtk_widget_set_composite_name (GtkWidget *widget, const gchar *name)
 
-gchar* gtk_widget_get_composite_name (GtkWidget *widget)
+gchar_ornull* gtk_widget_get_composite_name (GtkWidget *widget)
  
 #/* Descend recursively and set rc-style on all widgets without user styles */
 void gtk_widget_reset_rc_styles (GtkWidget *widget)
@@ -1101,7 +1086,7 @@ gtk_widget_get_default_direction (class);
 
  #/* Counterpart to gdk_window_shape_combine_mask.
  # */
-void gtk_widget_shape_combine_mask (GtkWidget *widget, GdkBitmap *shape_mask, gint offset_x, gint offset_y);
+void gtk_widget_shape_combine_mask (GtkWidget *widget, GdkBitmap_ornull *shape_mask, gint offset_x, gint offset_y);
 
 
 
@@ -1163,6 +1148,95 @@ gtk_widget_path (GtkWidget *widget)
 #	GtkWidgetClass * klass
 #	guint          * n_properties
 
+=for apidoc Gtk2::Widget::list_style_properties
+=for signature list = $widget_or_class_name->list_style_properties
+=for arg ... (__hide__)
+Return a list of C<Glib::ParamSpec> objects which are the style
+properties available on C<$widget_or_class_name>.  See L<Glib::Object>
+C<list_properties> for the fields in a ParamSpec.
+=cut
+=for apidoc Gtk2::Widget::find_style_property
+=for signature pspec or undef = $widget_or_class_name->find_style_property ($name)
+=for arg name (string)
+=for arg ... (__hide__)
+Return a C<Glib::ParamSpec> for style property C<$name> on widget
+C<$widget_or_class_name>.  If there's no property C<$name> then return
+C<undef>.  See L<Glib::Object> C<list_properties> for the fields in a
+ParamSpec.
+=cut
+void
+find_style_property (widget_or_class_name, ...)
+	SV * widget_or_class_name
+    ALIAS:
+        Gtk2::Widget::list_style_properties = 1
+    PREINIT:
+	GType type;
+	gchar *name = NULL;
+	GtkWidgetClass *widget_class;
+    PPCODE:
+	/* ENHANCE-ME: share this SV to GType lookup code with
+	   Glib::Object::find_property and Gtk2::Container::find_child_property
+	   and probably other places.  Might pass GTK_TYPE_WIDGET to say it
+	   should be a widget. */
+	if (gperl_sv_is_defined (widget_or_class_name) &&
+	    SvROK (widget_or_class_name)) {
+		GtkWidget * widget = SvGtkWidget (widget_or_class_name);
+		if (!widget)
+			croak ("wha?  NULL widget in list_style_properties");
+		type = G_OBJECT_TYPE (widget);
+	} else {
+		type = gperl_object_type_from_package
+			(SvPV_nolen (widget_or_class_name));
+		if (!type)
+			croak ("package %s is not registered with GPerl",
+			       SvPV_nolen (widget_or_class_name));
+	}
+
+	switch (ix) {
+	case 0:
+		if (items != 2)
+			croak ("Usage: Gtk2::Widget::find_style_property (class, name)");
+		name = SvGChar (ST (1));
+		break;
+	default: /* ix==1 */
+		if (items != 1)
+			croak ("Usage: Gtk2::Widget::list_style_properties (class)");
+		break;
+	}
+	if (! g_type_is_a (type, GTK_TYPE_WIDGET))
+		croak ("Not a Gtk2::Widget");
+
+	/* classes registered by perl are kept alive by the bindings.
+	 * those coming straight from C are not.  if we had an actual
+	 * widget, the class will be alive, but if we just had a
+	 * package, the class may not exist yet.  thus, we'll have to
+	 * do an honest ref here, rather than a peek.
+	 */
+	widget_class = g_type_class_ref (type);
+
+	if (ix == 0) {
+		GParamSpec *pspec
+		  = gtk_widget_class_find_style_property
+		      (widget_class, name);
+		XPUSHs (pspec
+			? sv_2mortal (newSVGParamSpec (pspec))
+			: &PL_sv_undef);
+	}
+	else if (ix == 1) {
+		GParamSpec **props;
+		guint n_props, i;
+		props = gtk_widget_class_list_style_properties
+			  (widget_class, &n_props);
+		if (n_props) {
+			EXTEND (SP, n_props);
+			for (i = 0; i < n_props; i++)
+				PUSHs (sv_2mortal (newSVGParamSpec (props[i])));
+		}
+		g_free (props); /* must free even when n_props==0 */
+	}
+
+	g_type_class_unref (widget_class);
+
 
 #GtkClipboard* gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
 GtkClipboard *
@@ -1216,6 +1290,8 @@ void gtk_widget_remove_mnemonic_label (GtkWidget *widget, GtkWidget *label);
 
 void gtk_widget_input_shape_combine_mask (GtkWidget *widget, GdkBitmap_ornull *shape_mask, gint offset_x, gint offset_y);
 
+gboolean gtk_widget_is_composited (GtkWidget *widget);
+
 #endif /* 2.10 */
 
 #if GTK_CHECK_VERSION(2, 12, 0)
@@ -1238,7 +1314,7 @@ void gtk_widget_set_tooltip_markup (GtkWidget *widget, const gchar_ornull *marku
 
 gchar_own * gtk_widget_get_tooltip_markup (GtkWidget *widget);
 
-void gtk_widget_modify_cursor (GtkWidget *widget, const GdkColor *primary, const GdkColor *secondary);
+void gtk_widget_modify_cursor (GtkWidget *widget, const GdkColor_ornull *primary, const GdkColor_ornull *secondary);
 
 void gtk_widget_set_has_tooltip (GtkWidget *widget, gboolean has_tooltip);
 
@@ -1250,4 +1326,96 @@ gboolean gtk_widget_get_has_tooltip (GtkWidget *widget);
 
 GdkPixmap_noinc_ornull * gtk_widget_get_snapshot (GtkWidget *widget,  GdkRectangle_ornull *clip_rect=NULL);
 
+GdkWindow_ornull * gtk_widget_get_window (GtkWidget *widget);
+
 #endif /* 2.14 */
+
+#if GTK_CHECK_VERSION (2, 18, 0)
+
+void gtk_widget_set_allocation (GtkWidget *widget, const GdkRectangle *allocation);
+
+GdkRectangle_copy * gtk_widget_get_allocation (GtkWidget *widget)
+    PREINIT:
+        GdkRectangle allocation;
+    CODE:
+        gtk_widget_get_allocation (widget, &allocation);
+        RETVAL = &allocation;
+    OUTPUT:
+        RETVAL
+
+gboolean gtk_widget_get_app_paintable (GtkWidget *widget);
+
+gboolean gtk_widget_get_can_default (GtkWidget *widget);
+
+void gtk_widget_set_can_default (GtkWidget *widget, gboolean can_default);
+
+gboolean gtk_widget_get_can_focus (GtkWidget *widget);
+
+void gtk_widget_set_can_focus (GtkWidget *widget, gboolean can_focus);
+
+gboolean gtk_widget_get_double_buffered (GtkWidget *widget);
+
+void gtk_widget_set_has_window (GtkWidget *widget, gboolean has_window);
+
+gboolean gtk_widget_get_has_window (GtkWidget *widget);
+
+void gtk_widget_set_receives_default (GtkWidget *widget, gboolean receives_default);
+
+gboolean gtk_widget_get_receives_default (GtkWidget *widget);
+
+gboolean gtk_widget_get_sensitive (GtkWidget *widget);
+
+GtkStateType gtk_widget_get_state (GtkWidget *widget);
+
+gboolean gtk_widget_get_visible (GtkWidget *widget);
+
+void gtk_widget_set_visible (GtkWidget *widget, gboolean visible);
+
+# These conflict with our custom accessors and don't provide new
+# functionality. So just skip them for now.
+#gboolean gtk_widget_has_default (GtkWidget *widget);
+#gboolean gtk_widget_has_focus (GtkWidget *widget);
+#gboolean gtk_widget_has_grab (GtkWidget *widget);
+
+gboolean gtk_widget_is_drawable (GtkWidget *widget);
+
+gboolean gtk_widget_is_sensitive (GtkWidget *widget);
+
+gboolean gtk_widget_is_toplevel (GtkWidget *widget);
+
+void gtk_widget_set_window (GtkWidget *widget, GdkWindow *window);
+
+#endif /* 2.18 */
+
+#if GTK_CHECK_VERSION (2, 20, 0)
+
+void gtk_widget_set_realized (GtkWidget *widget, gboolean realized);
+
+gboolean gtk_widget_get_realized (GtkWidget *widget);
+
+void gtk_widget_set_mapped (GtkWidget *widget, gboolean mapped);
+
+gboolean gtk_widget_get_mapped (GtkWidget *widget);
+
+# void gtk_widget_get_requisition (GtkWidget *widget, GtkRequisition *requisition)
+GtkRequisition_copy *
+gtk_widget_get_requisition (GtkWidget *widget)
+    PREINIT:
+	GtkRequisition requisition;
+    CODE:
+	gtk_widget_get_requisition (widget, &requisition);
+	RETVAL = &requisition;
+    OUTPUT:
+	RETVAL
+
+gboolean gtk_widget_has_rc_style (GtkWidget *widget);
+
+void gtk_widget_style_attach (GtkWidget *style);
+
+#endif /* 2.20 */
+
+#if GTK_CHECK_VERSION (2, 22, 0)
+
+gboolean gtk_widget_send_focus_change (GtkWidget *widget, GdkEvent *event);
+
+#endif /* 2.22 */

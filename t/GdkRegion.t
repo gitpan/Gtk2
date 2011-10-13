@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 22, noinit => 1;
+use Gtk2::TestHelper tests => 35, noinit => 1;
 
 # $Id$
 
@@ -9,6 +9,20 @@ my $rectangle_two = Gtk2::Gdk::Rectangle -> new(23, 42, 15, 15);
 
 isa_ok($rectangle_one -> intersect($rectangle_two), "Gtk2::Gdk::Rectangle");
 isa_ok($rectangle_one -> union($rectangle_two), "Gtk2::Gdk::Rectangle");
+
+{
+  my $pspec = Glib::ParamSpec->boxed ('bb','bb','blurb',
+				      'Gtk2::Gdk::Rectangle',
+				      Glib::G_PARAM_READWRITE);
+  my $rect = Gtk2::Gdk::Rectangle->new (1,2,3,4);
+  my ($flag, $new) = $pspec->value_validate($rect);
+  undef $rect;
+  ok (! $flag, 'value_validate() rectangle unchanged');
+  is ($new->x, 1, );
+  is ($new->y, 2);
+  is ($new->width, 3);
+  is ($new->height, 4);
+}
 
 my $region = Gtk2::Gdk::Region -> new();
 isa_ok($region, "Gtk2::Gdk::Region");
@@ -51,6 +65,25 @@ $region -> spans_intersect_foreach([24, 43, 5,
   is($data, "bla");
 }, "bla");
 
+{
+  my $callback = 0;
+  $region -> spans_intersect_foreach([], 1, sub { $callback = 1; });
+  is($callback, 0, 'spans_intersect_foreach() 0 coords - no callback');
+}
+
+ok (! eval { $region->spans_intersect_foreach([1], 1, sub {}); 1 },
+      'spans_intersect_foreach() 1 coord - expect error');
+ok (! eval { $region->spans_intersect_foreach([1,2], 1, sub {}); 1 },
+      'spans_intersect_foreach() 2 coords - expect error');
+ok (  eval { $region->spans_intersect_foreach([1,2,3], 1, sub {}); 1 },
+      'spans_intersect_foreach() 3 coords - expect good');
+ok (! eval { $region->spans_intersect_foreach([1,2,3,4], 1, sub {}); 1 },
+      'spans_intersect_foreach() 4 coords - expect error');
+ok (! eval { $region->spans_intersect_foreach([1,2,3,4,5], 1, sub {}); 1 },
+      'spans_intersect_foreach() 5 coords - expect error');
+ok (  eval { $region->spans_intersect_foreach([1,2,3,4,5,6], 1, sub {}); 1 },
+      'spans_intersect_foreach() 6 coords - expect good');
+
 $region -> offset(5, 5);
 $region -> shrink(5, 5);
 $region -> union_with_rect($rectangle_two);
@@ -62,7 +95,15 @@ $region -> union($region_two);
 $region -> subtract($region_two);
 $region -> xor($region_two);
 
+SKIP: {
+  skip "new 2.18 stuff", 1
+	unless Gtk2 -> CHECK_VERSION(2, 18, 0);
+	my $region= Gtk2::Gdk::Region -> rectangle($rectangle_one);
+	ok(!$region->rect_equal($rectangle_two), 'rect_equal');
+}
+
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003, 2010 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

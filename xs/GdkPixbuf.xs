@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2008 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2008, 2010, 2011 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,15 +19,15 @@
  * $Id$
  */
 
+#define GDK_PIXBUF_ENABLE_BACKEND 1 /* for gdk_pixbuf_set_option() prototype */
 #include "gtk2perl.h"
 
 static void
 gtk2perl_pixbuf_destroy_notify (guchar * pixels,
                                 gpointer data)
 {
-	PERL_UNUSED_VAR (pixels);
-
-	gperl_sv_free ((SV*)data);
+	PERL_UNUSED_VAR (data);
+	Safefree (pixels);
 }
 
 #if GTK_CHECK_VERSION (2, 2, 0)
@@ -42,46 +42,49 @@ newSVGdkPixbufFormat (GdkPixbufFormat * format)
 	HV * stash, * hv = newHV ();
 
 	s = gdk_pixbuf_format_get_name (format);
-	hv_store (hv, "name", 4, newSVGChar (s), 0);
+	gperl_hv_take_sv_s (hv, "name", newSVGChar (s));
 	g_free (s);
 
 	s = gdk_pixbuf_format_get_description (format);
-	hv_store (hv, "description", 11, newSVGChar (s), 0);
+	gperl_hv_take_sv_s (hv, "description", newSVGChar (s));
 	g_free (s);
 
 	strv = gdk_pixbuf_format_get_mime_types (format);
 	av = newAV ();
 	for (j = 0 ; strv && strv[j] ; j++)
 		av_store (av, j, newSVGChar (strv[j]));
-	hv_store (hv, "mime_types", 10, newRV_noinc ((SV*) av), 0);
+	gperl_hv_take_sv_s (hv, "mime_types", newRV_noinc ((SV*) av));
 	g_strfreev (strv);
 
 	strv = gdk_pixbuf_format_get_extensions (format);
 	av = newAV ();
 	for (j = 0 ; strv && strv[j] ; j++)
 		av_store (av, j, newSVGChar (strv[j]));
-	hv_store (hv, "extensions", 10, newRV_noinc ((SV*) av), 0);
+	gperl_hv_take_sv_s (hv, "extensions", newRV_noinc ((SV*) av));
 	g_strfreev (strv);
+
+	gperl_hv_take_sv_s (hv, "is_writable",
+			    newSVuv (gdk_pixbuf_format_is_writable (format)));
 
 #if GTK_CHECK_VERSION (2,6,0)
 {
 	gboolean b;
 
 	b = gdk_pixbuf_format_is_scalable (format);
-	hv_store (hv, "is_scalable", 11, newSVuv (b), 0);
+	gperl_hv_take_sv_s (hv, "is_scalable", newSVuv (b));
 
 	b = gdk_pixbuf_format_is_disabled (format);
-	hv_store (hv, "is_disabled", 11, newSVuv (b), 0);
+	gperl_hv_take_sv_s (hv, "is_disabled", newSVuv (b));
 
 	s = gdk_pixbuf_format_get_license (format);
-	hv_store (hv, "license", 7, newSVGChar (s), 0);
+	gperl_hv_take_sv_s (hv, "license", newSVGChar (s));
 	g_free (s);
 }
 #endif
 
 	/* Store the original format pointer in the hash so that
 	   SvGdkPixbufFormat can retrieve and return it. */
-	sv_magic ((SV*) hv, 0, PERL_MAGIC_ext, (const char *)format, 0);
+	_gperl_attach_mg ((SV*) hv, format);
 
 	stash = gv_stashpv ("Gtk2::Gdk::PixbufFormat", TRUE);
 	return sv_bless ((SV*) newRV_noinc ((SV*) hv), stash);
@@ -92,7 +95,8 @@ SvGdkPixbufFormat (SV * sv)
 {
 	MAGIC *mg;
 
-	if (!gperl_sv_is_defined (sv) || !SvROK (sv) || !(mg = mg_find (SvRV (sv), PERL_MAGIC_ext)))
+	if (!gperl_sv_is_defined (sv) || !SvROK (sv)
+	    || !(mg = _gperl_find_mg (SvRV (sv))))
 		return NULL;
 
 	return (GdkPixbufFormat *) mg->mg_ptr;
@@ -251,7 +255,7 @@ gdk_pixbuf_get_from_drawable (dest_or_class, src, cmap, src_x, src_y, dest_x, de
     PREINIT:
 	GdkPixbuf * pixbuf, * dest;
     CODE:
-	dest = SvROK (dest_or_class)
+	dest = (gperl_sv_is_defined (dest_or_class) && SvROK (dest_or_class))
 	     ? SvGdkPixbuf (dest_or_class)
 	     : NULL;
 	if (ix == 1)
@@ -302,16 +306,43 @@ gdk_pixbuf_get_bits_per_sample (pixbuf)
 	GdkPixbuf *pixbuf
 
 ##  guchar *gdk_pixbuf_get_pixels (const GdkPixbuf *pixbuf) 
+=for apidoc
+Return a copy of the bytes comprising the pixel data of C<$pixbuf>.
+
+As described in the Gdk Pixbuf reference manual (the "Note" section of
+"The GdkPixbuf Structure"), the last row does not extend to the
+rowstride, but ends with the last byte of the last pixel.  The length
+of the C<get_pixels> return reflects this.
+=cut
 SV *
 gdk_pixbuf_get_pixels (pixbuf)
 	GdkPixbuf *pixbuf
     PREINIT:
 	guchar * pixels;
+	STRLEN size;
     CODE:
+	/* For reference, most pixbuf mallocs are height*rowstride, for
+	   example gdk_pixbuf_new() does that.  But gdk_pixbuf_copy()
+	   mallocs only the lesser "last row unpadded" size.  If the code
+	   here used height*rowstride it would read past the end of such a
+	   block.
+
+	   Most of the time rowstride is the next multiple of 4, and a
+	   malloced block is the next multiple of 4 too, so it's ok, but for
+	   a bigger rowstride it's not.
+
+	   The following calculation adapted from gdk_pixbuf_copy() circa
+	   Gtk 2.16.  bits_per_sample is only ever 8 currently, making it
+	   simply n_channels many bytes-per-pixel, but the calculation
+	   anticipates bits not a multiple of 8.  */
+
+	size = ((gdk_pixbuf_get_height(pixbuf) - 1)
+		* gdk_pixbuf_get_rowstride(pixbuf)
+		+ gdk_pixbuf_get_width(pixbuf)
+		* ((gdk_pixbuf_get_n_channels(pixbuf)
+		    * gdk_pixbuf_get_bits_per_sample(pixbuf) + 7) / 8));
 	pixels = gdk_pixbuf_get_pixels (pixbuf);
-	RETVAL = newSVpv ((gchar *) pixels,
-			  gdk_pixbuf_get_height (pixbuf)
-			  * gdk_pixbuf_get_rowstride (pixbuf));
+	RETVAL = newSVpv ((gchar *) pixels, size);
     OUTPUT:
 	RETVAL
 
@@ -335,6 +366,12 @@ const gchar_ornull *
 gdk_pixbuf_get_option (pixbuf, key)
 	GdkPixbuf * pixbuf
 	const gchar * key
+
+#if GTK_CHECK_VERSION (2, 2, 0)
+
+gboolean gdk_pixbuf_set_option (GdkPixbuf *pixbuf, const gchar *key, const gchar *value);
+
+#endif /* 2.2 */
 
 ##  GdkPixbuf *gdk_pixbuf_new (GdkColorspace colorspace, gboolean has_alpha, int bits_per_sample, int width, int height) 
 GdkPixbuf_noinc *
@@ -449,18 +486,18 @@ gdk_pixbuf_new_from_data (class, data, colorspace, has_alpha, bits_per_sample, w
 	int height
 	int rowstride
     PREINIT:
-	SV * real_data;
+	char *data_ptr, *pix_ptr;
+	STRLEN len;
     CODE:
-	if (!data || !SvPOK (data))
-		croak ("expecting a packed string for pixel data");
-	real_data = gperl_sv_copy (data);
-	RETVAL = gdk_pixbuf_new_from_data ((const guchar *)
-	                                     SvPV_nolen (real_data),
+	data_ptr = SvPV (data, len);
+	Newx (pix_ptr, len, char);
+	Copy (data_ptr, pix_ptr, len, char);
+	RETVAL = gdk_pixbuf_new_from_data ((const guchar *) pix_ptr,
 	                                   colorspace, has_alpha,
 					   bits_per_sample,
 					   width, height, rowstride,
 					   gtk2perl_pixbuf_destroy_notify,
-					   real_data);
+					   NULL);
     OUTPUT:
 	RETVAL
 
@@ -605,16 +642,23 @@ gdk_pixbuf_save (pixbuf, filename, type, ...)
 	/* collect key/val pairs from the argument stack and 
 	 * call gdk_pixbuf_savev */
 #define FIRST_KEY 3
-	nkeys = (items - FIRST_KEY) / 2;
+	nkeys = items - FIRST_KEY;
+	if (nkeys % 2)
+		croak ("gdk_pixbuf_save expects options as key => value pairs "
+		       "(odd number of arguments detected)");
+	nkeys /= 2;
 	/* always allocate them.  doesn't hurt.  always one longer for the
 	 * null-terminator, which is set by g_new0. */
 	option_keys = g_new0 (char *, nkeys + 1);
 	option_vals = g_new0 (char *, nkeys + 1);
 
 	for (i = 0 ; i < nkeys ; i++) {
-		/* NOT copies */
-		option_keys[i] = SvPV_nolen (ST (FIRST_KEY + i*2 + 0));
-		option_vals[i] = SvPV_nolen (ST (FIRST_KEY + i*2 + 1));
+		/* NOT copies of the strings.
+		   option_vals[] are utf8 for png format "tEXt::Foo" etc.
+		   option_keys[] are ascii-only circa gtk 2.18, but presume
+		   any non-ascii there would be utf8 too. */
+		option_keys[i] = SvGChar (ST (FIRST_KEY + i*2 + 0));
+		option_vals[i] = SvGChar (ST (FIRST_KEY + i*2 + 1));
 	}
 
 	worked = gdk_pixbuf_savev (pixbuf, filename, type, 
@@ -985,13 +1029,31 @@ void gdk_pixbuf_get_file_info (class, filename)
 
 MODULE = Gtk2::Gdk::Pixbuf	PACKAGE = Gtk2::Gdk::PixbufFormat	PREFIX = gdk_pixbuf_format_
 
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+A C<Gtk2::Gdk::PixbufFormat> has the following format information fields,
+eg. C<< $format->{'name'} >>,
+
+    name            string
+    description     string
+    mime_types      arrayref of strings
+    extensions      arrayref of strings, eg. ['jpg','jpeg']
+    is_writable     0 or 1
+    is_scalable     0 or 1    # in Gtk 2.6 up
+    is_disabled     0 or 1    # in Gtk 2.6 up
+    license         string    # in Gtk 2.6 up
+
+=cut
+
 #if GTK_CHECK_VERSION(2, 2, 0)
 
 void
 DESTROY (sv)
 	SV *sv
     CODE:
-	sv_unmagic (sv, PERL_MAGIC_ext);
+	_gperl_remove_mg (SvRV (sv));
 
 #endif /* 2.2.0 */
 

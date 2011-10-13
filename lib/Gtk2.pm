@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2003-2008 by the gtk2-perl team (see the file AUTHORS for
+# Copyright (C) 2003-2011 by the gtk2-perl team (see the file AUTHORS for
 # the full list)
 #
 # This library is free software; you can redistribute it and/or modify it under
@@ -73,7 +73,7 @@ eval "use Cairo;";
 use Exporter;
 require DynaLoader;
 
-our $VERSION = '1.224';
+our $VERSION = '1.240';
 
 our @ISA = qw(DynaLoader Exporter);
 
@@ -163,13 +163,19 @@ use overload
 package Gtk2::CellLayout::DataFunc;
 
 use overload
-	'&{}' => sub { \&Gtk2::CellLayout::DataFunc::invoke },
+	'&{}' => sub {
+                   my ($func) = @_;
+                   return sub { Gtk2::CellLayout::DataFunc::invoke($func, @_) }
+                 },
 	fallback => 1;
 
 package Gtk2::TreeSortable::IterCompareFunc;
 
 use overload
-	'&{}' => sub { \&Gtk2::TreeSortable::IterCompareFunc::invoke },
+	'&{}' => sub {
+                   my ($func) = @_;
+                   return sub { Gtk2::TreeSortable::IterCompareFunc::invoke($func, @_) };
+                 },
 	fallback => 1;
 
 package Gtk2::TreeModelSort;

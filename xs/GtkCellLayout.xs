@@ -141,26 +141,17 @@ create_callback (GtkCellLayoutDataFunc func,
                  SV                  **data_return)
 {
 	HV *stash;
-	gchar *sub;
-	CV *dummy_cv = NULL;
 	SV *code_sv, *data_sv;
 	Gtk2PerlCellLayoutDataFunc *wrapper;
-
-	stash = gv_stashpv ("Gtk2::CellLayout::DataFunc", TRUE);
-
-	sub = g_strdup_printf ("__gtk2perl_cell_layout_data_func_%p", data);
-	dummy_cv = newCONSTSUB (stash, sub, NULL);
-	g_free (sub);
-
-	code_sv = sv_bless (newRV_noinc ((SV *) dummy_cv), stash);
 
 	wrapper = g_new0 (Gtk2PerlCellLayoutDataFunc, 1);
 	wrapper->func = func;
 	wrapper->data = data;
 	wrapper->destroy = destroy;
-
 	data_sv = newSViv (PTR2IV (wrapper));
-	sv_magic ((SV *) dummy_cv, 0, PERL_MAGIC_ext, (const char *) data_sv, 0);
+
+	stash = gv_stashpv ("Gtk2::CellLayout::DataFunc", TRUE);
+	code_sv = sv_bless (newRV (data_sv), stash);
 
 	*code_return = code_sv;
 	*data_return = data_sv;
@@ -185,8 +176,8 @@ gtk2perl_cell_layout_set_cell_data_func (GtkCellLayout         *cell_layout,
 			create_callback (func, func_data, destroy,
 					 &code_sv, &data_sv);
 
-			XPUSHs (sv_2mortal (newSVsv (code_sv)));
-			XPUSHs (sv_2mortal (newSVsv (data_sv)));
+			XPUSHs (sv_2mortal (code_sv));
+			XPUSHs (sv_2mortal (data_sv));
 		}
 
 		CALL;
@@ -471,6 +462,9 @@ void gtk_cell_layout_reorder (GtkCellLayout *cell_layout, GtkCellRenderer *cell,
 
 =for apidoc
 Fetch all of the cell renderers which have been added to I<$cell_layout>.
+
+Note that if there are no cells this functions returns 'undef' instead of an
+empty list.
 =cut
 void
 gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
@@ -490,29 +484,27 @@ gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
 
 MODULE = Gtk2::CellLayout	PACKAGE = Gtk2::CellLayout::DataFunc
 
+=for apidoc __hide__
+=cut
 void
-invoke (GtkCellLayout *cell_layout, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, SV *data)
+invoke (SV *code, GtkCellLayout *cell_layout, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, data)
     PREINIT:
 	Gtk2PerlCellLayoutDataFunc *wrapper;
     CODE:
-	wrapper = INT2PTR (Gtk2PerlCellLayoutDataFunc*, SvIV (data));
+	wrapper = INT2PTR (Gtk2PerlCellLayoutDataFunc*, SvIV (SvRV (code)));
 	if (!wrapper || !wrapper->func)
-		croak ("Invalid user data passed to the data func");
+		croak ("Invalid reference encountered in cell data func");
 	wrapper->func (cell_layout, cell, tree_model, iter, wrapper->data);
 
 void
 DESTROY (SV *code)
     PREINIT:
-	MAGIC *mg;
 	Gtk2PerlCellLayoutDataFunc *wrapper;
     CODE:
-	if (!gperl_sv_is_defined (code) || !SvROK (code) || !(mg = mg_find (SvRV (code), PERL_MAGIC_ext)))
+	if (!gperl_sv_is_defined (code) || !SvROK (code))
 		return;
-
-	wrapper = INT2PTR (Gtk2PerlCellLayoutDataFunc*, SvIV ((SV *) mg->mg_ptr));
+	wrapper = INT2PTR (Gtk2PerlCellLayoutDataFunc*, SvIV (SvRV (code)));
 	if (wrapper && wrapper->destroy)
 		wrapper->destroy (wrapper->data);
-
-	sv_unmagic (SvRV (code), PERL_MAGIC_ext);
 	if (wrapper)
 		g_free (wrapper);

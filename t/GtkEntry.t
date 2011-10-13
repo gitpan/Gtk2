@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 61;
+use Gtk2::TestHelper tests => 76;
 
 # $Id$
 
@@ -100,7 +100,7 @@ SKIP: {
 }
 
 SKIP: {
-  skip '2.16 stuff', 38
+  skip '2.16 stuff', 48
     unless Gtk2->CHECK_VERSION(2, 16, 0);
 
   ## progress methods
@@ -139,6 +139,47 @@ SKIP: {
 
   test_icon_methods('primary');
   test_icon_methods('secondary');
+}
+
+SKIP: {
+  skip 'new 2.18 stuff', 2
+    unless Gtk2->CHECK_VERSION(2, 18, 0);
+
+  my $buffer = Gtk2::EntryBuffer->new;
+  my $entry = Gtk2::Entry->new_with_buffer ($buffer);
+  isa_ok ($entry, 'Gtk2::Entry');
+  $entry->set_buffer ($buffer);
+  is ($entry->get_buffer, $buffer);
+}
+
+SKIP: {
+  skip 'new 2.20 stuff', 2
+    unless Gtk2->CHECK_VERSION(2, 20, 0);
+
+  my $entry = Gtk2::Entry->new;
+  my $window = Gtk2::Window->new;
+  $window->add ($entry);
+  $entry->realize;
+
+  $entry->set_icon_from_icon_name ('primary', 'gtk-yes');
+  isa_ok ($entry->get_icon_window ('primary'), 'Gtk2::Gdk::Window');
+
+  isa_ok ($entry->get_text_window, 'Gtk2::Gdk::Window');
+}
+
+SKIP: {
+  skip 'new 2.22 stuff', 1
+    unless Gtk2->CHECK_VERSION(2, 22, 0);
+
+  my $entry = Gtk2::Entry->new;
+  my $window = Gtk2::Window->new;
+  $window->add ($entry);
+  $entry->realize;
+  my $event = Gtk2::Gdk::Event->new ('key-press');
+  $event->window ($entry->window);
+  ok (defined $entry->im_context_filter_keypress ($event));
+
+  $entry->reset_im_context;
 }
 
 
@@ -193,12 +234,23 @@ sub test_icon_methods {
   is($entry -> get_icon_pixbuf($icon_pos), undef);
 
 
-  # This method can't be tested, at least we call them just in case they crash
+  # Icon tooltips
   $entry -> set_icon_tooltip_markup($icon_pos, "<b>Pan</b><i>Go</i> tooltip");
+  is($entry -> get_icon_tooltip_markup($icon_pos), "<b>Pan</b><i>Go</i> tooltip");
   $entry -> set_icon_tooltip_markup($icon_pos, undef);
+  is($entry -> get_icon_tooltip_markup($icon_pos), undef);
 
   $entry -> set_icon_tooltip_text($icon_pos, "Text tooltip");
+  is($entry -> get_icon_tooltip_text($icon_pos), "Text tooltip");
   $entry -> set_icon_tooltip_text($icon_pos, undef);
+  is($entry -> get_icon_tooltip_text($icon_pos), undef);
+
+
+  $entry -> set_icon_drag_source(
+    $icon_pos,
+    Gtk2::TargetList->new({target => 'TEXT', flags => 'same-app', info => 23 }),
+    'move');
+  ok(defined $entry -> get_current_icon_drag_source());
 }
 
 __END__

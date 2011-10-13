@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 40;
+use Gtk2::TestHelper tests => 58;
 
 # $Id$
 
@@ -155,6 +155,7 @@ $window_two -> begin_paint_region($region);
 $window_two -> end_paint();
 
 $window_two -> invalidate_rect($rectangle, 1);
+$window_two -> invalidate_rect(undef, 1);
 $window_two -> invalidate_region($region, 1);
 
 # FIXME: never called?
@@ -185,6 +186,11 @@ my $bitmap = Gtk2::Gdk::Bitmap->create_from_data ($window, "", 1, 1);
 
 $window -> shape_combine_mask($bitmap, 5, 5);
 $window -> shape_combine_region($region, 1, 1);
+
+# test with undef
+$window -> shape_combine_mask(undef, 0, 0);
+$window -> shape_combine_region(undef, 0, 0);
+
 
 $window -> set_child_shapes();
 $window -> merge_child_shapes();
@@ -223,7 +229,11 @@ SKIP: {
   $window -> merge_child_input_shapes();
   $window -> input_shape_combine_mask($bitmap, 23, 42);
   $window -> input_shape_combine_region($region, 23, 42);
-  
+
+  # test with undef
+  $window -> input_shape_combine_mask(undef, 0,0);
+  $window -> input_shape_combine_region(undef, 0,0);
+
 }
 
 SKIP: {
@@ -261,6 +271,7 @@ isa_ok($window -> get_events(), "Gtk2::Gdk::EventMask");
 
 $window_three -> set_icon(undef, undef, undef);
 $window -> set_icon_name("Wheeee");
+$window -> set_icon_name(undef);
 $window -> set_transient_for($window_three);
 $window -> set_role("Playa");
 $window_three -> set_group($window_three);
@@ -302,6 +313,7 @@ SKIP: {
     unless Gtk2 -> CHECK_VERSION(2, 12, 0);
 
   $window -> set_startup_id('bla');
+  $window -> set_opacity(1.0);
   $window -> set_composited(FALSE);
   # $window -> beep();
 }
@@ -315,6 +327,54 @@ SKIP: {
 }
 
 $window -> hide();
+
+SKIP: {
+  skip 'new 2.18 stuff', 7
+    unless Gtk2->CHECK_VERSION(2, 18, 0);
+
+  my $window = Gtk2::Gdk::Window -> new(undef, { window_type => 'toplevel' });
+  $window -> flush();
+  ok($window -> ensure_native());
+  $window -> geometry_changed();
+
+  is($window -> get_cursor(), undef);
+  $window -> set_cursor(Gtk2::Gdk::Cursor -> new("arrow"));
+  isa_ok($window -> get_cursor(), 'Gtk2::Gdk::Cursor');
+
+  my $sibling = Gtk2::Gdk::Window -> new(undef, { window_type => 'toplevel' });
+  $window -> restack(undef, TRUE);
+  $window -> restack($sibling, TRUE);
+
+  my $gtkwindow= Gtk2::Window->new;
+  $gtkwindow->show_all;
+  $gtkwindow->realize;
+  my $offscreen= Gtk2::Gdk::Window->new(undef, { window_type	=> 'offscreen', });
+  $offscreen->set_embedder($gtkwindow->window);
+  isa_ok($offscreen->get_pixmap,  'Gtk2::Gdk::Pixmap');
+  isa_ok($offscreen->get_embedder,'Gtk2::Gdk::Window');
+
+  my ($rx, $ry) = $window->get_root_coords(0, 0);
+  ok(defined $rx && defined $ry);
+  ok(defined $window->is_destroyed());
+}
+
+SKIP: {
+  skip 'new 2.22 stuff', 11
+    unless Gtk2->CHECK_VERSION(2, 22, 0);
+
+  my $window = Gtk2::Gdk::Window -> new(undef, { window_type => 'toplevel' });
+  is_deeply ([$window->coords_from_parent (0, 0)], [0, 0]);
+  is_deeply ([$window->coords_to_parent (0, 0)], [0, 0]);
+  ok (defined $window->get_accept_focus);
+  ok (defined $window->get_composited);
+  isa_ok ($window->get_effective_parent, 'Gtk2::Gdk::Window');
+  isa_ok ($window->get_effective_toplevel, 'Gtk2::Gdk::Window');
+  ok (defined $window->get_focus_on_map);
+  ok (defined $window->get_modal_hint);
+  ok (defined $window->has_native);
+  ok (defined $window->is_input_only);
+  ok (defined $window->is_shaped);
+}
 
 __END__
 

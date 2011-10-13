@@ -68,5 +68,7 @@ SKIP: {
 
 	# Get a default context
 	$context->focus_in ();
-	ok (defined $context->get_context_id, 'Context ID');
+	my $id = $context->get_context_id;
+	ok (defined $id, 'Context ID');
+	$context->set_context_id ($id);
 }

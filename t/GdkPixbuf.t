@@ -1,6 +1,7 @@
+#!/usr/bin/env perl
 use strict;
 use warnings;
-use Gtk2::TestHelper tests => 103, noinit => 1;
+use Gtk2::TestHelper tests => 112, noinit => 1;
 
 my $show = 0;
 
@@ -57,7 +58,7 @@ is ($pixbuf->get_height, 33);
 is ($pixbuf->get_rowstride, 244);
 $pixels = $pixbuf->get_pixels;
 ok ($pixels);
-is (length($pixels), ($pixbuf->get_height * $pixbuf->get_rowstride)); 
+is (length($pixels), 8052);
 
 
 $pixbuf = Gtk2::Gdk::Pixbuf->new ('rgb', FALSE, 8, 33, 61);
@@ -71,7 +72,8 @@ is ($pixbuf->get_height, 61);
 is ($pixbuf->get_rowstride, 100); # 100 is aligned, 99 is actual
 $pixels = $pixbuf->get_pixels;
 ok ($pixels);
-is (length($pixels), ($pixbuf->get_height * $pixbuf->get_rowstride)); 
+# last row is not padded to the rowstride, hence 6099 not 6100
+is (length($pixels), 6099); 
 
 
 isa_ok ($pixbuf->copy, 'Gtk2::Gdk::Pixbuf', 'copy');
@@ -142,6 +144,30 @@ is ($pixbuf->get_height, 5);
 is ($pixbuf->get_rowstride, 16);
 $vbox->add (Gtk2::Image->new_from_pixbuf ($pixbuf)) if $show;
 
+{
+  {
+    package MyOverloaded;
+    use overload '""' => \&stringize;
+    sub new {
+      my ($class) = @_;
+      my $str = "not this value";
+      return bless \$str, $class;
+    }
+    sub stringize {
+      my ($self) = @_;
+      return "\x01\x02\x03";
+    }
+  }
+  my $overloaded = MyOverloaded->new;
+  $pixbuf = Gtk2::Gdk::Pixbuf->new_from_data ($overloaded, 'rgb',
+					      0,   # alpha
+					      8,   # bits
+					      1,1, # width,height
+					      3);  # rowstride
+  is ($pixbuf->get_pixels, "\x01\x02\x03");
+  $vbox->add (Gtk2::Image->new_from_pixbuf ($pixbuf)) if $show;
+}
+
 # inlined data from gdk-pixbuf-csource, run on the xpm from above
 my $inlinedata =
   "GdkP" # Pixbuf magic (0x47646b50)
@@ -210,11 +236,28 @@ unlink $filename;
 
 
 $filename = 'testsave.png';
+eval {
+  $pixbuf->save ($filename, 'png',
+		 'key_arg_without_value_arg');
+};
+like ($@, qr/odd number of arguments detected/);
+
 my $mtime = scalar localtime;
 my $desc = 'Something really cool';
 $pixbuf->save ($filename, 'png',
 	       'tEXt::Thumb::MTime' => $mtime,
-	       'tEXt::Description' => $desc);
+	       'tEXt::Description' => $desc,
+	       #
+	       # latin1 bytes upgraded to utf8 in the xsub
+	       #
+	       # Crib note: if there's no upgrade in the xsub then one of
+	       # two bad things happen: if libpng was built without iTXt
+	       # support then gdk-pixbuf gives a GError because the bytes
+	       # are not valid utf8; or if libpng does have iTXt then
+	       # gdk-pixbuf drops the bytes straight in an iTXt in the file,
+	       # leaving invalid utf8 there.
+	       #
+	       'tEXt::Title' => "z \x{B1} .5");
 ok (1);
 
 $pixbuf = Gtk2::Gdk::Pixbuf->new_from_file ($filename);
@@ -224,6 +267,27 @@ is ($pixbuf->get_option ('tEXt::Description'), $desc, 'get_option works');
 is ($pixbuf->get_option ('tEXt::Thumb::MTime'), $mtime, 'get_option works');
 ok (! $pixbuf->get_option ('tEXt::noneXIStenTTag'),
     'get_option returns undef if the key is not found');
+{
+	my $got = $pixbuf->get_option ('tEXt::Title');
+	my $want = "z \x{B1} .5";
+	utf8::upgrade ($want);
+	is ($got, $want, 'get_option tEXt::Title');
+	SKIP: {
+		utf8->can('is_utf8')
+			or skip 'utf8::is_utf8() not available (perl 5.8.0)', 1;
+		ok (utf8::is_utf8($got), 'get_option tEXt::Title is_utf8()');
+	}
+}
+
+SKIP: {
+	skip 'new 2.2 stuff', 3
+		unless Gtk2->CHECK_VERSION(2, 2, 0);
+
+	ok (! $pixbuf->set_option ('tEXt::Description', reverse $desc),
+	    'set_option refuses to overwrite');
+	ok ($pixbuf->set_option ('tEXt::woot', 'whee'));
+	is ($pixbuf->get_option ('tEXt::woot'), 'whee');
+}
 
 unlink $filename;
 
@@ -308,7 +372,7 @@ isa_ok ($pixbuf, 'Gtk2::Gdk::Pixbuf', 'composite_color_simple');
 
 
 SKIP: {
-  skip "GdkPixbufFormat stuff is new in 2.2.0", 12
+  skip "GdkPixbufFormat stuff is new in 2.2.0", 14
     unless Gtk2->CHECK_VERSION (2,2,0);
 
   my @formats = Gtk2::Gdk::Pixbuf->get_formats;
@@ -320,6 +384,9 @@ SKIP: {
   is (ref $formats[0]{mime_types}, 'ARRAY', "'mime_types' is a list");
   ok (exists $formats[0]{extensions}, "contains key 'extensions'");
   is (ref $formats[0]{extensions}, 'ARRAY', "'extensions' is a list");
+  ok (exists $formats[0]{is_writable}, "contains key 'is_writable'");
+  ok ($formats[0]{is_writable} == 0 || $formats[0]{is_writable} == 1,
+      "'is_writable' is 0 or 1");
 
   SKIP: {
     skip "new format stuff", 4

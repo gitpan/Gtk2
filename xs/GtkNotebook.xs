@@ -73,7 +73,7 @@ gtk2perl_notebook_window_creation_func (GtkNotebook *source,
         GtkNotebook * retval;
         GValue value = {0, };
         g_value_init (&value, GTK_TYPE_NOTEBOOK);
-        gperl_callback_invoke ((GPerlCallback*) data, &value, source, x, y);
+        gperl_callback_invoke ((GPerlCallback*) data, &value, source, page, x, y);
         retval = g_value_get_object (&value);
         g_value_unset (&value);
         return retval;
@@ -456,3 +456,20 @@ void gtk_notebook_set_tab_detachable (GtkNotebook *notebook, GtkWidget *child, g
 gboolean gtk_notebook_get_tab_detachable (GtkNotebook *notebook, GtkWidget *child);
 
 #endif /* 2.10 */
+
+#if GTK_CHECK_VERSION (2, 20, 0)
+
+void gtk_notebook_set_action_widget (GtkNotebook *notebook, GtkWidget *widget, GtkPackType pack_type);
+
+GtkWidget_ornull* gtk_notebook_get_action_widget (GtkNotebook *notebook, GtkPackType pack_type);
+
+#endif /* 2.20 */
+
+#if GTK_CHECK_VERSION (2, 22, 0)
+
+guint16 gtk_notebook_get_tab_hborder (GtkNotebook *notebook);
+
+guint16 gtk_notebook_get_tab_vborder (GtkNotebook *notebook);
+
+#endif /* 2.22 */
+

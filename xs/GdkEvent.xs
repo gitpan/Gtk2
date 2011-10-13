@@ -54,6 +54,9 @@ gdk_event_get_package (GType gtype,
 	    case GDK_UNMAP:
 		return "Gtk2::Gdk::Event";
 	    case GDK_EXPOSE:
+#if GTK_CHECK_VERSION (2, 14, 0)
+	    case GDK_DAMAGE:
+#endif
 		return "Gtk2::Gdk::Event::Expose";
 	    case GDK_MOTION_NOTIFY:
 		return "Gtk2::Gdk::Event::Motion";
@@ -136,7 +139,7 @@ gtk2perl_gdk_event_set_state (GdkEvent * event,
 		    case GDK_2BUTTON_PRESS:
 		    case GDK_3BUTTON_PRESS:
 		    case GDK_BUTTON_RELEASE:
-			event->button.state = newstate = newstate;
+			event->button.state = newstate;
 			break;
 		    case GDK_SCROLL:
 			event->scroll.state = newstate;

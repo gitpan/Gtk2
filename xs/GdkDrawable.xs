@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005, 2009, 2010 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +20,10 @@
  */
 
 #include "gtk2perl.h"
+
+#ifndef G_LIKELY  /* new in glib 2.2 */
+#define G_LIKELY(cond)  (cond)  /* fallback */
+#endif
 
 /*
 NOTE:
@@ -48,7 +52,7 @@ gdk_drawable_set_colormap (drawable, colormap)
 	GdkColormap *colormap
 
  ## GdkColormap* gdk_drawable_get_colormap (GdkDrawable *drawable)
-GdkColormap*
+GdkColormap_ornull *
 gdk_drawable_get_colormap (drawable)
 	GdkDrawable *drawable
 
@@ -185,18 +189,20 @@ gdk_draw_point (drawable, gc, x, y)
  ## void gdk_draw_lines (GdkDrawable *drawable, GdkGC *gc, GdkPoint *points, gint npoints)
 
 =for apidoc Gtk2::Gdk::Drawable::draw_lines
-=for arg x1 (integer) the x coordinate of the first point
-=for arg y1 (integer) the y coordinate of the first point
-=for arg ... pairs of x and y coordinates
+=for arg ... integer x,y coordinates (possibly none)
+For example
+
+    $win->draw_lines ($gc, 0,0, 20,30, 40,20);
 =cut
 
 =for apidoc
-=for arg x1 (integer) the x coordinate of the first point
-=for arg y1 (integer) the y coordinate of the first point
-=for arg ... (__hide__)
+=for arg ... integer x,y coordinates (possibly none)
+For example three points
+
+    $win->draw_points ($gc, 0,0, 10,10, 20,20);
 =cut
 void
-gdk_draw_points (drawable, gc, x1, y1, ...)
+gdk_draw_points (drawable, gc, ...)
 	GdkDrawable *drawable
 	GdkGC *gc
     ALIAS:
@@ -207,27 +213,30 @@ gdk_draw_points (drawable, gc, x1, y1, ...)
 	gint i, j;
     CODE:
 	npoints = (items-2)/2;
-	points = g_new (GdkPoint, npoints);
-	for (i = 0, j = 2; i < npoints ; i++, j+=2) {
-		points[i].x = SvIV (ST (j));
-		points[i].y = SvIV (ST (j+1));
+	/* gdk_draw_points() and gdk_draw_lines() both accept npoints==0 but
+	   can skip entirely with a couple of bytes of code. */
+	if (G_LIKELY (npoints != 0)) {
+		points = g_new (GdkPoint, npoints);
+		for (i = 0, j = 2; i < npoints ; i++, j+=2) {
+			points[i].x = SvIV (ST (j));
+			points[i].y = SvIV (ST (j+1));
+		}
+		if (ix == 1)
+			gdk_draw_lines (drawable, gc, points, npoints);
+		else
+			gdk_draw_points (drawable, gc, points, npoints);
+		g_free (points);
 	}
-	if (ix == 1)
-		gdk_draw_lines (drawable, gc, points, npoints);
-	else
-		gdk_draw_points (drawable, gc, points, npoints);
-	g_free (points);
 
  #### void gdk_draw_segments (GdkDrawable *drawable, GdkGC *gc, GdkSegment *segs, gint nsegs)
 =for apidoc
-=for arg x1 (integer) the x coordinate of the first point
-=for arg y1 (integer) the y coordinate of the first point
-=for arg x2 (integer) the x coordinate of the second point
-=for arg y2 (integer) the y coordinate of the second point
-=for arg ... quads of x and y coordinates
+=for arg ... quads of x1,y1,x2,y2 coordinates
+For example to draw two diagonal line segments,
+
+    $drawable->draw_segments($gc, 0,0,100,100, 200,200,300,300);
 =cut
 void
-gdk_draw_segments (drawable, gc, x1, y1, x2, y2, ...)
+gdk_draw_segments (drawable, gc, ...)
 	GdkDrawable *drawable
 	GdkGC *gc
     PREINIT:
@@ -253,7 +262,7 @@ gdk_draw_segments (drawable, gc, x1, y1, x2, y2, ...)
 void
 gdk_draw_pixbuf (drawable, gc, pixbuf, src_x, src_y, dest_x, dest_y, width, height, dither, x_dither, y_dither)
 	GdkDrawable *drawable
-	GdkGC *gc
+	GdkGC_ornull *gc
 	GdkPixbuf *pixbuf
 	gint src_x
 	gint src_y
@@ -277,6 +286,8 @@ gdk_draw_pixbuf (drawable, gc, pixbuf, src_x, src_y, dest_x, dest_y, width, heig
 ##	gint x
 ##	gint y
 ##	PangoGlyphString *glyphs
+
+ # FIXME: gdk_draw_glyphs_transformed
 
  ## void gdk_draw_layout_line (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, PangoLayoutLine *line)
 void
@@ -304,8 +315,8 @@ gdk_draw_layout_line_with_colors (drawable, gc, x, y, line, foreground, backgrou
 	gint x
 	gint y
 	PangoLayoutLine *line
-	GdkColor *foreground
-	GdkColor *background
+	GdkColor_ornull *foreground
+	GdkColor_ornull *background
 
  ## void gdk_draw_layout_with_colors (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, PangoLayout *layout, GdkColor *foreground, GdkColor *background)
 void
@@ -315,8 +326,8 @@ gdk_draw_layout_with_colors (drawable, gc, x, y, layout, foreground, background)
 	gint x
 	gint y
 	PangoLayout *layout
-	GdkColor *foreground
-	GdkColor *background
+	GdkColor_ornull *foreground
+	GdkColor_ornull *background
 
 ##  The docs say that "[t]his is low level functionality used internally to
 ##  implement rotated underlines and backgrouds when rendering a PangoLayout
@@ -326,7 +337,8 @@ gdk_draw_layout_with_colors (drawable, gc, x, y, layout, foreground, background)
 MODULE = Gtk2::Gdk::Drawable	PACKAGE = Gtk2::Gdk::Drawable	PREFIX = gdk_drawable_
 
  ## GdkImage* gdk_drawable_get_image (GdkDrawable *drawable, gint x, gint y, gint width, gint height)
-GdkImage*
+ ## The return is a non-floating refcount==1, hence _noinc.
+GdkImage_noinc *
 gdk_drawable_get_image (drawable, x, y, width, height)
 	GdkDrawable *drawable
 	gint x

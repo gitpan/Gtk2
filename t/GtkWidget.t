@@ -6,7 +6,7 @@
 
 use warnings;
 use strict;
-use Gtk2::TestHelper tests => 134;
+use Gtk2::TestHelper tests => 158;
 
 # we can't instantiate Gtk2::Widget, it's abstract.  use a button instead.
 
@@ -92,6 +92,7 @@ use Gtk2::Gdk::Keysyms;
 my $accel_group = Gtk2::AccelGroup->new;
 $widget->add_accelerator ("activate", $accel_group, $Gtk2::Gdk::Keysyms{ Return }, qw/shift-mask/, qw/visible/);
 $widget->set_accel_path ("<gtk2perl>/Bla", $accel_group);
+$widget->set_accel_path (undef,undef);
 $widget->remove_accelerator ($accel_group, $Gtk2::Gdk::Keysyms{ Return }, qw/shift-mask/);
 
 isa_ok ($widget->intersect (Gtk2::Gdk::Rectangle->new (0, 0, 10000, 10000)),
@@ -321,6 +322,7 @@ $widget->modify_font (undef);
 isa_ok ($widget->create_pango_context, "Gtk2::Pango::Context");
 isa_ok ($widget->get_pango_context, "Gtk2::Pango::Context");
 isa_ok ($widget->create_pango_layout ("Bla"), "Gtk2::Pango::Layout");
+isa_ok ($widget->create_pango_layout(), "Gtk2::Pango::Layout");
 isa_ok ($widget->render_icon ("gtk-open", "menu", "detail"), "Gtk2::Gdk::Pixbuf");
 
 Gtk2::Widget->push_composite_child;
@@ -373,9 +375,10 @@ my $bitmap = Gtk2::Gdk::Bitmap->create_from_data ($win->window, "", 1, 1);
 
 $win->realize;
 $widget->shape_combine_mask ($bitmap, 5, 5);
+$widget->shape_combine_mask (undef, 5, 5);
 
 SKIP: {
-	skip "stuff that's new in 2.2", 5
+	skip "stuff that's new in 2.2", 10
 		unless Gtk2->CHECK_VERSION (2, 2, 0);
 
 	isa_ok ($widget->get_clipboard, "Gtk2::Clipboard");
@@ -384,6 +387,29 @@ SKIP: {
 	isa_ok ($widget->get_screen, "Gtk2::Gdk::Screen");
 
 	is ($widget->has_screen, 1);
+
+	# not sure it's wise to enquire into what properties exist, but
+	# let's assume there's at least 1
+	{ my @pspecs = $widget->list_style_properties;
+	  cmp_ok (scalar(@pspecs), '>', 0); }
+	{ my @pspecs = Gtk2::Widget->list_style_properties;
+	  cmp_ok (scalar(@pspecs), '>', 0); }
+
+	is ($widget->find_style_property('no-such-style-property-of-this-name'),
+	    undef,
+	    "find_style_property() no such name, on object");
+	is (Gtk2::Widget->find_style_property('no-such-style-property-of-this-name'),
+	    undef,
+	    "find_style_property() no such name, on class");
+	is (Gtk2::Label->find_style_property('no-such-style-property-of-this-name'),
+	    undef,
+	    "find_style_property() no such name, on label class");
+
+	# not sure it's wise to depend on properties exist, but at least
+	# exercise the code on "interior-focus" which exists in 2.2 up
+	$widget->find_style_property('interior-focus');
+	Gtk2::Widget->find_style_property('interior-focus');
+	Gtk2::Label->find_style_property('interior-focus');
 }
 
 SKIP: {
@@ -415,6 +441,8 @@ SKIP: {
 
 	$widget->input_shape_combine_mask ($bitmap, 23, 42);
 	$widget->input_shape_combine_mask (undef, 0, 0);
+
+	$widget->is_composited;
 }
 
 SKIP: {
@@ -449,10 +477,11 @@ SKIP: {
 
 	$widget->modify_cursor (Gtk2::Gdk::Color->new (0x0000, 0x0000, 0x0000),
 			        Gtk2::Gdk::Color->new (0xffff, 0xffff, 0xffff));
+	$widget->modify_cursor (undef,undef);
 }
 
 SKIP: {
-	skip 'new 2.14 stuff', 3
+	skip 'new 2.14 stuff', 4
 		unless Gtk2->CHECK_VERSION(2, 14, 0);
 
 	my $widget = Gtk2::Label->new ('Bla');
@@ -467,13 +496,79 @@ SKIP: {
 	isa_ok ($widget->get_snapshot (Gtk2::Gdk::Rectangle->new (0, 0, 1, 1)),
 		'Gtk2::Gdk::Pixmap');
 
+	isa_ok ($widget->get_window (), 'Gtk2::Gdk::Window');
+
 	$window->signal_connect(
 		delete_event => \&Gtk2::Widget::hide_on_delete);
 	$window->signal_emit(
 		delete_event => Gtk2::Gdk::Event->new ('key-press'));
 }
 
+SKIP: {
+	skip 'new 2.18 stuff', 13
+		unless Gtk2->CHECK_VERSION(2, 18, 0);
+	my $widget = Gtk2::Label->new ('Bla');
+
+	my $rect = Gtk2::Gdk::Rectangle->new (0, 0, 23, 42);
+	$widget->set_allocation ($rect);
+	my $new_rect = $widget->get_allocation;
+	is ($new_rect->width, $rect->width);
+
+	$widget->set_can_default (TRUE);
+	ok ($widget->get_can_default);
+
+	$widget->set_can_focus (TRUE);
+	ok ($widget->get_can_focus);
+
+	$widget->set_has_window (TRUE);
+	ok ($widget->get_has_window);
+
+	$widget->set_receives_default (TRUE);
+	ok ($widget->get_receives_default);
+
+	$widget->set_visible (TRUE);
+	ok ($widget->get_visible);
+
+	ok (defined $widget->get_app_paintable);
+	ok (defined $widget->get_double_buffered);
+	ok (defined $widget->get_sensitive);
+	ok (defined $widget->get_state);
+	ok (defined $widget->is_drawable);
+	ok (defined $widget->is_sensitive);
+	ok (defined $widget->is_toplevel);
+}
+
+SKIP: {
+	skip 'new 2.20 stuff', 4
+		unless Gtk2->CHECK_VERSION(2, 20, 0);
+
+	my $widget = Gtk2::Label->new ('Bla');
+	$widget->set_realized (FALSE);
+	ok (!$widget->get_realized);
+	$widget->set_mapped (FALSE);
+	ok (!$widget->get_mapped);
+	my $req = $widget->get_requisition;
+	ok (defined $req->width && defined $req->height);
+	ok (defined $widget->has_rc_style);
+
+	my $window = Gtk2::Window->new;
+	$window->add ($widget);
+	$widget->realize;
+	$widget->style_attach;
+}
+
+SKIP: {
+	skip 'new 2.22 stuff', 0
+		unless Gtk2->CHECK_VERSION(2, 22, 0);
+
+	my $widget = Gtk2::Label->new ('Bla');
+	my $event = Gtk2::Gdk::Event->new ('focus-change');
+	$event->in (TRUE);
+	$event->window ($widget->window);
+	$widget->send_focus_change ($event);
+}
+
 __END__
 
-Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006, 2010 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

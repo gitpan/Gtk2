@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006, 2009 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
@@ -9,6 +9,25 @@
 #include "gtk2perl.h"
 
 MODULE = Gtk2::Action	PACKAGE = Gtk2::Action	PREFIX = gtk_action_
+
+=for position post_interfaces
+
+=head1 CONSTRUCTOR
+
+=head2 action = Gtk2::Action->B<new> (key=>value,...)
+
+Create and return a new action object.  Note that this is the C<new>
+of L<Glib::Object|Glib::Object>, not C<gtk_action_new>.  Eg.
+
+    Gtk2::Action->new (name => 'open-foo',
+		       stock_id => 'gtk-open',
+		       tooltip => 'Start a foo');
+
+The keyword/value style is more flexible and a little clearer than the
+four direct arguments of C<gtk_action_new> (and also works better for
+subclasses).
+
+=cut
 
 const gchar* gtk_action_get_name (GtkAction *action);
 
@@ -75,6 +94,60 @@ const gchar* gtk_action_get_accel_path (GtkAction *action);
 
 #endif
 
+#if GTK_CHECK_VERSION (2, 16, 0)
+
+void gtk_action_set_label (GtkAction *action, const gchar *label);
+
+const gchar_ornull * gtk_action_get_label (GtkAction *action);
+
+void gtk_action_set_short_label (GtkAction *action, const gchar *short_label);
+
+const gchar_ornull * gtk_action_get_short_label (GtkAction *action);
+
+void gtk_action_set_tooltip (GtkAction *action, const gchar_ornull *tooltip);
+
+const gchar_ornull * gtk_action_get_tooltip (GtkAction *action);
+
+void gtk_action_set_stock_id (GtkAction *action,const gchar_ornull *stock_id);
+
+const gchar_ornull * gtk_action_get_stock_id (GtkAction *action);
+
+void gtk_action_set_icon_name (GtkAction *action, const gchar_ornull *icon_name);
+
+const gchar_ornull * gtk_action_get_icon_name (GtkAction *action);
+
+void gtk_action_set_visible_horizontal (GtkAction *action, gboolean visible_horizontal);
+
+gboolean gtk_action_get_visible_horizontal (GtkAction *action);
+
+void gtk_action_set_visible_vertical (GtkAction *action, gboolean visible_vertical);
+
+gboolean gtk_action_get_visible_vertical (GtkAction *action);
+
+void gtk_action_set_is_important (GtkAction *action, gboolean is_important);
+
+gboolean gtk_action_get_is_important (GtkAction *action);
+
+# FIXME GIcon not in typemap
+# void gtk_action_set_gicon (GtkAction *action, GIcon *icon);
+#
+# GIcon * gtk_action_get_gicon (GtkAction *action);
+
+void gtk_action_block_activate (GtkAction *action);
+
+void gtk_action_unblock_activate (GtkAction *action);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 20, 0)
+
+gboolean gtk_action_get_always_show_image (GtkAction *action);
+
+void gtk_action_set_always_show_image (GtkAction *action, gboolean always_show);
+
+#endif /* 2.20 */
+
+
 #if GTK_CHECK_VERSION (2, 10, 0)
 
 MODULE = Gtk2::Action	PACKAGE = Gtk2::Widget	PREFIX = gtk_widget_
@@ -82,3 +155,4 @@ MODULE = Gtk2::Action	PACKAGE = Gtk2::Widget	PREFIX = gtk_widget_
 GtkAction_ornull * gtk_widget_get_action (GtkWidget *widget);
 
 #endif
+

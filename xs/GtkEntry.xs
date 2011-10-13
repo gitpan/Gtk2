@@ -29,15 +29,18 @@ gtk2perl_border_wrap (GType gtype, const char * package, gpointer boxed, gboolea
 	GtkBorder *border = boxed;
 	HV *hv;
 
+	PERL_UNUSED_VAR (gtype);
+	PERL_UNUSED_VAR (package);
+
 	if (!border)
 		return &PL_sv_undef;
 
 	hv = newHV ();
 
-	hv_store (hv, "left", 4, newSViv (border->left), 0);
-	hv_store (hv, "right", 5, newSViv (border->right), 0);
-	hv_store (hv, "top", 3, newSViv (border->top), 0);
-	hv_store (hv, "bottom", 6, newSViv (border->bottom), 0);
+	gperl_hv_take_sv_s (hv, "left", newSViv (border->left));
+	gperl_hv_take_sv_s (hv, "right", newSViv (border->right));
+	gperl_hv_take_sv_s (hv, "top", newSViv (border->top));
+	gperl_hv_take_sv_s (hv, "bottom", newSViv (border->bottom));
 
 	if (own)
 		gtk_border_free (border);
@@ -53,6 +56,9 @@ gtk2perl_border_unwrap (GType gtype, const char * package, SV * sv)
 	HV *hv;
 	SV **value;
 	GtkBorder *border;
+
+	PERL_UNUSED_VAR (gtype);
+	PERL_UNUSED_VAR (package);
 
 	if (!gperl_sv_is_defined (sv) || !SvRV (sv))
 		return NULL;
@@ -227,7 +233,6 @@ guint16 gtk_entry_get_text_length (GtkEntry *entry);
 
 #endif /* 2.14 */
 
-
 #if GTK_CHECK_VERSION (2, 16, 0)
 
 #
@@ -269,7 +274,11 @@ void gtk_entry_set_icon_sensitive (GtkEntry *entry, GtkEntryIconPosition icon_po
 
 void gtk_entry_set_icon_tooltip_markup (GtkEntry *entry, GtkEntryIconPosition icon_pos, const gchar_ornull *tooltip);
 
+gchar_own_ornull * gtk_entry_get_icon_tooltip_markup (GtkEntry *entry, GtkEntryIconPosition icon_pos);
+
 void gtk_entry_set_icon_tooltip_text (GtkEntry *entry, GtkEntryIconPosition icon_pos, const gchar_ornull *tooltip);
+
+gchar_own_ornull * gtk_entry_get_icon_tooltip_text (GtkEntry *entry, GtkEntryIconPosition icon_pos);
 
 void gtk_entry_set_progress_fraction (GtkEntry *entry, gdouble fraction);
 
@@ -277,9 +286,41 @@ void gtk_entry_set_progress_pulse_step (GtkEntry *entry, gdouble fraction);
 
 void gtk_entry_unset_invisible_char (GtkEntry *entry);
 
+void gtk_entry_set_icon_drag_source (GtkEntry *entry, GtkEntryIconPosition icon_pos, GtkTargetList *target_list, GdkDragAction actions);
+
+gint gtk_entry_get_current_icon_drag_source (GtkEntry *entry);
 
 #endif /* 2.16 */
 
+#if GTK_CHECK_VERSION (2, 18, 0)
+
+GtkWidget *gtk_entry_new_with_buffer (class, GtkEntryBuffer *buffer)
+    C_ARGS:
+	buffer
+
+GtkEntryBuffer *gtk_entry_get_buffer (GtkEntry *entry);
+
+void gtk_entry_set_buffer (GtkEntry *entry, GtkEntryBuffer *buffer);
+
+#endif /* 2.18 */
+
+#if GTK_CHECK_VERSION (2, 20, 0)
+
+GdkWindow * gtk_entry_get_icon_window (GtkEntry *entry, GtkEntryIconPosition icon_pos);
+
+GdkWindow * gtk_entry_get_text_window (GtkEntry *entry);
+
+#endif /* 2.20 */
+
+#if GTK_CHECK_VERSION (2, 22, 0)
+
+gboolean gtk_entry_im_context_filter_keypress (GtkEntry *entry, GdkEvent *event);
+    C_ARGS:
+	entry, (GdkEventKey *) event
+
+void gtk_entry_reset_im_context (GtkEntry *entry);
+
+#endif /* 2.22 */
 
 ##
 ## hey, these are deprecated!  is that new as of 2.3.x?

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 43;
+use Gtk2::TestHelper tests => 46;
 
 # $Id$
 
@@ -86,6 +86,13 @@ SKIP: {
   ok(defined($map -> have_bidi_layouts()));
 }
 
+SKIP: {
+  skip "new 2.16 stuff", 1
+    unless Gtk2 -> CHECK_VERSION(2, 16, 0);
+
+  ok(defined($map -> get_caps_lock_state), 'get_caps_lock_state');
+}
+
 my $a = $Gtk2::Gdk::Keysyms{ a };
 my $A = $Gtk2::Gdk::Keysyms{ A };
 
@@ -103,6 +110,16 @@ is(Gtk2::Gdk -> keyval_is_lower($a), 1);
 my $unicode = Gtk2::Gdk -> keyval_to_unicode($a);
 is(Gtk2::Gdk -> unicode_to_keyval($unicode), $a);
 
+}
+
+SKIP: {
+  skip 'new 2.20 stuff', 2
+    unless Gtk2->CHECK_VERSION(2, 20, 0);
+
+  my $map = Gtk2::Gdk::Keymap -> get_default();
+  ok(defined $map -> add_virtual_modifiers([qw/mod1-mask super-mask/]));
+  my ($result, $new_state) = $map -> map_virtual_modifiers([qw/mod1-mask super-mask/]);
+  ok(defined $result && defined $new_state);
 }
 
 __END__

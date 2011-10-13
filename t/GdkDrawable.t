@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-use Gtk2::TestHelper tests => 11;
+use Gtk2::TestHelper tests => 15;
 
 # $Id$
 
@@ -62,9 +62,12 @@ my $gc = Gtk2::Gdk::GC -> new_with_values($window -> window(), $values);
 my $layout = $window -> create_pango_layout("Bla!");
 
 $win -> draw_point($gc, 10, 10);
+$win -> draw_points($gc);  # no points
 $win -> draw_points($gc, 10, 10, 11, 11, 12, 12, 13, 13);
 $win -> draw_line($gc, 5, 5, 10, 10);
+$win -> draw_lines($gc);  # no lines
 $win -> draw_lines($gc, 5, 5, 10, 10, 15, 15, 20, 20);
+$win -> draw_segments($gc);
 $win -> draw_segments($gc, 1, 2, 3, 4, 10, 11, 12, 13);
 $win -> draw_rectangle($gc, 1, 0, 0, 10, 10);
 $win -> draw_arc($gc, 1, 5, 5, 10, 10, 23, 42);
@@ -72,17 +75,22 @@ $win -> draw_polygon($gc, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6);
 $win -> draw_layout_line($gc, 10, 10, $layout -> get_line(0));
 $win -> draw_layout($gc, 10, 10, $layout);
 $win -> draw_layout_line_with_colors($gc, 10, 10, $layout -> get_line(0), $black, $black);
+$win -> draw_layout_line_with_colors($gc, 10, 10, $layout -> get_line(0), $black, undef);
 $win -> draw_layout_with_colors($gc, 10, 10, $layout, $black, $black);
+$win -> draw_layout_with_colors($gc, 10, 10, $layout, undef,  $black);
 $win -> draw_drawable($gc, $win, 5, 5, 5, 5, 10, 10);
 
-my $image = $win -> get_image(5, 5, 10, 10);
-
 SKIP: {
-  skip("get_image returned undef, skipping draw_image", 1)
+  my $image = $win -> get_image(5, 5, 10, 10);
+  skip("get_image returned undef, skipping draw_image", 2)
     unless (defined($image));
 
   isa_ok($image, "Gtk2::Gdk::Image");
   $win -> draw_image($gc, $image, 0, 0, 0, 0, 50, 50);
+
+  require Scalar::Util;
+  Scalar::Util::weaken ($image);
+  is ($image, undef, 'get_image() resulting image destroyed when unreferenced');
 }
 
 SKIP: {
@@ -90,21 +98,51 @@ SKIP: {
     unless Gtk2->CHECK_VERSION (2, 2, 0);
 
   $win -> draw_pixbuf($gc, Gtk2::Gdk::Pixbuf -> new("rgb", 0, 8, 10, 10), 0, 0, 0, 0, -1, -1, "none", 5, 5);
+
+  #test with no gc
+  $win -> draw_pixbuf(undef, Gtk2::Gdk::Pixbuf -> new("rgb", 0, 8, 10, 10), 0, 0, 0, 0, -1, -1, "none", 5, 5);
+}
+
+SKIP: {
+  skip("copy_to_image is new in 2.4", 2)
+    unless Gtk2->CHECK_VERSION (2, 4, 0);
+
+  my $image = $win -> copy_to_image(undef, 0, 0, 0, 0, 50, 50);
+  skip ("copy_to_image returned undef", 2)
+    unless (defined($image));
+
+  isa_ok($image, "Gtk2::Gdk::Image",
+	'copy_to_image() creating an image');
+
+  require Scalar::Util;
+  Scalar::Util::weaken ($image);
+  is ($image, undef,
+      'copy_to_image() creating an image - destroyed when unreferenced');
 }
 
 SKIP: {
   skip("copy_to_image is new in 2.4", 1)
     unless Gtk2->CHECK_VERSION (2, 4, 0);
+  my $existing_image = $win -> get_image(5, 5, 10, 10);
+  skip("get_image returned undef, skipping draw_image", 2)
+    unless (defined($existing_image));
 
-  my $image = $win -> copy_to_image($image, 0, 0, 0, 0, 50, 50);
+  my $image = $win -> copy_to_image($existing_image, 0, 0, 0, 0, 50, 50);
 
   skip ("copy_to_image returned undef", 1)
     unless (defined($image));
 
-  isa_ok($image, "Gtk2::Gdk::Image");
+  isa_ok($image, "Gtk2::Gdk::Image",
+	 'copy_to_image() to a given target image');
+
+  require Scalar::Util;
+  Scalar::Util::weaken ($image);
+  Scalar::Util::weaken ($existing_image);
+  is ($image, undef,
+      'copy_to_image() to a given target image - destroyed when unreferenced');
 }
 
 __END__
 
-Copyright (C) 2003-2008 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2010 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

@@ -17,7 +17,8 @@ gtk_font_button_new (class, const gchar * fontname=NULL)
     ALIAS:
 	new_with_font = 1
     CODE:
-	RETVAL = ix == 1
+	PERL_UNUSED_VAR (ix);
+	RETVAL = items == 2
 	       ? gtk_font_button_new_with_font (fontname)
 	       : gtk_font_button_new ();
     OUTPUT:

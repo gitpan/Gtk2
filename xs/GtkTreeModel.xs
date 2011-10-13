@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005, 2010 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
@@ -180,9 +180,10 @@ gtk2perl_tree_model_get_column_type (GtkTreeModel *tree_model,
 static SV *
 sv_from_iter (GtkTreeIter * iter)
 {
-	AV * av = newAV ();
+	AV * av;
 	if (!iter)
 		return &PL_sv_undef;
+	av = newAV ();
 	av_push (av, newSVuv (iter->stamp));
 	av_push (av, newSViv (PTR2IV (iter->user_data)));
 	av_push (av, iter->user_data2 ? newRV (iter->user_data2) : &PL_sv_undef);
@@ -209,17 +210,17 @@ iter_from_sv (GtkTreeIter * iter,
 		if ((svp = av_fetch (av, 0, FALSE)))
 			iter->stamp = SvUV (*svp);
 
-		if ((svp = av_fetch (av, 1, FALSE)) && SvIOK (*svp))
+		if ((svp = av_fetch (av, 1, FALSE)) && gperl_sv_is_defined (*svp))
 			iter->user_data = INT2PTR (gpointer, SvIV (*svp));
 		else
 			iter->user_data = NULL;
 
-		if ((svp = av_fetch (av, 2, FALSE)) && SvROK (*svp))
+		if ((svp = av_fetch (av, 2, FALSE)) && gperl_sv_is_ref (*svp))
 			iter->user_data2 =  SvRV (*svp);
 		else
 			iter->user_data2 = NULL;
 
-		if ((svp = av_fetch (av, 3, FALSE)) && SvROK (*svp))
+		if ((svp = av_fetch (av, 3, FALSE)) && gperl_sv_is_ref (*svp))
 			iter->user_data3 =  SvRV (*svp);
 		else
 			iter->user_data3 = NULL;
@@ -741,6 +742,7 @@ gint
 gtk_tree_path_get_depth (path)
 	GtkTreePath *path
 
+# gint * gtk_tree_path_get_indices_with_depth (GtkTreePath *path, gint *depth);
 =for apidoc
 Returns a list of integers describing the current indices of I<$path>.
 =cut
@@ -924,7 +926,8 @@ SV*
 to_arrayref (GtkTreeIter * iter, IV stamp)
     CODE:
 	if (iter->stamp != stamp)
-		croak ("invalid iter -- stamp %d does not match requested %d",
+		croak ("invalid iter -- stamp %d does not match "
+		       "requested %" IVdf,
 		       iter->stamp, stamp);
         RETVAL = sv_from_iter (iter);
     OUTPUT:
@@ -1406,7 +1409,7 @@ gtk_tree_model_rows_reordered (tree_model, path, iter, ...)
 	if (items - 3 != n)
 		croak ("rows_reordered expects a list of as many indices"
 		       " as the selected node of the model has children\n"
-		       "   got %d, expected %d", items - 3, n);
+		       "   got %" IVdf ", expected %d", items - 3, n);
 	new_order = g_new (gint, n);
 	for (i = 0 ; i < n ; i++)
 		new_order[i] = SvIV (ST (3+i));

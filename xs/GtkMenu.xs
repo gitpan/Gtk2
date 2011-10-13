@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005, 2010 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,24 +57,34 @@ gtk2perl_menu_position_func (GtkMenu * menu,
 	if (callback->data)
 		XPUSHs (sv_2mortal (newSVsv (callback->data)));
 
+	/* A die() from callback->func is suspected to be bad or very bad.
+	   Circa Gtk 2.18 a jump out of $menu->popup seems to leave an X
+	   grab with no way to get rid of it (no keyboard Esc, and no mouse
+	   click handlers).  The position func can also be called later for
+	   things like resizing or move to a different GdkScreen, and such a
+	   call might come straight from the main loop, where a die() would
+	   jump out of Gtk2->main.  */
+
 	PUTBACK;
-
-	n = call_sv (callback->func, G_ARRAY);
-
+	n = call_sv (callback->func, G_ARRAY | G_EVAL);
 	SPAGAIN;
 
-	if (n < 2 || n > 3)
-		croak ("menu position callback must return two integers "
-		       "(x, and y) or two integers and a boolean (x, y, and "
-		       "push_in)");
-
-	/* POPs and POPi take things off the *end* of the stack! */
-	if (n > 2) {
-		SV *sv = POPs;
-		*push_in = sv_2bool (sv);
+	if (SvTRUE (ERRSV)) {
+		g_warning ("menu position callback ignoring error: %s",
+			   SvPVutf8_nolen (ERRSV));
+	} else if (n < 2 || n > 3) {
+		g_warning ("menu position callback must return two integers "
+			   "(x, and y) or two integers and a boolean "
+			   "(x, y, and push_in)");
+	} else {
+		/* POPs and POPi take things off the *end* of the stack! */
+		if (n > 2) {
+			SV *sv = POPs;
+			*push_in = sv_2bool (sv);
+		}
+		if (n > 1) *y = POPi;
+		if (n > 0) *x = POPi;
 	}
-	if (n > 1) *y = POPi;
-	if (n > 0) *x = POPi;
 
 	PUTBACK;
 	FREETMPS;
@@ -100,8 +110,13 @@ gtk2perl_menu_detach_func (GtkWidget *attach_widget,
 	callback = g_object_get_data (G_OBJECT (attach_widget),
 	                              "__gtk2perl_menu_detach_func__");
 
-	if (callback)
+	if (callback) {
 		gperl_callback_invoke (callback, NULL, attach_widget, menu);
+
+		/* free the handler after it's been called */
+		g_object_set_data (G_OBJECT (attach_widget),
+				   "__gtk2perl_menu_detach_func__", NULL);
+	}
 }
 
 MODULE = Gtk2::Menu	PACKAGE = Gtk2::Menu	PREFIX = gtk_menu_
@@ -111,6 +126,22 @@ gtk_menu_new (class)
     C_ARGS:
 	/* void */
 
+=for apidoc
+If C<$menu_pos_func> is not C<undef> it's called as
+
+    ($x, $y, $push_in) = &$menu_pos_func ($menu, $x, $y, $data)
+
+C<$x>,C<$y> inputs are a proposed position based on the mouse pointer
+(not actually documented in the Gtk manuals).  The return should be a
+desired C<$x>,C<$y>, and an optional C<$push_in> flag.  If C<$push_in>
+is true then Gtk will adjust C<$x>,C<$y> if necessary so the menu is
+fully visible in the screen width and height.
+
+C<$menu_pos_func> and C<$data> are stored in C<$menu> and may be
+called again later for a C<< $menu->reposition >> or some obscure
+things like a changed C<set_screen> while torn-off.  A further
+C<< $menu->popup >> call replaces C<$menu_pos_func> and C<$data>.
+=cut
 void
 gtk_menu_popup (menu, parent_menu_shell, parent_menu_item, menu_pos_func, data, button, activate_time)
 	GtkMenu	* menu
@@ -125,6 +156,7 @@ gtk_menu_popup (menu, parent_menu_shell, parent_menu_item, menu_pos_func, data, 
 	if (!gperl_sv_is_defined (menu_pos_func)) {
 		gtk_menu_popup (menu, parent_menu_shell, parent_menu_item,
 		                NULL, NULL, button, activate_time);
+		g_object_set_data (G_OBJECT(menu), "_gtk2perl_menu_pos_callback", NULL);
 	} else {
 		GPerlCallback * callback;
 		/* we don't need to worry about the callback arg types since
@@ -141,7 +173,7 @@ gtk_menu_popup (menu, parent_menu_shell, parent_menu_item, menu_pos_func, data, 
 		 * if we use object data, we can clean up the ones we install
 		 * and reinstall.  Not likely, of course, but there are
 		 * pathological programmers out there. */
-		g_object_set_data_full (G_OBJECT (menu), "_menu_pos_callback",
+		g_object_set_data_full (G_OBJECT (menu), "_gtk2perl_menu_pos_callback",
 		                        callback,
 		                        (GDestroyNotify)
 		                             gperl_callback_destroy);
@@ -178,15 +210,25 @@ gtk_menu_set_accel_path (menu, accel_path)
 	GtkMenu *menu
 	const gchar *accel_path
 
+=for apidoc
+Attach C<$menu> to C<$attach_widget>.  C<$menu> must not be currently
+attached to any other widget, including not a submenu of a
+C<Gtk2::MenuItem>.
+
+If C<$menu> is later detached from the widget with
+C<< $menu->detach >> then the C<$detach_func> is called as
+
+    &$detach_func ($attach_widget, $menu)
+=cut
 void
-gtk_menu_attach_to_widget (menu, attach_widget, detacher)
+gtk_menu_attach_to_widget (menu, attach_widget, detach_func)
 	GtkMenu *menu
 	GtkWidget *attach_widget
-	SV *detacher
+	SV *detach_func
     PREINIT:
 	GPerlCallback *callback;
     CODE:
-	callback = gtk2perl_menu_detach_func_create (detacher, NULL);
+	callback = gtk2perl_menu_detach_func_create (detach_func, NULL);
 
 	g_object_set_data_full (G_OBJECT (attach_widget),
 	                        "__gtk2perl_menu_detach_func__",
@@ -238,7 +280,7 @@ gtk_menu_get_title (menu)
 void
 gtk_menu_set_screen (menu, screen)
 	GtkMenu   * menu
-	GdkScreen * screen
+	GdkScreen_ornull * screen
 
 #endif
 
@@ -272,3 +314,12 @@ const gchar* gtk_menu_get_accel_path (GtkMenu *menu);
 gint gtk_menu_get_monitor (GtkMenu *menu);
 
 #endif /* 2.14 */
+
+#if GTK_CHECK_VERSION (2, 18, 0)
+
+void gtk_menu_set_reserve_toggle_size (GtkMenu *menu, gboolean reserve_toggle_size);
+
+gboolean gtk_menu_get_reserve_toggle_size (GtkMenu *menu);
+
+#endif
+

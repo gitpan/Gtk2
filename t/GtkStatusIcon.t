@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 use Gtk2::TestHelper
-  tests => 36,
+  tests => 37,
   at_least_version => [2, 10, 0, "Gtk2::StatusIcon is new in 2.10"];
 
 # $Id$
@@ -140,14 +140,18 @@ SKIP: {
   skip 'new 2.16 stuff', 6
     unless Gtk2->CHECK_VERSION(2, 16, 0);
 
+  # Non-X11 platforms require a tooltip text for the below to work.
+  $icon->set_tooltip_text("TEST");
+
   $icon->set_has_tooltip(TRUE);
   is ($icon->get_has_tooltip(), TRUE);
 
   $icon->set_has_tooltip(FALSE);
   is ($icon->get_has_tooltip(), FALSE);
 
-  $icon->set_tooltip_markup("<b>TEST1</b>");
-  is ($icon->get_tooltip_markup(), "<b>TEST1</b>");
+  # Non-X11 platforms don't actually support any markup tags.
+  $icon->set_tooltip_markup("TEST1");
+  is ($icon->get_tooltip_markup(), "TEST1");
 
   $icon->set_tooltip_markup(undef);
   is ($icon->get_tooltip_markup(), undef);
@@ -157,10 +161,28 @@ SKIP: {
 
   $icon->set_tooltip_text(undef);
   is ($icon->get_tooltip_text(), undef);
-
-
 }
 
+# --------------------------------------------------------------------------- #
+
+SKIP: {
+  skip 'new 2.18 stuff', 1
+    unless Gtk2->CHECK_VERSION(2, 18, 0);
+
+  $icon->set_title('my statusicon title');
+  is ($icon->get_title, 'my statusicon title', '[gs]et_title');
+}
+
+# --------------------------------------------------------------------------- #
+
+SKIP: {
+  skip 'new 2.20 stuff', 0
+    unless Gtk2->CHECK_VERSION(2, 24, 7);
+  # Not usable prior to 2.24.7, see
+  # <https://bugzilla.gnome.org/show_bug.cgi?id=638263>.
+  my $icon = Gtk2::StatusIcon->new;
+  $icon->set_name('bla');
+}
 
 __END__
 

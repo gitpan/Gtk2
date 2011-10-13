@@ -1,9 +1,7 @@
-###!/usr/bin/perl -w
-
-# $Id$
+#!/usr/bin/env perl
 
 use Gtk2::TestHelper
-	tests => 24,
+	tests => 28,
 	at_least_version => [2, 4, 0, "GtkComboBox is new in 2.4"],
 	;
 
@@ -37,6 +35,10 @@ $combo_box->set_active_iter ($iter);
 is ($model->get_path ($combo_box->get_active_iter)->to_string,
     $model->get_path ($iter)->to_string);
 
+$combo_box->set_active_iter (undef);
+is ($combo_box->get_active, -1);
+is ($combo_box->get_active_iter, undef);
+
 $combo_box = Gtk2::ComboBox->new;
 isa_ok ($combo_box, 'Gtk2::ComboBox');
 # set a model to avoid a nastygram when destroying; some versions of gtk+
@@ -66,7 +68,7 @@ $combo_box->set_active (1);
 is ($combo_box->get_active, 1, 'set and get active');
 
 SKIP: {
-	skip "new api in gtk+ 2.6", 11
+	skip "new api in gtk+ 2.6", 12
 		unless Gtk2->CHECK_VERSION (2, 6, 0);
 
 	my $active_path = Gtk2::TreePath->new_from_string
@@ -117,6 +119,10 @@ SKIP: {
 	is ($combo_box->get_wrap_width, 1);
 	is ($combo_box->get_row_span_column, 1);
 	is ($combo_box->get_column_span_column, 1);
+
+	# setting undef for no model is allowed
+	$combo_box->set_model (undef);
+	is ($combo_box->get_model, undef, 'set_model() of undef giving undef');
 }
 
 SKIP: {
@@ -127,9 +133,18 @@ SKIP: {
 	is ($combo_box->get_title, "whee");
 }
 
+SKIP: {
+	skip 'new 2.14 stuff', 1
+		unless Gtk2->CHECK_VERSION(2, 14, 0);
+
+	my $combo_box = Gtk2::ComboBox->new;
+	$combo_box->set_button_sensitivity ('auto');
+	is ($combo_box->get_button_sensitivity, 'auto');
+}
+
 __END__
 
-Copyright (C) 2003-2006 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2006, 2010 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.
 
 vim: set ft=perl :

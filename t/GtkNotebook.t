@@ -1,13 +1,11 @@
-#
-# $Id$
-#
+#!/usr/bin/env perl
 
 #########################
 # GtkNotbook Tests
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 63;
+use Gtk2::TestHelper tests => 66;
 
 my $win = Gtk2::Window->new;
 
@@ -126,10 +124,23 @@ SKIP: {
 
 	$nb->set_tab_detachable ($child, TRUE);
 	ok ($nb->get_tab_detachable ($child));
+}
 
-	# FIXME: How to test the callback marshalling?
-	$nb->set_window_creation_hook (sub { warn join ", ", @_; }, 'data');
-	$nb->set_window_creation_hook (sub { warn join ", ", @_; });
+SKIP: {
+	skip "2.20 stuff", 1
+		unless Gtk2->CHECK_VERSION (2, 20, 0);
+
+	my $button=Gtk2::Button->new("click me");
+	$nb->set_action_widget($button,'end');
+	is ($nb->get_action_widget('end'), $button, '[gs]et_action_widget');
+}
+
+SKIP: {
+	skip 'new 2.22 stuff', 2
+		unless Gtk2->CHECK_VERSION(2, 22, 0);
+
+	ok (defined $nb->get_tab_hborder);
+	ok (defined $nb->get_tab_vborder);
 }
 
 $win->show_all;
@@ -156,6 +167,40 @@ run_main sub {
 };
 
 ok(1);
+
+=comment
+
+Here's some interactive code for testing the window creation hook.
+
+my $w = Gtk2::Window->new;
+my $nb = Gtk2::Notebook->new;
+$nb->append_page (my $c = Gtk2::Label->new ('Test'));
+$nb->set_tab_detachable ($c, TRUE);
+
+Gtk2::Notebook->set_window_creation_hook (
+  sub {
+    my ($notebook, $page, $x, $y, $data) = @_;
+
+    my $new_window = Gtk2::Window->new;
+    my $new_notebook = Gtk2::Notebook->new;
+    $new_window->add ($new_notebook);
+    $new_window->show_all;
+
+    # Either do it manually and return undef, or ...
+    #$notebook->remove ($page);
+    #$new_notebook->append_page ($page);
+    #return undef;
+
+    # ... simply return the new notebook and let gtk+ do the work.
+    return $new_notebook;
+  });
+
+$w->add ($nb);
+$w->signal_connect (destroy => sub { Gtk2->main_quit; });
+$w->show_all;
+Gtk2->main;
+
+=cut
 
 __END__
 

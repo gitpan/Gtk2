@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003, 2009 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,9 +57,9 @@ newSVGdkKeymapKey (GdkKeymapKey *key)
 
 	hv = newHV ();
 
-	hv_store (hv, "keycode", 7, newSVuv (key->keycode), 0);
-	hv_store (hv, "group", 5, newSViv (key->group), 0);
-	hv_store (hv, "level", 5, newSViv (key->level), 0);
+	gperl_hv_take_sv_s (hv, "keycode", newSVuv (key->keycode));
+	gperl_hv_take_sv_s (hv, "group", newSViv (key->group));
+	gperl_hv_take_sv_s (hv, "level", newSViv (key->level));
 
 	return newRV_noinc ((SV *) hv);
 }
@@ -180,8 +180,8 @@ gdk_keymap_get_entries_for_keycode (keymap, hardware_keycode)
 	EXTEND (SP, n_entries);
 	for (i = 0; i < n_entries; i++) {
 		hv = newHV ();
-		hv_store (hv, "key", 3, newSVGdkKeymapKey (&keys[i]), 0);
-		hv_store (hv, "keyval", 6, newSVuv (keyvals[i]), 0);
+		gperl_hv_take_sv_s (hv, "key", newSVGdkKeymapKey (&keys[i]));
+		gperl_hv_take_sv_s (hv, "keyval", newSVuv (keyvals[i]));
 		PUSHs (sv_2mortal (newRV_noinc ((SV*) hv)));
 	}
 
@@ -194,6 +194,37 @@ gdk_keymap_get_direction (keymap)
 gboolean gdk_keymap_have_bidi_layouts (GdkKeymap *keymap);
 
 #endif
+
+#if GTK_CHECK_VERSION (2, 16, 0)
+
+gboolean gdk_keymap_get_caps_lock_state (GdkKeymap *keymap);
+
+#endif
+
+#if GTK_CHECK_VERSION (2, 20, 0)
+
+GdkModifierType
+gdk_keymap_add_virtual_modifiers (GdkKeymap *keymap, GdkModifierType state)
+    CODE:
+	gdk_keymap_add_virtual_modifiers (keymap, &state);
+	RETVAL = state;
+    OUTPUT:
+	RETVAL
+
+=for apidoc
+=for signature (bool, new_state) = $keymap->map_virtual_modifiers (keymap, state)
+=cut
+void
+gdk_keymap_map_virtual_modifiers (GdkKeymap *keymap, GdkModifierType state)
+    PREINIT:
+	gboolean result;
+    PPCODE:
+	result = gdk_keymap_map_virtual_modifiers (keymap, &state);
+	EXTEND (SP, 2);
+	PUSHs (sv_2mortal (boolSV (result)));
+	PUSHs (sv_2mortal (newSVGdkModifierType (state)));
+
+#endif /* 2.20 */
 
 MODULE = Gtk2::Gdk::Keys PACKAGE = Gtk2::Gdk PREFIX = gdk_
 
@@ -212,7 +243,7 @@ gdk_keyval_from_name (class, keyval_name)
 
 ##  void gdk_keyval_convert_case (guint symbol, guint *lower, guint *upper)
 =for apidoc
-=for signature (lower, upper) = Gtk2::Gdk::Keyval->convert_case ($symbol)
+=for signature (lower, upper) = Gtk2::Gdk->keyval_convert_case ($symbol)
 =cut
 void
 gdk_keyval_convert_case (class, symbol)

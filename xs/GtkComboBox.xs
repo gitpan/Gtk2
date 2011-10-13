@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2006 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006, 2010 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
@@ -121,11 +121,15 @@ gtk_combo_box_get_active_iter (GtkComboBox * combo_box)
     OUTPUT:
 	RETVAL
 
-void gtk_combo_box_set_active_iter (GtkComboBox *combo_box, GtkTreeIter *iter);
+void gtk_combo_box_set_active_iter (GtkComboBox *combo_box, GtkTreeIter_ornull *iter);
 
 ##/* getters and setters */
 
-void gtk_combo_box_set_model (GtkComboBox *combo_box, GtkTreeModel *model)
+=for apidoc
+Note that setting C<undef> for no model is new in Gtk 2.6.  (Both here
+or via C<set_property>.)
+=cut
+void gtk_combo_box_set_model (GtkComboBox *combo_box, GtkTreeModel_ornull *model)
 
 GtkTreeModel *gtk_combo_box_get_model (GtkComboBox *combo_box);
 
@@ -197,3 +201,11 @@ void gtk_combo_box_set_title (GtkComboBox *combo_box, const gchar * title);
 const gchar * gtk_combo_box_get_title (GtkComboBox *combo_box);
 
 #endif
+
+#if GTK_CHECK_VERSION (2, 14, 0)
+
+void gtk_combo_box_set_button_sensitivity (GtkComboBox *combo_box, GtkSensitivityType sensitivity);
+
+GtkSensitivityType gtk_combo_box_get_button_sensitivity (GtkComboBox *combo_box);
+
+#endif /* 2.14 */

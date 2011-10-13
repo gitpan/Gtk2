@@ -10,7 +10,7 @@
 
 #########################
 
-use Gtk2::TestHelper tests => 114;
+use Gtk2::TestHelper tests => 120;
 
 ok( my $win = Gtk2::Window->new );
 ok( $win = Gtk2::Window->new('popup') );
@@ -388,6 +388,42 @@ SKIP: {
 	is (scalar @list, 3);
 	isa_ok ($list[0], 'Gtk2::Window');
 }
+
+SKIP: {
+	skip 'new 2.16 stuff', 2
+		unless Gtk2->CHECK_VERSION(2, 16, 0);
+
+	Gtk2::Window->set_default_icon_name (undef);
+	is (Gtk2::Window->get_default_icon_name,undef, '[gs]et_default_icon_name with undef');
+	Gtk2::Window->set_default_icon_name ('gtk-ok');
+	is (Gtk2::Window->get_default_icon_name,'gtk-ok', 'get_default_icon_name');
+}
+
+SKIP: {
+	skip 'new 2.20 stuff', 2
+		unless Gtk2->CHECK_VERSION(2, 20, 0);
+
+	my $window = Gtk2::Window->new;
+	is ($window->get_window_type, 'toplevel');
+
+	$window->set_mnemonics_visible (TRUE);
+	ok ($window->get_mnemonics_visible);
+}
+
+SKIP: {
+	skip 'new 2.22 stuff', 2
+		unless Gtk2->CHECK_VERSION(2, 22, 0);
+
+	my $window = Gtk2::Window->new;
+	my $group = Gtk2::WindowGroup->new ();
+	$group->add_window ($window);
+
+	ok ($window->has_group);
+
+	my $grab = $group->get_current_grab;
+	ok ((defined $grab && $grab->isa ('Gtk2::Widget')) || !defined $grab);
+}
+
 
 __END__
 

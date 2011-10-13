@@ -8,7 +8,7 @@
 # 	- rm
 #########################
 
-use Gtk2::TestHelper tests => 57;
+use Gtk2::TestHelper tests => 66;
 
 ok( my $menubar = Gtk2::MenuBar->new );
 
@@ -58,6 +58,7 @@ foreach $num (qw/1 2 3/)
 			unless Gtk2->CHECK_VERSION (2, 2, 0);
 
 		$menu->set_screen (Gtk2::Gdk::Screen->get_default);
+		$menu->set_screen (undef);
 	}
 
 	$menuitem = undef;
@@ -124,11 +125,67 @@ $menu->popup(undef, undef, $position_callback, "bla", 1, 0);
 $menu->popdown;
 ok(TRUE);
 
+# crib note: $position_callback sub must be a proper closure referring to a
+# variable outside itself to weaken away like this
+require Scalar::Util;
+Scalar::Util::weaken($position_callback);
+ok ($position_callback, 'popup() holds onto position_callback');
+
+my $next_position_callback_variable = 0;
+my $next_position_callback = sub { $next_position_callback_variable++;
+                                   return (50,50) };
+$menu->popup(undef, undef, $next_position_callback, undef, 1, 0);
+$menu->popdown;
+is ($position_callback, undef,
+    'next popup() drops previously held position_callback');
+
+# crib note: again $next_position_callback must refer to a variable outside
+# itself to weaken away like this
+require Scalar::Util;
+Scalar::Util::weaken($next_position_callback);
+ok ($next_position_callback, 'popup() holds onto next_position_callback');
+$menu->popup(undef, undef, undef, undef, 1, 0);
+$menu->popdown;
+is ($next_position_callback, undef,
+    'popup() with no position func drops held position_callback');
+
 # If we never entered the pos. callback, fake four tests
 unless ($i_know_you) {
 	foreach (0 .. 3) {
 		ok (TRUE, 'faking pos. callback');
 	}
+}
+
+{
+  my $item = Gtk2::MenuItem->new;
+  my $menu = Gtk2::Menu->new;
+  my $detach_args;
+  my $detach_func = sub { $detach_args = \@_; };
+  $menu->attach_to_widget ($item, $detach_func);
+  $menu->detach;
+  is_deeply ($detach_args, [ $item, $menu ], 'detach callback args');
+
+  # crib note: $detach_func must be a closure referring to a variable
+  # outside itself to weaken away like this
+  Scalar::Util::weaken ($detach_func);
+  is ($detach_func, undef, 'detach callback func freed after called');
+}
+
+{
+  my $popup_runs = 0;
+  my $saw_warning = '';
+  { local $SIG{__WARN__} = sub { $saw_warning = $_[0] };
+    $menu->popup(undef, undef, sub {
+                   $popup_runs = 1;
+                   die;
+                 }, undef, 1, 0);
+  }
+  note "popup position runs=$popup_runs warn='$saw_warning'";
+  $menu->popdown;
+  ok ($popup_runs,
+      'popup positioning die() - popup runs');
+  ok ($saw_warning,
+      'popup positioning die() - die not fatal, turned into warning');
 }
 
 SKIP: {
@@ -143,7 +200,15 @@ SKIP: {
 	is ($menu->get_monitor, 0);
 }
 
+SKIP: {
+	skip 'new 2.18 stuff', 1
+		unless Gtk2->CHECK_VERSION(2, 18, 0);
+
+	$menu->set_reserve_toggle_size(FALSE);
+	is ($menu->get_reserve_toggle_size, FALSE, '[sg]et_reserve_toggle_size');
+}
+
 __END__
 
-Copyright (C) 2003 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003, 2010 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

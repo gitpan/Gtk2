@@ -1,16 +1,15 @@
-api.pod
 AUTHORS
 ChangeLog.pre-git
-CodeGen.pm
 constants-2.0
+constants-2.18
 copyright.pod
-devel.pod
 doctypes
 examples/accel_groups.pl
 examples/adding_stock_icons.pl
 examples/assistant.pl
 examples/attributes.pl
 examples/buttonbox.pl
+examples/cairo-clock.pl
 examples/cairo-rendering.pl
 examples/calendar.pl
 examples/cellrenderer_date.pl
@@ -22,6 +21,7 @@ examples/color_snooper.pl
 examples/combo_box.pl
 examples/customlist.pl
 examples/customrenderer.pl
+examples/customtree.pl
 examples/dialog.pl
 examples/draw_text.pl
 examples/file_chooser.pl
@@ -33,6 +33,9 @@ examples/item_factory_demo.pl
 examples/layout.pl
 examples/linkbutton.pl
 examples/multisel.pl
+examples/offscreen_reflection.pl
+examples/offscreen_rotation.pl
+examples/offscreen_scale.pl
 examples/plug.pl
 examples/rulers.pl
 examples/scribble.pl
@@ -80,11 +83,18 @@ gtk-demo/tree_store.pl
 gtk-demo/ui_manager.pl
 gtk.typemap
 Gtk2.exports
-Gtk2.pm
 gtk2perl-private.h
 gtk2perl.h
+lib/Gtk2.pm
+lib/Gtk2/api.pod
+lib/Gtk2/CodeGen.pm
+lib/Gtk2/devel.pod
+lib/Gtk2/Helper.pm
+lib/Gtk2/Pango.pm
+lib/Gtk2/SimpleList.pm
+lib/Gtk2/SimpleMenu.pm
+lib/Gtk2/TestHelper.pm
 LICENSE
-MAINTAINERS
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
@@ -93,7 +103,9 @@ maps-2.10
 maps-2.12
 maps-2.14
 maps-2.16
+maps-2.18
 maps-2.2
+maps-2.20
 maps-2.4
 maps-2.6
 maps-2.8
@@ -105,12 +117,8 @@ maps_pango-1.4
 maps_pango-1.6
 maps_pango-1.8
 NEWS
+perl-Gtk2.doap
 perl-Gtk2.spec.in
-pm/Helper.pm
-pm/Pango.pm
-pm/SimpleList.pm
-pm/SimpleMenu.pm
-pm/TestHelper.pm
 README
 t/00.Gtk2.t
 t/01.GtkWindow.t
@@ -125,6 +133,7 @@ t/GdkDnd.t
 t/GdkDrawable.t
 t/GdkEvent.t
 t/GdkGC.t
+t/GdkImage.t
 t/GdkInput.t
 t/GdkKeys.t
 t/GdkPango.t
@@ -146,6 +155,7 @@ t/GtkAccelLabel.t
 t/GtkAccelMap.t
 t/GtkAction.t
 t/GtkActionGroup.t
+t/GtkActivatable.t
 t/GtkAdjustment.t
 t/GtkAlignment.t
 t/GtkArrow.t
@@ -170,6 +180,7 @@ t/GtkCellRendererIface-Chaining.t
 t/GtkCellRendererPixbuf.t
 t/GtkCellRendererProgress.t
 t/GtkCellRendererSpin.t
+t/GtkCellRendererSpinner.t
 t/GtkCellRendererText.t
 t/GtkCellRendererToggle.t
 t/GtkCellView.t
@@ -188,6 +199,7 @@ t/GtkDnd.t
 t/GtkDrawingArea.t
 t/GtkEditable.t
 t/GtkEntry.t
+t/GtkEntryBuffer.t
 t/GtkEntryCompletion.t
 t/GtkEventBox.t
 t/GtkExpander.t
@@ -211,12 +223,14 @@ t/GtkHRuler.t
 t/GtkHScale.t
 t/GtkHScrollbar.t
 t/GtkHSeparator.t
+t/GtkHSV.t
 t/GtkIconFactory.t
 t/GtkIconTheme.t
 t/GtkIconView.t
 t/GtkImage.t
 t/GtkImageMenuItem.t
 t/GtkIMContext.t
+t/GtkInfoBar.t
 t/GtkInputDialog.t
 t/GtkInvisible.t
 t/GtkItemFactory.t
@@ -233,6 +247,7 @@ t/GtkMessageDialog.t
 t/GtkMisc.t
 t/GtkNotebook.t
 t/GtkObject.t
+t/GtkOffscreenWindow.t
 t/GtkOptionMenu.t
 t/GtkOrientable.t
 t/GtkPageSetup.t
@@ -269,7 +284,8 @@ t/GtkSimpleMenu.t
 t/GtkSizeGroup.t
 t/GtkSocket-GtkPlug.t
 t/GtkSpinButton.t
-t/GtkStatusBar.t
+t/GtkSpinner.t
+t/GtkStatusbar.t
 t/GtkStatusIcon.t
 t/GtkStock.t
 t/GtkStyle.t
@@ -289,6 +305,8 @@ t/GtkToggleToolButton.t
 t/GtkToolbar.t
 t/GtkToolButton.t
 t/GtkToolItem.t
+t/GtkToolItemGroup.t
+t/GtkToolPalette.t
 t/GtkToolShell.t
 t/GtkTooltip.t
 t/GtkTooltips.t
@@ -328,6 +346,8 @@ t/PangoScript.t
 t/PangoTabs.t
 t/PangoTypes.t
 t/set-scroll-adjustments-signal.t
+t/signal-chaining.t
+t/tied-objects.t
 t/version-checks.t
 TODO
 tools/fetch_faq.pl
@@ -345,6 +365,7 @@ xs/GdkDnd.xs
 xs/GdkDrawable.xs
 xs/GdkEvent.xs
 xs/GdkGC.xs
+xs/GdkImage.xs
 xs/GdkInput.xs
 xs/GdkKeys.xs
 xs/GdkPango.xs
@@ -368,6 +389,7 @@ xs/GtkAccelLabel.xs
 xs/GtkAccelMap.xs
 xs/GtkAction.xs
 xs/GtkActionGroup.xs
+xs/GtkActivatable.xs
 xs/GtkAdjustment.xs
 xs/GtkAlignment.xs
 xs/GtkArrow.xs
@@ -389,6 +411,7 @@ xs/GtkCellRendererCombo.xs
 xs/GtkCellRendererPixbuf.xs
 xs/GtkCellRendererProgress.xs
 xs/GtkCellRendererSpin.xs
+xs/GtkCellRendererSpinner.xs
 xs/GtkCellRendererText.xs
 xs/GtkCellRendererToggle.xs
 xs/GtkCellView.xs
@@ -408,6 +431,7 @@ xs/GtkDnd.xs
 xs/GtkDrawingArea.xs
 xs/GtkEditable.xs
 xs/GtkEntry.xs
+xs/GtkEntryBuffer.xs
 xs/GtkEntryCompletion.xs
 xs/GtkEventBox.xs
 xs/GtkExpander.xs
@@ -431,6 +455,7 @@ xs/GtkHRuler.xs
 xs/GtkHScale.xs
 xs/GtkHScrollbar.xs
 xs/GtkHSeparator.xs
+xs/GtkHSV.xs
 xs/GtkIconFactory.xs
 xs/GtkIconTheme.xs
 xs/GtkIconView.xs
@@ -439,6 +464,7 @@ xs/GtkImageMenuItem.xs
 xs/GtkIMContext.xs
 xs/GtkIMContextSimple.xs
 xs/GtkIMMulticontext.xs
+xs/GtkInfoBar.xs
 xs/GtkInputDialog.xs
 xs/GtkInvisible.xs
 xs/GtkItem.xs
@@ -458,6 +484,7 @@ xs/GtkMessageDialog.xs
 xs/GtkMisc.xs
 xs/GtkNotebook.xs
 xs/GtkObject.xs
+xs/GtkOffscreenWindow.xs
 xs/GtkOptionMenu.xs
 xs/GtkOrientable.xs
 xs/GtkPageSetup.xs
@@ -493,6 +520,7 @@ xs/GtkShow.xs
 xs/GtkSizeGroup.xs
 xs/GtkSocket.xs
 xs/GtkSpinButton.xs
+xs/GtkSpinner.xs
 xs/GtkStatusbar.xs
 xs/GtkStatusIcon.xs
 xs/GtkStock.xs
@@ -513,6 +541,8 @@ xs/GtkToggleToolButton.xs
 xs/GtkToolbar.xs
 xs/GtkToolButton.xs
 xs/GtkToolItem.xs
+xs/GtkToolItemGroup.xs
+xs/GtkToolPalette.xs
 xs/GtkToolShell.xs
 xs/GtkTooltip.xs
 xs/GtkTooltips.xs
@@ -542,7 +572,9 @@ xs_files-2.10
 xs_files-2.12
 xs_files-2.14
 xs_files-2.16
+xs_files-2.18
 xs_files-2.2
+xs_files-2.20
 xs_files-2.4
 xs_files-2.6
 xs_files-2.8

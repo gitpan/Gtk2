@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 by the gtk2-perl team (see the file AUTHORS for a
+ * Copyright (C) 2006, 2010 by the gtk2-perl team (see the file AUTHORS for a
  * complete listing)
  *
  * This library is free software; you can redistribute it and/or
@@ -139,7 +139,7 @@ gtk_recent_manager_set_screen (GtkRecentManager *manager, GdkScreen *screen)
 =for apidoc
 Add I<$uri> to the list of recently used documents.  The Gtk2::RecentManager
 object will try to guess the meta-data of the document from its URI, but if
-you know it you should use L<Gtk2::RecentManager::add_full>.
+you know it you should use C<add_full> above.
 =cut
 gboolean
 gtk_recent_manager_add_item (GtkRecentManager *manager, const gchar *uri)
@@ -167,7 +167,8 @@ The MIME type of the document. [Mandatory]
 =item app_name
 
 The name of the application that is registering the document.  You might
-use the same name you used in L<Glib::set_application_name>.
+use the same name you used in C<Glib::set_application_name>
+(see L<Glib::Utils>).
 
 =item app_exec
 
@@ -356,7 +357,7 @@ gtk_recent_info_get_application_info (info, app_name)
 	GtkRecentInfo *info
 	const gchar *app_name
     PREINIT:
-	gchar *app_exec;
+	const gchar *app_exec;
 	guint count;
 	time_t timestamp;
 	gboolean res;
@@ -371,7 +372,6 @@ gtk_recent_info_get_application_info (info, app_name)
 	PUSHs (sv_2mortal (newSVGChar (app_exec)));
 	PUSHs (sv_2mortal (newSVuv (count)));
 	PUSHs (sv_2mortal (newSViv (timestamp)));
-	g_free (app_exec); /* don't leak */
 
 =for apidoc
 =for signature (applications) = $info->get_applications

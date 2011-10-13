@@ -48,9 +48,9 @@ newSVGtkTargetEntry (GtkTargetEntry * e)
 	h = newHV ();
 	r = newRV_noinc ((SV*)h);
 
-	hv_store (h, "target", 6, e->target ? newSVpv (e->target, 0) : newSVsv (&PL_sv_undef), 0);
-	hv_store (h, "flags", 5, newSVGtkTargetFlags (e->flags), 0);
-	hv_store (h, "info", 4, newSViv (e->info), 0);
+	gperl_hv_take_sv_s (h, "target", e->target ? newSVpv (e->target, 0) : newSVsv (&PL_sv_undef));
+	gperl_hv_take_sv_s (h, "flags", newSVGtkTargetFlags (e->flags));
+	gperl_hv_take_sv_s (h, "info", newSViv (e->info));
 
 	return r;
 }
@@ -111,6 +111,7 @@ gtk_target_list_wrap (GType gtype,
 {
 	/* To keep compatibility with the old wrappers, we always assume
 	 * ownership of the list. */
+	PERL_UNUSED_VAR (own);
 	gtk_target_list_ref ((GtkTargetList *) boxed);
 	return default_wrapper_class->wrap (gtype, package, boxed, TRUE);
 }
@@ -134,7 +135,7 @@ SvGtkTargetList (SV * sv)
 #if GTK_CHECK_VERSION (2, 9, 0)
 	return gperl_get_boxed_check (sv, GTK_TYPE_TARGET_LIST);
 #else
-	if (!sv || !SvROK (sv) ||
+	if (!gperl_sv_is_defined (sv) || !SvROK (sv) ||
 	    !sv_derived_from (sv, "Gtk2::TargetList"))
 		croak ("variable is not of type Gtk2::TargetList");
 	return INT2PTR (GtkTargetList*, SvUV (SvRV (sv)));

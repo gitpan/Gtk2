@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2005 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2005, 2009 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
  */
 
 #include "gtk2perl.h"
+#include <gperl_marshal.h>
 
 /* ------------------------------------------------------------------------- */
 
@@ -30,20 +31,20 @@ newSVGdkWindowAttr (GdkWindowAttr *attr)
 	HV *object = newHV ();
 
 	if (attr && attr->x && attr->y) {
-		hv_store (object, "title", 5, newSVGChar (attr->title), 0);
-		hv_store (object, "event_mask", 10, newSVGdkEventMask (attr->event_mask), 0);
-		hv_store (object, "x", 1, newSViv (attr->x), 0);
-		hv_store (object, "y", 1, newSViv (attr->y), 0);
-		hv_store (object, "width", 5, newSViv (attr->width), 0);
-		hv_store (object, "height", 6, newSViv (attr->height), 0);
-		hv_store (object, "wclass", 6, newSVGdkWindowClass (attr->wclass), 0);
-		hv_store (object, "visual", 6, newSVGdkVisual (attr->visual), 0);
-		hv_store (object, "colormap", 8, newSVGdkColormap (attr->colormap), 0);
-		hv_store (object, "window_type", 11, newSVGdkWindowType (attr->window_type), 0);
-		hv_store (object, "cursor", 6, newSVGdkCursor (attr->cursor), 0);
-		hv_store (object, "wmclass_name", 12, newSVGChar (attr->wmclass_name), 0);
-		hv_store (object, "wmclass_class", 13, newSVGChar (attr->wmclass_class), 0);
-		hv_store (object, "override_redirect", 17, boolSV (attr->override_redirect), 0);
+		gperl_hv_take_sv_s (object, "title", newSVGChar (attr->title));
+		gperl_hv_take_sv_s (object, "event_mask", newSVGdkEventMask (attr->event_mask));
+		gperl_hv_take_sv_s (object, "x", newSViv (attr->x));
+		gperl_hv_take_sv_s (object, "y", newSViv (attr->y));
+		gperl_hv_take_sv_s (object, "width", newSViv (attr->width));
+		gperl_hv_take_sv_s (object, "height", newSViv (attr->height));
+		gperl_hv_take_sv_s (object, "wclass", newSVGdkWindowClass (attr->wclass));
+		gperl_hv_take_sv_s (object, "visual", newSVGdkVisual (attr->visual));
+		gperl_hv_take_sv_s (object, "colormap", newSVGdkColormap (attr->colormap));
+		gperl_hv_take_sv_s (object, "window_type", newSVGdkWindowType (attr->window_type));
+		gperl_hv_take_sv_s (object, "cursor", newSVGdkCursor (attr->cursor));
+		gperl_hv_take_sv_s (object, "wmclass_name", newSVGChar (attr->wmclass_name));
+		gperl_hv_take_sv_s (object, "wmclass_class", newSVGChar (attr->wmclass_class));
+		gperl_hv_take_sv_s (object, "override_redirect", boolSV (attr->override_redirect));
 	}
 
 	return sv_bless (newRV_noinc ((SV *) object),
@@ -99,6 +100,60 @@ SvGdkWindowAttrReal (SV *object, GdkWindowAttributesType *mask)
 	return attr;
 }
 
+#if GTK_CHECK_VERSION (2, 18, 0)
+
+static void
+gtk2perl_offscreen_coord_translate_marshal (GClosure * closure,
+                                            GValue * return_value,
+                                            guint n_param_values,
+                                            const GValue * param_values,
+                                            gpointer invocation_hint,
+                                            gpointer marshal_data)
+
+{
+	gdouble * return_x, * return_y;
+	dGPERL_CLOSURE_MARSHAL_ARGS;
+
+	GPERL_CLOSURE_MARSHAL_INIT (closure, marshal_data);
+
+	PERL_UNUSED_VAR (return_value);
+	PERL_UNUSED_VAR (n_param_values);
+	PERL_UNUSED_VAR (invocation_hint);
+
+	ENTER;
+	SAVETMPS;
+
+	PUSHMARK (SP);
+
+	GPERL_CLOSURE_MARSHAL_PUSH_INSTANCE (param_values);
+
+	XPUSHs (sv_2mortal (newSVnv (g_value_get_double (param_values+1))));
+	XPUSHs (sv_2mortal (newSVnv (g_value_get_double (param_values+2))));
+	return_x = g_value_get_pointer (param_values+3);
+	return_y = g_value_get_pointer (param_values+4);
+
+	GPERL_CLOSURE_MARSHAL_PUSH_DATA;
+
+	PUTBACK;
+
+	GPERL_CLOSURE_MARSHAL_CALL (G_ARRAY);
+
+	if (count == 2) {
+		*return_y = POPn;
+		*return_x = POPn;
+	} else {
+		/* NOTE: croaking here can cause bad things to happen to the
+		 * app, because croaking in signal handlers is bad juju. */
+		croak ("callback must return 2 values : x and y");
+	}
+
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+}
+#endif
+
+
 #if 0 /* not used at the moment */
 static GdkWindowAttr *
 SvGdkWindowAttr (SV *object)
@@ -137,6 +192,47 @@ gtk2perl_gdk_window_invalidate_maybe_recurse_func (GdkWindow *window,
 /* ------------------------------------------------------------------------- */
 
 MODULE = Gtk2::Gdk::Window	PACKAGE = Gtk2::Gdk::Window	PREFIX = gdk_window_
+
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+C<Gtk2::Gdk::Window> is a low-level window-system window.  One of
+these is created when a widget is "realized".
+
+As of Gtk 2.22 a window can only be created by
+C<< Gtk2::Gdk::Window->new() >>, C<foreign_new()>, etc.
+C<Glib::Object::new()> doesn't work (segfaults on using the resulting
+window object).  It's not possible to subclass C<Gtk2::Gdk::Window>
+with L<Glib::Object::Subclass> and the C<Glib::Type> system, since
+only C<gdk_window_new()> does the actual window creation, and that
+function always makes a C<GdkWindow>.  (The Perl-Gtk
+C<< Gtk2::Gdk::Window->new() >> wrapper ignores the class name
+argument.)
+
+It may work to create a Perl level subclass and re-bless a
+C<< Gtk2::Gdk::Window->new() >> into that.  But like any such
+re-blessing it's not preserved when the object is returned from a Gtk
+function etc (that just gives the base Gtk class).
+
+=cut
+
+BOOT:
+#if GTK_CHECK_VERSION (2, 18, 0)
+	gperl_signal_set_marshaller_for (GDK_TYPE_WINDOW, "from-embedder",
+		gtk2perl_offscreen_coord_translate_marshal);
+	gperl_signal_set_marshaller_for (GDK_TYPE_WINDOW, "to-embedder",
+		gtk2perl_offscreen_coord_translate_marshal);
+#endif
+
+=for position post_signals
+
+from-embedder, to-embedder and pick-embedded-child signals are for offscreen windows only.
+
+from-embedder and to-embedder receive the x and y coordinates to translate, and must return the translated x and y coordinate.
+
+=cut
+
 
  ## GdkWindow* gdk_window_new (GdkWindow *parent, GdkWindowAttr *attributes, gint attributes_mask)
 =for apidoc
@@ -347,13 +443,13 @@ gdk_window_scroll (window, dx, dy)
 	gint dx
 	gint dy
 
-void gdk_window_shape_combine_mask (GdkWindow * window, GdkBitmap * mask, gint x, gint y);
+void gdk_window_shape_combine_mask (GdkWindow * window, GdkBitmap_ornull * mask, gint x, gint y);
 
  ## void gdk_window_shape_combine_region (GdkWindow *window, GdkRegion *shape_region, gint offset_x, gint offset_y)
 void
 gdk_window_shape_combine_region (window, shape_region, offset_x, offset_y)
 	GdkWindow *window
-	GdkRegion *shape_region
+	GdkRegion_ornull *shape_region
 	gint offset_x
 	gint offset_y
 
@@ -440,16 +536,46 @@ gdk_window_set_skip_pager_hint (window, skips_pager)
 
 #endif
 
+# The hash fields of SvGdkGeometryReal() are described here because
+# this and Gtk2::Window::set_geometry_hints are the only places it
+# arises.  Otherwise probably the description could go at the start of
+# Gtk2::Gdk::Geometry itself.
+#
 =for apidoc
-
 =for signature $window->set_geometry_hints ($geometry)
 =for signature $window->set_geometry_hints ($geometry, $geom_mask)
-
-=for arg geometry (Gtk2::Gdk::Geometry)
+=for arg geometry_ref (__hide__)
+=for arg geom_mask_sv (__hide__)
+=for arg geometry (scalar) Gtk2::Gdk::Geometry or hashref
 =for arg geom_mask (Gtk2::Gdk::WindowHints) optional, usually inferred from I<$geometry>
 
-The geom_mask argument, describing which fields in the geometry are valid, is
-optional.  If omitted it will be inferred from the geometry itself.
+$geometry is either a L<C<Gtk2::Gdk::Geometry>|Gtk2::Gdk::Geometry>
+object, or a hashref with the following keys and values,
+
+    min_width     integer \ 'min-size' mask
+    min_height    integer /
+    max_width     integer \ 'max-size' mask
+    max_height    integer /
+    base_width    integer \ 'base-size' mask
+    base_height   integer /
+    width_inc     integer \ 'resize-inc' mask
+    height_inc    integer /
+    min_aspect    float   \ 'aspect' mask
+    max_aspect    float   /
+    win_gravity   Gtk2::Gdk::Gravity enum, 'win-gravity' mask
+
+Optional $geom_mask is which fields of $geometry are used.  If
+$geometry is a hashref then $geom_mask defaults to the keys supplied
+in the hash, so for example
+
+    $win->set_geometry_hints ({ min_width => 20, min_height => 10});
+
+If $geometry is a C<Gtk2::Gdk::Geometry> object then you must give
+$geom_mask explicitly.
+
+The 'pos', 'user-pos' and 'user-size' flags in $geom_mask have no data
+fields, so cannot be inferred from a $geometry hashref.  If you want
+those flags you must pass $geom_mask explicitly.
 
 =cut
 ## void gdk_window_set_geometry_hints (GdkWindow *window, GdkGeometry *geometry, GdkWindowHints geom_mask)
@@ -662,7 +788,7 @@ gdk_window_set_icon (window, icon_window, pixmap, mask)
 void
 gdk_window_set_icon_name (window, name)
 	GdkWindow *window
-	const gchar *name
+	const gchar_ornull *name
 
 #if GTK_CHECK_VERSION (2, 4, 0)
 
@@ -680,7 +806,7 @@ GdkWindow * gdk_window_get_group (GdkWindow * window)
 void
 gdk_window_set_group (window, leader)
 	GdkWindow *window
-	GdkWindow *leader
+	GdkWindow_ornull *leader
 
  ## void gdk_window_set_decorations (GdkWindow *window, GdkWMDecoration decorations)
 void
@@ -795,7 +921,7 @@ gdk_window_begin_move_drag (window, button, root_x, root_y, timestamp)
 void
 gdk_window_invalidate_rect (window, rectangle, invalidate_children)
 	GdkWindow * window
-	GdkRectangle * rectangle
+	GdkRectangle_ornull * rectangle
 	gboolean invalidate_children
 
  ## void gdk_window_invalidate_region (GdkWindow *window, GdkRegion *region, gboolean invalidate_children)
@@ -891,9 +1017,9 @@ void gdk_window_move_region (GdkWindow *window, GdkRegion *region, gint dx, gint
 
 GdkWindowTypeHint gdk_window_get_type_hint (GdkWindow *window);
 
-void gdk_window_input_shape_combine_mask (GdkWindow * window, GdkBitmap *mask, gint x, gint y);
+void gdk_window_input_shape_combine_mask (GdkWindow * window, GdkBitmap_ornull *mask, gint x, gint y);
 
-void gdk_window_input_shape_combine_region (GdkWindow * window, GdkRegion *shape, gint offset_x, gint offset_y);
+void gdk_window_input_shape_combine_region (GdkWindow * window, GdkRegion_ornull *shape, gint offset_x, gint offset_y);
 
 void gdk_window_set_child_input_shapes (GdkWindow *window);
 
@@ -907,6 +1033,8 @@ void gdk_window_beep (GdkWindow *window);
 
 void gdk_window_set_startup_id (GdkWindow *window, const gchar *startup_id);
 
+void gdk_window_set_opacity (GdkWindow *window, gdouble opacity);
+
 void gdk_window_set_composited (GdkWindow *window, gboolean composited);
 
 #endif
@@ -918,6 +1046,75 @@ void gdk_window_redirect_to_drawable (GdkWindow *window, GdkDrawable *drawable, 
 void gdk_window_remove_redirection (GdkWindow *window)
 
 #endif /* 2.14 */
+
+#if GTK_CHECK_VERSION (2, 18, 0)
+
+void gdk_window_flush (GdkWindow *window);
+
+gboolean gdk_window_ensure_native (GdkWindow *window);
+
+GdkCursor_ornull * gdk_window_get_cursor (GdkWindow *window);
+
+void gdk_window_restack (GdkWindow *window, GdkWindow_ornull *sibling, gboolean above);
+
+=for apidoc
+Only useful for offscreen C<Gtk2::Gdk::Windows>.
+=cut
+void gdk_window_geometry_changed (GdkWindow *window);
+
+void gdk_window_get_root_coords (GdkWindow *window, gint x, gint y, OUTLIST gint root_x, OUTLIST gint root_y);
+
+gboolean gdk_window_is_destroyed (GdkWindow *window);
+
+#endif /* 2.18 */
+
+#if GTK_CHECK_VERSION (2, 22, 0)
+
+void gdk_window_coords_from_parent (GdkWindow *window, gdouble parent_x, gdouble parent_y, OUTLIST gdouble x, OUTLIST gdouble y);
+
+void gdk_window_coords_to_parent (GdkWindow *window, gdouble x, gdouble y, OUTLIST gdouble parent_x, OUTLIST gdouble parent_y);
+
+gboolean gdk_window_get_accept_focus (GdkWindow *window);
+
+gboolean gdk_window_get_composited (GdkWindow *window);
+
+GdkWindow * gdk_window_get_effective_parent (GdkWindow *window);
+
+GdkWindow * gdk_window_get_effective_toplevel (GdkWindow *window);
+
+gboolean gdk_window_get_focus_on_map (GdkWindow *window);
+
+gboolean gdk_window_get_modal_hint (GdkWindow *window);
+
+gboolean gdk_window_has_native (GdkWindow *window);
+
+gboolean gdk_window_is_input_only (GdkWindow *window);
+
+gboolean gdk_window_is_shaped (GdkWindow *window);
+
+#endif /* 2.22 */
+
+
+#if GTK_CHECK_VERSION (2, 18, 0)
+
+MODULE = Gtk2::Gdk::Window	PACKAGE = Gtk2::Gdk::Window	PREFIX = gdk_offscreen_window_
+
+=for apidoc
+Only for offscreen C<Gtk2::Gdk::Windows>.
+=cut
+GdkPixmap_ornull * gdk_offscreen_window_get_pixmap (GdkWindow *offscreen_window);
+
+=for apidoc
+Only for offscreen C<Gtk2::Gdk::Windows>.
+=cut
+void gdk_offscreen_window_set_embedder (GdkWindow *offscreen_window, GdkWindow *embedder);
+
+=for apidoc
+Only for offscreen C<Gtk2::Gdk::Windows>.
+=cut
+GdkWindow_ornull * gdk_offscreen_window_get_embedder (GdkWindow *offscreen_window);
+
+#endif /* 2.18 */
 
 MODULE = Gtk2::Gdk::Window	PACKAGE = Gtk2::Gdk	PREFIX = gdk_
 

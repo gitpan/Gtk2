@@ -17,7 +17,8 @@ gtk_color_button_new (class, GdkColor*color=NULL)
     ALIAS:
 	new_with_color = 1
     CODE:
-	if (ix == 1)
+	PERL_UNUSED_VAR (ix);
+	if (items == 2)
 		RETVAL = gtk_color_button_new_with_color (color);
 	else
 		RETVAL = gtk_color_button_new ();

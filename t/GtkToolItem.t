@@ -5,7 +5,7 @@
 
 use Gtk2::TestHelper
 	at_least_version => [2, 4, 0, "Action-based menus are new in 2.4"],
-	tests => 19;
+	tests => 24;
 
 
 my $tool_item = Gtk2::ToolItem->new;
@@ -64,6 +64,10 @@ is ($tool_item->get_toolbar_style, 'icons');
 is ($tool_item->get_relief_style,  'none');
 
 
+$tool_item->set_proxy_menu_item ("menu_item_id", undef);
+is ($tool_item->get_proxy_menu_item ("menu_item_id"), undef,
+   'set_proxy_menu_item() to undef');
+
 my $menu_item = Gtk2::MenuItem->new;
 $tool_item->set_proxy_menu_item ("menu_item_id", $menu_item);
 is ($tool_item->retrieve_proxy_menu_item, $menu_item);
@@ -93,7 +97,22 @@ SKIP: {
     $tool_item->toolbar_reconfigured;
 }
 
+SKIP: {
+    skip 'new 2.20 stuff', 4
+        unless Gtk2->CHECK_VERSION(2, 20, 0);
+
+    ok (defined $tool_item->get_ellipsize_mode);
+    ok (defined $tool_item->get_text_alignment);
+    ok (defined $tool_item->get_text_orientation);
+
+    my $palette = Gtk2::ToolPalette->new;
+    my $bar = Gtk2::ToolItemGroup->new ('Test');
+    $bar->add ($tool_item);
+    $palette->add ($bar);
+    isa_ok ($tool_item->get_text_size_group, 'Gtk2::SizeGroup');
+}
+
 __END__
 
-Copyright (C) 2003-2005 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2003-2005, 2011 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

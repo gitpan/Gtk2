@@ -81,9 +81,9 @@ axes (device)
 	for (i = 0; i < device->num_axes; i++) {
 		HV *axis = newHV ();
 
-		hv_store (axis, "use", 3, newSVGdkAxisUse (device->axes[i].use), 0);
-		hv_store (axis, "min", 3, newSVnv (device->axes[i].min), 0);
-		hv_store (axis, "max", 3, newSVnv (device->axes[i].max), 0);
+		gperl_hv_take_sv_s (axis, "use", newSVGdkAxisUse (device->axes[i].use));
+		gperl_hv_take_sv_s (axis, "min", newSVnv (device->axes[i].min));
+		gperl_hv_take_sv_s (axis, "max", newSVnv (device->axes[i].max));
 
 		PUSHs (sv_2mortal (newRV_noinc ((SV *) axis)));
 	}
@@ -105,8 +105,8 @@ keys (device)
 	for (i = 0; i < device->num_keys; i++) {
 		HV *key = newHV ();
 
-		hv_store (key, "keyval", 6, newSVuv (device->keys[i].keyval), 0);
-		hv_store (key, "modifiers", 9, newSVGdkModifierType (device->keys[i].modifiers), 0);
+		gperl_hv_take_sv_s (key, "keyval", newSVuv (device->keys[i].keyval));
+		gperl_hv_take_sv_s (key, "modifiers", newSVGdkModifierType (device->keys[i].modifiers));
 
 		PUSHs (sv_2mortal (newRV_noinc ((SV *) key)));
 	}
@@ -198,8 +198,8 @@ gdk_device_get_history (device, window, start, stop)
 
 		event = newHV ();
 
-		hv_store (event, "axes", 4, newRV_noinc ((SV *) axes), 0);
-		hv_store (event, "time", 4, newSVuv (events[i]->time), 0);
+		gperl_hv_take_sv_s (event, "axes", newRV_noinc ((SV *) axes));
+		gperl_hv_take_sv_s (event, "time", newSVuv (events[i]->time));
 
 		PUSHs (sv_2mortal (newRV_noinc ((SV *) event)));
 	}
@@ -246,6 +246,22 @@ gdk_device_get_core_pointer (class)
 	/* void */
 
 #endif /* ! GDK_MULTIHEAD_SAFE */
+
+#if GTK_CHECK_VERSION (2, 22, 0)
+
+GdkAxisUse gdk_device_get_axis_use (GdkDevice *device, guint index);
+
+void gdk_device_get_key (GdkDevice *device, guint index, OUTLIST guint keyval, OUTLIST GdkModifierType modifiers);
+
+GdkInputMode gdk_device_get_mode (GdkDevice *device);
+
+const gchar * gdk_device_get_name (GdkDevice *device);
+
+gint gdk_device_get_n_axes (GdkDevice *device);
+
+GdkInputSource gdk_device_get_source (GdkDevice *device);
+
+#endif /* 2.22 */
 
 MODULE = Gtk2::Gdk::Device	PACKAGE = Gtk2::Gdk::Input	PREFIX = gdk_input_
 

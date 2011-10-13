@@ -130,6 +130,8 @@ guint32 gdk_x11_display_get_user_time (GdkDisplay *display);
 
 #if GTK_CHECK_VERSION (2, 12, 0)
 
+# FIXME: gdk_x11_display_broadcast_startup_message
+
 const gchar *gdk_x11_display_get_startup_notification_id (GdkDisplay *display);
 
 #endif
@@ -174,6 +176,12 @@ const char* gdk_x11_screen_get_window_manager_name (GdkScreen *screen);
 gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen, GdkAtom property);
 
 #endif /* 2.2.0 */
+
+#if GTK_CHECK_VERSION (2, 14, 0)
+
+UV gdk_x11_screen_get_monitor_output (GdkScreen *screen, gint monitor_num);
+
+#endif /* 2.14.0 */
 
 #endif /* GDK_WINDOWING_X11 */
 

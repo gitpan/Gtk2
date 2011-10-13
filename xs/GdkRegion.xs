@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003, 2010 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -215,6 +215,29 @@ gdk_region_xor (source1, source2)
 	GdkRegion *source2
 
 ##  void gdk_region_spans_intersect_foreach (GdkRegion *region, GdkSpan *spans, int n_spans, gboolean sorted, GdkSpanFunc function, gpointer data) 
+=for arg spans_ref (scalar) arrayref of triples [$x1,$y1,$width1, $x2,$y2,$width2, ...]
+=for apidoc
+Call C<$function> for horizontal lines which intersect C<$region>.
+
+C<$spans_ref> is an arrayref of x,y,width horizontal lines.  If
+C<$sorted> is true then they're assumed to be sorted by increasing y
+coordinate (allowing a single pass across the region rectangles).
+C<$function> is called
+
+    &$function ($x, $y, $width, $data)
+
+for each portion of a span which intersects C<$region>.  C<$function>
+must not change C<$region>.
+
+    $region->spans_intersect_foreach ([ 0,0,50, 20,20,100, 0,10,50 ],
+                                      0, # spans not sorted by y
+                                      \&my_callback,
+                                      'hello');  # userdata
+    sub my_callback {
+      my ($x, $y, $width, $userdata) = @_;
+      print "$userdata: $x, $y, $width\n";
+    }
+=cut
 void
 gdk_region_spans_intersect_foreach (region, spans_ref, sorted, func, data=NULL)
 	GdkRegion *region
@@ -230,29 +253,46 @@ gdk_region_spans_intersect_foreach (region, spans_ref, sorted, func, data=NULL)
 	GPerlCallback * callback;
     CODE:
 	if (!gperl_sv_is_array_ref (spans_ref))
-		croak ("span list has to be a reference to an array of GdkPoint's");
+		croak ("span list must be an arrayref of triples [ $x,$y,$width,$x,$y,$width,...]");
 
 	array = (AV *) SvRV (spans_ref);
-	n_spans = (av_len (array) + 1) / 3;
-	spans = g_new0 (GdkSpan, n_spans);
+	n_spans = av_len (array) + 1;
+	if ((n_spans % 3) != 0)
+		croak ("span list not a multiple of 3");
+	n_spans /= 3;
 
-	for (i = 0; i < n_spans; i++) {
-		if ((value = av_fetch (array, 3*i, 0)) && gperl_sv_is_defined (*value))
-			spans[i].x = SvIV (*value);
-		if ((value = av_fetch (array, 3*i + 1, 0)) && gperl_sv_is_defined (*value))
-			spans[i].y = SvIV (*value);
-		if ((value = av_fetch (array, 3*i + 2, 0)) && gperl_sv_is_defined (*value))
-			spans[i].width = SvIV (*value);
+	/* gdk_region_spans_intersect_foreach() is happy to take n_spans==0
+	   and do nothing, but it doesn't like spans==NULL (as of Gtk 2.20),
+	   and NULL is what g_new0() gives for a count of 0.  So explicit
+	   skip if n_spans==0.  */
+	if (n_spans != 0) {
+		spans = g_new0 (GdkSpan, n_spans);
+
+		for (i = 0; i < n_spans; i++) {
+			if ((value = av_fetch (array, 3*i, 0)) && gperl_sv_is_defined (*value))
+				spans[i].x = SvIV (*value);
+			if ((value = av_fetch (array, 3*i + 1, 0)) && gperl_sv_is_defined (*value))
+				spans[i].y = SvIV (*value);
+			if ((value = av_fetch (array, 3*i + 2, 0)) && gperl_sv_is_defined (*value))
+				spans[i].width = SvIV (*value);
+		}
+
+		callback = gperl_callback_new (func, data, 0, NULL, 0);
+
+		gdk_region_spans_intersect_foreach (region,
+		                                    spans,
+		                                    n_spans,
+		                                    sorted,
+		                                    (GdkSpanFunc) gtk2perl_gdk_span_func,
+		                                    callback);
+
+		gperl_callback_destroy (callback);
+		g_free (spans);
 	}
 
-	callback = gperl_callback_new (func, data, 0, NULL, 0);
+#if GTK_CHECK_VERSION (2, 18, 0)
 
-	gdk_region_spans_intersect_foreach (region,
-	                                    spans,
-	                                    n_spans,
-	                                    sorted,
-	                                    (GdkSpanFunc) gtk2perl_gdk_span_func,
-	                                    callback);
+gboolean gdk_region_rect_equal (const GdkRegion *region, const GdkRectangle *rectangle);
 
-	gperl_callback_destroy (callback);
-	g_free (spans);
+#endif
+

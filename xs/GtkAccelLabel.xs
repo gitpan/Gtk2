@@ -23,6 +23,19 @@
 
 MODULE = Gtk2::AccelLabel	PACKAGE = Gtk2::AccelLabel	PREFIX = gtk_accel_label_
 
+=for position DESCRIPTION
+
+=head1 DESCRIPTION
+
+Note that the C<accel-widget> property is a hard reference to the
+target widget.  If it's a container parent of the AccelLabel then it
+will be a circular reference and will have to be unset by an explicit
+C<destroy> when no longer wanted, as usual for such things.  See
+L<Gtk2::MenuItem> for how this affects the common case of a MenuItem
+containing a AccelLabel.
+
+=cut
+
 ## GtkWidget* gtk_accel_label_new (const gchar *string)
 GtkWidget *
 gtk_accel_label_new (class, string)
@@ -31,7 +44,7 @@ gtk_accel_label_new (class, string)
 	string
 
 ## GtkWidget* gtk_accel_label_get_accel_widget (GtkAccelLabel *accel_label)
-GtkWidget *
+GtkWidget_ornull *
 gtk_accel_label_get_accel_widget (accel_label)
 	GtkAccelLabel * accel_label
 
@@ -44,7 +57,7 @@ gtk_accel_label_get_accel_width (accel_label)
 void
 gtk_accel_label_set_accel_widget (accel_label, accel_widget)
 	GtkAccelLabel * accel_label
-	GtkWidget     * accel_widget
+	GtkWidget_ornull * accel_widget
 
 # TODO: The docs say that the "closure must be connected to an accelerator
 # group", but how do we find the GClosure that was created in the xsub for

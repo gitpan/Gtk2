@@ -1,25 +1,119 @@
-Overview of changes in Gtk2 1.224
+Overview of changes in Gtk2 1.240
 =================================
 
+ Since 1.22x (the previous stable series)
+ ----------------------------------------
+ * Wrap missing gdk, gdk-pixbuf and gtk+ 2.12, 2.14, 2.16, 2.18, 2.20
+   and 2.22 API.
+ * Add Gtk2::Gdk::Image.
+ * Add Gtk2::Container->find_child_property and list_child_properties.
+ * Add Gtk2::Widget->find_style_property and list_style_properties.
+ * Add Gtk2::Gdk::Pixbuf->get_option.
+ * Add is_writable field to Gtk2::Gdk::PixbufFormat.
+ * Make Gtk2::FontButton->new and Gtk2::ColorButton->new more flexible.
+ * Accept format strings in Gtk2::MessageDialog->format_secondary_markup.
+ * In syntax check mode, do not call gtk_init.
+ * Improve the documentation in many places.
+
+ Since 1.232
+ -----------
+ * Document the unusual return semantics of Gtk2::CellLayout::get_cells.
+
+Overview of changes in Gtk2 1.232
+=================================
+
+* Gtk2::Gdk::Pixbuf->new_from_data(): accept overloaded strings
+* Expand and clarify some of the documentation.
+* Allow undef in a few more places.
 * Fix a few test failures.
 
-Overview of changes in Gtk2 1.223
+Overview of changes in Gtk2 1.231
 =================================
 
-* Cope with the rename of the keysym defines in gtk+ 2.22
-* Correct the memory management in Gtk2::Gdk::Window->new
-* Fix a test failure in GtkBuilder.t
+* Wrap gtk+ 2.22 API.
+* Wrap gdk 2.20 and 2.22 API.
+* Wrap missing gtk+ 2.8, 2.10, 2.12, 2.14, 2.16, 2.18 and 2.20 API.
+* Wrap missing gdk 2.18 API.
+* Wrap missing gdk-pixbuf 2.18 API.
+* Add Gtk2::Gdk::Image.
+* Add Gtk2::Container->find_child_property and list_child_properties.
+* Add Gtk2::Widget->find_style_property and list_style_properties.
+* Add Gtk2::Gdk::Pixbuf->get_option.
+* Add is_writable field to Gtk2::Gdk::PixbufFormat.
+* Allow Gtk2::Buildable implementations to return undef from
+  GET_INTERNAL_CHILD.
+* Cope with the rename of the keysym defines in gtk+ 2.22.
+* Fix invocation of Gtk2::Notebook window creation hooks.
+* Fix length of Gtk2::Gdk::Pixbuf->get_pixels() return.
+* Ensure that the option strings passed to Gtk2::Gdk::Pixbuf->save() are
+  upgraded to utf8 if necessary.  Also, complain if an odd number of key/value
+  args is given.
+* Update Gtk2->show_about_dialog to match upstream.
+* Make damage events Gtk2::Gdk::Event::Expose objects.
+* Allow undef in a few more places.
+* Correct the memory management in Gtk2::Gdk::Window->new.
+* Correct length of the Gtk2::Gdk::Pixbuf->get_pixels() return.
+* Plug leaks in Gtk2::Gdk::Drawable->get_image, Gtk2::CellLayout and
+  Gtk2::TreeSortable.
+* Use Glib's infrastructure for attaching "magic".
+* Add some examples.
+* Improve the documentation in a few places.
+* Fix a few build and test failures.
 
-Overview of changes in Gtk2 1.222
+Overview of changes in Gtk2 1.230
 =================================
 
-* Make Gtk2::ListStore->remove()'s return value consistent on gtk+ 2.0
-* Fix some build and test failures.
-
-Overview of changes in Gtk2 1.221
-=================================
-
-* Properly wrap the binding for gtk_binding_entry_skip in version guards.
+* Wrap gtk+ 2.20 API in:  [Special thanks to Quentin Sculo]
+  - Gtk2::Notebook
+* Wrap gtk+ 2.18 API in:  [Special thanks to Quentin Sculo]
+  - Gtk2::FileChooser
+  - Gtk2::IconView
+  - Gtk2::InfoBar
+  - Gtk2::Label
+  - Gtk2::Menu
+  - Gtk2::Range
+  - Gtk2::StatusIcon
+  - Gtk2::Gdk::Cairo
+  - Gtk2::Gdk::Region
+  - Gtk2::Gdk::Window
+* Wrap gtk+ 2.16 API in:  [Special thanks to Emmanuele Bassi and Quentin
+  Sculo]
+  - Gtk2::Action
+  - Gtk2::Entry
+  - Gtk2::Gdk::Keymap
+  - Gtk2::IMContext
+  - Gtk2::MenuItem, Gtk2::ImageMenuItem
+  - Gtk2::Scale
+  - Gtk2::Window
+* Wrap gtk+ 2.14 API:
+  - Gtk2::Adjustment  [Special thanks to Kevin Ryde]
+  - Gtk2::Gdk::Event
+  - Gtk2::Gdk::Screen
+* Wrap gtk+ 2.12 API in Gtk2::Gdk::Window.
+* Make Gtk2::FontButton->new and Gtk2::ColorButton->new more flexible:
+  When called with an argument, turn new() into new_with_color() or
+  new_with_font(), respectively.
+* Accept format strings in Gtk2::MessageDialog->format_secondary_markup.
+* Allow undef in a few places:
+  - Gtk2::Gdk::Drawable->draw_pixbuf, draw_layout_with_colors,
+    draw_layout_line_with_colors, draw_segments
+  - Gtk2::Gdk::Window->invalidate_rect, set_icon_name,
+    input_shape_combine_mask, shape_combine_mask,
+    input_shape_combine_region, shape_combine_region
+  - Gtk2::AccelLabel->set_accel_widget
+  - Gtk2::Menu->set_screen
+  - Gtk2::Widget->set_accel_path, shape_combine_mask
+  - Gtk2::Window->set_default_icon_name
+* In syntax check mode, do not call gtk_init.  gtk_init may abort the
+  program (e.g. if DISPLAY is not set), so only call gtk_init_check even
+  if asked to call gtk_init.
+* Gtk2::Menu: trap exceptions in popup callbacks.  Uncaught exceptions
+  in a popup callback can result in persistent mouse and keyboard grabs,
+  locking the screen until the program is killed.
+* Make Gtk2::ListStore->remove()'s return value consistent on gtk+ 2.0.
+* Fix memory handling in Gtk2::RecentInfo->get_application_info.
+* Improve the documentation in many places.  [Special thanks to Kevin
+  Ryde]
 * Fix some build and test failures.
 
 Overview of changes in Gtk2 1.220
