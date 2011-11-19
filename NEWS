@@ -1,3 +1,10 @@
+Overview of changes in Gtk2 1.241
+=================================
+
+* Add the missing NEWS entries from the stable branch
+* Fix a test failure in t/tied-objects.t
+* Fix a test failure in t/GtkEntryBuffer.t
+
 Overview of changes in Gtk2 1.240
 =================================
 
@@ -114,6 +121,30 @@ Overview of changes in Gtk2 1.230
 * Fix memory handling in Gtk2::RecentInfo->get_application_info.
 * Improve the documentation in many places.  [Special thanks to Kevin
   Ryde]
+* Fix some build and test failures.
+
+Overview of changes in Gtk2 1.224
+=================================
+
+* Fix a few test failures.
+
+Overview of changes in Gtk2 1.223
+=================================
+
+* Cope with the rename of the keysym defines in gtk+ 2.22
+* Correct the memory management in Gtk2::Gdk::Window->new
+* Fix a test failure in GtkBuilder.t
+
+Overview of changes in Gtk2 1.222
+=================================
+
+* Make Gtk2::ListStore->remove()'s return value consistent on gtk+ 2.0
+* Fix some build and test failures.
+
+Overview of changes in Gtk2 1.221
+=================================
+
+* Properly wrap the binding for gtk_binding_entry_skip in version guards.
 * Fix some build and test failures.
 
 Overview of changes in Gtk2 1.220

@@ -578,5 +578,4 @@ xs_files-2.20
 xs_files-2.4
 xs_files-2.6
 xs_files-2.8
-META.yml                                 Module YAML meta-data (added by MakeMaker)
-META.json                                Module JSON meta-data (added by MakeMaker)
+META.yml                                 Module meta-data (added by MakeMaker)
