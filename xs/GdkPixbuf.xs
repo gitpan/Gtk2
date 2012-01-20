@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2003-2008, 2010, 2011 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2008, 2010-2012 by the gtk2-perl team (see the file
+ * AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +22,11 @@
 
 #define GDK_PIXBUF_ENABLE_BACKEND 1 /* for gdk_pixbuf_set_option() prototype */
 #include "gtk2perl.h"
+
+/* for backwards-compatibility: */
+#ifndef Newx
+# define Newx(v,n,t) New(0,v,n,t)
+#endif
 
 static void
 gtk2perl_pixbuf_destroy_notify (guchar * pixels,

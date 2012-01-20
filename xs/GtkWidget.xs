@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2003-2006, 2009, 2010 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003-2006, 2009, 2010, 2012 by the gtk2-perl team (see the
+ * file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
@@ -1379,7 +1380,8 @@ void gtk_widget_set_visible (GtkWidget *widget, gboolean visible);
 
 gboolean gtk_widget_is_drawable (GtkWidget *widget);
 
-gboolean gtk_widget_is_sensitive (GtkWidget *widget);
+# Already implemented above with GTK_WIDGET_IS_SENSITIVE.
+# gboolean gtk_widget_is_sensitive (GtkWidget *widget);
 
 gboolean gtk_widget_is_toplevel (GtkWidget *widget);
 
