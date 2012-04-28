@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2007, 2012 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
@@ -21,7 +21,12 @@ gtk2perl_connect_flags_get_type (void)
 			{ G_CONNECT_SWAPPED, "G_CONNECT_SWAPPED", "swapped" },
 			{ 0, NULL, NULL }
 		};
-		etype = g_flags_register_static ("GConnectFlags", values);
+		/* This is actually a race condition, but I don't think it
+		 * matters too much in this case. */
+		etype = g_type_from_name ("GConnectFlags");
+		if (etype == 0) {
+			etype = g_flags_register_static ("GConnectFlags", values);
+		}
 	}
 	return etype;
 }
