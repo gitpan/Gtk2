@@ -1,3 +1,9 @@
+Overview of changes in Gtk2 1.244
+=================================
+
+* Disable the correct potentially annoying test for GtkDnD.
+* Tell CPAN to some ignore POD fragments
+
 Overview of changes in Gtk2 1.243
 =================================
 
