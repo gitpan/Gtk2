@@ -12,7 +12,7 @@ configure_requires:
   Glib: 1.240
   Pango: 1.220
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120921'
+generated_by: 'ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112150'
 license: unknown
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -33,4 +33,4 @@ requires:
   ExtUtils::PkgConfig: 1.030
   Glib: 1.240
   Pango: 1.220
-version: 1.245
+version: 1.246
