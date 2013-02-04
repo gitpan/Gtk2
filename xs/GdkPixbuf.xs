@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2008, 2010-2012 by the gtk2-perl team (see the file
+ * Copyright (c) 2003-2008, 2010-2013 by the gtk2-perl team (see the file
  * AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
@@ -123,6 +123,7 @@ save_to_sv_callback (const gchar * data,
 
         sv_catpvn_nomg (sv, data, count);
         /* XXX no way to find out if that failed. */
+	PERL_UNUSED_VAR (error);
 
         return TRUE;
 }
