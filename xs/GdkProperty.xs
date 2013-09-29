@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2003, 2013 by the gtk2-perl team (see the file AUTHORS)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,7 +38,7 @@
 	EXTEND (sp, elements);		\
 					\
 	for (i = 0; i < elements; i++)	\
-		PUSHs (sv_2mortal (newSVpv (list[i], PL_na)));
+		PUSHs (sv_2mortal (newSVpv (list[i], 0)));
 
 /* ------------------------------------------------------------------------- */
 

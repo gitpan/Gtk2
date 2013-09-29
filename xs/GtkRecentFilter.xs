@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 by the gtk2-perl team (see the file AUTHORS)
+ * Copyright (c) 2006, 2013 by the gtk2-perl team (see the file AUTHORS)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
@@ -40,7 +40,7 @@ newSVGtkRecentFilterInfo (const GtkRecentFilterInfo *info)
                       newSVGtkRecentFilterFlags (info->contains));
 
   if (info->uri)
-    gperl_hv_take_sv_s (hv, "uri", newSVpv (info->uri, PL_na));
+    gperl_hv_take_sv_s (hv, "uri", newSVpv (info->uri, 0));
 
   if (info->display_name)
     gperl_hv_take_sv_s (hv, "display_name", newSVGChar (info->display_name));
