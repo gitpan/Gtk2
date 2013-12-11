@@ -6,6 +6,9 @@ use Gtk2::TestHelper
 
 # $Id$
 
+use File::Temp qw(tempdir);
+my $dir = tempdir(CLEANUP => 1);
+
 my $op = Gtk2::PrintOperation -> new();
 isa_ok($op, "Gtk2::PrintOperation");
 
@@ -32,15 +35,13 @@ sub get_op {
   $op -> set_current_page(1);
   $op -> set_use_full_page(TRUE);
   $op -> set_unit("mm");
-  $op -> set_export_filename("test.pdf");
+  $op -> set_export_filename("$dir/test.pdf");
   $op -> set_track_print_status(TRUE);
   $op -> set_show_progress(FALSE);
   $op -> set_allow_async(TRUE);
   $op -> set_custom_tab_label("Print");
   return $op;
 }
-
-END { unlink "test.pdf"; }
 
 $op = get_op();
 ok(defined $op -> run("export", undef));
@@ -124,5 +125,5 @@ warn Gtk2::Print -> run_page_setup_dialog($window, $setup, $settings);
 
 __END__
 
-Copyright (C) 2006 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2006, 2013 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

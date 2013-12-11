@@ -6,6 +6,9 @@ use Gtk2::TestHelper
 
 # $Id$
 
+use File::Temp qw(tempdir);
+my $dir = tempdir(CLEANUP => 1);
+
 # I hope that signal will always fire ...
 
 my $op = Gtk2::PrintOperation -> new();
@@ -37,14 +40,12 @@ $op -> signal_connect(begin_print => sub {
 
 $op -> set_n_pages(1);
 $op -> set_allow_async(TRUE);
-$op -> set_export_filename("test.pdf");
+$op -> set_export_filename("$dir/test.pdf");
 
 $op -> run("export", undef);
 $op -> cancel();
 
-unlink "test.pdf";
-
 __END__
 
-Copyright (C) 2006 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2006, 2013 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

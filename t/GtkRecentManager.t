@@ -13,6 +13,8 @@
 use strict;
 use warnings;
 use File::Basename qw(basename);
+use File::Temp qw(tempdir);
+my $dir = tempdir(CLEANUP => 1);
 
 use Gtk2::TestHelper tests => 36,
     at_least_version => [2, 10, 0, "GtkRecentManager is new in 2.10"],
@@ -33,8 +35,7 @@ $manager->set_screen(Gtk2::Gdk::Screen->get_default);
 # list, so we use the 'filename' constructor only property of the
 # GtkRecentManager object to create our own test storage file.  this
 # also gives us a better controlled environment. -- ebassi
-unlink './test.xbel'; # in case of an aborted run
-$manager = Glib::Object::new('Gtk2::RecentManager', filename => './test.xbel');
+$manager = Glib::Object::new('Gtk2::RecentManager', filename => "$dir/test.xbel");
 isa_ok($manager, 'Gtk2::RecentManager');
 
 # purge existing items.
@@ -126,12 +127,9 @@ SKIP: {
 	ok(!$manager->has_item($icon_uri), 'check remove item');
 
 	is($manager->purge_items, 0, 'check purge items');
-
-	unlink './test.xbel' or
-		die "Unable to remove the test storage file";
 }
 
 __END__
 
-Copyright (C) 2006 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2006, 2013 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.

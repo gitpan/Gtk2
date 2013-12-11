@@ -6,8 +6,10 @@ use Gtk2::TestHelper
 
 # $Id$
 
-unlink "./test.xbel"; # in case of an aborted run
-my $manager = Glib::Object::new("Gtk2::RecentManager", filename => "./test.xbel");
+use File::Temp qw(tempdir);
+my $dir = tempdir(CLEANUP => 1);
+
+my $manager = Glib::Object::new("Gtk2::RecentManager", filename => "$dir/test.xbel");
 
 my $chooser = Gtk2::RecentChooserWidget -> new_for_manager($manager);
 isa_ok($chooser, "Gtk2::RecentChooser");
@@ -88,9 +90,7 @@ $chooser -> remove_filter($filter_one);
 $chooser -> set_filter($filter_one);
 is($chooser -> get_filter(), $filter_one);
 
-unlink "./test.xbel";
-
 __END__
 
-Copyright (C) 2006 by the gtk2-perl team (see the file AUTHORS for the
+Copyright (C) 2006, 2013 by the gtk2-perl team (see the file AUTHORS for the
 full list).  See LICENSE for more information.
