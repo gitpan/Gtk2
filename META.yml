@@ -39,4 +39,4 @@ resources:
   homepage: http://gtk2-perl.sourceforge.net
   license: http://www.gnu.org/licenses/lgpl-2.1.html
   repository: git://git.gnome.org/perl-Gtk2
-version: 1.2491
+version: 1.2492
